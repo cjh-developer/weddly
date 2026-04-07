@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 로그인</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="phone-wrapper">
+    <div class="phone-screen">
+
+      <!-- 상단 로고 영역 -->
+      <div class="logo-section">
+        <h1 class="logo">weddly</h1>
+        <p class="logo-sub">당신의 특별한 날을 함께해요</p>
+      </div>
+
+      <!-- 로그인 폼 -->
+      <div class="form-section">
+        <div class="input-group">
+          <label for="email">아이디</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </span>
+            <input type="text" id="email" placeholder="아이디를 입력하세요" />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="password">비밀번호</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <input type="password" id="password" placeholder="비밀번호를 입력하세요" />
+            <button class="toggle-pw" type="button" id="togglePw" aria-label="비밀번호 보기">
+              <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="options-row">
+          <label class="remember-me">
+            <input type="checkbox" id="remember" />
+            <span class="custom-check"></span>
+            <span>로그인 유지</span>
+          </label>
+          <div class="forgot-links">
+            <a href="find_id.html" class="forgot-link">아이디 찾기</a>
+            <span class="forgot-divider">|</span>
+            <a href="reset_pw.html" class="forgot-link">비밀번호 초기화</a>
+          </div>
+        </div>
+
+        <button class="btn-login" type="button" id="loginBtn">로그인</button>
+
+        <p class="signup-row">
+          아직 계정이 없으신가요? <a href="signup.html">회원가입</a>
+        </p>
+      </div>
+
+      <!-- 소셜 로그인 구분선 -->
+      <div class="divider">
+        <span>또는 소셜 계정으로 로그인</span>
+      </div>
+
+      <!-- 소셜 로그인 버튼 -->
+      <div class="social-section">
+        <button class="btn-social btn-google" type="button">
+          <span class="social-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48">
+              <path fill="#EA4335" d="M24 9.5c3.1 0 5.8 1.1 8 2.9l6-6C34.3 3 29.4 1 24 1 14.8 1 7 6.7 3.7 14.6l7 5.4C12.5 13.8 17.8 9.5 24 9.5z"/>
+              <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.4 5.7c4.3-4 6.8-9.9 7.2-16.9z"/>
+              <path fill="#FBBC05" d="M10.7 28.5A14.6 14.6 0 0 1 9.5 24c0-1.6.3-3.1.7-4.5l-7-5.4A23.9 23.9 0 0 0 0 24c0 3.9.9 7.5 2.6 10.8l8.1-6.3z"/>
+              <path fill="#34A853" d="M24 47c5.4 0 9.9-1.8 13.2-4.8l-7.4-5.7c-1.8 1.2-4.1 2-5.8 2-6.2 0-11.5-4.2-13.4-10l-8.1 6.3C7 42.3 14.8 47 24 47z"/>
+            </svg>
+          </span>
+          <span class="social-label">Google로 로그인</span>
+        </button>
+
+        <button class="btn-social btn-kakao" type="button">
+          <span class="social-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+              <path fill="#3C1E1E" d="M12 3C6.477 3 2 6.477 2 10.667c0 2.667 1.667 5 4.167 6.333L5.5 20.5l4.333-2.833c.714.1 1.44.166 2.167.166 5.523 0 10-3.477 10-7.666C22 6.477 17.523 3 12 3z"/>
+            </svg>
+          </span>
+          <span class="social-label">Kakao로 로그인</span>
+        </button>
+
+        <button class="btn-social btn-naver" type="button">
+          <span class="social-icon naver-n">N</span>
+          <span class="social-label">Naver로 로그인</span>
+        </button>
+      </div>
+
+      <p class="copyright">© 2025 Weddly. All rights reserved.</p>
+
+    </div>
+  </div>
+
+  <script src="style.js"></script>
+</body>
+</html>

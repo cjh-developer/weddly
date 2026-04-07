@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 아이디 찾기</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="phone-wrapper">
+    <div class="phone-screen">
+
+      <!-- 헤더 -->
+      <div class="signup-header">
+        <a href="login.html" class="back-btn" aria-label="뒤로가기">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </a>
+        <div class="header-title-wrap">
+          <span class="logo-small">weddly</span>
+          <span class="header-title">아이디 찾기</span>
+        </div>
+        <div class="header-placeholder"></div>
+      </div>
+
+      <!-- 안내 문구 -->
+      <div class="find-guide">
+        <div class="find-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+            fill="none" stroke="#D4A96A" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <p class="find-guide-title">아이디를 잊으셨나요?</p>
+        <p class="find-guide-desc">가입 시 등록한 이름과 이메일 주소를 입력하면<br/>아이디를 확인할 수 있어요.</p>
+      </div>
+
+      <!-- 입력 폼 -->
+      <form class="find-form" id="findIdForm" novalidate>
+
+        <!-- 이름 -->
+        <div class="input-group">
+          <label for="findName">이름 <span class="required">*</span></label>
+          <div class="input-wrapper" id="findNameWrapper">
+            <span class="input-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </span>
+            <input type="text" id="findName" placeholder="이름을 입력하세요" maxlength="10" />
+          </div>
+          <p class="field-msg" id="findNameMsg"></p>
+        </div>
+
+        <!-- 이메일 -->
+        <div class="input-group">
+          <label for="findEmail">이메일 <span class="required">*</span></label>
+          <div class="input-wrapper" id="findEmailWrapper">
+            <span class="input-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </span>
+            <input type="email" id="findEmail" placeholder="가입한 이메일을 입력하세요" />
+          </div>
+          <p class="field-msg" id="findEmailMsg"></p>
+        </div>
+
+        <!-- 아이디 찾기 버튼 -->
+        <button type="submit" class="btn-login" id="findIdBtn">아이디 찾기</button>
+
+      </form>
+
+      <!-- 결과 영역 (숨김 → JS로 표시) -->
+      <div class="find-result" id="findResult">
+        <div class="result-box">
+          <div class="result-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+              fill="none" stroke="#4caf50" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <p class="result-label">회원님의 아이디</p>
+          <p class="result-id" id="resultIdText"></p>
+          <p class="result-date" id="resultDateText"></p>
+        </div>
+        <div class="result-actions">
+          <a href="login.html" class="btn-login result-btn-login">로그인하러 가기</a>
+          <a href="reset_pw.html" class="result-btn-pw" id="goFindPw">비밀번호 초기화</a>
+        </div>
+      </div>
+
+      <!-- 하단 링크 -->
+      <div class="find-bottom-links">
+        <a href="login.html" class="bottom-link">로그인</a>
+        <span class="forgot-divider">|</span>
+        <a href="signup.html" class="bottom-link">회원가입</a>
+      </div>
+
+      <p class="copyright">© 2025 Weddly. All rights reserved.</p>
+
+    </div>
+  </div>
+
+  <script src="style.js"></script>
+</body>
+</html>

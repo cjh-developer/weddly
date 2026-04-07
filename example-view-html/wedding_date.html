@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 결혼 예정일 설정</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="phone-wrapper">
+    <div class="phone-screen">
+
+      <!-- 상단 로고 -->
+      <div class="wd-top">
+        <span class="logo-small">weddly</span>
+      </div>
+
+      <!-- 환영 섹션 -->
+      <div class="wd-welcome">
+        <div class="wd-ring-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 64 64" fill="none">
+            <!-- 반지 모양 -->
+            <circle cx="32" cy="36" r="18" stroke="#D4A96A" stroke-width="5" fill="none"/>
+            <circle cx="32" cy="36" r="11" stroke="#f0e0c0" stroke-width="2.5" fill="none"/>
+            <!-- 보석 -->
+            <polygon points="32,10 36,18 32,16 28,18" fill="#D4A96A"/>
+            <polygon points="32,16 36,18 32,22 28,18" fill="#e8c07a"/>
+          </svg>
+        </div>
+        <h1 class="wd-welcome-title">웨딩 날짜를 알려주세요</h1>
+        <p class="wd-welcome-desc">특별한 날까지 함께 준비해 드릴게요.<br/>결혼 예정일을 설정하면 맞춤 일정을<br/>자동으로 추천해 드려요.</p>
+      </div>
+
+      <!-- 날짜 선택 카드 -->
+      <div class="wd-card">
+
+        <!-- 선택된 날짜 표시 배너 -->
+        <div class="wd-selected-banner" id="selectedBanner">
+          <div class="wd-selected-inner">
+            <span class="wd-selected-label">선택한 날짜</span>
+            <span class="wd-selected-date" id="selectedDateText">날짜를 선택해주세요</span>
+            <span class="wd-selected-dday" id="selectedDday"></span>
+          </div>
+        </div>
+
+        <!-- 연/월 네비게이션 -->
+        <div class="wd-nav">
+          <button class="wd-nav-btn" id="prevMonth" aria-label="이전 달">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <div class="wd-nav-title">
+            <!-- 년도 버튼 + 휠 -->
+            <div class="wd-picker-wrap">
+              <button type="button" class="wd-picker-btn" id="currentYear"></button>
+              <div class="wd-wheel-panel" id="yearPanel">
+                <div class="wd-wheel-highlight-bar"></div>
+                <div class="wd-wheel-fade top"></div>
+                <div class="wd-wheel-fade bottom"></div>
+                <div class="wd-wheel-scroller" id="yearScroller"></div>
+              </div>
+            </div>
+            <!-- 월 버튼 + 휠 -->
+            <div class="wd-picker-wrap">
+              <button type="button" class="wd-picker-btn" id="currentMonth"></button>
+              <div class="wd-wheel-panel" id="monthPanel">
+                <div class="wd-wheel-highlight-bar"></div>
+                <div class="wd-wheel-fade top"></div>
+                <div class="wd-wheel-fade bottom"></div>
+                <div class="wd-wheel-scroller" id="monthScroller"></div>
+              </div>
+            </div>
+          </div>
+          <button class="wd-nav-btn" id="nextMonth" aria-label="다음 달">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- 요일 헤더 -->
+        <div class="wd-weekdays">
+          <span class="wd-weekday sun">일</span>
+          <span class="wd-weekday">월</span>
+          <span class="wd-weekday">화</span>
+          <span class="wd-weekday">수</span>
+          <span class="wd-weekday">목</span>
+          <span class="wd-weekday">금</span>
+          <span class="wd-weekday sat">토</span>
+        </div>
+
+        <!-- 날짜 그리드 -->
+        <div class="wd-days" id="calendarDays"></div>
+
+      </div>
+
+      <!-- 안내 태그 -->
+      <div class="wd-tags">
+        <span class="wd-tag">💍 날짜 미정이면 나중에 설정 가능</span>
+      </div>
+
+      <!-- 버튼 영역 -->
+      <div class="wd-actions">
+        <button class="btn-login wd-btn-confirm" id="confirmBtn" disabled>
+          결혼 예정일 저장하기
+        </button>
+        <button class="wd-btn-skip" id="skipBtn">나중에 설정할게요</button>
+      </div>
+
+      <p class="copyright">© 2025 Weddly. All rights reserved.</p>
+
+    </div>
+  </div>
+
+  <script src="style.js"></script>
+</body>
+</html>
