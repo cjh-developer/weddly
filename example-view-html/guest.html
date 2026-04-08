@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>weddly – 하객관리</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+  /* ══════════════════════════════
+     Guest Page
+  ══════════════════════════════ */
+  .guest-page {
+    display: flex;
+    flex-direction: column;
+    height: 814px;
+    min-height: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── 헤더 (schedule.html 동일 패턴) ── */
+  .gh-header {
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #f0f0f0;
+    flex-shrink: 0;
+  }
+  .gh-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px 10px;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  .gh-header-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px 10px;
+  }
+  .gh-header-left { display: flex; align-items: center; gap: 8px; }
+  .gh-header-actions { display: flex; align-items: center; gap: 6px; }
+
+  .gh-back {
+    width: 34px; height: 34px;
+    border-radius: 10px; border: none;
+    background: #f5f5f5;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: #555; text-decoration: none;
+    transition: background 0.15s;
+  }
+  .gh-back:hover { background: #ebebeb; }
+
+  .gh-logo {
+    font-size: 20px; font-weight: 800;
+    color: #D4A96A; font-style: italic; letter-spacing: -0.5px;
+  }
+
+  /* icon-btn (main.html 동일) */
+  .icon-btn {
+    width: 36px; height: 36px;
+    border-radius: 11px; background: #f8f8f8; border: none;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    color: #666; transition: background 0.15s, color 0.15s;
+    position: relative; flex-shrink: 0;
+  }
+  .icon-btn:hover { background: #f0e8d8; color: #D4A96A; }
+
+  .notif-badge {
+    position: absolute; top: 7px; right: 7px;
+    width: 7px; height: 7px;
+    background: #f44336; border-radius: 50%; border: 1.5px solid #fff;
+  }
+
+  .dark-toggle-btn .icon-sun  { display: none; }
+  .dark-toggle-btn .icon-moon { display: block; }
+  .phone-wrapper.dark .dark-toggle-btn .icon-moon { display: none; }
+  .phone-wrapper.dark .dark-toggle-btn .icon-sun  { display: block; }
+  .phone-wrapper.dark .dark-toggle-btn { background: #2e2616; color: #D4A96A; }
+  .phone-wrapper.dark .dark-toggle-btn:hover { background: #3a3020; }
+
+  .gh-page-title {
+    font-size: 16px; font-weight: 700; color: #222;
+  }
+
+  /* 정렬 셀렉트 */
+  .gh-sort-wrap { position: relative; display: flex; align-items: center; }
+  .gh-sort-select {
+    -webkit-appearance: none; appearance: none;
+    padding: 6px 28px 6px 12px;
+    border: 1.5px solid #e8e8e8; border-radius: 10px;
+    font-size: 12px; font-weight: 600; color: #555;
+    background: #f8f8f8;
+    cursor: pointer; outline: none; font-family: inherit;
+    transition: border-color 0.2s;
+  }
+  .gh-sort-select:focus { border-color: #D4A96A; }
+  .gh-sort-icon {
+    position: absolute; right: 9px; pointer-events: none; color: #aaa;
+  }
+
+  /* ── 카테고리 스트립 ── */
+  .gh-cat-strip {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px 16px;
+    gap: 8px;
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    flex-shrink: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .gh-cat-strip::-webkit-scrollbar { display: none; }
+
+  .gh-cat-tab {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid #eee;
+    background: #f8f8f8;
+    font-size: 13px; font-weight: 600; color: #aaa;
+    cursor: pointer; transition: all 0.18s; white-space: nowrap;
+    font-family: inherit;
+  }
+  .gh-cat-tab:hover { border-color: #D4A96A; color: #D4A96A; background: #fffaf3; }
+  .gh-cat-tab.active {
+    border-color: #D4A96A; background: #D4A96A; color: #fff;
+    box-shadow: 0 2px 8px rgba(212,169,106,0.35);
+  }
+  .gh-cat-add {
+    flex-shrink: 0;
+    width: 34px; height: 34px;
+    border-radius: 50%; border: 1.5px dashed #ccc;
+    background: none; font-size: 18px; color: #ccc;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; font-family: inherit;
+  }
+  .gh-cat-add:hover { border-color: #D4A96A; color: #D4A96A; }
+
+  /* ── 통계 바 ── */
+  .gh-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    padding: 10px 16px;
+    background: #fafafa;
+    border-bottom: 1px solid #f0f0f0;
+    flex-shrink: 0;
+    gap: 8px;
+  }
+  .gh-stat-item {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 2px;
+  }
+  .gh-stat-val { font-size: 16px; font-weight: 800; color: #222; }
+  .gh-stat-val.gold { color: #D4A96A; }
+  .gh-stat-val.blue { color: #5B9BD5; }
+  .gh-stat-val.green { color: #70B56E; }
+  .gh-stat-lbl { font-size: 11px; color: #bbb; font-weight: 500; }
+
+  /* ── 하객 목록 ── */
+  .gh-list {
+    flex: 1;
+    min-height: 0;          /* flex child 스크롤 핵심 */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 12px 16px 76px; /* FAB 높이(54) + 여백 */
+    display: flex; flex-direction: column; gap: 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .gh-list::-webkit-scrollbar { display: none; }
+
+  /* ── 일괄 액션 스트립 (통계 바 아래, 목록 위) ── */
+  .gh-bulk-strip {
+    display: none;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    gap: 8px;
+    background: #fffaf3;
+    border-bottom: 1px solid #f0e8d0;
+  }
+  .gh-bulk-strip.active { display: flex; }
+
+  .gh-bulk-count {
+    font-size: 13px; font-weight: 700; color: #444;
+    white-space: nowrap;
+  }
+  .gh-bulk-actions { display: flex; gap: 6px; }
+  .gh-bulk-btn {
+    padding: 7px 12px; border: none; border-radius: 10px;
+    font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;
+    transition: opacity 0.15s;
+  }
+  .gh-bulk-btn:hover { opacity: 0.8; }
+  .gh-bulk-btn-visit  { background: rgba(112,181,110,0.18); color: #55a052; }
+  .gh-bulk-btn-invite { background: rgba(212,169,106,0.2);  color: #C49050; }
+  .gh-bulk-btn-clear  { background: #f0f0f0; color: #888; }
+
+  /* ── 하단 저작권 바 (항상 고정) ── */
+  .gh-bottom-bar {
+    flex-shrink: 0;
+    padding: 10px 0 12px;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+    text-align: center;
+    font-size: 11px;
+    color: #ccc;
+    letter-spacing: 0.2px;
+  }
+
+  /* ── 카드 체크박스 ── */
+  .gc-check-wrap {
+    display: flex; align-items: center; justify-content: center;
+    width: 40px; flex-shrink: 0; cursor: pointer; padding: 0;
+  }
+  .gc-chk { display: none; }
+  .gc-chk-box {
+    width: 18px; height: 18px;
+    border: 2px solid #ddd; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.15s, background 0.15s;
+    background: #fff; flex-shrink: 0; pointer-events: none;
+  }
+  .gc-chk:checked + .gc-chk-box {
+    border-color: #D4A96A;
+    background: #D4A96A;
+  }
+  .gc-chk:checked + .gc-chk-box::after {
+    content: '';
+    width: 9px; height: 5px;
+    border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translateY(-1px);
+    display: block;
+  }
+
+  .gh-empty {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 48px 20px;
+    color: #ccc; font-size: 13px; gap: 10px;
+  }
+  .gh-empty-icon { font-size: 40px; }
+
+  /* ── 하객 카드 ── */
+  .guest-card {
+    display: flex; align-items: stretch;
+    background: #fff; border-radius: 14px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+    overflow: hidden; cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.12s;
+    min-height: 68px;
+  }
+  .guest-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+  .guest-card:active { transform: scale(0.98); }
+
+  .gc-bar { width: 5px; flex-shrink: 0; }
+
+  .gc-body {
+    flex: 1; padding: 10px 10px 10px 12px; min-width: 0;
+    display: flex; flex-direction: column; justify-content: center; gap: 6px;
+  }
+
+  /* 1행: 이름(좌, 40%) + 축의금(우, 고정) */
+  .gc-row1 {
+    display: flex; align-items: center;
+    justify-content: space-between; gap: 6px;
+  }
+  .gc-name {
+    font-size: 15px; font-weight: 700; color: #222;
+    flex: 1; min-width: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .gc-amount {
+    font-size: 13px; font-weight: 700; color: #D4A96A;
+    flex-shrink: 0; white-space: nowrap;
+  }
+  .gc-amount.zero { color: #ccc; font-weight: 500; }
+
+  /* 2행: 배지들(좌, 넘치면 clip) + 동반인원(우, 고정) */
+  .gc-row2 {
+    display: flex; align-items: center;
+    justify-content: space-between; gap: 6px;
+  }
+  .gc-badges {
+    display: flex; gap: 4px; flex: 1; min-width: 0;
+    overflow: hidden; flex-wrap: nowrap;
+  }
+  .gc-badge {
+    font-size: 10px; font-weight: 700;
+    padding: 2px 6px; border-radius: 8px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .badge-cat            { background: #f0f0f0; color: #888; }
+  .badge-visit-none     { background: #f0f0f0; color: #bbb; }
+  .badge-visit-planned  { background: rgba(91,155,213,0.12); color: #5B9BD5; }
+  .badge-visit-done     { background: rgba(112,181,110,0.12); color: #70B56E; }
+  .badge-invite-no      { background: #f0f0f0; color: #bbb; }
+  .badge-invite-yes     { background: rgba(212,169,106,0.12); color: #C49050; }
+
+  .gc-companions {
+    font-size: 11px; color: #bbb; flex-shrink: 0;
+    white-space: nowrap; font-weight: 500;
+  }
+
+  .gc-del {
+    width: 40px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    border: none; border-left: 1px solid #f5f5f5;
+    background: #fff; cursor: pointer; color: #e0a0a0;
+    transition: background 0.15s, color 0.15s;
+  }
+  .gc-del:hover { background: #fff0f0; color: #f44336; }
+
+  /* ── FAB ── */
+  .gh-fab {
+    position: absolute; bottom: 52px; right: 20px;
+    width: 54px; height: 54px; border-radius: 50%;
+    background: linear-gradient(135deg, #D4A96A, #C49050);
+    border: none; cursor: pointer;
+    box-shadow: 0 4px 18px rgba(212,169,106,0.55);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 40; transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .gh-fab:hover { transform: scale(1.08); box-shadow: 0 6px 22px rgba(212,169,106,0.65); }
+  .gh-fab:active { transform: scale(0.94); }
+
+  /* ══════════════════════════════
+     하객 등록/수정 모달 (중앙)
+  ══════════════════════════════ */
+  .gm-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.48); z-index: 200;
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .gm-overlay.active { display: flex; }
+
+  .gm-box {
+    background: #fff; border-radius: 20px;
+    width: 100%; max-width: 360px;
+    max-height: 88vh; display: flex; flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    animation: modalIn 0.22s cubic-bezier(0.25,0.46,0.45,0.94);
+    overflow: hidden;
+  }
+  @keyframes modalIn {
+    from { transform: scale(0.94) translateY(8px); opacity: 0; }
+    to   { transform: scale(1)    translateY(0);   opacity: 1; }
+  }
+
+  .gm-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px 12px; border-bottom: 1px solid #f0f0f0; flex-shrink: 0;
+  }
+  .gm-title { font-size: 16px; font-weight: 700; color: #222; }
+  .gm-close {
+    width: 32px; height: 32px; border-radius: 10px; border: none;
+    background: #f5f5f5; cursor: pointer; color: #888;
+    display: flex; align-items: center; justify-content: center; transition: background 0.15s;
+  }
+  .gm-close:hover { background: #ebebeb; }
+
+  .gm-body {
+    padding: 16px 20px; display: flex; flex-direction: column;
+    gap: 14px; overflow-y: auto; flex: 1;
+  }
+  .gm-body::-webkit-scrollbar { display: none; }
+
+  .gm-fg { display: flex; flex-direction: column; gap: 6px; }
+  .gm-lbl { font-size: 13px; font-weight: 600; color: #555; }
+
+  .gm-input, .gm-select {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid #e8e8e8; border-radius: 12px;
+    font-size: 14px; color: #222; background: #f8f8f8;
+    outline: none; font-family: inherit; box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  .gm-input:focus, .gm-select:focus {
+    border-color: #D4A96A; box-shadow: 0 0 0 3px rgba(212,169,106,0.15); background: #fff;
+  }
+  .gm-select { -webkit-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 7L11 1' stroke='%23aaa' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+    padding-right: 36px;
+  }
+  .gm-textarea {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid #e8e8e8; border-radius: 12px;
+    font-size: 14px; color: #222; background: #f8f8f8;
+    outline: none; font-family: inherit; box-sizing: border-box; resize: none;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  .gm-textarea:focus {
+    border-color: #D4A96A; box-shadow: 0 0 0 3px rgba(212,169,106,0.15); background: #fff;
+  }
+  .gm-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* 세그먼트 컨트롤 */
+  .seg-ctrl {
+    display: flex; background: #f5f5f5; border-radius: 10px; padding: 3px; gap: 2px;
+  }
+  .seg-ctrl input[type="radio"] { display: none; }
+  .seg-ctrl label {
+    flex: 1; text-align: center; padding: 7px 4px;
+    border-radius: 8px; font-size: 12px; font-weight: 600;
+    color: #bbb; cursor: pointer;
+    transition: all 0.18s; user-select: none; font-family: inherit;
+  }
+  .seg-ctrl input[type="radio"]:checked + label {
+    background: #fff; color: #222;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  }
+  #gm_visit_planned:checked + label { color: #5B9BD5; }
+  #gm_visit_done:checked    + label { color: #70B56E; }
+  #gm_inv_yes:checked       + label { color: #D4A96A; }
+
+  .gm-footer {
+    padding: 12px 20px 16px; display: flex; gap: 10px;
+    border-top: 1px solid #f0f0f0; flex-shrink: 0;
+  }
+  .gm-btn-cancel {
+    padding: 13px 18px; background: #f5f5f5; color: #888;
+    font-size: 14px; font-weight: 600; border: none; border-radius: 12px;
+    cursor: pointer; font-family: inherit; transition: background 0.15s;
+  }
+  .gm-btn-cancel:hover { background: #ebebeb; }
+  .gm-btn-save {
+    flex: 1; padding: 13px; font-family: inherit;
+    background: linear-gradient(135deg, #D4A96A, #C49050);
+    color: #fff; font-size: 15px; font-weight: 700;
+    border: none; border-radius: 12px; cursor: pointer;
+    box-shadow: 0 3px 12px rgba(212,169,106,0.35);
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .gm-btn-save:hover { opacity: 0.9; }
+  .gm-btn-save:active { transform: scale(0.98); }
+
+  /* ══════════════════════════════
+     카테고리 추가 모달
+  ══════════════════════════════ */
+  .cat-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.48); z-index: 300;
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  .cat-overlay.active { display: flex; }
+
+  .cat-box {
+    background: #fff; border-radius: 20px;
+    width: 100%; max-width: 320px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    animation: modalIn 0.22s ease; overflow: hidden;
+  }
+  .cat-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px 12px; border-bottom: 1px solid #f0f0f0;
+  }
+  .cat-title { font-size: 15px; font-weight: 700; color: #222; }
+  .cat-close {
+    width: 30px; height: 30px; border-radius: 9px; border: none;
+    background: #f5f5f5; cursor: pointer; color: #888;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cat-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; }
+
+  .cat-colors {
+    display: flex; gap: 10px; padding: 2px 0;
+  }
+  .cat-color-opt {
+    width: 30px; height: 30px; border-radius: 50%; border: none;
+    cursor: pointer; transition: transform 0.15s; flex-shrink: 0;
+  }
+  .cat-color-opt:hover { transform: scale(1.12); }
+
+  .cat-footer { padding: 0 20px 16px; display: flex; gap: 8px; }
+  .cat-btn-cancel {
+    padding: 11px 16px; background: #f5f5f5; color: #888;
+    font-size: 14px; font-weight: 600; border: none; border-radius: 12px;
+    cursor: pointer; font-family: inherit;
+  }
+  .cat-btn-add {
+    flex: 1; padding: 11px;
+    background: linear-gradient(135deg, #D4A96A, #C49050);
+    color: #fff; font-size: 14px; font-weight: 700;
+    border: none; border-radius: 12px; cursor: pointer; font-family: inherit;
+  }
+
+  /* ══════════════════════════════
+     삭제 확인 모달
+  ══════════════════════════════ */
+  .del-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.48); z-index: 400;
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  .del-overlay.active { display: flex; }
+
+  .del-box {
+    background: #fff; border-radius: 20px;
+    padding: 28px 24px 20px; width: 300px; text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    animation: modalIn 0.22s ease;
+  }
+  .del-icon  { font-size: 36px; margin-bottom: 12px; }
+  .del-title { font-size: 17px; font-weight: 700; color: #222; margin-bottom: 8px; }
+  .del-desc  { font-size: 13px; color: #888; line-height: 1.6; margin-bottom: 20px; }
+  .del-btns  { display: flex; gap: 10px; }
+  .del-btn-cancel {
+    flex: 1; padding: 12px; background: #f5f5f5; color: #888;
+    border: none; border-radius: 12px; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+  }
+  .del-btn-ok {
+    flex: 1; padding: 12px; background: #f44336; color: #fff;
+    border: none; border-radius: 12px; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: inherit; transition: opacity 0.15s;
+  }
+  .del-btn-ok:hover { opacity: 0.88; }
+
+  /* ══════════════════════════════
+     다크모드
+  ══════════════════════════════ */
+  .phone-wrapper.dark { background: #15120e; box-shadow: 0 0 0 2px #2e2820, 0 20px 60px rgba(0,0,0,0.55); }
+
+  .phone-wrapper.dark .gh-header       { background: rgba(21,18,14,0.97); border-bottom-color: #2a2418; }
+  .phone-wrapper.dark .gh-header-top   { border-bottom-color: #2a2418; }
+  .phone-wrapper.dark .gh-back         { background: #26201a; color: #7a7068; }
+  .phone-wrapper.dark .gh-logo         { color: #D4A96A; }
+  .phone-wrapper.dark .icon-btn        { background: #26201a; color: #7a7068; }
+  .phone-wrapper.dark .icon-btn:hover  { background: #342c22; color: #D4A96A; }
+  .phone-wrapper.dark .notif-badge     { border-color: #26201a; }
+  .phone-wrapper.dark .gh-page-title   { color: #ede8e0; }
+  .phone-wrapper.dark .gh-sort-select  { background: #26201a; border-color: #3a3028; color: #c8c0b0; }
+
+  .phone-wrapper.dark .gh-cat-strip { background: #15120e; border-bottom-color: #2a2418; }
+  .phone-wrapper.dark .gh-cat-tab   { background: #26201a; border-color: #3a3028; color: #584e42; }
+  .phone-wrapper.dark .gh-cat-tab:hover { border-color: #D4A96A; color: #D4A96A; background: #2e2616; }
+  .phone-wrapper.dark .gh-cat-tab.active { background: #D4A96A; border-color: #D4A96A; color: #fff; }
+  .phone-wrapper.dark .gh-cat-add  { border-color: #3a3028; color: #483e32; }
+
+  .phone-wrapper.dark .gh-stats      { background: #1a1710; border-bottom-color: #2a2418; }
+  .phone-wrapper.dark .gh-stat-val   { color: #ede8e0; }
+  .phone-wrapper.dark .gh-stat-lbl   { color: #483e32; }
+
+  .phone-wrapper.dark .gh-list { background: #15120e; }
+  .phone-wrapper.dark .guest-card      { background: #1e1a14; box-shadow: none; border: 1px solid #2a2418; }
+  .phone-wrapper.dark .guest-card:hover{ box-shadow: 0 4px 14px rgba(0,0,0,0.4); }
+  .phone-wrapper.dark .gc-name         { color: #ede8e0; }
+  .phone-wrapper.dark .gc-companions   { color: #483e32; }
+  .phone-wrapper.dark .badge-cat        { background: #2a2418; color: #584e42; }
+  .phone-wrapper.dark .badge-visit-none { background: #2a2418; color: #483e32; }
+  .phone-wrapper.dark .badge-invite-no  { background: #2a2418; color: #483e32; }
+  .phone-wrapper.dark .gc-del          { background: #1e1a14; border-left-color: #2a2418; color: #7a4040; }
+  .phone-wrapper.dark .gc-del:hover    { background: #2e1818; color: #f44336; }
+
+  .phone-wrapper.dark .gh-empty { color: #483e32; }
+  .phone-wrapper.dark .gh-bulk-strip      { background: #1e1a14; border-bottom-color: #2a2418; }
+  .phone-wrapper.dark .gh-bulk-count      { color: #c8c0b0; }
+  .phone-wrapper.dark .gh-bulk-btn-visit  { background: rgba(112,181,110,0.12); }
+  .phone-wrapper.dark .gh-bulk-btn-invite { background: rgba(212,169,106,0.12); }
+  .phone-wrapper.dark .gh-bulk-btn-clear  { background: #26201a; color: #584e42; }
+  .phone-wrapper.dark .gh-bottom-bar      { background: #15120e; border-top-color: #2a2418; color: #3a3028; }
+  .phone-wrapper.dark .gc-chk-box         { background: #26201a; border-color: #3a3028; }
+
+  /* 모달 다크 */
+  .phone-wrapper.dark .gm-box    { background: #1a1710; }
+  .phone-wrapper.dark .gm-header { border-bottom-color: #2a2418; }
+  .phone-wrapper.dark .gm-title  { color: #ede8e0; }
+  .phone-wrapper.dark .gm-close  { background: #26201a; color: #7a7068; }
+  .phone-wrapper.dark .gm-lbl    { color: #7a7068; }
+  .phone-wrapper.dark .gm-input, .phone-wrapper.dark .gm-select, .phone-wrapper.dark .gm-textarea {
+    background: #26201a; border-color: #3a3028; color: #ede8e0;
+  }
+  .phone-wrapper.dark .gm-input:focus, .phone-wrapper.dark .gm-select:focus, .phone-wrapper.dark .gm-textarea:focus {
+    border-color: #D4A96A; background: #2e2616; box-shadow: 0 0 0 3px rgba(212,169,106,0.15);
+  }
+  .phone-wrapper.dark .gm-input::placeholder, .phone-wrapper.dark .gm-textarea::placeholder { color: #483e32; }
+  .phone-wrapper.dark .seg-ctrl          { background: #26201a; }
+  .phone-wrapper.dark .seg-ctrl label    { color: #483e32; }
+  .phone-wrapper.dark .seg-ctrl input[type="radio"]:checked + label { background: #342c22; color: #ede8e0; box-shadow: none; }
+  .phone-wrapper.dark #gm_visit_planned:checked + label { color: #5B9BD5; }
+  .phone-wrapper.dark #gm_visit_done:checked    + label { color: #70B56E; }
+  .phone-wrapper.dark #gm_inv_yes:checked       + label { color: #D4A96A; }
+  .phone-wrapper.dark .gm-footer     { border-top-color: #2a2418; }
+  .phone-wrapper.dark .gm-btn-cancel { background: #26201a; color: #584e42; }
+
+  .phone-wrapper.dark .cat-box    { background: #1a1710; }
+  .phone-wrapper.dark .cat-header { border-bottom-color: #2a2418; }
+  .phone-wrapper.dark .cat-title  { color: #ede8e0; }
+  .phone-wrapper.dark .cat-close  { background: #26201a; color: #7a7068; }
+  .phone-wrapper.dark .gm-input.cat-name-input { background: #26201a; border-color: #3a3028; color: #ede8e0; }
+  .phone-wrapper.dark .cat-btn-cancel { background: #26201a; color: #584e42; }
+
+  .phone-wrapper.dark .del-box        { background: #1a1710; }
+  .phone-wrapper.dark .del-title      { color: #ede8e0; }
+  .phone-wrapper.dark .del-desc       { color: #584e42; }
+  .phone-wrapper.dark .del-btn-cancel { background: #26201a; color: #584e42; }
+  </style>
+</head>
+<body>
+
+<div class="phone-wrapper">
+  <div class="phone-screen" style="padding:0; overflow:hidden; min-height:auto; height:814px; display:flex; flex-direction:column;">
+    <div class="guest-page">
+
+      <!-- ── 헤더 ── -->
+      <header class="gh-header">
+        <!-- 상단 행: 로고 + 아이콘 -->
+        <div class="gh-header-top">
+          <div class="gh-header-left">
+            <a href="main.html" class="gh-back" title="메인으로">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <span class="gh-logo">weddly</span>
+          </div>
+          <div class="gh-header-actions">
+            <button class="icon-btn dark-toggle-btn" id="darkToggleBtn" aria-label="다크모드">
+              <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              <svg class="icon-sun"  width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+              </svg>
+            </button>
+            <button class="icon-btn" id="notifBtn" aria-label="알림">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <span class="notif-badge"></span>
+            </button>
+            <button class="icon-btn" id="profileBtn" aria-label="프로필">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </button>
+          </div>
+        </div>
+        <!-- 하단 행: 페이지 제목 + 정렬 -->
+        <div class="gh-header-nav">
+          <span class="gh-page-title">하객관리</span>
+          <div class="gh-sort-wrap">
+            <select class="gh-sort-select" id="sortSelect">
+              <option value="name">이름순</option>
+              <option value="visit">방문 여부</option>
+              <option value="amount">축의금 높은순</option>
+            </select>
+            <svg class="gh-sort-icon" width="11" height="7" viewBox="0 0 12 8" fill="none">
+              <path d="M1 1L6 7L11 1" stroke="#aaa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </header>
+
+      <!-- ── 카테고리 스트립 ── -->
+      <div class="gh-cat-strip" id="catStrip"></div>
+
+      <!-- ── 통계 바 ── -->
+      <div class="gh-stats" id="ghStats"></div>
+
+      <!-- ── 일괄 액션 스트립 (체크박스 선택 시 표시) ── -->
+      <div class="gh-bulk-strip" id="ghBulkStrip">
+        <span class="gh-bulk-count" id="ghBulkCount">0명 선택</span>
+        <div class="gh-bulk-actions">
+          <button class="gh-bulk-btn gh-bulk-btn-visit"  id="ghBulkVisit">✓ 방문완료</button>
+          <button class="gh-bulk-btn gh-bulk-btn-invite" id="ghBulkInvite">✉ 청첩장 완료</button>
+          <button class="gh-bulk-btn gh-bulk-btn-clear"  id="ghBulkClear">취소</button>
+        </div>
+      </div>
+
+      <!-- ── 하객 목록 ── -->
+      <div class="gh-list" id="ghList"></div>
+
+      <!-- ── 저작권 (항상 고정) ── -->
+      <div class="gh-bottom-bar">© 2025 Weddly. All rights reserved.</div>
+
+      <!-- FAB -->
+      <button class="gh-fab" id="ghFab" aria-label="하객 등록">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 5V19M5 12H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── 하객 등록/수정 모달 ── -->
+<div class="gm-overlay" id="gmOverlay">
+  <div class="gm-box">
+    <div class="gm-header">
+      <h2 class="gm-title" id="gmTitle">하객 등록</h2>
+      <button class="gm-close" id="gmClose" aria-label="닫기">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+          <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="gm-body">
+      <!-- 이름 -->
+      <div class="gm-fg">
+        <label class="gm-lbl" for="gmName">이름 *</label>
+        <input type="text" class="gm-input" id="gmName" placeholder="하객 이름을 입력하세요" maxlength="20" />
+      </div>
+      <!-- 카테고리 -->
+      <div class="gm-fg">
+        <label class="gm-lbl" for="gmCat">카테고리 *</label>
+        <select class="gm-select" id="gmCat"></select>
+      </div>
+      <!-- 동반인원 / 축의금 -->
+      <div class="gm-row">
+        <div class="gm-fg">
+          <label class="gm-lbl" for="gmComp">동반 인원</label>
+          <input type="number" class="gm-input" id="gmComp" min="0" max="10" value="0" placeholder="0" />
+        </div>
+        <div class="gm-fg">
+          <label class="gm-lbl" for="gmAmount">축의금 (원)</label>
+          <input type="number" class="gm-input" id="gmAmount" min="0" step="10000" value="0" placeholder="0" />
+        </div>
+      </div>
+      <!-- 방문 여부 -->
+      <div class="gm-fg">
+        <label class="gm-lbl">방문 여부</label>
+        <div class="seg-ctrl">
+          <input type="radio" name="gm_visit" id="gm_visit_none"    value="미정"     checked />
+          <label for="gm_visit_none">미정</label>
+          <input type="radio" name="gm_visit" id="gm_visit_planned" value="방문예정" />
+          <label for="gm_visit_planned">방문예정</label>
+          <input type="radio" name="gm_visit" id="gm_visit_done"    value="방문완료" />
+          <label for="gm_visit_done">방문완료</label>
+        </div>
+      </div>
+      <!-- 청첩장 발송 -->
+      <div class="gm-fg">
+        <label class="gm-lbl">청첩장 발송</label>
+        <div class="seg-ctrl">
+          <input type="radio" name="gm_inv" id="gm_inv_no"  value="미발송" checked />
+          <label for="gm_inv_no">미발송</label>
+          <input type="radio" name="gm_inv" id="gm_inv_yes" value="발송완료" />
+          <label for="gm_inv_yes">발송완료</label>
+        </div>
+      </div>
+      <!-- 비고 -->
+      <div class="gm-fg">
+        <label class="gm-lbl" for="gmMemo">비고</label>
+        <textarea class="gm-textarea" id="gmMemo" rows="2" placeholder="메모를 입력하세요" maxlength="80"></textarea>
+      </div>
+    </div>
+    <div class="gm-footer">
+      <button class="gm-btn-cancel" id="gmCancel">취소</button>
+      <button class="gm-btn-save"   id="gmSave">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── 카테고리 추가 모달 ── -->
+<div class="cat-overlay" id="catOverlay">
+  <div class="cat-box">
+    <div class="cat-header">
+      <span class="cat-title">카테고리 추가</span>
+      <button class="cat-close" id="catClose" aria-label="닫기">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="cat-body">
+      <div class="gm-fg">
+        <label class="gm-lbl" for="catNameInput">카테고리 이름 *</label>
+        <input type="text" class="gm-input cat-name-input" id="catNameInput" placeholder="예) 동창회, 군대 등" maxlength="10" />
+      </div>
+      <div class="gm-fg">
+        <label class="gm-lbl">색상 선택</label>
+        <div class="cat-colors" id="catColorPicker">
+          <button type="button" class="cat-color-opt" data-color="#70B56E" style="background:#70B56E" aria-label="그린"></button>
+          <button type="button" class="cat-color-opt" data-color="#FF9800" style="background:#FF9800" aria-label="오렌지"></button>
+          <button type="button" class="cat-color-opt" data-color="#26C6DA" style="background:#26C6DA" aria-label="시안"></button>
+          <button type="button" class="cat-color-opt" data-color="#AB47BC" style="background:#AB47BC" aria-label="바이올렛"></button>
+          <button type="button" class="cat-color-opt" data-color="#EC407A" style="background:#EC407A" aria-label="딥핑크"></button>
+        </div>
+      </div>
+    </div>
+    <div class="cat-footer">
+      <button class="cat-btn-cancel" id="catCancelBtn">취소</button>
+      <button class="cat-btn-add"    id="catAddBtn">추가</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── 삭제 확인 모달 ── -->
+<div class="del-overlay" id="delOverlay">
+  <div class="del-box">
+    <div class="del-icon">🗑️</div>
+    <div class="del-title">하객을 삭제할까요?</div>
+    <div class="del-desc" id="delDesc">이 하객 정보를 삭제하면 복구할 수 없습니다.</div>
+    <div class="del-btns">
+      <button class="del-btn-cancel" id="delCancelBtn">취소</button>
+      <button class="del-btn-ok"     id="delOkBtn">삭제</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════
+   상태
+══════════════════════════════ */
+let activeCategory = 'all';
+let sortBy         = 'name';
+let editingId      = null;
+let deletingId     = null;
+let newCatColor    = '#70B56E';
+let nextGuestId    = 20;
+let nextCatId      = 10;
+let selectedIds    = new Set();
+
+const CAT_COLORS = {
+  '부모님': '#D4A96A',
+  '친구':   '#E8758A',
+  '직장':   '#5B9BD5',
+  '기타':   '#9B76C8',
+};
+
+let categories = [
+  { id: 'all',    name: '전체',  color: null },
+  { id: 'family', name: '부모님', color: '#D4A96A' },
+  { id: 'friend', name: '친구',  color: '#E8758A' },
+  { id: 'work',   name: '직장',  color: '#5B9BD5' },
+  { id: 'other',  name: '기타',  color: '#9B76C8' },
+];
+
+let guests = [
+  { id:1,  name:'김민준', category:'친구',  companions:1, visitStatus:'방문예정', inviteSent:true,  amount:100000, memo:'고등학교 친구' },
+  { id:2,  name:'이서연', category:'직장',  companions:0, visitStatus:'미정',     inviteSent:true,  amount:50000,  memo:'' },
+  { id:3,  name:'박정숙', category:'부모님', companions:2, visitStatus:'방문예정', inviteSent:true,  amount:300000, memo:'신부 측 부모님' },
+  { id:4,  name:'최유진', category:'친구',  companions:1, visitStatus:'미정',     inviteSent:false, amount:70000,  memo:'대학교 친구' },
+  { id:5,  name:'정수현', category:'직장',  companions:0, visitStatus:'방문완료', inviteSent:true,  amount:50000,  memo:'' },
+  { id:6,  name:'강민서', category:'기타',  companions:0, visitStatus:'미정',     inviteSent:true,  amount:0,      memo:'동네 지인' },
+  { id:7,  name:'윤도현', category:'친구',  companions:2, visitStatus:'방문예정', inviteSent:true,  amount:100000, memo:'군대 친구' },
+  { id:8,  name:'임지수', category:'직장',  companions:1, visitStatus:'미정',     inviteSent:false, amount:0,      memo:'' },
+  { id:9,  name:'한서준', category:'부모님', companions:1, visitStatus:'방문예정', inviteSent:true,  amount:200000, memo:'신랑 측 친척' },
+  { id:10, name:'오민아', category:'친구',  companions:0, visitStatus:'방문완료', inviteSent:true,  amount:50000,  memo:'초등학교 친구' },
+  { id:11, name:'신동욱', category:'직장',  companions:0, visitStatus:'방문예정', inviteSent:true,  amount:50000,  memo:'' },
+  { id:12, name:'권나연', category:'기타',  companions:1, visitStatus:'방문예정', inviteSent:false, amount:30000,  memo:'지인 소개' },
+];
+
+/* ══════════════════════════════
+   유틸리티
+══════════════════════════════ */
+function getCatColor(catName) {
+  const c = categories.find(c => c.name === catName);
+  return c ? (c.color || '#aaa') : '#aaa';
+}
+function getCatById(id) { return categories.find(c => c.id === id); }
+function getCatByName(name) { return categories.find(c => c.name === name); }
+
+function fmtAmount(n) {
+  if (!n) return '미정';
+  return '₩' + n.toLocaleString('ko-KR');
+}
+
+function getFiltered() {
+  let list = [...guests];
+  if (activeCategory !== 'all') {
+    const cat = getCatById(activeCategory);
+    if (cat) list = list.filter(g => g.category === cat.name);
+  }
+  if      (sortBy === 'name')   list.sort((a,b) => a.name.localeCompare(b.name, 'ko'));
+  else if (sortBy === 'visit')  {
+    const ord = { '방문완료': 0, '방문예정': 1, '미정': 2 };
+    list.sort((a,b) => (ord[a.visitStatus]??2) - (ord[b.visitStatus]??2));
+  }
+  else if (sortBy === 'amount') list.sort((a,b) => b.amount - a.amount);
+  return list;
+}
+
+/* ══════════════════════════════
+   렌더
+══════════════════════════════ */
+function renderAll() {
+  renderCatStrip();
+  renderStats();
+  renderList();
+}
+
+function renderCatStrip() {
+  const strip = document.getElementById('catStrip');
+  let html = '';
+  categories.forEach(cat => {
+    const active = cat.id === activeCategory ? 'active' : '';
+    html += `<button class="gh-cat-tab ${active}" data-catid="${cat.id}">${cat.name}</button>`;
+  });
+  html += `<button class="gh-cat-add" id="catAddOpenBtn" title="카테고리 추가">+</button>`;
+  strip.innerHTML = html;
+
+  strip.querySelectorAll('.gh-cat-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.catid;
+      renderAll();
+    });
+  });
+  document.getElementById('catAddOpenBtn').addEventListener('click', openCatModal);
+}
+
+function renderStats() {
+  const filtered = getFiltered();
+  const totalPeople = filtered.reduce((s, g) => s + 1 + g.companions, 0);
+  const visiting    = filtered.filter(g => g.visitStatus === '방문예정' || g.visitStatus === '방문완료').length;
+  const totalAmt    = filtered.reduce((s, g) => s + g.amount, 0);
+
+  document.getElementById('ghStats').innerHTML = `
+    <div class="gh-stat-item">
+      <span class="gh-stat-val gold">${filtered.length}<span style="font-size:12px;font-weight:600">명</span></span>
+      <span class="gh-stat-lbl">하객</span>
+    </div>
+    <div class="gh-stat-item">
+      <span class="gh-stat-val blue">${visiting}<span style="font-size:12px;font-weight:600">명</span></span>
+      <span class="gh-stat-lbl">방문 확정</span>
+    </div>
+    <div class="gh-stat-item">
+      <span class="gh-stat-val green" style="font-size:13px">${totalAmt ? '₩'+Math.floor(totalAmt/10000)+'만' : '0'}</span>
+      <span class="gh-stat-lbl">총 축의금</span>
+    </div>`;
+}
+
+function renderList() {
+  const list = document.getElementById('ghList');
+  const filtered = getFiltered();
+
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="gh-empty">
+      <div class="gh-empty-icon">👥</div>
+      <div>등록된 하객이 없습니다</div>
+      <div style="font-size:12px;color:#d0c8bc">+ 버튼을 눌러 하객을 추가해보세요</div>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(g => {
+
+    const catColor = getCatColor(g.category);
+    const visitCls = g.visitStatus === '방문완료' ? 'badge-visit-done'
+                   : g.visitStatus === '방문예정' ? 'badge-visit-planned'
+                   : 'badge-visit-none';
+    const invCls   = g.inviteSent ? 'badge-invite-yes' : 'badge-invite-no';
+    const amtCls   = g.amount > 0 ? '' : 'zero';
+    const compText = g.companions > 0 ? `동반 ${g.companions}명` : '단독';
+
+    const isChecked = selectedIds.has(g.id);
+    return `<div class="guest-card" data-id="${g.id}">
+      <label class="gc-check-wrap" onclick="event.stopPropagation()">
+        <input type="checkbox" class="gc-chk" data-id="${g.id}" ${isChecked ? 'checked' : ''}>
+        <span class="gc-chk-box"></span>
+      </label>
+      <div class="gc-bar" style="background:${catColor}"></div>
+      <div class="gc-body">
+        <!-- 1행: 이름 + 축의금 -->
+        <div class="gc-row1">
+          <span class="gc-name">${g.name}</span>
+          <span class="gc-amount ${amtCls}">${fmtAmount(g.amount)}</span>
+        </div>
+        <!-- 2행: 배지 + 동반인원 -->
+        <div class="gc-row2">
+          <div class="gc-badges">
+            <span class="gc-badge badge-cat">${g.category}</span>
+            <span class="gc-badge ${visitCls}">${g.visitStatus}</span>
+            <span class="gc-badge ${invCls}">${g.inviteSent ? '✓ 청첩장' : '청첩장 미발송'}</span>
+          </div>
+          <span class="gc-companions">${compText}</span>
+        </div>
+      </div>
+      <button class="gc-del" data-del-id="${g.id}" title="삭제" aria-label="삭제">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+          <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.guest-card').forEach(card => {
+    card.addEventListener('click', () => openEdit(Number(card.dataset.id)));
+  });
+  list.querySelectorAll('.gc-del').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      openDelete(Number(btn.dataset.delId));
+    });
+  });
+  list.querySelectorAll('.gc-chk').forEach(chk => {
+    chk.addEventListener('change', () => {
+      const id = Number(chk.dataset.id);
+      if (chk.checked) selectedIds.add(id);
+      else selectedIds.delete(id);
+      updateBulkBar();
+    });
+  });
+}
+
+/* ══════════════════════════════
+   일괄 액션 바
+══════════════════════════════ */
+function updateBulkBar() {
+  const strip = document.getElementById('ghBulkStrip');
+  if (selectedIds.size > 0) {
+    strip.classList.add('active');
+    document.getElementById('ghBulkCount').textContent = `${selectedIds.size}명 선택`;
+  } else {
+    strip.classList.remove('active');
+  }
+}
+
+/* ══════════════════════════════
+   하객 모달
+══════════════════════════════ */
+function buildCatOptions(selectedName) {
+  const sel = document.getElementById('gmCat');
+  sel.innerHTML = '';
+  categories.filter(c => c.id !== 'all').forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.name;
+    opt.textContent = c.name;
+    if (c.name === selectedName) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function openAdd() {
+  editingId = null;
+  document.getElementById('gmTitle').textContent = '하객 등록';
+  document.getElementById('gmName').value    = '';
+  document.getElementById('gmComp').value   = '0';
+  document.getElementById('gmAmount').value = '0';
+  document.getElementById('gmMemo').value   = '';
+  document.querySelector('input[name="gm_visit"][value="미정"]').checked   = true;
+  document.querySelector('input[name="gm_inv"][value="미발송"]').checked    = true;
+  const activeCat = getCatById(activeCategory);
+  buildCatOptions(activeCat && activeCat.id !== 'all' ? activeCat.name : categories[1]?.name);
+  document.getElementById('gmOverlay').classList.add('active');
+  setTimeout(() => document.getElementById('gmName').focus(), 80);
+}
+
+function openEdit(id) {
+  const g = guests.find(g => g.id === id);
+  if (!g) return;
+  editingId = id;
+  document.getElementById('gmTitle').textContent = '하객 수정';
+  document.getElementById('gmName').value    = g.name;
+  document.getElementById('gmComp').value   = g.companions;
+  document.getElementById('gmAmount').value = g.amount;
+  document.getElementById('gmMemo').value   = g.memo;
+  document.querySelector(`input[name="gm_visit"][value="${g.visitStatus}"]`).checked = true;
+  document.querySelector(`input[name="gm_inv"][value="${g.inviteSent ? '발송완료' : '미발송'}"]`).checked = true;
+  buildCatOptions(g.category);
+  document.getElementById('gmOverlay').classList.add('active');
+}
+
+function closeGuestModal() {
+  document.getElementById('gmOverlay').classList.remove('active');
+  editingId = null;
+}
+
+document.getElementById('gmClose').addEventListener('click', closeGuestModal);
+document.getElementById('gmCancel').addEventListener('click', closeGuestModal);
+document.getElementById('gmOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('gmOverlay')) closeGuestModal();
+});
+
+document.getElementById('gmSave').addEventListener('click', () => {
+  const name = document.getElementById('gmName').value.trim();
+  if (!name) {
+    const el = document.getElementById('gmName');
+    el.style.borderColor = '#f44336';
+    el.style.boxShadow   = '0 0 0 3px rgba(244,67,54,0.12)';
+    el.focus();
+    setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 1800);
+    return;
+  }
+
+  const g = {
+    id:          editingId || nextGuestId++,
+    name,
+    category:    document.getElementById('gmCat').value,
+    companions:  Number(document.getElementById('gmComp').value) || 0,
+    visitStatus: document.querySelector('input[name="gm_visit"]:checked').value,
+    inviteSent:  document.querySelector('input[name="gm_inv"]:checked').value === '발송완료',
+    amount:      Number(document.getElementById('gmAmount').value) || 0,
+    memo:        document.getElementById('gmMemo').value.trim(),
+  };
+
+  if (editingId) {
+    const idx = guests.findIndex(g => g.id === editingId);
+    if (idx !== -1) guests[idx] = g;
+  } else {
+    guests.push(g);
+  }
+
+  closeGuestModal();
+  renderAll();
+});
+
+/* ══════════════════════════════
+   카테고리 추가 모달
+══════════════════════════════ */
+function openCatModal() {
+  document.getElementById('catNameInput').value = '';
+  setNewCatColor('#70B56E');
+  document.getElementById('catOverlay').classList.add('active');
+  setTimeout(() => document.getElementById('catNameInput').focus(), 80);
+}
+
+function closeCatModal() {
+  document.getElementById('catOverlay').classList.remove('active');
+}
+
+function setNewCatColor(color) {
+  newCatColor = color;
+  document.querySelectorAll('.cat-color-opt').forEach(opt => {
+    opt.style.outline       = opt.dataset.color === color ? `3px solid #fff` : 'none';
+    opt.style.boxShadow     = opt.dataset.color === color ? `0 0 0 5px ${color}` : 'none';
+    opt.style.transform     = opt.dataset.color === color ? 'scale(1.15)' : 'scale(1)';
+  });
+}
+
+document.querySelectorAll('.cat-color-opt').forEach(opt => {
+  opt.addEventListener('click', () => setNewCatColor(opt.dataset.color));
+});
+
+document.getElementById('catClose').addEventListener('click', closeCatModal);
+document.getElementById('catCancelBtn').addEventListener('click', closeCatModal);
+document.getElementById('catOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('catOverlay')) closeCatModal();
+});
+
+document.getElementById('catAddBtn').addEventListener('click', () => {
+  const name = document.getElementById('catNameInput').value.trim();
+  if (!name) {
+    document.getElementById('catNameInput').focus();
+    return;
+  }
+  if (categories.find(c => c.name === name)) {
+    alert('이미 존재하는 카테고리입니다.');
+    return;
+  }
+  categories.push({ id: 'custom_' + (nextCatId++), name, color: newCatColor });
+  closeCatModal();
+  renderAll();
+});
+
+/* ══════════════════════════════
+   삭제 확인 모달
+══════════════════════════════ */
+function openDelete(id) {
+  const g = guests.find(g => g.id === id);
+  if (!g) return;
+  deletingId = id;
+  document.getElementById('delDesc').textContent = `"${g.name}" 하객 정보를 삭제하면 복구할 수 없습니다.`;
+  document.getElementById('delOverlay').classList.add('active');
+}
+
+function closeDelete() {
+  document.getElementById('delOverlay').classList.remove('active');
+  deletingId = null;
+}
+
+document.getElementById('delCancelBtn').addEventListener('click', closeDelete);
+document.getElementById('delOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('delOverlay')) closeDelete();
+});
+document.getElementById('delOkBtn').addEventListener('click', () => {
+  if (deletingId !== null) {
+    guests = guests.filter(g => g.id !== deletingId);
+    closeDelete();
+    renderAll();
+  }
+});
+
+document.getElementById('ghBulkVisit').addEventListener('click', () => {
+  selectedIds.forEach(id => {
+    const g = guests.find(g => g.id === id);
+    if (g) g.visitStatus = '방문완료';
+  });
+  selectedIds.clear();
+  updateBulkBar();
+  renderAll();
+});
+
+document.getElementById('ghBulkInvite').addEventListener('click', () => {
+  selectedIds.forEach(id => {
+    const g = guests.find(g => g.id === id);
+    if (g) g.inviteSent = true;
+  });
+  selectedIds.clear();
+  updateBulkBar();
+  renderAll();
+});
+
+document.getElementById('ghBulkClear').addEventListener('click', () => {
+  selectedIds.clear();
+  updateBulkBar();
+  renderList();
+});
+
+/* ══════════════════════════════
+   헤더 액션
+══════════════════════════════ */
+document.getElementById('darkToggleBtn').addEventListener('click', () => {
+  document.querySelector('.phone-wrapper').classList.toggle('dark');
+});
+document.getElementById('notifBtn').addEventListener('click', () => alert('알림 기능 연동 예정'));
+document.getElementById('profileBtn').addEventListener('click', () => alert('프로필 기능 연동 예정'));
+
+document.getElementById('sortSelect').addEventListener('change', e => {
+  sortBy = e.target.value;
+  renderList();
+  renderStats();
+});
+
+document.getElementById('ghFab').addEventListener('click', openAdd);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeGuestModal(); closeCatModal(); closeDelete(); }
+});
+
+/* ══════════════════════════════
+   초기 렌더
+══════════════════════════════ */
+setNewCatColor('#70B56E');
+renderAll();
+</script>
+</body>
+</html>
