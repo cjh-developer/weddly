@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 메모 작성</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { align-items: flex-start; }
+
+    .phone-wrapper {
+      height: 844px;
+      min-height: unset;
+      position: relative;
+    }
+
+    .phone-screen {
+      padding: 0;
+      min-height: unset;
+      height: calc(844px - 30px);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ══ 메인 헤더 (로고 + 액션) ══ */
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 14px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #f5f5f5;
+      z-index: 10;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .main-logo {
+      font-size: 24px;
+      font-weight: 800;
+      font-style: italic;
+      color: #D4A96A;
+      letter-spacing: -0.5px;
+    }
+
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    .notif-badge {
+      position: absolute;
+      top: 7px; right: 7px;
+      width: 8px; height: 8px;
+      background: #f44336;
+      border-radius: 50%;
+      border: 1.5px solid #fff;
+    }
+
+    .icon-btn { position: relative; }
+
+    /* 다크모드 토글 아이콘 */
+    .dark-toggle-btn .icon-sun  { display: none; }
+    .dark-toggle-btn .icon-moon { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-moon { display: none; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-sun  { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn { background: #2e2616; color: #D4A96A; }
+    .phone-wrapper.dark .dark-toggle-btn:hover { background: #3a3020; }
+
+    /* ══ 저작권 ══ */
+    .main-copyright {
+      text-align: center;
+      font-size: 11px;
+      color: #ccc;
+      padding: 10px 20px 12px;
+      letter-spacing: 0.2px;
+      line-height: 1.8;
+    }
+
+    /* ══ 서브 헤더 (뒤로가기 + 제목 + 저장) ══ */
+    .write-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px 12px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #f5f5f5;
+      z-index: 10;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .write-header-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #222;
+      letter-spacing: -0.3px;
+      transition: color 0.3s;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #f8f8f8;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      transition: background 0.15s, color 0.15s;
+    }
+    .icon-btn:hover { background: #f0e8d8; color: #D4A96A; }
+
+    .btn-save {
+      padding: 8px 18px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(212,169,106,0.35);
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn-save:hover  { opacity: 0.92; }
+    .btn-save:active { transform: scale(0.97); }
+
+    /* ══ 색상 강조 바 ══ */
+    .color-accent-bar {
+      height: 4px;
+      flex-shrink: 0;
+      background: transparent;
+      transition: background 0.25s;
+    }
+
+    /* ══ 스크롤 영역 ══ */
+    .write-scroll {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      -webkit-overflow-scrolling: touch;
+    }
+    .write-scroll::-webkit-scrollbar { display: none; }
+
+    /* ══ 작성 영역 ══ */
+    .write-area {
+      flex: 1;
+      padding: 20px 20px 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 제목 */
+    .title-input {
+      font-size: 20px;
+      font-weight: 700;
+      color: #222;
+      border: none;
+      outline: none;
+      padding: 0;
+      margin-bottom: 14px;
+      font-family: inherit;
+      letter-spacing: -0.5px;
+      background: transparent;
+      width: 100%;
+      transition: color 0.3s;
+    }
+    .title-input::placeholder { color: #ddd; }
+
+    /* ══ 제목 아래 메타 행 (날짜·시간·첨부) ══ */
+    .write-meta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #f5f5f5;
+      border: 1.5px solid transparent;
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 12px;
+      color: #888;
+      font-weight: 500;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .meta-chip:hover  { background: #f0e8d8; color: #C49050; }
+    .meta-chip.is-set {
+      background: #fff8ef;
+      color: #C49050;
+      border-color: #f0e8d8;
+    }
+
+    /* 구분선 */
+    .write-divider {
+      height: 1px;
+      background: #f0f0f0;
+      margin-bottom: 14px;
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+
+    /* 내용 */
+    .content-textarea {
+      flex: 1;
+      font-size: 14px;
+      color: #444;
+      border: none;
+      outline: none;
+      padding: 0;
+      font-family: inherit;
+      line-height: 1.8;
+      resize: none;
+      background: transparent;
+      min-height: 200px;
+      transition: color 0.3s;
+    }
+    .content-textarea::placeholder { color: #ddd; }
+
+    /* ══ 첨부파일 목록 ══ */
+    .attach-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px 20px 12px;
+    }
+
+    .attach-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f5f5f5;
+      border: 1px solid #ebebeb;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 12px;
+      color: #555;
+      font-weight: 500;
+      max-width: 200px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .attach-item-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .attach-remove-btn {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #ccc;
+      border: none;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .attach-remove-btn:hover { background: #f44336; }
+
+    /* ══ 하단 툴바 (색상만) ══ */
+    .write-toolbar {
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid #f0f0f0;
+      padding: 6px 14px 8px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .toolbar-row {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .toolbar-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: none;
+      background: transparent;
+      color: #888;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s;
+    }
+    .toolbar-btn:hover { background: #f0e8d8; color: #D4A96A; }
+    .toolbar-btn.on    { background: #fff8ef; color: #D4A96A; }
+
+    /* ══ 색상 팔레트 ══ */
+    .color-palette {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 4px 2px;
+    }
+    .color-palette.show { display: flex; }
+
+    .palette-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #bbb;
+      white-space: nowrap;
+    }
+
+    .color-swatch {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2.5px solid transparent;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .color-swatch:hover   { transform: scale(1.12); }
+    .color-swatch.selected { border-color: #333; transform: scale(1.18); }
+
+    .swatch-none {
+      background: #fff;
+      border-color: #ddd !important;
+    }
+    .swatch-none::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%) rotate(-45deg);
+      width: 65%; height: 1.5px;
+      background: #ccc;
+      border-radius: 1px;
+    }
+    .swatch-none.selected { border-color: #888 !important; }
+
+    /* ══ 중앙 팝업 모달 공통 ══ */
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.42);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      border-radius: 44px;
+      overflow: hidden;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 320px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px 22px 22px;
+      animation: modalIn 0.22s ease;
+      transition: background 0.3s;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 16px;
+      transition: color 0.3s;
+    }
+
+    /* 날짜/시간 입력 */
+    .dt-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .dt-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #aaa;
+      margin-bottom: 5px;
+      transition: color 0.3s;
+    }
+
+    .dt-input {
+      width: 100%;
+      padding: 12px 14px;
+      background: #f8f8f8;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 12px;
+      font-size: 14px;
+      color: #222;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .dt-input:focus {
+      border-color: #D4A96A;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(212,169,106,0.15);
+    }
+
+    /* 첨부파일 모달 내 파일 선택 버튼 */
+    .attach-upload-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 13px 16px;
+      background: #f8f8f8;
+      border: 1.5px dashed #ddd;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      cursor: pointer;
+      margin-bottom: 14px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .attach-upload-btn:hover {
+      background: #fff8ef;
+      border-color: #D4A96A;
+      color: #D4A96A;
+    }
+
+    /* 첨부파일 모달 내 목록 */
+    .attach-modal-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 160px;
+      overflow-y: auto;
+      margin-bottom: 16px;
+    }
+    .attach-modal-list::-webkit-scrollbar { width: 3px; }
+    .attach-modal-list::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+
+    .attach-modal-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: #fafafa;
+      border: 1px solid #f0f0f0;
+      border-radius: 10px;
+      font-size: 12px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .attach-modal-item-name {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .attach-modal-empty {
+      text-align: center;
+      font-size: 12px;
+      color: #ccc;
+      padding: 16px 0;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-cancel {
+      flex: 1;
+      padding: 13px;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #888;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-cancel:hover { background: #eeeeee; }
+
+    .btn-confirm {
+      flex: 1;
+      padding: 13px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(212,169,106,0.35);
+    }
+
+    /* ══ 다크모드 ══ */
+    .phone-wrapper.dark {
+      background: #15120e;
+      box-shadow: 0 0 0 2px #2e2820, 0 20px 60px rgba(0,0,0,0.55);
+    }
+    .phone-wrapper.dark .phone-screen        { background: #15120e; }
+    .phone-wrapper.dark .main-header         { background: rgba(21,18,14,0.97); border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .notif-badge         { border-color: #26201a; }
+    .phone-wrapper.dark .main-copyright      { color: #2e2818; }
+    .phone-wrapper.dark .write-header        { background: rgba(21,18,14,0.97); border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .write-header-title { color: #ede8e0; }
+    .phone-wrapper.dark .icon-btn           { background: #26201a; color: #7a7068; }
+    .phone-wrapper.dark .icon-btn:hover     { background: #342c22; color: #D4A96A; }
+    .phone-wrapper.dark .title-input        { color: #ede8e0; }
+    .phone-wrapper.dark .title-input::placeholder { color: #2e2818; }
+    .phone-wrapper.dark .meta-chip          { background: #26201a; color: #584e42; }
+    .phone-wrapper.dark .meta-chip:hover    { background: #342c22; color: #D4A96A; }
+    .phone-wrapper.dark .meta-chip.is-set   { background: #2a1e10; color: #D4A96A; border-color: #3a2a14; }
+    .phone-wrapper.dark .write-divider      { background: #2a2418; }
+    .phone-wrapper.dark .content-textarea   { color: #c8c0b0; }
+    .phone-wrapper.dark .content-textarea::placeholder { color: #2e2818; }
+    .phone-wrapper.dark .attach-item        { background: #26201a; border-color: #2e2818; color: #c8c0b0; }
+    .phone-wrapper.dark .write-toolbar      { background: rgba(21,18,14,0.97); border-top-color: #2a2418; }
+    .phone-wrapper.dark .toolbar-btn        { color: #3a3028; }
+    .phone-wrapper.dark .toolbar-btn:hover  { background: #2e2818; color: #D4A96A; }
+    .phone-wrapper.dark .toolbar-btn.on     { background: #2a1e10; color: #D4A96A; }
+    .phone-wrapper.dark .palette-label      { color: #3a3028; }
+    .phone-wrapper.dark .swatch-none        { background: #26201a; border-color: #3a3028 !important; }
+    .phone-wrapper.dark .swatch-none::after { background: #3a3028; }
+    .phone-wrapper.dark .color-swatch.selected { border-color: #ede8e0; }
+    .phone-wrapper.dark .modal-overlay      { background: rgba(0,0,0,0.65); }
+    .phone-wrapper.dark .modal-box          { background: #1e1a14; }
+    .phone-wrapper.dark .modal-title        { color: #ede8e0; }
+    .phone-wrapper.dark .dt-label           { color: #3a3028; }
+    .phone-wrapper.dark .dt-input           { background: #26201a; border-color: #2e2818; color: #ede8e0; }
+    .phone-wrapper.dark .dt-input:focus     { background: #1e1a14; border-color: #D4A96A; }
+    .phone-wrapper.dark .attach-upload-btn  { background: #26201a; border-color: #3a3028; color: #584e42; }
+    .phone-wrapper.dark .attach-upload-btn:hover { background: #2a1e10; border-color: #D4A96A; color: #D4A96A; }
+    .phone-wrapper.dark .attach-modal-item  { background: #26201a; border-color: #2e2818; color: #c8c0b0; }
+    .phone-wrapper.dark .attach-modal-empty { color: #2e2818; }
+    .phone-wrapper.dark .btn-cancel         { background: #26201a; color: #584e42; }
+    .phone-wrapper.dark .btn-cancel:hover   { background: #2e2818; }
+
+    @media (max-width: 430px) {
+      .modal-overlay { border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-wrapper">
+
+    <!-- ① 날짜·시간 모달 (중앙 팝업) -->
+    <div class="modal-overlay" id="dtModal" onclick="onOverlayClick(event,'dtModal')">
+      <div class="modal-box">
+        <div class="modal-title">날짜 &middot; 시간 설정</div>
+        <div class="dt-group">
+          <div>
+            <div class="dt-label">날짜</div>
+            <input type="date" class="dt-input" id="dtDate" />
+          </div>
+          <div>
+            <div class="dt-label">시간</div>
+            <input type="time" class="dt-input" id="dtTime" />
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeModal('dtModal')">취소</button>
+          <button class="btn-confirm" onclick="applyDateTime()">적용</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ② 첨부파일 모달 (중앙 팝업) -->
+    <div class="modal-overlay" id="attachModal" onclick="onOverlayClick(event,'attachModal')">
+      <div class="modal-box">
+        <div class="modal-title">첨부파일</div>
+        <!-- 파일 선택 버튼 -->
+        <button class="attach-upload-btn" onclick="triggerFileInput()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+          </svg>
+          파일 선택
+        </button>
+        <!-- 첨부된 파일 목록 -->
+        <div class="attach-modal-list" id="attachModalList">
+          <div class="attach-modal-empty">첨부된 파일이 없습니다.</div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-confirm" onclick="closeModal('attachModal')">완료</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 숨겨진 파일 입력 -->
+    <input type="file" id="fileInput" multiple style="display:none" onchange="handleFileSelect(this)" />
+
+    <div class="phone-screen">
+
+      <!-- 메인 헤더 -->
+      <div class="main-header">
+        <span class="main-logo">weddly</span>
+        <div class="header-actions">
+          <button class="icon-btn dark-toggle-btn" id="darkToggleBtn" aria-label="다크모드 전환">
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun"  width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+          <button class="icon-btn" id="notifBtn" aria-label="알림">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-badge"></span>
+          </button>
+          <button class="icon-btn" id="profileBtn" aria-label="프로필">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 서브 헤더 (뒤로가기 · 페이지 제목 · 저장) -->
+      <div class="write-header">
+        <button class="icon-btn" onclick="history.back()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+        <span class="write-header-title" id="headerTitle">새 메모</span>
+        <button class="btn-save" onclick="saveMemo()">저장</button>
+      </div>
+
+      <!-- 색상 강조 바 -->
+      <div class="color-accent-bar" id="colorAccentBar"></div>
+
+      <!-- 스크롤 영역 -->
+      <div class="write-scroll">
+        <div class="write-area">
+
+          <!-- 제목 -->
+          <input
+            type="text"
+            class="title-input"
+            id="titleInput"
+            placeholder="제목"
+            maxlength="50"
+            autocomplete="off"
+          />
+
+          <!-- 제목 아래 메타 행 (날짜 · 시간 · 첨부) -->
+          <div class="write-meta-row">
+            <!-- 날짜 칩 -->
+            <div class="meta-chip is-set" id="dateChip" onclick="openDtModal()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8"  y1="2" x2="8"  y2="6"/>
+                <line x1="3"  y1="10" x2="21" y2="10"/>
+              </svg>
+              <span id="dateChipText">날짜</span>
+            </div>
+            <!-- 시간 칩 -->
+            <div class="meta-chip is-set" id="timeChip" onclick="openDtModal()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span id="timeChipText">시간</span>
+            </div>
+          </div>
+
+          <!-- 구분선 -->
+          <div class="write-divider"></div>
+
+          <!-- 내용 -->
+          <textarea
+            class="content-textarea"
+            id="contentTextarea"
+            placeholder="내용을 입력하세요..."
+          ></textarea>
+
+        </div>
+
+        <!-- 첨부파일 인라인 목록 -->
+        <div class="attach-list" id="attachList"></div>
+
+      </div><!-- /write-scroll -->
+
+      <!-- 하단 툴바 (색상 선택) -->
+      <div class="write-toolbar">
+        <div class="toolbar-row">
+          <!-- 첨부파일 -->
+          <button class="toolbar-btn" id="attachBtn" onclick="openAttachModal()" title="첨부파일">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+            </svg>
+          </button>
+          <!-- 색상 -->
+          <button class="toolbar-btn" id="colorToggleBtn" onclick="toggleColorPalette()" title="색상 선택">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="13.5" cy="6.5"  r=".5" fill="currentColor"/>
+              <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+              <circle cx="8.5"  cy="7.5"  r=".5" fill="currentColor"/>
+              <circle cx="6.5"  cy="12.5" r=".5" fill="currentColor"/>
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- 색상 팔레트 -->
+        <div class="color-palette" id="colorPalette">
+          <span class="palette-label">색상</span>
+          <div class="color-swatch swatch-none selected" data-color="" onclick="selectColor(this,'')"></div>
+          <div class="color-swatch" style="background:#D4A96A" data-color="#D4A96A" onclick="selectColor(this,'#D4A96A')"></div>
+          <div class="color-swatch" style="background:#E07070" data-color="#E07070" onclick="selectColor(this,'#E07070')"></div>
+          <div class="color-swatch" style="background:#5BAD7F" data-color="#5BAD7F" onclick="selectColor(this,'#5BAD7F')"></div>
+          <div class="color-swatch" style="background:#5B8AF0" data-color="#5B8AF0" onclick="selectColor(this,'#5B8AF0')"></div>
+          <div class="color-swatch" style="background:#9C6BC4" data-color="#9C6BC4" onclick="selectColor(this,'#9C6BC4')"></div>
+        </div>
+      </div>
+
+      <!-- 저작권 -->
+      <div class="main-copyright">
+        © 2025 Weddly. All rights reserved.<br/>
+        당신의 특별한 날을 함께해요 💍
+      </div>
+
+    </div><!-- /phone-screen -->
+  </div><!-- /phone-wrapper -->
+
+  <script>
+    /* ══ 상태 ══ */
+    let selectedColor = '';
+    let attachments   = [];
+    let noteDate      = '';
+    let noteTime      = '';
+
+    const phoneWrapper = document.querySelector('.phone-wrapper');
+
+    /* ══ 다크모드 ══ */
+    if (localStorage.getItem('weddly-dark') === 'true') {
+      phoneWrapper.classList.add('dark');
+    }
+    document.getElementById('darkToggleBtn').addEventListener('click', () => {
+      const isDark = phoneWrapper.classList.toggle('dark');
+      localStorage.setItem('weddly-dark', isDark);
+    });
+    document.getElementById('notifBtn').addEventListener('click',  () => alert('알림 기능 연동 예정'));
+    document.getElementById('profileBtn').addEventListener('click', () => alert('프로필 페이지 연동 예정'));
+
+    /* ══ 색상 선택 ══ */
+    function selectColor(el, color) {
+      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedColor = color;
+      document.getElementById('colorAccentBar').style.background = color || 'transparent';
+    }
+
+    function toggleColorPalette() {
+      const palette = document.getElementById('colorPalette');
+      const btn     = document.getElementById('colorToggleBtn');
+      const isOpen  = palette.classList.toggle('show');
+      btn.classList.toggle('on', isOpen);
+    }
+
+    /* ══ 날짜/시간 ══ */
+    function openDtModal() {
+      const now = new Date();
+      const di  = document.getElementById('dtDate');
+      const ti  = document.getElementById('dtTime');
+      if (!di.value) di.value = now.toISOString().split('T')[0];
+      if (!ti.value) ti.value = now.toTimeString().slice(0, 5);
+      openModal('dtModal');
+    }
+
+    function applyDateTime() {
+      noteDate = document.getElementById('dtDate').value;
+      noteTime = document.getElementById('dtTime').value;
+
+      if (noteDate) {
+        const d   = new Date(noteDate + 'T00:00:00');
+        const fmt = `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+        document.getElementById('dateChipText').textContent = fmt;
+        document.getElementById('dateChip').classList.add('is-set');
+      }
+      if (noteTime) {
+        document.getElementById('timeChipText').textContent = noteTime;
+        document.getElementById('timeChip').classList.add('is-set');
+      }
+      closeModal('dtModal');
+    }
+
+    /* ══ 첨부파일 ══ */
+    function openAttachModal() {
+      renderAttachModalList();
+      openModal('attachModal');
+    }
+
+    function triggerFileInput() {
+      document.getElementById('fileInput').click();
+    }
+
+    function handleFileSelect(input) {
+      Array.from(input.files).forEach(f => {
+        attachments.push({ id: Date.now() + Math.random(), name: f.name });
+      });
+      input.value = '';
+      renderAttachModalList();
+      renderAttachList();
+      updateAttachIcon();
+    }
+
+    function removeAttach(id) {
+      attachments = attachments.filter(a => String(a.id) !== String(id));
+      renderAttachModalList();
+      renderAttachList();
+      updateAttachIcon();
+    }
+
+    function renderAttachModalList() {
+      const el = document.getElementById('attachModalList');
+      if (!attachments.length) {
+        el.innerHTML = '<div class="attach-modal-empty">첨부된 파일이 없습니다.</div>';
+        return;
+      }
+      el.innerHTML = attachments.map(a => `
+        <div class="attach-modal-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+          </svg>
+          <span class="attach-modal-item-name">${a.name}</span>
+          <button class="attach-remove-btn" onclick="removeAttach('${a.id}')">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function renderAttachList() {
+      document.getElementById('attachList').innerHTML = attachments.map(a => `
+        <div class="attach-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+          </svg>
+          <span class="attach-item-name">${a.name}</span>
+          <button class="attach-remove-btn" onclick="removeAttach('${a.id}')">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function updateAttachIcon() {
+      const btn = document.getElementById('attachBtn');
+      btn.classList.toggle('on', attachments.length > 0);
+    }
+
+    /* ══ 저장 ══ */
+    function saveMemo() {
+      const title   = document.getElementById('titleInput').value.trim();
+      const content = document.getElementById('contentTextarea').value.trim();
+
+      if (!title && !content) {
+        document.getElementById('titleInput').focus();
+        return;
+      }
+
+      const memo = {
+        id:          urlNoteId || Date.now(),
+        title:       title || '제목 없음',
+        content,
+        color:       selectedColor,
+        date:        noteDate,
+        time:        noteTime,
+        attachments,
+      };
+
+      console.log('[저장]', memo);
+      /* TODO: API 연동 */
+      alert(`"${memo.title}" 저장되었습니다.`);
+      history.back();
+    }
+
+    /* ══ 모달 유틸 ══ */
+    function openModal(id)  { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    function onOverlayClick(e, id) {
+      if (e.target === document.getElementById(id)) closeModal(id);
+    }
+
+    /* ══ 키보드 ══ */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeModal('dtModal');
+        closeModal('attachModal');
+      }
+    });
+
+    /* ══ 초기화 ══ */
+    const params    = new URLSearchParams(window.location.search);
+    const urlNoteId = params.get('id');
+
+    if (urlNoteId) {
+      document.getElementById('headerTitle').textContent = '메모 수정';
+      /* TODO: 기존 데이터 불러와서 폼에 채우기 */
+    }
+
+    (function initDateTime() {
+      const now = new Date();
+      noteDate  = now.toISOString().split('T')[0];
+      noteTime  = now.toTimeString().slice(0, 5);
+      const fmt = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+      document.getElementById('dateChipText').textContent = fmt;
+      document.getElementById('timeChipText').textContent = noteTime;
+    })();
+  </script>
+</body>
+</html>

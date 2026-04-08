@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 메모</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { align-items: flex-start; }
+
+    .phone-wrapper {
+      height: 844px;
+      min-height: unset;
+      position: relative;
+    }
+
+    .phone-screen {
+      padding: 0 0 140px;
+      min-height: unset;
+      height: calc(844px - 30px);
+      overflow-y: auto;
+      display: block;
+    }
+
+    /* ── 스크롤바 ── */
+    .phone-screen::-webkit-scrollbar {
+      width: 4px;
+    }
+    .phone-screen::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .phone-screen::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #D4A96A, #C49050);
+      border-radius: 4px;
+    }
+    .phone-screen::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #C49050, #b07840);
+    }
+    .phone-wrapper.dark .phone-screen::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #3a2e1e, #2a2010);
+    }
+    .phone-wrapper.dark .phone-screen::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #D4A96A, #C49050);
+    }
+
+    /* ── 헤더 ── */
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 14px;
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .main-logo {
+      font-size: 24px;
+      font-weight: 800;
+      font-style: italic;
+      color: #D4A96A;
+      letter-spacing: -0.5px;
+    }
+
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #f8f8f8;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      transition: background 0.15s, color 0.15s;
+      position: relative;
+    }
+    .icon-btn:hover { background: #f0e8d8; color: #D4A96A; }
+
+    .notif-badge {
+      position: absolute;
+      top: 7px; right: 7px;
+      width: 8px; height: 8px;
+      background: #f44336;
+      border-radius: 50%;
+      border: 1.5px solid #fff;
+    }
+
+    /* ── 다크모드 토글 아이콘 ── */
+    .dark-toggle-btn .icon-sun  { display: none; }
+    .dark-toggle-btn .icon-moon { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-moon { display: none; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-sun  { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn { background: #2e2616; color: #D4A96A; }
+    .phone-wrapper.dark .dark-toggle-btn:hover { background: #3a3020; }
+
+    /* ── 저작권 ── */
+    .main-copyright {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 11px;
+      color: #ccc;
+      padding: 8px 20px 10px;
+      letter-spacing: 0.2px;
+      line-height: 1.8;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(6px);
+      z-index: 150;
+    }
+
+    /* ── 다크모드 ── */
+    .phone-wrapper.dark {
+      background: #15120e;
+      box-shadow: 0 0 0 2px #2e2820, 0 20px 60px rgba(0,0,0,0.55);
+    }
+    .phone-wrapper.dark .phone-screen    { background: #15120e; }
+    .phone-wrapper.dark .main-header     { background: rgba(21,18,14,0.97); border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .icon-btn        { background: #26201a; color: #7a7068; }
+    .phone-wrapper.dark .icon-btn:hover  { background: #342c22; color: #D4A96A; }
+    .phone-wrapper.dark .notif-badge     { border-color: #26201a; }
+    .phone-wrapper.dark .memo-tabs       { }
+    .phone-wrapper.dark .memo-tab        { background: #1e1a14; border-color: #2e2818; color: #584e42; }
+    .phone-wrapper.dark .memo-tab.active { background: linear-gradient(135deg,#D4A96A,#C49050); border-color: transparent; color: #fff; }
+    .phone-wrapper.dark .memo-section-label { color: #3a3028; }
+    .phone-wrapper.dark .memo-section-count { background: #2a1e10; color: #D4A96A; }
+    .phone-wrapper.dark .folder-card     { background: #1e1a14; border-color: #2e2818; }
+    .phone-wrapper.dark .folder-card:hover { background: #26201a; border-color: #D4A96A; }
+    .phone-wrapper.dark .folder-name     { color: #ede8e0; }
+    .phone-wrapper.dark .folder-meta     { color: #c8c0b0; }
+    .phone-wrapper.dark .note-card       { background: #1e1a14; border-color: #2e2818; }
+    .phone-wrapper.dark .note-card:hover { border-color: #D4A96A; }
+    .phone-wrapper.dark .note-title      { color: #ede8e0; }
+    .phone-wrapper.dark .note-preview    { color: #c8c0b0; }
+    .phone-wrapper.dark .note-date       { color: #2e2818; }
+    .phone-wrapper.dark .note-folder-badge { background: #2a1e10; }
+    .phone-wrapper.dark .del-btn         { color: #2e2818; }
+    .phone-wrapper.dark .del-btn:hover   { background: #300; color: #f44336; }
+    .phone-wrapper.dark .memo-empty-text { color: #2e2818; }
+    .phone-wrapper.dark .modal-sheet     { background: #1e1a14; }
+    .phone-wrapper.dark .modal-handle    { background: #2e2818; }
+    .phone-wrapper.dark .modal-title     { color: #ede8e0; }
+    .phone-wrapper.dark .modal-desc      { color: #c8c0b0; }
+    .phone-wrapper.dark .btn-cancel      { background: #26201a; color: #584e42; }
+    .phone-wrapper.dark .btn-cancel:hover { background: #2e2818; }
+    .phone-wrapper.dark .add-folder-input { background: #26201a; border-color: #2e2818; color: #ede8e0; }
+    .phone-wrapper.dark .add-folder-input:focus { background: #1e1a14; border-color: #D4A96A; }
+    .phone-wrapper.dark .fab-menu-item   { background: #1e1a14; border-color: #2e2818; color: #ede8e0; }
+    .phone-wrapper.dark .fab-menu-item:hover { background: #26201a; border-color: #D4A96A; color: #D4A96A; }
+    .phone-wrapper.dark .main-copyright  { color: #2e2818; background: rgba(21,18,14,0.97); }
+
+    /* ── 서브 헤더 ── */
+    .memo-sub-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px 6px;
+      position: relative;
+    }
+
+    .memo-sub-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #222;
+      letter-spacing: -0.3px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .phone-wrapper.dark .memo-sub-title { color: #ede8e0; }
+
+    /* ── 탭 ── */
+    .memo-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 14px 16px 0;
+    }
+
+    .memo-tab {
+      padding: 7px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1.5px solid #e8e8e8;
+      background: #fff;
+      color: #888;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .memo-tab.active {
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border-color: transparent;
+      color: #fff;
+    }
+
+    /* ── 섹션 ── */
+    .memo-section {
+      padding: 18px 16px 0;
+    }
+
+    .memo-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .memo-section-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #aaa;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .memo-section-count {
+      font-size: 12px;
+      font-weight: 600;
+      color: #D4A96A;
+      background: #fff8ef;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    /* ── 폴더 카드 ── */
+    .folder-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .folder-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fafafa;
+      border: 1.5px solid #f0f0f0;
+      border-radius: 14px;
+      padding: 13px 14px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .folder-card:hover {
+      border-color: #D4A96A;
+      background: #fffaf4;
+    }
+
+    .folder-icon-wrap {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f7eedd, #eedbb5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #C49050;
+    }
+
+    .folder-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .folder-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 3px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .folder-meta {
+      font-size: 11px;
+      color: #bbb;
+      font-weight: 500;
+    }
+
+    .del-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: #ddd;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .del-btn:hover { background: #fff0f0; color: #f44336; }
+
+    /* ── 노트 카드 ── */
+    .note-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .note-card {
+      display: flex;
+      background: #fff;
+      border: 1.5px solid #f0f0f0;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .note-card:hover {
+      border-color: #D4A96A;
+      box-shadow: 0 2px 10px rgba(212,169,106,0.12);
+    }
+
+    .note-color-bar {
+      width: 5px;
+      flex-shrink: 0;
+      border-radius: 12px 0 0 12px;
+    }
+
+    .note-body {
+      flex: 1;
+      padding: 13px 12px;
+      min-width: 0;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .note-content-wrap {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .note-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .note-preview {
+      font-size: 12px;
+      color: #aaa;
+      font-weight: 500;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      margin-bottom: 7px;
+      line-height: 1.5;
+    }
+
+    .note-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .note-date {
+      font-size: 11px;
+      color: #ccc;
+      font-weight: 500;
+    }
+
+    .note-attach-badge {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      color: #bbb;
+      font-weight: 500;
+    }
+
+    .note-folder-badge {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      color: #D4A96A;
+      background: #fff8ef;
+      padding: 1px 7px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    /* ── 빈 상태 ── */
+    .memo-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 36px 0;
+      gap: 10px;
+    }
+
+    .memo-empty-text {
+      font-size: 13px;
+      color: #ccc;
+      font-weight: 500;
+    }
+
+    /* ── FAB ── */
+    .fab-wrapper {
+      position: absolute;
+      bottom: 68px;
+      right: 18px;
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .fab-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .fab-menu.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .fab-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border: 1.5px solid #eee;
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #333;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+
+    .fab-menu-item:hover {
+      border-color: #D4A96A;
+      background: #fffaf4;
+      color: #D4A96A;
+    }
+
+    .fab-item-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .fab-item-icon.folder {
+      background: linear-gradient(135deg, #f7eedd, #eedbb5);
+      color: #C49050;
+    }
+
+    .fab-item-icon.note {
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      color: #fff;
+    }
+
+    .fab-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(212,169,106,0.45);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .fab-btn.open { transform: rotate(45deg); }
+
+    /* ── FAB 배경막 ── */
+    .fab-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.18);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      border-radius: 44px;
+    }
+
+    .fab-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ── 모달 (바텀 시트 – 삭제 확인용) ── */
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.40);
+      display: flex;
+      align-items: flex-end;
+      z-index: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      border-radius: 44px;
+      overflow: hidden;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-sheet {
+      width: 100%;
+      background: #fff;
+      border-radius: 20px 20px 0 0;
+      padding: 18px 20px 32px;
+    }
+
+    .modal-sheet.animate { animation: slideUp 0.25s ease; }
+
+    @keyframes slideUp {
+      from { transform: translateY(60px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    /* ── 모달 (중앙 팝업 – 폴더 추가용) ── */
+    .modal-overlay.modal-center {
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-overlay.modal-center .modal-sheet {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 20px;
+      padding: 24px 22px 22px;
+      animation: modalIn 0.22s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+
+    .modal-handle {
+      width: 36px;
+      height: 4px;
+      background: #e8e8e8;
+      border-radius: 2px;
+      margin: 0 auto 18px;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .modal-desc {
+      font-size: 13px;
+      color: #888;
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-cancel {
+      flex: 1;
+      padding: 14px;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #888;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-cancel:hover { background: #eeeeee; }
+
+    .btn-delete {
+      flex: 1;
+      padding: 14px;
+      background: #fff0f0;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #f44336;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-delete:hover { background: #ffe0e0; }
+
+    .btn-confirm {
+      flex: 1;
+      padding: 14px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(212,169,106,0.35);
+    }
+
+    /* 폴더 추가 입력 */
+    .add-folder-input {
+      width: 100%;
+      padding: 13px 14px;
+      background: #f8f8f8;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 12px;
+      font-size: 14px;
+      color: #222;
+      font-family: inherit;
+      outline: none;
+      margin-bottom: 16px;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .add-folder-input:focus {
+      border-color: #D4A96A;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(212,169,106,0.15);
+    }
+
+    .add-folder-input::placeholder { color: #ccc; }
+
+    @media (max-width: 430px) {
+      .fab-backdrop { border-radius: 0; }
+      .modal-overlay { border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-wrapper">
+
+    <!-- FAB 배경막 -->
+    <div class="fab-backdrop" id="fabBackdrop" onclick="closeFab()"></div>
+
+    <!-- 삭제 확인 모달 (중앙 팝업) -->
+    <div class="modal-overlay modal-center" id="deleteModal">
+      <div class="modal-sheet">
+        <div class="modal-title" id="deleteModalTitle">폴더를 삭제할까요?</div>
+        <div class="modal-desc" id="deleteModalDesc">삭제하면 되돌릴 수 없습니다.<br>폴더 내 모든 노트도 함께 삭제됩니다.</div>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeModal('deleteModal')">취소</button>
+          <button class="btn-delete" onclick="executeDelete()">삭제</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 폴더 추가 모달 (중앙 팝업) -->
+    <div class="modal-overlay modal-center" id="addFolderModal">
+      <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-title">폴더 추가</div>
+        <div class="modal-desc" style="margin-bottom:14px;">폴더 이름을 입력해 주세요.</div>
+        <input type="text" class="add-folder-input" id="folderNameInput" placeholder="폴더 이름" maxlength="20" />
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeModal('addFolderModal')">취소</button>
+          <button class="btn-confirm" onclick="confirmAddFolder()">추가</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 화면 본체 -->
+    <div class="phone-screen">
+
+      <!-- 헤더 -->
+      <div class="main-header">
+        <span class="main-logo">weddly</span>
+        <div class="header-actions">
+          <!-- 다크모드 토글 -->
+          <button class="icon-btn dark-toggle-btn" id="darkToggleBtn" aria-label="다크모드 전환">
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+          <!-- 알림 -->
+          <button class="icon-btn" id="notifBtn" aria-label="알림">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-badge"></span>
+          </button>
+          <!-- 프로필 -->
+          <button class="icon-btn" id="profileBtn" aria-label="프로필">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 서브 헤더 -->
+      <div class="memo-sub-header">
+        <button class="icon-btn" onclick="location.href='main.html'" aria-label="뒤로가기">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <span class="memo-sub-title">메모장</span>
+      </div>
+
+      <!-- 탭 -->
+      <div class="memo-tabs">
+        <button class="memo-tab active" onclick="switchTab(this,'all')">전체</button>
+        <button class="memo-tab" onclick="switchTab(this,'folder')">폴더</button>
+        <button class="memo-tab" onclick="switchTab(this,'note')">노트</button>
+      </div>
+
+      <!-- 전체 탭 -->
+      <div id="tab-all">
+        <div class="memo-section">
+          <div class="memo-section-header">
+            <span class="memo-section-label">폴더</span>
+            <span class="memo-section-count" id="folderCountAll">0</span>
+          </div>
+          <div class="folder-list" id="folderListAll"></div>
+        </div>
+        <div class="memo-section" style="margin-bottom:20px;">
+          <div class="memo-section-header">
+            <span class="memo-section-label">노트</span>
+            <span class="memo-section-count" id="noteCountAll">0</span>
+          </div>
+          <div class="note-list" id="noteListAll"></div>
+        </div>
+      </div>
+
+      <!-- 폴더 탭 -->
+      <div id="tab-folder" style="display:none;">
+        <div class="memo-section" style="margin-bottom:20px;">
+          <div class="memo-section-header">
+            <span class="memo-section-label">폴더</span>
+            <span class="memo-section-count" id="folderCountTab">0</span>
+          </div>
+          <div class="folder-list" id="folderListTab"></div>
+        </div>
+      </div>
+
+      <!-- 노트 탭 -->
+      <div id="tab-note" style="display:none;">
+        <div class="memo-section" style="margin-bottom:20px;">
+          <div class="memo-section-header">
+            <span class="memo-section-label">노트</span>
+            <span class="memo-section-count" id="noteCountTab">0</span>
+          </div>
+          <div class="note-list" id="noteListTab"></div>
+        </div>
+      </div>
+
+    </div><!-- /phone-screen -->
+
+    <!-- 저작권 (phone-wrapper 하단 고정) -->
+    <div class="main-copyright">
+      © 2025 Weddly. All rights reserved.<br/>
+      당신의 특별한 날을 함께해요 💍
+    </div>
+
+    <!-- FAB 래퍼 (phone-wrapper 기준 절대 위치) -->
+    <div class="fab-wrapper" id="fabWrapper">
+      <div class="fab-menu" id="fabMenu">
+        <div class="fab-menu-item" onclick="showAddFolder()">
+          <div class="fab-item-icon folder">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          폴더 추가
+        </div>
+        <div class="fab-menu-item" onclick="goAddNote()">
+          <div class="fab-item-icon note">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="18" x2="12" y2="12"/>
+              <line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+          </div>
+          노트 추가
+        </div>
+      </div>
+      <button class="fab-btn" id="fabBtn" onclick="toggleFab()">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
+    </div>
+
+  </div><!-- /phone-wrapper -->
+
+  <script>
+    /* ── 샘플 데이터 ── */
+    const folders = [
+      { id: 1, name: '웨딩 준비', count: 3, date: '2026.04.07' },
+      { id: 2, name: '예산 관리', count: 1, date: '2026.04.05' },
+    ];
+
+    const notes = [
+      {
+        id: 1,
+        title: '스드메 비교 메모',
+        preview: '스튜디오 3곳 가격 비교 · A스튜디오 130만원, B스튜디오 95만원...',
+        date: '2026.04.07',
+        time: '14:32',
+        color: '#D4A96A',
+        folder: '웨딩 준비',
+        hasAttach: true,
+        attachCount: 2,
+      },
+      {
+        id: 2,
+        title: '하객 식사 메뉴 선택',
+        preview: '한식 뷔페 vs 양식 코스 · 양식 코스가 더 고급스럽지만 비용이...',
+        date: '2026.04.06',
+        time: '10:15',
+        color: '#5BAD7F',
+        folder: '웨딩 준비',
+        hasAttach: false,
+        attachCount: 0,
+      },
+      {
+        id: 3,
+        title: '웨딩홀 계약 전 체크리스트',
+        preview: '1. 주차 공간 확인  2. 음향 시스템  3. 포함 서비스 내역  4. 위약금...',
+        date: '2026.04.05',
+        time: '09:00',
+        color: '#5B8AF0',
+        folder: '예산 관리',
+        hasAttach: true,
+        attachCount: 1,
+      },
+    ];
+
+    /* ── SVG ── */
+    const svgFolder = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`;
+    const svgTrash = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>`;
+    const svgAttach = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>`;
+    const svgFolderSm = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`;
+
+    /* ── 렌더링 ── */
+    function folderCardHTML(f) {
+      return `
+        <div class="folder-card" onclick="openFolder(${f.id})">
+          <div class="folder-icon-wrap">${svgFolder}</div>
+          <div class="folder-info">
+            <div class="folder-name">${f.name}</div>
+            <div class="folder-meta">${f.count}개의 노트 &middot; ${f.date}</div>
+          </div>
+          <button class="del-btn" onclick="confirmDelete(event,'folder',${f.id})">${svgTrash}</button>
+        </div>`;
+    }
+
+    function noteCardHTML(n) {
+      const attach = n.hasAttach
+        ? `<span class="note-attach-badge">${svgAttach} ${n.attachCount}</span>` : '';
+      const folder = n.folder
+        ? `<span class="note-folder-badge">${svgFolderSm} ${n.folder}</span>` : '';
+      return `
+        <div class="note-card" onclick="openNote(${n.id})">
+          <div class="note-color-bar" style="background:${n.color || '#D4A96A'}"></div>
+          <div class="note-body">
+            <div class="note-content-wrap">
+              <div class="note-title">${n.title}</div>
+              <div class="note-preview">${n.preview}</div>
+              <div class="note-meta-row">
+                <span class="note-date">${n.date} ${n.time}</span>
+                ${attach}${folder}
+              </div>
+            </div>
+            <button class="del-btn" onclick="confirmDelete(event,'note',${n.id})">${svgTrash}</button>
+          </div>
+        </div>`;
+    }
+
+    function emptyHTML(text) {
+      return `<div class="memo-empty">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#e0e0e0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+        <span class="memo-empty-text">${text}</span>
+      </div>`;
+    }
+
+    function renderAll() {
+      /* 폴더 목록 */
+      const fHTML = folders.length
+        ? folders.map(folderCardHTML).join('')
+        : emptyHTML('폴더가 없습니다');
+      document.getElementById('folderListAll').innerHTML = fHTML;
+      document.getElementById('folderListTab').innerHTML = fHTML;
+      document.getElementById('folderCountAll').textContent = folders.length;
+      document.getElementById('folderCountTab').textContent = folders.length;
+
+      /* 노트 목록 */
+      const nHTML = notes.length
+        ? notes.map(noteCardHTML).join('')
+        : emptyHTML('노트가 없습니다');
+      document.getElementById('noteListAll').innerHTML = nHTML;
+      document.getElementById('noteListTab').innerHTML = nHTML;
+      document.getElementById('noteCountAll').textContent = notes.length;
+      document.getElementById('noteCountTab').textContent = notes.length;
+    }
+
+    /* ── 탭 전환 ── */
+    function switchTab(btn, name) {
+      document.querySelectorAll('.memo-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      ['tab-all', 'tab-folder', 'tab-note'].forEach(id => {
+        document.getElementById(id).style.display = 'none';
+      });
+      document.getElementById('tab-' + name).style.display = '';
+    }
+
+    /* ── FAB ── */
+    let fabOpen = false;
+
+    function toggleFab() {
+      fabOpen = !fabOpen;
+      document.getElementById('fabBtn').classList.toggle('open', fabOpen);
+      document.getElementById('fabMenu').classList.toggle('open', fabOpen);
+      document.getElementById('fabBackdrop').classList.toggle('open', fabOpen);
+    }
+
+    function closeFab() {
+      fabOpen = false;
+      document.getElementById('fabBtn').classList.remove('open');
+      document.getElementById('fabMenu').classList.remove('open');
+      document.getElementById('fabBackdrop').classList.remove('open');
+    }
+
+    /* ── 삭제 ── */
+    let deleteTarget = null;
+
+    function confirmDelete(e, type, id) {
+      e.stopPropagation();
+      deleteTarget = { type, id };
+      const title = document.getElementById('deleteModalTitle');
+      const desc  = document.getElementById('deleteModalDesc');
+      if (type === 'folder') {
+        title.textContent = '폴더를 삭제할까요?';
+        desc.innerHTML = '삭제하면 되돌릴 수 없습니다.<br>폴더 내 모든 노트도 함께 삭제됩니다.';
+      } else {
+        title.textContent = '노트를 삭제할까요?';
+        desc.innerHTML = '삭제하면 되돌릴 수 없습니다.';
+      }
+      openModal('deleteModal');
+    }
+
+    function executeDelete() {
+      if (!deleteTarget) return;
+      if (deleteTarget.type === 'folder') {
+        const i = folders.findIndex(f => f.id === deleteTarget.id);
+        if (i > -1) folders.splice(i, 1);
+      } else {
+        const i = notes.findIndex(n => n.id === deleteTarget.id);
+        if (i > -1) notes.splice(i, 1);
+      }
+      deleteTarget = null;
+      closeModal('deleteModal');
+      renderAll();
+    }
+
+    /* ── 폴더 추가 ── */
+    function showAddFolder() {
+      closeFab();
+      document.getElementById('folderNameInput').value = '';
+      openModal('addFolderModal');
+      setTimeout(() => document.getElementById('folderNameInput').focus(), 150);
+    }
+
+    function confirmAddFolder() {
+      const name = document.getElementById('folderNameInput').value.trim();
+      if (!name) {
+        document.getElementById('folderNameInput').focus();
+        return;
+      }
+      const today = new Date();
+      const dateStr = `${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')}`;
+      folders.unshift({ id: Date.now(), name, count: 0, date: dateStr });
+      closeModal('addFolderModal');
+      renderAll();
+    }
+
+    /* ── 노트 추가 ── */
+    function goAddNote() {
+      closeFab();
+      window.location.href = 'memo_write.html';
+    }
+
+    /* ── 열기 ── */
+    function openFolder(id) {
+      /* 추후 폴더 상세 페이지로 이동 */
+      alert('폴더 상세 페이지 (추후 구현)');
+    }
+
+    function openNote(id) {
+      window.location.href = `memo_write.html?id=${id}`;
+    }
+
+    /* ── 모달 유틸 ── */
+    function openModal(id)  { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    /* ── 키보드 ── */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeFab();
+        closeModal('deleteModal');
+        closeModal('addFolderModal');
+      }
+      if (e.key === 'Enter' && document.getElementById('addFolderModal').classList.contains('active')) {
+        confirmAddFolder();
+      }
+    });
+
+    /* ── 다크모드 ── */
+    const phoneWrapper = document.querySelector('.phone-wrapper');
+    if (localStorage.getItem('weddly-dark') === 'true') {
+      phoneWrapper.classList.add('dark');
+    }
+    document.getElementById('darkToggleBtn').addEventListener('click', () => {
+      const isDark = phoneWrapper.classList.toggle('dark');
+      localStorage.setItem('weddly-dark', isDark);
+    });
+    document.getElementById('notifBtn').addEventListener('click', () => alert('알림 기능 연동 예정'));
+    document.getElementById('profileBtn').addEventListener('click', () => alert('프로필 페이지 연동 예정'));
+
+    /* ── 초기화 ── */
+    renderAll();
+  </script>
+</body>
+</html>

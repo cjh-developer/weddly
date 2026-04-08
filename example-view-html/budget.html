@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 예산관리</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { align-items: flex-start; }
+
+    .phone-wrapper {
+      height: 844px;
+      min-height: unset;
+      position: relative;
+    }
+
+    .phone-screen {
+      padding: 0 0 140px;
+      min-height: unset;
+      height: calc(844px - 30px);
+      overflow-y: auto;
+      display: block;
+    }
+
+    /* ── 스크롤바 ── */
+    .phone-screen::-webkit-scrollbar { width: 4px; }
+    .phone-screen::-webkit-scrollbar-track { background: transparent; }
+    .phone-screen::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #D4A96A, #C49050);
+      border-radius: 4px;
+    }
+    .phone-screen::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #C49050, #b07840);
+    }
+    .phone-wrapper.dark .phone-screen::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #3a2e1e, #2a2010);
+    }
+    .phone-wrapper.dark .phone-screen::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #D4A96A, #C49050);
+    }
+
+    /* ── 헤더 ── */
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 14px;
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .main-logo {
+      font-size: 24px;
+      font-weight: 800;
+      font-style: italic;
+      color: #D4A96A;
+      letter-spacing: -0.5px;
+    }
+
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #f8f8f8;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      transition: background 0.15s, color 0.15s;
+      position: relative;
+    }
+    .icon-btn:hover { background: #f0e8d8; color: #D4A96A; }
+
+    .notif-badge {
+      position: absolute;
+      top: 7px; right: 7px;
+      width: 8px; height: 8px;
+      background: #f44336;
+      border-radius: 50%;
+      border: 1.5px solid #fff;
+    }
+
+    /* ── 다크모드 토글 아이콘 ── */
+    .dark-toggle-btn .icon-sun  { display: none; }
+    .dark-toggle-btn .icon-moon { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-moon { display: none; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-sun  { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn { background: #2e2616; color: #D4A96A; }
+    .phone-wrapper.dark .dark-toggle-btn:hover { background: #3a3020; }
+
+    /* ── 서브 헤더 ── */
+    .sub-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px 6px;
+      position: relative;
+    }
+
+    .sub-header-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #222;
+      letter-spacing: -0.3px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* ── 저작권 ── */
+    .main-copyright {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 11px;
+      color: #ccc;
+      padding: 8px 20px 10px;
+      letter-spacing: 0.2px;
+      line-height: 1.8;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(6px);
+      z-index: 150;
+    }
+
+    /* ── 전체 예산 요약 카드 ── */
+    .budget-summary-card {
+      margin: 12px 16px 0;
+      background: linear-gradient(130deg, #18110a 0%, #33210a 55%, #a8721e 100%);
+      border-radius: 18px;
+      padding: 14px 16px 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .budget-summary-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    .bsc-deco {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.025);
+      pointer-events: none;
+    }
+    .bsc-deco.d1 { width: 110px; height: 110px; right: -20px; bottom: -36px; }
+    .bsc-deco.d2 { width: 60px;  height: 60px;  right: 54px;  bottom: -8px; }
+
+    /* 상단 행: 라벨 + 설정 버튼 */
+    .bsc-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bsc-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .bsc-set-btn {
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.8);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .bsc-set-btn:hover { background: rgba(255,255,255,0.22); }
+
+    /* 메인 행: 금액+사용 / 도넛 링 */
+    .bsc-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bsc-left { flex: 1; min-width: 0; }
+
+    .bsc-amount {
+      font-size: 21px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.5px;
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    .bsc-used {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .bsc-used strong { color: rgba(255,255,255,0.85); font-weight: 700; }
+
+    /* 하단 바 */
+    .bsc-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bsc-bar-track {
+      flex: 1;
+      height: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .bsc-bar-fill {
+      height: 100%;
+      background: rgba(255,255,255,0.80);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .bsc-bar-pct {
+      font-size: 11px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.7);
+      min-width: 28px;
+      text-align: right;
+    }
+
+    /* 도넛 링 */
+    .bsc-ring-wrap {
+      width: 62px;
+      height: 62px;
+      position: relative;
+      flex-shrink: 0;
+      margin-left: 12px;
+    }
+
+    .bsc-ring-svg { width: 62px; height: 62px; display: block; }
+
+    .bsc-ring-pct {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .bsc-ring-num {
+      font-size: 13px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .bsc-ring-sub {
+      font-size: 8px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    /* ── 카테고리 섹션 ── */
+    .budget-section {
+      padding: 18px 16px 0;
+    }
+
+    .budget-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .budget-section-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #aaa;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .budget-section-count {
+      font-size: 12px;
+      font-weight: 600;
+      color: #D4A96A;
+      background: #fff8ef;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    /* ── 카테고리 카드 ── */
+    .budget-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .budget-card {
+      background: #fafafa;
+      border: 1.5px solid #f0f0f0;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .budget-card:hover { border-color: #e0d0b8; }
+
+    .budget-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 12px 12px 14px;
+      cursor: pointer;
+    }
+
+    .budget-cat-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      width: 32px;
+      text-align: center;
+    }
+
+    .budget-cat-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .budget-cat-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 2px;
+    }
+
+    .budget-cat-amounts {
+      font-size: 11px;
+      color: #999;
+      font-weight: 500;
+    }
+
+    .budget-cat-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .budget-cat-percent {
+      font-size: 12px;
+      font-weight: 700;
+      color: #D4A96A;
+      min-width: 32px;
+      text-align: right;
+    }
+
+    .budget-mini-progress {
+      width: 40px;
+      height: 4px;
+      background: #f0ebe4;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .budget-mini-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #D4A96A, #C49050);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .budget-action-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: #ccc;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .budget-action-btn:hover { background: #f0e8d8; color: #D4A96A; }
+    .budget-action-btn.del:hover { background: #fff0f0; color: #f44336; }
+
+    .budget-chevron {
+      transition: transform 0.25s ease;
+    }
+    .budget-chevron.open { transform: rotate(180deg); }
+
+    /* ── 세부 예산 목록 ── */
+    .budget-sub-list {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      border-top: 0px solid #f0f0f0;
+    }
+    .budget-sub-list.open {
+      border-top-width: 1px;
+    }
+
+    .budget-sub-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px 10px 20px;
+      border-bottom: 1px solid #f8f6f2;
+    }
+    .budget-sub-item:last-child { border-bottom: none; }
+
+    .budget-sub-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #D4A96A;
+      flex-shrink: 0;
+    }
+
+    .budget-sub-name {
+      flex: 1;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .budget-sub-amount {
+      font-size: 12px;
+      font-weight: 700;
+      color: #888;
+      flex-shrink: 0;
+    }
+
+    .budget-sub-note {
+      font-size: 11px;
+      color: #bbb;
+      font-weight: 500;
+      flex-shrink: 0;
+      max-width: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .budget-sub-del {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: #ddd;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .budget-sub-del:hover { background: #fff0f0; color: #f44336; }
+
+    /* ── 빈 상태 ── */
+    .budget-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 36px 0;
+      gap: 10px;
+    }
+    .budget-empty-text {
+      font-size: 13px;
+      color: #ccc;
+      font-weight: 500;
+    }
+
+    /* ── FAB ── */
+    .fab-btn {
+      position: absolute;
+      bottom: 68px;
+      right: 18px;
+      z-index: 300;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(212,169,106,0.45);
+      transition: transform 0.15s;
+    }
+    .fab-btn:hover { transform: scale(1.05); }
+
+    /* ── 모달 공통 ── */
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.40);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      border-radius: 44px;
+      overflow: hidden;
+      padding: 20px;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 340px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px 22px 22px;
+      animation: modalIn 0.22s ease;
+      max-height: calc(844px - 100px);
+      overflow-y: auto;
+    }
+    .modal-box::-webkit-scrollbar { width: 3px; }
+    .modal-box::-webkit-scrollbar-track { background: transparent; }
+    .modal-box::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #D4A96A, #C49050);
+      border-radius: 3px;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .modal-desc {
+      font-size: 13px;
+      color: #888;
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .btn-cancel {
+      flex: 1;
+      padding: 14px;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #888;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-cancel:hover { background: #eeeeee; }
+
+    .btn-confirm {
+      flex: 1;
+      padding: 14px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(212,169,106,0.35);
+    }
+
+    .btn-delete {
+      flex: 1;
+      padding: 14px;
+      background: #fff0f0;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #f44336;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-delete:hover { background: #ffe0e0; }
+
+    /* ── 폼 입력 ── */
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #888;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .form-input,
+    .amount-input {
+      width: 100%;
+      padding: 13px 14px;
+      background: #f8f8f8;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 12px;
+      font-size: 14px;
+      color: #222;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      box-sizing: border-box;
+    }
+    .form-input:focus,
+    .amount-input:focus {
+      border-color: #D4A96A;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(212,169,106,0.15);
+    }
+    .form-input::placeholder,
+    .amount-input::placeholder { color: #ccc; }
+
+    .amount-preview {
+      font-size: 12px;
+      color: #D4A96A;
+      font-weight: 600;
+      margin-top: 4px;
+      min-height: 18px;
+    }
+
+    /* ── 카테고리 선택 그리드 ── */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .cat-select-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 8px 2px;
+      background: #f8f8f8;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .cat-select-btn:hover {
+      border-color: #D4A96A;
+      background: #fffaf4;
+    }
+    .cat-select-btn.selected {
+      border-color: #D4A96A;
+      background: #fff8ef;
+      color: #D4A96A;
+    }
+
+    .cat-select-icon { font-size: 18px; line-height: 1; }
+    .cat-select-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #888;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .cat-select-btn.selected .cat-select-label { color: #D4A96A; }
+
+    /* 카테고리 직접 추가 */
+    .cat-add-section {
+      margin-bottom: 16px;
+    }
+    .cat-add-row {
+      display: flex;
+      gap: 6px;
+    }
+    .cat-add-row .form-input { flex: 1; margin-bottom: 0; }
+    .cat-add-btn {
+      padding: 0 16px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border: none;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* 아이콘 피커 */
+    .icon-picker-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 8px 0 10px;
+      scrollbar-width: none;
+    }
+    .icon-picker-row::-webkit-scrollbar { display: none; }
+
+    .icon-pick-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1.5px solid #e8e8e8;
+      background: #fafafa;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .icon-pick-btn:hover { border-color: #D4A96A; background: #fffaf4; }
+    .icon-pick-btn.selected {
+      border-color: #D4A96A;
+      background: #fff8ef;
+      box-shadow: 0 0 0 2px rgba(212,169,106,0.25);
+    }
+
+    .phone-wrapper.dark .icon-pick-btn { background: #26201a; border-color: #2e2818; }
+    .phone-wrapper.dark .icon-pick-btn:hover { border-color: #D4A96A; background: #2a1e10; }
+    .phone-wrapper.dark .icon-pick-btn.selected { border-color: #D4A96A; background: #2a1e10; }
+
+    /* ── 세부 예산 섹션 ── */
+    .sub-budget-section {
+      border-top: 1px solid #f0f0f0;
+      margin-top: 16px;
+      padding-top: 14px;
+    }
+
+    .sub-budget-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .sub-budget-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #666;
+    }
+
+    .sub-add-btn {
+      padding: 5px 12px;
+      background: #fff8ef;
+      border: 1.5px solid #f0e8d8;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #D4A96A;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .sub-add-btn:hover { background: #f0e8d8; }
+
+    .sub-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .sub-row .form-input { flex: 1; padding: 10px 10px; font-size: 12px; }
+    .sub-row .amount-input { width: 90px; flex: none; padding: 10px 10px; font-size: 12px; }
+    .sub-row-del {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: #ddd;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sub-row-del:hover { background: #fff0f0; color: #f44336; }
+
+    /* ── 다크모드 ── */
+    .phone-wrapper.dark {
+      background: #15120e;
+      box-shadow: 0 0 0 2px #2e2820, 0 20px 60px rgba(0,0,0,0.55);
+    }
+    .phone-wrapper.dark .phone-screen    { background: #15120e; }
+    .phone-wrapper.dark .main-header     { background: rgba(21,18,14,0.97); border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .icon-btn        { background: #26201a; color: #7a7068; }
+    .phone-wrapper.dark .icon-btn:hover  { background: #342c22; color: #D4A96A; }
+    .phone-wrapper.dark .notif-badge     { border-color: #26201a; }
+    .phone-wrapper.dark .sub-header-title { color: #ede8e0; }
+
+    .phone-wrapper.dark .budget-card       { background: #1e1a14; border-color: #2e2818; }
+    .phone-wrapper.dark .budget-card:hover { border-color: #3e3420; }
+    .phone-wrapper.dark .budget-cat-name   { color: #ede8e0; }
+    .phone-wrapper.dark .budget-cat-amounts { color: #584e42; }
+    .phone-wrapper.dark .budget-mini-progress { background: #2a2418; }
+    .phone-wrapper.dark .budget-action-btn { color: #3a3428; }
+    .phone-wrapper.dark .budget-action-btn:hover { background: #2a2418; color: #D4A96A; }
+    .phone-wrapper.dark .budget-action-btn.del:hover { background: #300; color: #f44336; }
+    .phone-wrapper.dark .budget-chevron svg { color: #584e42; }
+
+    .phone-wrapper.dark .budget-sub-list   { border-color: #2a2418; }
+    .phone-wrapper.dark .budget-sub-item   { border-color: #2a2418; }
+    .phone-wrapper.dark .budget-sub-name   { color: #c8c0b0; }
+    .phone-wrapper.dark .budget-sub-amount { color: #584e42; }
+    .phone-wrapper.dark .budget-sub-note   { color: #484038; }
+    .phone-wrapper.dark .budget-sub-del    { color: #2e2818; }
+    .phone-wrapper.dark .budget-sub-del:hover { background: #300; color: #f44336; }
+
+    .phone-wrapper.dark .budget-section-label { color: #3a3028; }
+    .phone-wrapper.dark .budget-section-count { background: #2a1e10; color: #D4A96A; }
+    .phone-wrapper.dark .budget-empty-text { color: #2e2818; }
+
+    .phone-wrapper.dark .modal-box       { background: #1e1a14; }
+    .phone-wrapper.dark .modal-title     { color: #ede8e0; }
+    .phone-wrapper.dark .modal-desc      { color: #c8c0b0; }
+    .phone-wrapper.dark .form-input,
+    .phone-wrapper.dark .amount-input    { background: #26201a; border-color: #2e2818; color: #ede8e0; }
+    .phone-wrapper.dark .form-input:focus,
+    .phone-wrapper.dark .amount-input:focus { background: #1e1a14; border-color: #D4A96A; }
+    .phone-wrapper.dark .cat-select-btn  { background: #26201a; border-color: #2e2818; color: #584e42; }
+    .phone-wrapper.dark .cat-select-btn:hover { background: #2a1e10; border-color: #D4A96A; color: #D4A96A; }
+    .phone-wrapper.dark .cat-select-btn.selected { background: #2a1e10; border-color: #D4A96A; color: #D4A96A; }
+    .phone-wrapper.dark .cat-select-label { color: #584e42; }
+    .phone-wrapper.dark .cat-select-btn.selected .cat-select-label { color: #D4A96A; }
+    .phone-wrapper.dark .cat-select-btn:hover .cat-select-label { color: #D4A96A; }
+    .phone-wrapper.dark .sub-budget-section { border-color: #2a2418; }
+    .phone-wrapper.dark .sub-budget-title { color: #584e42; }
+    .phone-wrapper.dark .sub-add-btn { background: #2a1e10; border-color: #2e2818; color: #D4A96A; }
+    .phone-wrapper.dark .btn-cancel { background: #26201a; color: #584e42; }
+    .phone-wrapper.dark .btn-cancel:hover { background: #2e2818; }
+    .phone-wrapper.dark .main-copyright  { color: #2e2818; background: rgba(21,18,14,0.97); }
+    .phone-wrapper.dark .modal-box::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #3a2e1e, #2a2010);
+    }
+
+    @media (max-width: 430px) {
+      .modal-overlay { border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-wrapper">
+
+    <!-- 전체 예산 설정 모달 -->
+    <div class="modal-overlay" id="totalBudgetModal">
+      <div class="modal-box">
+        <div class="modal-title">전체 예산 설정</div>
+        <label class="form-label">전체 예산 금액</label>
+        <input type="number" class="amount-input" id="totalBudgetInput" placeholder="금액을 입력하세요" oninput="previewAmount(this,'totalBudgetPreview')" />
+        <div class="amount-preview" id="totalBudgetPreview"></div>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeModal('totalBudgetModal')">취소</button>
+          <button class="btn-confirm" onclick="saveTotalBudget()">확인</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 예산 등록/수정 모달 -->
+    <div class="modal-overlay" id="budgetModal">
+      <div class="modal-box">
+        <div class="modal-title" id="budgetModalTitle">예산 등록</div>
+
+        <label class="form-label">카테고리 선택</label>
+        <div class="cat-grid" id="catGrid"></div>
+
+        <div class="cat-add-section">
+          <label class="form-label">카테고리 추가</label>
+          <div class="icon-picker-row" id="iconPickerRow"></div>
+          <div class="cat-add-row">
+            <input type="text" class="form-input" id="customCatInput" placeholder="카테고리명 입력" maxlength="10" />
+            <button class="cat-add-btn" onclick="addCustomCat()">추가</button>
+          </div>
+        </div>
+
+        <label class="form-label">카테고리 예산 금액</label>
+        <input type="number" class="amount-input" id="budgetAmountInput" placeholder="금액을 입력하세요" oninput="previewAmount(this,'budgetAmountPreview')" />
+        <div class="amount-preview" id="budgetAmountPreview"></div>
+
+        <div class="sub-budget-section">
+          <div class="sub-budget-header">
+            <span class="sub-budget-title">세부 예산</span>
+            <button class="sub-add-btn" onclick="addSubRow()">+ 항목 추가</button>
+          </div>
+          <div id="subRowsContainer"></div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeModal('budgetModal')">취소</button>
+          <button class="btn-confirm" onclick="saveBudget()">저장</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 삭제 확인 모달 -->
+    <div class="modal-overlay" id="deleteModal">
+      <div class="modal-box">
+        <div class="modal-title" id="deleteModalTitle">삭제할까요?</div>
+        <div class="modal-desc" id="deleteModalDesc">삭제하면 되돌릴 수 없습니다.</div>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeModal('deleteModal')">취소</button>
+          <button class="btn-delete" onclick="executeDelete()">삭제</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 화면 본체 -->
+    <div class="phone-screen">
+
+      <!-- 메인 헤더 -->
+      <div class="main-header">
+        <span class="main-logo">weddly</span>
+        <div class="header-actions">
+          <button class="icon-btn dark-toggle-btn" id="darkToggleBtn" aria-label="다크모드 전환">
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+          <button class="icon-btn" id="notifBtn" aria-label="알림">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-badge"></span>
+          </button>
+          <button class="icon-btn" id="profileBtn" aria-label="프로필">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 서브 헤더 -->
+      <div class="sub-header">
+        <button class="icon-btn" onclick="location.href='main.html'" aria-label="뒤로가기">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <span class="sub-header-title">예산관리</span>
+      </div>
+
+      <!-- 전체 예산 요약 카드 -->
+      <div class="budget-summary-card">
+        <div class="bsc-deco d1"></div>
+        <div class="bsc-deco d2"></div>
+        <div class="bsc-top">
+          <span class="bsc-label">전체 예산</span>
+          <button class="bsc-set-btn" onclick="openTotalBudgetModal()">설정</button>
+        </div>
+        <div class="bsc-main">
+          <div class="bsc-left">
+            <div class="bsc-amount" id="totalAmountDisplay">설정 안됨</div>
+            <div class="bsc-used" id="totalUsedDisplay">사용 <strong>0원</strong></div>
+            <div class="bsc-bar-row">
+              <div class="bsc-bar-track">
+                <div class="bsc-bar-fill" id="totalProgressFill" style="width:0%"></div>
+              </div>
+              <span class="bsc-bar-pct" id="totalPercentDisplay">0%</span>
+            </div>
+          </div>
+          <!-- 도넛 링 -->
+          <div class="bsc-ring-wrap">
+            <svg class="bsc-ring-svg" viewBox="0 0 62 62">
+              <circle cx="31" cy="31" r="24" fill="none"
+                stroke="rgba(255,255,255,0.12)" stroke-width="5"/>
+              <circle id="totalRingFill" cx="31" cy="31" r="24" fill="none"
+                stroke="rgba(255,255,255,0.82)" stroke-width="5"
+                stroke-linecap="round"
+                stroke-dasharray="150.8" stroke-dashoffset="150.8"
+                transform="rotate(-90 31 31)"
+                style="transition: stroke-dashoffset 0.5s ease;"/>
+            </svg>
+            <div class="bsc-ring-pct">
+              <span class="bsc-ring-num" id="totalRingPct">0%</span>
+              <span class="bsc-ring-sub">사용률</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카테고리별 예산 목록 -->
+      <div class="budget-section">
+        <div class="budget-section-header">
+          <span class="budget-section-label">카테고리별 예산</span>
+          <span class="budget-section-count" id="budgetCount">0</span>
+        </div>
+        <div class="budget-list" id="budgetList"></div>
+      </div>
+
+    </div><!-- /phone-screen -->
+
+    <!-- 저작권 -->
+    <div class="main-copyright">
+      &copy; 2025 Weddly. All rights reserved.<br/>
+      당신의 특별한 날을 함께해요
+    </div>
+
+    <!-- FAB -->
+    <button class="fab-btn" onclick="openBudgetModal()" aria-label="예산 등록">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+
+  </div><!-- /phone-wrapper -->
+
+  <script>
+    /* ── 샘플 데이터 ── */
+    let totalBudget = 30000000;
+    let budgets = [
+      {
+        id: 1, catKey: 'ceremony', catLabel: '예식비', catIcon: '\uD83D\uDC8D',
+        amount: 8000000,
+        subItems: [
+          { name: '웨딩홀 대관', amount: 6000000, note: '계약 완료' },
+          { name: '음식비', amount: 2000000, note: '' },
+        ],
+      },
+      {
+        id: 2, catKey: 'studio', catLabel: '스튜디오', catIcon: '\uD83D\uDCF7',
+        amount: 2000000,
+        subItems: [
+          { name: 'A스튜디오', amount: 1300000, note: '비교 중' },
+        ],
+      },
+    ];
+
+    let nextId = 3;
+
+    /* ── 카테고리 목록 ── */
+    const defaultCategories = [
+      { key: 'ceremony',  icon: '\uD83D\uDC8D', label: '예식비' },
+      { key: 'studio',    icon: '\uD83D\uDCF7', label: '스튜디오' },
+      { key: 'makeup',    icon: '\uD83D\uDC84', label: '메이크업' },
+      { key: 'dress',     icon: '\uD83D\uDC57', label: '드레스' },
+      { key: 'planner',   icon: '\uD83D\uDCCB', label: '플래너' },
+      { key: 'honeymoon', icon: '\u2708\uFE0F', label: '신혼여행' },
+      { key: 'gift',      icon: '\uD83D\uDC8E', label: '예물/예단' },
+      { key: 'appliance', icon: '\uD83C\uDFE0', label: '혼수/가전' },
+      { key: 'meeting',   icon: '\uD83C\uDF7D\uFE0F', label: '상견례' },
+      { key: 'invite',    icon: '\uD83D\uDC8C', label: '청첩장' },
+      { key: 'etc',       icon: '\uD83D\uDCE6', label: '기타' },
+    ];
+    let customCategories = [];
+    let selectedCatKey = null;
+
+    /* ── SVG ── */
+    const svgPencil = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+    const svgTrash = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>';
+    const svgChevron = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+    const svgX = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+    /* ── 유틸 ── */
+    function formatKRW(num) {
+      num = Math.abs(Number(num) || 0);
+      if (num >= 100000000) {
+        const eok = Math.floor(num / 100000000);
+        const man = Math.floor((num % 100000000) / 10000);
+        return man > 0 ? eok + '억 ' + man.toLocaleString() + '만원' : eok + '억원';
+      }
+      if (num >= 10000) {
+        const man = Math.floor(num / 10000);
+        return man.toLocaleString() + '만원';
+      }
+      return num.toLocaleString() + '원';
+    }
+
+    function formatNumber(num) {
+      return Number(num || 0).toLocaleString();
+    }
+
+    function previewAmount(input, previewId) {
+      const el = document.getElementById(previewId);
+      const v = Number(input.value);
+      el.textContent = v > 0 ? formatKRW(v) : '';
+    }
+
+    function totalUsed() {
+      return budgets.reduce(function(s, b) { return s + b.amount; }, 0);
+    }
+
+    /* ── 전체 예산 카드 업데이트 ── */
+    var RING_CIRCUMFERENCE = 2 * Math.PI * 24; // r=24 → ≈150.8
+
+    function updateTotalCard() {
+      var used = totalUsed();
+      var pct  = totalBudget > 0 ? Math.min(100, Math.round(used / totalBudget * 100)) : 0;
+
+      document.getElementById('totalAmountDisplay').textContent =
+        totalBudget > 0 ? formatKRW(totalBudget) : '설정 안됨';
+      document.getElementById('totalUsedDisplay').innerHTML =
+        '사용 <strong>' + formatKRW(used) + '</strong>';
+      document.getElementById('totalPercentDisplay').textContent = pct + '%';
+      document.getElementById('totalProgressFill').style.width = pct + '%';
+
+      // 도넛 링
+      var offset = RING_CIRCUMFERENCE * (1 - pct / 100);
+      document.getElementById('totalRingFill').style.strokeDashoffset = offset;
+      document.getElementById('totalRingPct').textContent = pct + '%';
+    }
+
+    /* ── 카테고리 목록 렌더링 ── */
+    function renderBudgetList() {
+      var container = document.getElementById('budgetList');
+      document.getElementById('budgetCount').textContent = budgets.length;
+
+      if (budgets.length === 0) {
+        container.innerHTML =
+          '<div class="budget-empty">' +
+            '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#e0e0e0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+              '<rect x="2" y="3" width="20" height="18" rx="2"/>' +
+              '<line x1="2" y1="9" x2="22" y2="9"/>' +
+              '<line x1="9" y1="21" x2="9" y2="9"/>' +
+            '</svg>' +
+            '<span class="budget-empty-text">등록된 예산이 없습니다</span>' +
+          '</div>';
+        return;
+      }
+
+      var html = '';
+      budgets.forEach(function(b) {
+        var pct = totalBudget > 0 ? Math.round((b.amount / totalBudget) * 100) : 0;
+        var subHtml = '';
+        if (b.subItems && b.subItems.length > 0) {
+          b.subItems.forEach(function(s, si) {
+            subHtml +=
+              '<div class="budget-sub-item">' +
+                '<span class="budget-sub-dot"></span>' +
+                '<span class="budget-sub-name">' + escapeHtml(s.name) + '</span>' +
+                '<span class="budget-sub-amount">' + formatNumber(s.amount) + '원</span>' +
+                (s.note ? '<span class="budget-sub-note">' + escapeHtml(s.note) + '</span>' : '') +
+                '<button class="budget-sub-del" onclick="confirmDeleteSub(event,' + b.id + ',' + si + ')">' + svgX + '</button>' +
+              '</div>';
+          });
+        }
+
+        html +=
+          '<div class="budget-card" id="card-' + b.id + '">' +
+            '<div class="budget-card-header" onclick="toggleCard(' + b.id + ')">' +
+              '<span class="budget-cat-icon">' + b.catIcon + '</span>' +
+              '<div class="budget-cat-info">' +
+                '<div class="budget-cat-name">' + escapeHtml(b.catLabel) + '</div>' +
+                '<div class="budget-cat-amounts">' + formatNumber(b.amount) + '원 / ' + formatKRW(totalBudget) + '</div>' +
+              '</div>' +
+              '<div class="budget-cat-right">' +
+                '<span class="budget-cat-percent">' + pct + '%</span>' +
+                '<div class="budget-mini-progress"><div class="budget-mini-fill" style="width:' + Math.min(pct, 100) + '%"></div></div>' +
+                '<button class="budget-action-btn" onclick="openBudgetModal(' + b.id + ');event.stopPropagation();">' + svgPencil + '</button>' +
+                '<button class="budget-action-btn del" onclick="confirmDeleteBudget(event,' + b.id + ')">' + svgTrash + '</button>' +
+                '<span class="budget-chevron" id="chevron-' + b.id + '">' + svgChevron + '</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="budget-sub-list" id="sub-' + b.id + '">' + subHtml + '</div>' +
+          '</div>';
+      });
+      container.innerHTML = html;
+      updateTotalCard();
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+
+    /* ── 카드 펼치기/접기 ── */
+    var openCards = {};
+    function toggleCard(id) {
+      var subList = document.getElementById('sub-' + id);
+      var chevron = document.getElementById('chevron-' + id);
+      if (openCards[id]) {
+        subList.style.maxHeight = '0';
+        subList.classList.remove('open');
+        chevron.classList.remove('open');
+        openCards[id] = false;
+      } else {
+        subList.style.maxHeight = subList.scrollHeight + 'px';
+        subList.classList.add('open');
+        chevron.classList.add('open');
+        openCards[id] = true;
+      }
+    }
+
+    /* ── 전체 예산 설정 모달 ── */
+    function openTotalBudgetModal() {
+      document.getElementById('totalBudgetInput').value = totalBudget || '';
+      previewAmount(document.getElementById('totalBudgetInput'), 'totalBudgetPreview');
+      openModal('totalBudgetModal');
+    }
+
+    function saveTotalBudget() {
+      var v = Number(document.getElementById('totalBudgetInput').value);
+      if (v > 0) {
+        totalBudget = v;
+        updateTotalCard();
+        renderBudgetList();
+      }
+      closeModal('totalBudgetModal');
+    }
+
+    /* ── 예산 등록/수정 모달 ── */
+    var editingBudgetId = null;
+    var subRows = [];
+
+    function renderCatGrid() {
+      var allCats = defaultCategories.concat(customCategories);
+      var html = '';
+      allCats.forEach(function(c) {
+        var sel = selectedCatKey === c.key ? ' selected' : '';
+        html +=
+          '<button class="cat-select-btn' + sel + '" onclick="selectCat(\'' + c.key + '\')">' +
+            '<span class="cat-select-icon">' + c.icon + '</span>' +
+            '<span class="cat-select-label">' + escapeHtml(c.label) + '</span>' +
+          '</button>';
+      });
+      document.getElementById('catGrid').innerHTML = html;
+    }
+
+    function selectCat(key) {
+      selectedCatKey = key;
+      renderCatGrid();
+    }
+
+    /* ── 아이콘 피커 ── */
+    var PICK_ICONS = [
+      '📌','💒','🎂','🌸','🎊','🎀','🎁','🍾','🥂','🌹',
+      '💐','🏡','🚗','✈️','📱','🎵','🎭','🌙','⭐','💫',
+      '🔔','🎈','🎨','🧧','🪄',
+    ];
+    var selectedIcon = '📌';
+
+    function renderIconPicker() {
+      var row = document.getElementById('iconPickerRow');
+      row.innerHTML = PICK_ICONS.map(function(ic) {
+        return '<button type="button" class="icon-pick-btn' + (ic === selectedIcon ? ' selected' : '') + '" onclick="pickIcon(this,\'' + ic + '\')">' + ic + '</button>';
+      }).join('');
+    }
+
+    function pickIcon(btn, icon) {
+      selectedIcon = icon;
+      document.querySelectorAll('.icon-pick-btn').forEach(function(b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+    }
+
+    function addCustomCat() {
+      var input = document.getElementById('customCatInput');
+      var name = input.value.trim();
+      if (!name) { input.focus(); return; }
+      var key = 'custom_' + Date.now();
+      customCategories.push({ key: key, icon: selectedIcon, label: name });
+      selectedCatKey = key;
+      input.value = '';
+      renderCatGrid();
+    }
+
+    function renderSubRows() {
+      var container = document.getElementById('subRowsContainer');
+      var html = '';
+      subRows.forEach(function(s, i) {
+        html +=
+          '<div class="sub-row">' +
+            '<input type="text" class="form-input" placeholder="예산명" value="' + escapeAttr(s.name) + '" onchange="subRows[' + i + '].name=this.value" />' +
+            '<input type="number" class="amount-input" placeholder="금액" value="' + (s.amount || '') + '" onchange="subRows[' + i + '].amount=Number(this.value)" />' +
+            '<input type="text" class="form-input" placeholder="메모" value="' + escapeAttr(s.note) + '" onchange="subRows[' + i + '].note=this.value" style="max-width:80px;" />' +
+            '<button class="sub-row-del" onclick="removeSubRow(' + i + ')">' + svgX + '</button>' +
+          '</div>';
+      });
+      container.innerHTML = html;
+    }
+
+    function escapeAttr(str) {
+      return String(str || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function addSubRow() {
+      subRows.push({ name: '', amount: 0, note: '' });
+      renderSubRows();
+    }
+
+    function removeSubRow(idx) {
+      subRows.splice(idx, 1);
+      renderSubRows();
+    }
+
+    function openBudgetModal(id) {
+      editingBudgetId = id || null;
+      selectedCatKey = null;
+      subRows = [];
+
+      if (editingBudgetId) {
+        var b = budgets.find(function(x) { return x.id === editingBudgetId; });
+        if (b) {
+          document.getElementById('budgetModalTitle').textContent = '예산 수정';
+          selectedCatKey = b.catKey;
+          document.getElementById('budgetAmountInput').value = b.amount;
+          previewAmount(document.getElementById('budgetAmountInput'), 'budgetAmountPreview');
+          subRows = b.subItems.map(function(s) { return { name: s.name, amount: s.amount, note: s.note }; });
+        }
+      } else {
+        document.getElementById('budgetModalTitle').textContent = '예산 등록';
+        document.getElementById('budgetAmountInput').value = '';
+        document.getElementById('budgetAmountPreview').textContent = '';
+      }
+
+      renderCatGrid();
+      renderSubRows();
+      renderIconPicker();
+      openModal('budgetModal');
+    }
+
+    function saveBudget() {
+      if (!selectedCatKey) { alert('카테고리를 선택해주세요.'); return; }
+      var amount = Number(document.getElementById('budgetAmountInput').value);
+      if (!amount || amount <= 0) { alert('금액을 입력해주세요.'); return; }
+
+      var allCats = defaultCategories.concat(customCategories);
+      var cat = allCats.find(function(c) { return c.key === selectedCatKey; });
+      if (!cat) return;
+
+      var items = subRows.filter(function(s) { return s.name.trim(); }).map(function(s) {
+        return { name: s.name.trim(), amount: Number(s.amount) || 0, note: s.note || '' };
+      });
+
+      if (editingBudgetId) {
+        var b = budgets.find(function(x) { return x.id === editingBudgetId; });
+        if (b) {
+          b.catKey = cat.key;
+          b.catLabel = cat.label;
+          b.catIcon = cat.icon;
+          b.amount = amount;
+          b.subItems = items;
+        }
+      } else {
+        budgets.push({
+          id: nextId++,
+          catKey: cat.key,
+          catLabel: cat.label,
+          catIcon: cat.icon,
+          amount: amount,
+          subItems: items,
+        });
+      }
+
+      closeModal('budgetModal');
+      renderBudgetList();
+    }
+
+    /* ── 삭제 ── */
+    var deleteTarget = null;
+
+    function confirmDeleteBudget(e, id) {
+      e.stopPropagation();
+      deleteTarget = { type: 'budget', id: id };
+      var b = budgets.find(function(x) { return x.id === id; });
+      document.getElementById('deleteModalTitle').textContent = '"' + (b ? b.catLabel : '') + '" 예산을 삭제할까요?';
+      document.getElementById('deleteModalDesc').innerHTML = '삭제하면 되돌릴 수 없습니다.<br>세부 예산 항목도 함께 삭제됩니다.';
+      openModal('deleteModal');
+    }
+
+    function confirmDeleteSub(e, budgetId, subIdx) {
+      e.stopPropagation();
+      deleteTarget = { type: 'sub', budgetId: budgetId, subIdx: subIdx };
+      var b = budgets.find(function(x) { return x.id === budgetId; });
+      var subName = b && b.subItems[subIdx] ? b.subItems[subIdx].name : '';
+      document.getElementById('deleteModalTitle').textContent = '"' + subName + '" 항목을 삭제할까요?';
+      document.getElementById('deleteModalDesc').textContent = '삭제하면 되돌릴 수 없습니다.';
+      openModal('deleteModal');
+    }
+
+    function executeDelete() {
+      if (!deleteTarget) return;
+      if (deleteTarget.type === 'budget') {
+        budgets = budgets.filter(function(b) { return b.id !== deleteTarget.id; });
+      } else if (deleteTarget.type === 'sub') {
+        var b = budgets.find(function(x) { return x.id === deleteTarget.budgetId; });
+        if (b && b.subItems) {
+          b.subItems.splice(deleteTarget.subIdx, 1);
+        }
+      }
+      deleteTarget = null;
+      closeModal('deleteModal');
+      renderBudgetList();
+    }
+
+    /* ── 모달 유틸 ── */
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    /* ── 키보드 ── */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal('totalBudgetModal');
+        closeModal('budgetModal');
+        closeModal('deleteModal');
+      }
+    });
+
+    /* ── 다크모드 ── */
+    var phoneWrapper = document.querySelector('.phone-wrapper');
+    if (localStorage.getItem('weddly-dark') === 'true') {
+      phoneWrapper.classList.add('dark');
+    }
+    document.getElementById('darkToggleBtn').addEventListener('click', function() {
+      var isDark = phoneWrapper.classList.toggle('dark');
+      localStorage.setItem('weddly-dark', isDark);
+    });
+    document.getElementById('notifBtn').addEventListener('click', function() { alert('알림 기능 연동 예정'); });
+    document.getElementById('profileBtn').addEventListener('click', function() { alert('프로필 페이지 연동 예정'); });
+
+    /* ── 초기화 ── */
+    renderBudgetList();
+  </script>
+</body>
+</html>
