@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 메인</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── 메인 전용 레이아웃 ── */
+    body { align-items: flex-start; }
+
+    .phone-wrapper {
+      height: 844px;
+      min-height: unset;
+    }
+
+    .phone-screen {
+      padding: 0 0 80px;
+      min-height: unset;
+      height: calc(844px - 30px);
+      overflow-y: auto;
+      display: block;
+    }
+
+    /* ── 상단 헤더 (로고) ── */
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 14px;
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .main-logo {
+      font-size: 24px;
+      font-weight: 800;
+      font-style: italic;
+      color: #D4A96A;
+      letter-spacing: -0.5px;
+    }
+
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #f8f8f8;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      transition: background 0.15s, color 0.15s;
+      position: relative;
+    }
+
+    .icon-btn:hover { background: #f0e8d8; color: #D4A96A; }
+
+    .notif-badge {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      width: 8px;
+      height: 8px;
+      background: #f44336;
+      border-radius: 50%;
+      border: 1.5px solid #fff;
+    }
+
+    /* ── 히어로 카드 (이름 + D-DAY) ── */
+    .hero-card {
+      margin: 14px 20px 0;
+      background: linear-gradient(130deg, #18110a 0%, #33210a 50%, #a8721e 100%);
+      border-radius: 20px;
+      padding: 16px 18px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    /* 반짝임 오버레이 */
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%);
+      pointer-events: none;
+      border-radius: 20px;
+    }
+
+    /* 배경 데코 원 */
+    .hero-deco {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.03);
+      pointer-events: none;
+    }
+
+    .hero-deco.d1 { width: 130px; height: 130px; right: -28px; bottom: -42px; }
+    .hero-deco.d2 { width: 75px;  height: 75px;  right: 42px;  bottom: -12px; }
+    .hero-deco.d3 { width: 40px;  height: 40px;  right: -4px;  top: -8px; }
+
+    /* 왼쪽 텍스트 영역 */
+    .hero-left { flex: 1; min-width: 0; position: relative; z-index: 1; }
+
+    .hero-greeting {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 3px;
+    }
+
+    .hero-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+      letter-spacing: -0.3px;
+    }
+
+    .hero-date-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 20px;
+      padding: 4px 10px 4px 7px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.75);
+      backdrop-filter: blur(4px);
+    }
+
+    .hero-date-pill .pill-icon { font-size: 12px; line-height: 1; }
+
+    /* 오른쪽 D-Day 박스 */
+    .hero-dday-box {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 14px;
+      padding: 10px 14px 8px;
+      position: relative;
+      z-index: 1;
+      min-width: 80px;
+    }
+
+    .hero-dday-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent);
+      pointer-events: none;
+    }
+
+    .hero-dday-until {
+      font-size: 9px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .hero-dday-num {
+      font-size: 28px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .hero-dday-sub {
+      font-size: 9px;
+      color: rgba(255,255,255,0.45);
+      margin-top: 3px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── 공통 섹션 ── */
+    .section { margin: 16px 20px 0; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .section-title { font-size: 15px; font-weight: 700; color: #222; }
+
+    .section-more {
+      font-size: 12px;
+      color: #D4A96A;
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    /* ── 파트너 코드 트리거 버튼 ── */
+    .partner-trigger-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fffaf4;
+      border: 1.5px solid #f0e8d8;
+      border-radius: 18px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s;
+      text-align: left;
+    }
+
+    .partner-trigger-btn:hover {
+      background: #fff5e8;
+      box-shadow: 0 4px 14px rgba(212,169,106,0.15);
+    }
+
+    .partner-trigger-btn:active { transform: scale(0.99); }
+
+    .partner-trigger-left { display: flex; align-items: center; gap: 12px; }
+
+    .partner-trigger-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      box-shadow: 0 3px 10px rgba(212,169,106,0.35);
+    }
+
+    .partner-trigger-info { display: flex; flex-direction: column; gap: 3px; }
+
+    .partner-trigger-label { font-size: 14px; font-weight: 700; color: #222; }
+
+    .partner-trigger-sub { font-size: 11px; color: #bbb; }
+
+    .partner-trigger-arrow { color: #D4A96A; flex-shrink: 0; }
+
+    /* ── 파트너 코드 모달 ── */
+    .partner-modal-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+      padding: 20px;
+    }
+
+    .partner-modal-overlay.active { display: flex; }
+
+    .partner-modal {
+      background: #fff;
+      border-radius: 20px;
+      width: 100%;
+      padding: 0 0 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      animation: modalIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes modalIn {
+      from { transform: scale(0.92); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+    .partner-modal-handle { display: none; }
+
+    .partner-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .partner-modal-title { font-size: 15px; font-weight: 800; color: #222; }
+
+    .partner-modal-close {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #f5f5f5;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #888;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .partner-modal-close:hover { background: #eee; color: #444; }
+
+    .partner-modal-body { padding: 14px 16px 0; display: flex; flex-direction: column; gap: 12px; }
+
+    /* 내 코드 표시 */
+    .modal-my-code-card {
+      background: linear-gradient(135deg, #fffaf4, #fff8ee);
+      border: 1.5px solid #f0e8d8;
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .modal-code-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #bbb;
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    .modal-code-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .modal-code-value {
+      font-size: 22px;
+      font-weight: 900;
+      color: #D4A96A;
+      letter-spacing: 3px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .modal-code-actions { display: flex; gap: 6px; }
+
+    .modal-action-btn {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1.5px solid #f0e8d8;
+      background: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      color: #D4A96A;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .modal-action-btn:hover { background: #D4A96A; color: #fff; border-color: #D4A96A; }
+
+    /* 구분선 */
+    .modal-divider {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #ccc;
+      font-size: 10px;
+    }
+
+    .modal-divider::before,
+    .modal-divider::after { content: ''; flex: 1; height: 1px; background: #f0f0f0; }
+
+    /* 파트너 코드 입력 */
+    .modal-connect-card {
+      background: #fafafa;
+      border: 1.5px solid #f0f0f0;
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .modal-connect-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 10px;
+      font-size: 14px;
+      background: #fff;
+      color: #222;
+      outline: none;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 2px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .modal-connect-input:focus {
+      border-color: #D4A96A;
+      box-shadow: 0 0 0 3px rgba(212,169,106,0.12);
+    }
+
+    .modal-connect-input::placeholder {
+      color: #ccc;
+      letter-spacing: 0;
+      font-family: 'Apple SD Gothic Neo', 'Pretendard', sans-serif;
+      font-size: 12px;
+    }
+
+    .modal-connect-btn {
+      width: 100%;
+      padding: 11px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(212,169,106,0.35);
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    .modal-connect-btn:hover  { opacity: 0.92; }
+    .modal-connect-btn:active { transform: scale(0.98); }
+
+    /* ── 통합 통계 카드 (도넛 링) ── */
+    .stats-card {
+      background: #fff;
+      border: 1.5px solid #f0f0f0;
+      border-radius: 20px;
+      padding: 18px 12px 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+    }
+
+    .stats-half {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .stats-sep {
+      width: 1px;
+      height: 90px;
+      background: #f0f0f0;
+      flex-shrink: 0;
+      margin: 0 8px;
+    }
+
+    .stats-ring-wrap {
+      position: relative;
+      width: 76px;
+      height: 76px;
+    }
+
+    .stats-ring-svg {
+      width: 76px;
+      height: 76px;
+      transform: rotate(-90deg);
+    }
+
+    .ring-bg {
+      fill: none;
+      stroke: #f2f2f2;
+      stroke-width: 8;
+    }
+
+    .ring-fill {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 188.5;
+      stroke-dashoffset: 188.5;
+      transition: stroke-dashoffset 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .task-ring   { stroke: #D4A96A; }
+    .budget-ring { stroke: #5B8DEF; }
+
+    .stats-ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stats-pct {
+      font-size: 15px;
+      font-weight: 900;
+      color: #222;
+      line-height: 1;
+    }
+
+    .stats-pct-unit { font-size: 10px; font-weight: 600; color: #aaa; }
+
+    .stats-label { font-size: 11px; color: #aaa; font-weight: 600; letter-spacing: -0.2px; }
+    .stats-value { font-size: 13px; font-weight: 800; color: #333; }
+    .stats-sub   { font-size: 10px; color: #bbb; }
+
+    /* ── 웨딩 타임라인 (수직 트랙) ── */
+    .tl-wrap {
+      background: #fff;
+      border: 1.5px solid #f0f0f0;
+      border-radius: 20px;
+      padding: 14px 16px 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+
+    /* 상단 요약 바 */
+    .tl-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .tl-summary-left { font-size: 12px; color: #888; }
+    .tl-summary-left strong { color: #D4A96A; font-weight: 800; font-size: 13px; }
+
+    .tl-summary-track {
+      width: 100px;
+      height: 5px;
+      background: #f0f0f0;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .tl-summary-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #D4A96A, #C49050);
+      transition: width 0.7s ease;
+    }
+
+    /* 아이템 */
+    .tl-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .tl-item:hover .tl-content { opacity: 0.75; }
+    .tl-item.no-hover:hover .tl-content { opacity: 1; }
+
+    /* 트랙 */
+    .tl-track {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      width: 20px;
+    }
+
+    .tl-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 4px;
+      transition: all 0.25s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tl-dot.d-done {
+      background: #D4A96A;
+      border: 2px solid #D4A96A;
+      box-shadow: 0 2px 6px rgba(212,169,106,0.45);
+    }
+    .tl-dot.d-done::after {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 4.5px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+
+    .tl-dot.d-urgent {
+      background: #fff;
+      border: 2px solid #f44336;
+    }
+    .tl-dot.d-urgent::after {
+      content: '!';
+      font-size: 10px;
+      font-weight: 900;
+      color: #f44336;
+      line-height: 1;
+    }
+
+    .tl-dot.d-todo {
+      background: #fff;
+      border: 2px solid #e0e0e0;
+    }
+
+    .tl-dot.d-dday {
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border: 2px solid transparent;
+      box-shadow: 0 2px 8px rgba(212,169,106,0.5);
+    }
+    .tl-dot.d-dday::after {
+      content: '★';
+      font-size: 8px;
+      color: #fff;
+      line-height: 1;
+    }
+
+    /* 연결선 */
+    .tl-line {
+      width: 2px;
+      flex: 1;
+      min-height: 16px;
+      margin: 2px 0;
+      border-radius: 1px;
+    }
+    .tl-line.l-done    { background: linear-gradient(to bottom, #D4A96A, #e8c88a); }
+    .tl-line.l-pending { background: #f0f0f0; }
+
+    .tl-item:last-child .tl-line { display: none; }
+
+    /* 콘텐츠 */
+    .tl-content {
+      flex: 1;
+      min-width: 0;
+      padding: 2px 0 14px;
+      transition: opacity 0.15s;
+    }
+
+    .tl-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 2px;
+    }
+
+    .tl-item.i-done   .tl-title { color: #ccc; text-decoration: line-through; font-weight: 500; }
+    .tl-item.i-urgent .tl-title { color: #f44336; }
+    .tl-item.i-dday   .tl-title { color: #D4A96A; font-weight: 800; }
+
+    .tl-due { font-size: 11px; color: #ccc; }
+    .tl-item.i-urgent .tl-due { color: rgba(244,67,54,0.5); }
+    .tl-item.i-dday   .tl-due { color: #D4A96A; opacity: 0.7; }
+
+    /* 배지 */
+    .tl-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      flex-shrink: 0;
+      margin-top: 5px;
+      align-self: flex-start;
+    }
+
+    .badge-done   { background: #f0faf0; color: #4caf50; }
+    .badge-todo   { background: #f5f5f5; color: #bbb; }
+    .badge-urgent { background: #fff0f0; color: #f44336; }
+    .badge-dday   { background: linear-gradient(135deg, #D4A96A, #C49050); color: #fff; }
+
+    /* ── 메뉴 그리드 ── */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .menu-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 6px 2px;
+      border-radius: 14px;
+      transition: background 0.15s;
+      border: none;
+      background: none;
+    }
+
+    .menu-item:hover { background: #fdf7ef; }
+    .menu-item:active .menu-icon-wrap { transform: scale(0.93); }
+
+    .menu-icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1.5px solid #f0e8d8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s, box-shadow 0.15s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .menu-label { font-size: 11px; font-weight: 600; color: #555; }
+
+    /* ── 업체 리스트 ── */
+    .vendor-scroll-wrap { margin: 0 -20px; padding: 0 20px; }
+
+    .vendor-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 4px 0 8px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .vendor-scroll::-webkit-scrollbar { display: none; }
+
+    .vendor-card {
+      flex-shrink: 0;
+      width: 100px;
+      background: #fff;
+      border: 1.5px solid #f0f0f0;
+      border-radius: 18px;
+      padding: 14px 10px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      scroll-snap-align: start;
+      transition: box-shadow 0.15s, transform 0.12s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .vendor-card:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.1); transform: translateY(-2px); }
+
+    .vendor-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .vendor-name { font-size: 12px; font-weight: 700; color: #333; }
+    .vendor-count { font-size: 10px; color: #bbb; }
+
+    /* ── 커뮤니티 ── */
+    .community-card {
+      background: #fff;
+      border: 1.5px solid #f0f0f0;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .community-item {
+      display: flex;
+      gap: 12px;
+      padding: 13px 16px;
+      border-bottom: 1px solid #f8f8f8;
+      cursor: pointer;
+      align-items: center;
+      transition: background 0.15s;
+    }
+
+    .community-item:last-child { border-bottom: none; }
+    .community-item:hover { background: #fdfaf5; }
+
+    .community-rank {
+      font-size: 13px;
+      font-weight: 900;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .community-rank.top1 { color: #D4A96A; }
+    .community-rank.top2 { color: #9da5b4; }
+    .community-rank.top3 { color: #c17f3b; }
+    .community-rank.other { color: #ddd; }
+
+    .community-thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .community-body { flex: 1; min-width: 0; }
+
+    .community-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .community-meta {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10px;
+      color: #bbb;
+    }
+
+    .community-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      background: #fff8ef;
+      color: #D4A96A;
+    }
+
+    /* ── 저작권 ── */
+    .main-copyright {
+      text-align: center;
+      font-size: 11px;
+      color: #ccc;
+      padding: 20px 20px 16px;
+      letter-spacing: 0.2px;
+      line-height: 1.8;
+    }
+
+    /* ── 타임라인 미리보기 더보기 행 ── */
+    .tl-preview-more {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px 12px;
+      border-top: 1px solid #f5f5f5;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-radius: 0 0 18px 18px;
+    }
+    .tl-preview-more:hover { background: #fdfaf5; }
+    .tl-preview-summary { font-size: 11px; color: #bbb; }
+    .tl-preview-link    { font-size: 12px; font-weight: 700; color: #D4A96A; display: flex; align-items: center; gap: 3px; }
+
+    /* ── 타임라인 바텀시트 ── */
+    .tl-sheet-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(2px);
+    }
+    .tl-sheet-overlay.active { display: flex; }
+
+    .tl-sheet {
+      background: #fff;
+      border-radius: 20px;
+      width: 100%;
+      max-height: 78%;
+      display: flex;
+      flex-direction: column;
+      animation: modalIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .tl-sheet-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px 12px;
+      border-bottom: 1px solid #f0f0f0;
+      flex-shrink: 0;
+    }
+
+    .tl-sheet-title { font-size: 15px; font-weight: 800; color: #222; }
+
+    .tl-sheet-close {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: #f5f5f5;
+      border: none;
+      cursor: pointer;
+      color: #888;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: background 0.15s, color 0.15s;
+    }
+    .tl-sheet-close:hover { background: #eee; color: #444; }
+
+    .tl-sheet-body {
+      overflow-y: auto;
+      flex: 1;
+      padding: 8px 16px 24px;
+    }
+    .tl-sheet-body::-webkit-scrollbar { display: none; }
+
+    /* 그룹 */
+    .tl-group { margin-bottom: 4px; }
+
+    .tl-group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 2px 8px;
+      cursor: pointer;
+      user-select: none;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .tl-group-title-row { display: flex; align-items: center; gap: 8px; }
+    .tl-group-label { font-size: 12px; font-weight: 700; color: #aaa; }
+    .tl-group-count {
+      font-size: 10px;
+      font-weight: 700;
+      background: #f0f0f0;
+      color: #888;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .tl-group-count.pending-count { background: #fff8ef; color: #D4A96A; }
+    .tl-group-count.done-count    { background: #f0faf0; color: #4caf50; }
+
+    .tl-group-chevron {
+      color: #ccc;
+      transition: transform 0.22s;
+      flex-shrink: 0;
+    }
+    .tl-group-chevron.open { transform: rotate(180deg); }
+
+    .tl-group-body.collapsed { display: none; }
+
+    /* ── 반응형 ── */
+    @media (max-width: 430px) {
+      .phone-wrapper { height: 100vh; }
+      .phone-screen  { height: calc(100vh - 30px); }
+    }
+
+    /* ── 다크모드 토글 버튼 아이콘 ── */
+    .dark-toggle-btn .icon-sun  { display: none; }
+    .dark-toggle-btn .icon-moon { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-moon { display: none; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-sun  { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn { background: #2e2616; color: #D4A96A; }
+    .phone-wrapper.dark .dark-toggle-btn:hover { background: #3a3020; }
+
+    /* ════════════════════════════════════════
+       다크모드
+    ════════════════════════════════════════ */
+    .phone-wrapper.dark {
+      background: #15120e;
+      box-shadow: 0 0 0 2px #2e2820, 0 20px 60px rgba(0,0,0,0.55);
+      transition: background 0.3s;
+    }
+
+    /* 공통 전환 효과 */
+    .phone-wrapper.dark .phone-screen,
+    .phone-wrapper.dark .main-header,
+    .phone-wrapper.dark .stats-card,
+    .phone-wrapper.dark .tl-wrap,
+    .phone-wrapper.dark .vendor-card,
+    .phone-wrapper.dark .community-card,
+    .phone-wrapper.dark .partner-trigger-btn,
+    .phone-wrapper.dark .partner-modal,
+    .phone-wrapper.dark .menu-icon-wrap {
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    /* 스크린 배경 */
+    .phone-wrapper.dark .phone-screen { background: #15120e; }
+
+    /* 헤더 */
+    .phone-wrapper.dark .main-header {
+      background: rgba(21,18,14,0.97);
+      border-bottom-color: #2a2418;
+    }
+    .phone-wrapper.dark .icon-btn          { background: #26201a; color: #7a7068; }
+    .phone-wrapper.dark .icon-btn:hover    { background: #342c22; color: #D4A96A; }
+    .phone-wrapper.dark .notif-badge       { border-color: #26201a; }
+
+    /* 파트너 트리거 버튼 */
+    .phone-wrapper.dark .partner-trigger-btn  { background: #1e1a14; border-color: #2e2818; }
+    .phone-wrapper.dark .partner-trigger-btn:hover { background: #26201a; box-shadow: none; }
+    .phone-wrapper.dark .partner-trigger-label { color: #ede8e0; }
+    .phone-wrapper.dark .partner-trigger-sub   { color: #584e42; }
+
+    /* 섹션 */
+    .phone-wrapper.dark .section-title { color: #ede8e0; }
+
+    /* 통계 카드 */
+    .phone-wrapper.dark .stats-card   { background: #1e1a14; border-color: #2e2818; box-shadow: none; }
+    .phone-wrapper.dark .stats-sep    { background: #2a2418; }
+    .phone-wrapper.dark .ring-bg      { stroke: #2e2818; }
+    .phone-wrapper.dark .stats-pct    { color: #ede8e0; }
+    .phone-wrapper.dark .stats-label  { color: #584e42; }
+    .phone-wrapper.dark .stats-value  { color: #c8c0b0; }
+    .phone-wrapper.dark .stats-sub    { color: #483e32; }
+
+    /* 타임라인 */
+    .phone-wrapper.dark .tl-wrap           { background: #1e1a14; border-color: #2e2818; box-shadow: none; }
+    .phone-wrapper.dark .tl-summary        { border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .tl-summary-left   { color: #584e42; }
+    .phone-wrapper.dark .tl-summary-left strong { color: #D4A96A; }
+    .phone-wrapper.dark .tl-summary-track  { background: #2e2818; }
+    .phone-wrapper.dark .tl-title          { color: #ede8e0; }
+    .phone-wrapper.dark .tl-item.i-done .tl-title { color: #3a3028; }
+    .phone-wrapper.dark .tl-due            { color: #483e32; }
+    .phone-wrapper.dark .tl-item.i-urgent .tl-due { color: rgba(244,67,54,0.4); }
+    .phone-wrapper.dark .tl-dot.d-todo     { background: #1e1a14; border-color: #3e3428; }
+    .phone-wrapper.dark .tl-line.l-pending { background: #2a2418; }
+    .phone-wrapper.dark .badge-todo        { background: #26201a; color: #584e42; }
+    .phone-wrapper.dark .badge-done        { background: #142014; }
+    .phone-wrapper.dark .tl-item:hover .tl-content { opacity: 0.65; }
+
+    /* 메뉴 그리드 */
+    .phone-wrapper.dark .menu-item:hover   { background: #26201a; }
+    .phone-wrapper.dark .menu-icon-wrap    { background: #1e1a14; border-color: #2e2818; box-shadow: none; }
+    .phone-wrapper.dark .menu-label        { color: #7a7068; }
+
+    /* 업체 카드 */
+    .phone-wrapper.dark .vendor-card       { background: #1e1a14; border-color: #2e2818; box-shadow: none; }
+    .phone-wrapper.dark .vendor-card:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.5); }
+    .phone-wrapper.dark .vendor-name       { color: #c8c0b0; }
+    .phone-wrapper.dark .vendor-count      { color: #483e32; }
+
+    /* 커뮤니티 */
+    .phone-wrapper.dark .community-card         { background: #1e1a14; border-color: #2e2818; box-shadow: none; }
+    .phone-wrapper.dark .community-item         { border-bottom-color: #26201a; }
+    .phone-wrapper.dark .community-item:hover   { background: #26201a; }
+    .phone-wrapper.dark .community-title        { color: #ede8e0; }
+    .phone-wrapper.dark .community-meta         { color: #483e32; }
+    .phone-wrapper.dark .community-tag          { background: #26190a; color: #D4A96A; }
+    .phone-wrapper.dark .community-rank.other   { color: #3a3028; }
+
+    /* 저작권 */
+    .phone-wrapper.dark .main-copyright { color: #3a3028; }
+
+    /* 타임라인 바텀시트 다크모드 */
+    .phone-wrapper.dark .tl-preview-more           { border-top-color: #2a2418; }
+    .phone-wrapper.dark .tl-preview-more:hover     { background: #26201a; }
+    .phone-wrapper.dark .tl-preview-summary        { color: #484038; }
+    .phone-wrapper.dark .tl-sheet-overlay          { background: rgba(0,0,0,0.7); }
+    .phone-wrapper.dark .tl-sheet                  { background: #1e1a14; }
+    .phone-wrapper.dark .tl-sheet-header           { border-bottom-color: #2e2818; }
+    .phone-wrapper.dark .tl-sheet-title            { color: #ede8e0; }
+    .phone-wrapper.dark .tl-sheet-close            { background: #2a2418; color: #7a7068; }
+    .phone-wrapper.dark .tl-sheet-close:hover      { background: #342c22; color: #ede8e0; }
+    .phone-wrapper.dark .tl-group-header           { border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .tl-group-label            { color: #584e42; }
+    .phone-wrapper.dark .tl-group-count            { background: #2a2418; color: #584e42; }
+    .phone-wrapper.dark .tl-group-count.pending-count { background: #26190a; color: #D4A96A; }
+    .phone-wrapper.dark .tl-group-count.done-count    { background: #142014; color: #4caf50; }
+    .phone-wrapper.dark .tl-sheet-body .tl-title   { color: #ede8e0; }
+    .phone-wrapper.dark .tl-sheet-body .tl-item.i-done .tl-title { color: #3a3028; }
+    .phone-wrapper.dark .tl-sheet-body .tl-due     { color: #484038; }
+    .phone-wrapper.dark .tl-sheet-body .tl-dot.d-todo { background: #1e1a14; border-color: #3e3428; }
+    .phone-wrapper.dark .tl-sheet-body .tl-line.l-pending { background: #2a2418; }
+    .phone-wrapper.dark .tl-sheet-body .badge-todo { background: #26201a; color: #584e42; }
+    .phone-wrapper.dark .tl-sheet-body .badge-done { background: #142014; }
+
+    /* 파트너 모달 */
+    .phone-wrapper.dark .partner-modal-overlay  { background: rgba(0,0,0,0.72); }
+    .phone-wrapper.dark .partner-modal          { background: #1e1a14; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
+    .phone-wrapper.dark .partner-modal-header   { border-bottom-color: #2e2818; }
+    .phone-wrapper.dark .partner-modal-title    { color: #ede8e0; }
+    .phone-wrapper.dark .partner-modal-close    { background: #2a2418; color: #7a7068; }
+    .phone-wrapper.dark .partner-modal-close:hover { background: #342c22; color: #ede8e0; }
+    .phone-wrapper.dark .modal-my-code-card     { background: linear-gradient(135deg, #231a0b, #1c1408); border-color: #3a2e18; }
+    .phone-wrapper.dark .modal-code-section-label { color: #584e42; }
+    .phone-wrapper.dark .modal-action-btn       { background: #2a2418; border-color: #3a2e18; color: #D4A96A; }
+    .phone-wrapper.dark .modal-action-btn:hover { background: #D4A96A; color: #fff; border-color: #D4A96A; }
+    .phone-wrapper.dark .modal-divider          { color: #3a3028; }
+    .phone-wrapper.dark .modal-divider::before,
+    .phone-wrapper.dark .modal-divider::after   { background: #2a2418; }
+    .phone-wrapper.dark .modal-connect-card     { background: #181410; border-color: #2a2418; }
+    .phone-wrapper.dark .modal-connect-input    { background: #221d16; border-color: #3a3028; color: #ede8e0; }
+    .phone-wrapper.dark .modal-connect-input:focus { border-color: #D4A96A; box-shadow: 0 0 0 3px rgba(212,169,106,0.15); }
+    .phone-wrapper.dark .modal-connect-input::placeholder { color: #483e32; }
+  </style>
+</head>
+<body>
+  <div class="phone-wrapper">
+    <div class="phone-screen">
+
+      <!-- ① 로고 (상단 헤더) -->
+      <div class="main-header">
+        <span class="main-logo">weddly</span>
+        <div class="header-actions">
+          <!-- 다크모드 토글 -->
+          <button class="icon-btn dark-toggle-btn" id="darkToggleBtn" aria-label="다크모드 전환">
+            <!-- 라이트모드일 때: 달 아이콘 -->
+            <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <!-- 다크모드일 때: 태양 아이콘 -->
+            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+          <button class="icon-btn" id="notifBtn" aria-label="알림">
+            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-badge"></span>
+          </button>
+          <button class="icon-btn" id="profileBtn" aria-label="프로필">
+            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ② 사용자 이름 환영 + ③ D-DAY -->
+      <div class="hero-card">
+        <div class="hero-deco d1"></div>
+        <div class="hero-deco d2"></div>
+        <div class="hero-deco d3"></div>
+
+        <!-- 왼쪽: 이름 + 날짜 -->
+        <div class="hero-left">
+          <div class="hero-greeting">안녕하세요 👋</div>
+          <div class="hero-name" id="heroName">홍길동님, 환영합니다!!</div>
+          <div class="hero-date-pill">
+            <span class="pill-icon">💍</span>
+            <span id="weddingDateText">2026년 8월 15일 (토)</span>
+          </div>
+        </div>
+
+        <!-- 오른쪽: D-DAY -->
+        <div class="hero-dday-box">
+          <div class="hero-dday-until">D · DAY</div>
+          <div class="hero-dday-num" id="ddayNumber">D-127</div>
+          <div class="hero-dday-sub">결혼까지</div>
+        </div>
+      </div>
+
+      <!-- ④ 파트너 코드 (버튼 → 모달) -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">💑 파트너 연결</span>
+        </div>
+        <button class="partner-trigger-btn" id="openPartnerModal">
+          <div class="partner-trigger-left">
+            <div class="partner-trigger-icon">💑</div>
+            <div class="partner-trigger-info">
+              <div class="partner-trigger-label">파트너 코드 연결</div>
+              <div class="partner-trigger-sub">코드 공유 · 파트너 연결하기</div>
+            </div>
+          </div>
+          <svg class="partner-trigger-arrow" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      <!-- ⑤⑥ 진행률 + 예산 사용률 -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">📊 현황</span>
+        </div>
+        <div class="stats-card">
+          <!-- 전체 진행률 -->
+          <div class="stats-half">
+            <div class="stats-ring-wrap">
+              <svg class="stats-ring-svg" viewBox="0 0 80 80">
+                <circle class="ring-bg"   cx="40" cy="40" r="30"/>
+                <circle class="ring-fill task-ring" id="taskRing" cx="40" cy="40" r="30"/>
+              </svg>
+              <div class="stats-ring-center">
+                <div class="stats-pct" id="taskPct">38%</div>
+              </div>
+            </div>
+            <div class="stats-label">전체 진행률</div>
+            <div class="stats-value" id="taskProgressValue">3 / 8 완료</div>
+            <div class="stats-sub"  id="taskRemain">미완료 5개</div>
+          </div>
+
+          <div class="stats-sep"></div>
+
+          <!-- 예산 사용률 -->
+          <div class="stats-half">
+            <div class="stats-ring-wrap">
+              <svg class="stats-ring-svg" viewBox="0 0 80 80">
+                <circle class="ring-bg"     cx="40" cy="40" r="30"/>
+                <circle class="ring-fill budget-ring" id="budgetRing" cx="40" cy="40" r="30"/>
+              </svg>
+              <div class="stats-ring-center">
+                <div class="stats-pct">38%</div>
+              </div>
+            </div>
+            <div class="stats-label">예산 사용률</div>
+            <div class="stats-value">1,900만원</div>
+            <div class="stats-sub">/ 5,000만원</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑦ 웨딩 타임라인 -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">📅 웨딩 타임라인</span>
+          <button class="section-more" id="timelineMoreBtn">
+            전체보기
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        <div class="tl-wrap">
+          <div class="tl-summary">
+            <div class="tl-summary-left">완료 <strong id="tlDoneCount">3</strong> / <span id="tlTotalCount">7</span></div>
+            <div class="tl-summary-track">
+              <div class="tl-summary-fill" id="tlSummaryFill" style="width:42.9%"></div>
+            </div>
+          </div>
+          <div id="timelineList"></div>
+          <div class="tl-preview-more" id="tlPreviewMore">
+            <span class="tl-preview-summary" id="tlPreviewSummary">전체 8개</span>
+            <span class="tl-preview-link">
+              전체보기
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑧ 메뉴 버튼 -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">📱 메뉴</span>
+        </div>
+        <div class="menu-grid">
+          <button class="menu-item" onclick="alert('일정관리 페이지 연동 예정')">
+            <div class="menu-icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4A96A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <span class="menu-label">일정관리</span>
+          </button>
+          <button class="menu-item" onclick="alert('예산관리 페이지 연동 예정')">
+            <div class="menu-icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4A96A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+            <span class="menu-label">예산관리</span>
+          </button>
+          <button class="menu-item" onclick="alert('웨딩관리 페이지 연동 예정')">
+            <div class="menu-icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4A96A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <span class="menu-label">웨딩관리</span>
+          </button>
+          <button class="menu-item" onclick="alert('하객관리 페이지 연동 예정')">
+            <div class="menu-icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4A96A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <span class="menu-label">하객관리</span>
+          </button>
+          <button class="menu-item" onclick="alert('메모장 페이지 연동 예정')">
+            <div class="menu-icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4A96A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </div>
+            <span class="menu-label">메모장</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ⑨ 업체 리스트 -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">🏪 업체 둘러보기</span>
+          <button class="section-more" onclick="alert('전체 업체 보기')">
+            더보기
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        <div class="vendor-scroll-wrap">
+          <div class="vendor-scroll">
+            <div class="vendor-card" onclick="alert('스튜디오 업체 목록')">
+              <div class="vendor-icon" style="background:#fff8ef;">📸</div>
+              <div class="vendor-name">스튜디오</div>
+              <div class="vendor-count">287개</div>
+            </div>
+            <div class="vendor-card" onclick="alert('드레스 업체 목록')">
+              <div class="vendor-icon" style="background:#fff0f5;">👗</div>
+              <div class="vendor-name">드레스</div>
+              <div class="vendor-count">156개</div>
+            </div>
+            <div class="vendor-card" onclick="alert('메이크업 업체 목록')">
+              <div class="vendor-icon" style="background:#f8f0ff;">💄</div>
+              <div class="vendor-name">메이크업</div>
+              <div class="vendor-count">203개</div>
+            </div>
+            <div class="vendor-card" onclick="alert('웨딩홀 목록')">
+              <div class="vendor-icon" style="background:#f0f8ff;">🏛️</div>
+              <div class="vendor-name">웨딩홀</div>
+              <div class="vendor-count">142개</div>
+            </div>
+            <div class="vendor-card" onclick="alert('촬영 업체 목록')">
+              <div class="vendor-icon" style="background:#f0fff6;">🎥</div>
+              <div class="vendor-name">촬영</div>
+              <div class="vendor-count">98개</div>
+            </div>
+            <div class="vendor-card" onclick="alert('가전 목록')">
+              <div class="vendor-icon" style="background:#f5f5ff;">📺</div>
+              <div class="vendor-name">가전</div>
+              <div class="vendor-count">412개</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑩ 커뮤니티 인기글 -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">🔥 커뮤니티 인기글</span>
+          <button class="section-more" onclick="alert('커뮤니티 전체보기')">
+            더보기
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        <div class="community-card">
+          <div class="community-item" onclick="alert('게시글로 이동')">
+            <div class="community-rank top1">1</div>
+            <div class="community-thumb" style="background:#fff8ef;">💒</div>
+            <div class="community-body">
+              <div class="community-title">웨딩홀 선택할 때 꼭 확인해야 할 5가지</div>
+              <div class="community-meta">
+                <span class="community-tag">웨딩홀</span>
+                <span>❤️ 342</span>
+                <span>댓글 58</span>
+              </div>
+            </div>
+          </div>
+          <div class="community-item" onclick="alert('게시글로 이동')">
+            <div class="community-rank top2">2</div>
+            <div class="community-thumb" style="background:#fff0f5;">👗</div>
+            <div class="community-body">
+              <div class="community-title">드레스 업체 솔직 후기 - 강남 TOP 5</div>
+              <div class="community-meta">
+                <span class="community-tag">드레스</span>
+                <span>❤️ 287</span>
+                <span>댓글 43</span>
+              </div>
+            </div>
+          </div>
+          <div class="community-item" onclick="alert('게시글로 이동')">
+            <div class="community-rank top3">3</div>
+            <div class="community-thumb" style="background:#f0f8ff;">📸</div>
+            <div class="community-body">
+              <div class="community-title">스튜디오 예약 최적 시기는 언제일까요?</div>
+              <div class="community-meta">
+                <span class="community-tag">스튜디오</span>
+                <span>❤️ 231</span>
+                <span>댓글 37</span>
+              </div>
+            </div>
+          </div>
+          <div class="community-item" onclick="alert('게시글로 이동')">
+            <div class="community-rank other">4</div>
+            <div class="community-thumb" style="background:#f8f0ff;">💄</div>
+            <div class="community-body">
+              <div class="community-title">메이크업 리허설 꼭 해야 하나요? 경험담</div>
+              <div class="community-meta">
+                <span class="community-tag">메이크업</span>
+                <span>❤️ 198</span>
+                <span>댓글 29</span>
+              </div>
+            </div>
+          </div>
+          <div class="community-item" onclick="alert('게시글로 이동')">
+            <div class="community-rank other">5</div>
+            <div class="community-thumb" style="background:#f0fff6;">💍</div>
+            <div class="community-body">
+              <div class="community-title">예물 예산 어떻게 배분하셨나요?</div>
+              <div class="community-meta">
+                <span class="community-tag">예산</span>
+                <span>❤️ 176</span>
+                <span>댓글 52</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑪ 저작권 -->
+      <div class="main-copyright">
+        © 2025 Weddly. All rights reserved.<br/>
+        당신의 특별한 날을 함께해요 💍
+      </div>
+
+    </div><!-- /phone-screen -->
+
+    <!-- 파트너 코드 모달 (phone-wrapper 안쪽, 절대 위치) -->
+    <div class="partner-modal-overlay" id="partnerModal">
+      <div class="partner-modal">
+        <div class="partner-modal-handle"></div>
+        <div class="partner-modal-header">
+          <span class="partner-modal-title">💑 파트너 코드</span>
+          <button class="partner-modal-close" id="closePartnerModal" aria-label="닫기">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="partner-modal-body">
+
+          <!-- 내 파트너 코드 -->
+          <div class="modal-my-code-card">
+            <div class="modal-code-section-label">내 파트너 코드</div>
+            <div class="modal-code-row">
+              <div class="modal-code-value" id="myPartnerCode">W2A4B3</div>
+              <div class="modal-code-actions">
+                <button class="modal-action-btn" id="copyCodeBtn">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  복사
+                </button>
+                <button class="modal-action-btn" id="shareCodeBtn">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                  공유
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-divider">파트너 코드 입력</div>
+
+          <!-- 파트너 코드 연결 -->
+          <div class="modal-connect-card">
+            <div class="modal-code-section-label">파트너 코드 입력</div>
+            <input class="modal-connect-input" type="text" id="partnerCodeInput" placeholder="파트너 코드 6자리 입력" maxlength="6" />
+            <button class="modal-connect-btn" id="connectPartnerBtn">파트너 연결하기</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- 타임라인 전체보기 바텀시트 -->
+    <div class="tl-sheet-overlay" id="tlSheetOverlay">
+      <div class="tl-sheet">
+        <div class="tl-sheet-header">
+          <span class="tl-sheet-title">📅 웨딩 타임라인</span>
+          <button class="tl-sheet-close" id="tlSheetClose" aria-label="닫기">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="tl-sheet-body" id="tlSheetBody"></div>
+      </div>
+    </div>
+
+  </div><!-- /phone-wrapper -->
+
+  <script src="style.js"></script>
+  <script>
+  // ════════════════════════════════════════
+  // 메인 페이지 스크립트
+  // ════════════════════════════════════════
+
+  // ── D-Day 자동 계산 ──
+  (function () {
+    const WEDDING = new Date('2026-08-15');
+    const today   = new Date(); today.setHours(0, 0, 0, 0);
+    const diff    = Math.round((WEDDING - today) / 86400000);
+    const el      = document.getElementById('ddayNumber');
+    if (!el) return;
+    if (diff > 0)      el.textContent = 'D-' + diff;
+    else if (diff < 0) el.textContent = 'D+' + Math.abs(diff);
+    else               el.textContent = 'D-Day!';
+  })();
+
+  // ── 웨딩 타임라인 데이터 ──
+  const TIMELINE = [
+    { title: '웨딩홀 선정 및 계약',   due: '2025년 12월', done: true  },
+    { title: '스튜디오 예약',          due: '2026년 1월',  done: true  },
+    { title: '드레스 / 턱시도 선정',   due: '2026년 2월',  done: true  },
+    { title: '청첩장 제작',            due: '2026년 3월',  done: false, urgent: true },
+    { title: '메이크업 업체 예약',     due: '2026년 4월',  done: false, urgent: true },
+    { title: '혼수 쇼핑',             due: '2026년 5월',  done: false },
+    { title: '리허설 촬영',            due: '2026년 7월',  done: false },
+    { title: '결혼식 D-Day! 🎊',       due: '2026년 8월 15일', done: false, dday: true },
+  ];
+
+  // ── 링 업데이트 유틸 ──
+  const CIRC = 188.5;
+  function setRing(id, pct) {
+    const el = document.getElementById(id);
+    if (el) el.style.strokeDashoffset = CIRC * (1 - pct / 100);
+  }
+
+  // ── 타임라인 아이템 엘리먼트 생성 (공통) ──
+  function createTlItemEl(item, onToggle) {
+    let dotClass, itemClass, badgeClass, badgeText;
+    if (item.done)        { dotClass = 'd-done';   itemClass = 'i-done';             badgeClass = 'badge-done';   badgeText = '완료'; }
+    else if (item.dday)   { dotClass = 'd-dday';   itemClass = 'i-dday no-hover';    badgeClass = 'badge-dday';   badgeText = 'D-Day'; }
+    else if (item.urgent) { dotClass = 'd-urgent'; itemClass = 'i-urgent';           badgeClass = 'badge-urgent'; badgeText = '긴급'; }
+    else                  { dotClass = 'd-todo';   itemClass = '';                   badgeClass = 'badge-todo';   badgeText = '예정'; }
+
+    const lineClass = item.done ? 'l-done' : 'l-pending';
+
+    const el = document.createElement('div');
+    el.className = `tl-item ${itemClass}`;
+    el.innerHTML = `
+      <div class="tl-track">
+        <div class="tl-dot ${dotClass}"></div>
+        <div class="tl-line ${lineClass}"></div>
+      </div>
+      <div class="tl-content">
+        <div class="tl-title">${item.title}</div>
+        <div class="tl-due">${item.due}</div>
+      </div>
+      <span class="tl-badge ${badgeClass}">${badgeText}</span>
+    `;
+
+    if (!item.dday) {
+      el.addEventListener('click', () => {
+        item.done   = !item.done;
+        item.urgent = false;
+        if (onToggle) onToggle();
+      });
+    }
+    return el;
+  }
+
+  // ── 메인 미리보기 렌더 (미완료 최대 3개) ──
+  function renderTimelinePreview() {
+    const list = document.getElementById('timelineList');
+    if (!list) return;
+    list.innerHTML = '';
+
+    // 미완료 항목 (urgent 우선, dday 제외)
+    const pending = TIMELINE.filter(i => !i.done && !i.dday);
+    pending.sort((a, b) => (b.urgent ? 1 : 0) - (a.urgent ? 1 : 0));
+    const preview = pending.slice(0, 3);
+
+    preview.forEach(item => {
+      list.appendChild(createTlItemEl(item, () => {
+        renderTimelinePreview();
+        renderTimelineSheet();
+        syncTaskProgress();
+      }));
+    });
+
+    // 마지막 아이템의 연결선 숨기기
+    const lastLine = list.querySelector('.tl-item:last-child .tl-line');
+    if (lastLine) lastLine.style.display = 'none';
+  }
+
+  // ── 바텀시트 전체 렌더 ──
+  function renderTimelineSheet() {
+    const body = document.getElementById('tlSheetBody');
+    if (!body) return;
+    body.innerHTML = '';
+
+    const doneItems    = TIMELINE.filter(i => i.done);
+    const pendingItems = TIMELINE.filter(i => !i.done);
+    pendingItems.sort((a, b) => {
+      if (a.dday) return 1; if (b.dday) return -1;
+      if (a.urgent && !b.urgent) return -1; if (!a.urgent && b.urgent) return 1;
+      return 0;
+    });
+
+    body.appendChild(createTlGroup('미완료', pendingItems, false, 'pending-count'));
+    body.appendChild(createTlGroup('완료',   doneItems,    false, 'done-count'));
+  }
+
+  function createTlGroup(label, items, collapsed, countClass) {
+    const group = document.createElement('div');
+    group.className = 'tl-group';
+
+    const header = document.createElement('div');
+    header.className = 'tl-group-header';
+    header.innerHTML = `
+      <div class="tl-group-title-row">
+        <span class="tl-group-label">${label}</span>
+        <span class="tl-group-count ${countClass}">${items.length}</span>
+      </div>
+      <svg class="tl-group-chevron ${collapsed ? '' : 'open'}" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    `;
+
+    const bodyEl = document.createElement('div');
+    bodyEl.className = 'tl-group-body' + (collapsed ? ' collapsed' : '');
+
+    header.addEventListener('click', () => {
+      const isNowCollapsed = bodyEl.classList.toggle('collapsed');
+      header.querySelector('.tl-group-chevron').classList.toggle('open', !isNowCollapsed);
+    });
+
+    items.forEach(item => {
+      bodyEl.appendChild(createTlItemEl(item, () => {
+        renderTimelinePreview();
+        renderTimelineSheet();
+        syncTaskProgress();
+      }));
+    });
+
+    // 그룹 마지막 아이템 연결선 숨기기
+    const lastLine = bodyEl.querySelector('.tl-item:last-child .tl-line');
+    if (lastLine) lastLine.style.display = 'none';
+
+    group.appendChild(header);
+    group.appendChild(bodyEl);
+    return group;
+  }
+
+  // ── 통계 동기화 ──
+  function syncTaskProgress() {
+    const total = TIMELINE.filter(i => !i.dday).length;
+    const done  = TIMELINE.filter(i => i.done).length;
+    const pct   = Math.round((done / total) * 100);
+
+    setRing('taskRing', pct);
+    document.getElementById('taskPct').textContent          = pct + '%';
+    document.getElementById('taskProgressValue').textContent = done + ' / ' + total + ' 완료';
+    document.getElementById('taskRemain').textContent        = '미완료 ' + (total - done) + '개';
+
+    document.getElementById('tlDoneCount').textContent   = done;
+    document.getElementById('tlTotalCount').textContent  = total;
+    document.getElementById('tlSummaryFill').style.width = pct + '%';
+
+    const pending = TIMELINE.filter(i => !i.done && !i.dday).length;
+    document.getElementById('tlPreviewSummary').textContent =
+      `완료 ${done}개 · 미완료 ${pending}개`;
+  }
+
+  // ── 바텀시트 열기/닫기 ──
+  const tlSheetOverlay = document.getElementById('tlSheetOverlay');
+
+  function openTlSheet() {
+    renderTimelineSheet();
+    tlSheetOverlay.classList.add('active');
+    phoneScreen.style.overflow = 'hidden';
+  }
+
+  function closeTlSheet() {
+    tlSheetOverlay.classList.remove('active');
+    phoneScreen.style.overflow = '';
+  }
+
+  document.getElementById('tlPreviewMore').addEventListener('click', openTlSheet);
+  document.getElementById('timelineMoreBtn').addEventListener('click', openTlSheet);
+  document.getElementById('tlSheetClose').addEventListener('click', closeTlSheet);
+  tlSheetOverlay.addEventListener('click', e => { if (e.target === tlSheetOverlay) closeTlSheet(); });
+
+  // 초기 렌더
+  renderTimelinePreview();
+  syncTaskProgress();
+
+  requestAnimationFrame(() => {
+    const total = TIMELINE.filter(i => !i.dday).length;
+    const done  = TIMELINE.filter(i => i.done).length;
+    setRing('taskRing',   Math.round((done / total) * 100));
+    setRing('budgetRing', 38);
+  });
+
+  // ── 파트너 코드 모달 열기/닫기 ──
+  const partnerModal   = document.getElementById('partnerModal');
+  const phoneScreen    = document.querySelector('.phone-screen');
+
+  function openPartnerModal() {
+    partnerModal.classList.add('active');
+    phoneScreen.style.overflow = 'hidden'; // 배경 스크롤 방지
+  }
+
+  function closePartnerModal() {
+    partnerModal.classList.remove('active');
+    phoneScreen.style.overflow = '';
+    document.getElementById('partnerCodeInput').value = '';
+  }
+
+  document.getElementById('openPartnerModal').addEventListener('click', openPartnerModal);
+  document.getElementById('closePartnerModal').addEventListener('click', closePartnerModal);
+
+  // 오버레이 배경 클릭 시 닫기
+  partnerModal.addEventListener('click', (e) => {
+    if (e.target === partnerModal) closePartnerModal();
+  });
+
+  // ── 파트너 코드 복사 ──
+  document.getElementById('copyCodeBtn').addEventListener('click', () => {
+    const code = document.getElementById('myPartnerCode').textContent;
+    const btn  = document.getElementById('copyCodeBtn');
+    const orig = btn.innerHTML;
+
+    const done = () => {
+      btn.innerHTML = '✓ 복사됨';
+      btn.style.cssText = 'background:#D4A96A;color:#fff;border-color:#D4A96A;';
+      setTimeout(() => { btn.innerHTML = orig; btn.style.cssText = ''; }, 2200);
+    };
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(code).then(done).catch(() => done());
+    } else {
+      done();
+    }
+  });
+
+  // ── 파트너 코드 공유 ──
+  document.getElementById('shareCodeBtn').addEventListener('click', () => {
+    const code = document.getElementById('myPartnerCode').textContent;
+    if (navigator.share) {
+      navigator.share({
+        title: 'Weddly 파트너 코드',
+        text : `Weddly에서 함께 웨딩 준비해요! 파트너 코드: ${code}`,
+      }).catch(() => {});
+    } else {
+      alert('내 파트너 코드: ' + code + '\n파트너에게 공유해주세요!');
+    }
+  });
+
+  // ── 파트너 코드 입력 (영문+숫자 6자리) ──
+  document.getElementById('partnerCodeInput').addEventListener('input', function () {
+    this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+  });
+
+  // ── 파트너 코드 연결 ──
+  document.getElementById('connectPartnerBtn').addEventListener('click', () => {
+    const input = document.getElementById('partnerCodeInput');
+    const code  = input.value.trim().toUpperCase();
+    if (!code) { input.focus(); return; }
+    if (!/^[A-Z0-9]{6}$/.test(code)) {
+      input.style.borderColor = '#f44336';
+      input.style.boxShadow   = '0 0 0 3px rgba(244,67,54,0.1)';
+      setTimeout(() => { input.style.borderColor = ''; input.style.boxShadow = ''; }, 1800);
+      input.focus();
+      return;
+    }
+    if (code === document.getElementById('myPartnerCode').textContent) {
+      input.focus(); return;
+    }
+    console.log('파트너 연결 요청:', code);
+    closePartnerModal();
+    alert('파트너 연결 요청을 전송했어요! 💌\n상대방이 수락하면 연결이 완료됩니다.');
+  });
+
+  // ── 다크모드 토글 ──
+  const phoneWrapper = document.querySelector('.phone-wrapper');
+
+  // 저장된 설정 복원
+  if (localStorage.getItem('weddly-dark') === 'true') {
+    phoneWrapper.classList.add('dark');
+  }
+
+  document.getElementById('darkToggleBtn').addEventListener('click', () => {
+    const isDark = phoneWrapper.classList.toggle('dark');
+    localStorage.setItem('weddly-dark', isDark);
+  });
+
+  // ── 헤더 버튼 ──
+  document.getElementById('notifBtn').addEventListener('click', () => alert('알림 기능 연동 예정'));
+  document.getElementById('profileBtn').addEventListener('click', () => alert('프로필 페이지 연동 예정'));
+  </script>
+</body>
+</html>
