@@ -16,7 +16,7 @@
     }
 
     .phone-screen {
-      padding: 0 0 20px;
+      padding: 0 0 50px;
       min-height: unset;
       height: calc(844px - 30px);
       overflow-y: auto;
@@ -84,11 +84,19 @@
 
     /* 저작권 */
     .vendor-copyright {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
       text-align: center;
       font-size: 11px;
       color: #ccc;
-      padding: 24px 20px 16px;
+      padding: 8px 20px 10px;
       letter-spacing: 0.2px;
+      line-height: 1.8;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(6px);
+      z-index: 10;
     }
 
     .dark-toggle-btn .icon-sun  { display: none; }
@@ -99,17 +107,35 @@
     .phone-wrapper.dark .dark-toggle-btn:hover { background: #3a3020; }
 
     /* ── 카테고리 탭 ── */
+    .category-wrap-outer {
+      position: sticky;
+      top: 68px;
+      z-index: 90;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .category-wrap-outer::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: 36px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.92));
+      pointer-events: none;
+      z-index: 1;
+    }
+    .phone-wrapper.dark .category-wrap-outer {
+      background: rgba(21,18,14,0.97);
+      border-bottom-color: #2a2418;
+    }
+    .phone-wrapper.dark .category-wrap-outer::after {
+      background: linear-gradient(to right, transparent, rgba(21,18,14,0.92));
+    }
     .category-wrap {
       display: flex;
       gap: 8px;
       padding: 12px 16px;
       overflow-x: auto;
-      position: sticky;
-      top: 68px;
-      background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(10px);
-      z-index: 90;
-      border-bottom: 1px solid #f5f5f5;
       scrollbar-width: none;
     }
     .category-wrap::-webkit-scrollbar { display: none; }
@@ -538,10 +564,6 @@
     .phone-wrapper.dark .dark-toggle-btn:hover { background: #3a3020; }
 
     /* ── 카테고리 탭 ── */
-    .phone-wrapper.dark .category-wrap {
-      background: rgba(21,18,14,0.97);
-      border-bottom-color: #2a2418;
-    }
     .phone-wrapper.dark .cat-tab { background: #1e1a14; border-color: #2e2818; color: #5a5040; }
     .phone-wrapper.dark .cat-tab:hover { border-color: #D4A96A; color: #D4A96A; background: #26201a; }
     .phone-wrapper.dark .cat-tab.active {
@@ -573,7 +595,7 @@
     .phone-wrapper.dark .empty-sub { color: #3a3020; }
 
     /* ── 저작권 ── */
-    .phone-wrapper.dark .vendor-copyright { color: #3a3028; }
+    .phone-wrapper.dark .vendor-copyright { color: #3a3028; background: rgba(21,18,14,0.97); }
 
     /* ════════════════════════
        업체 상세 오버레이 다크
@@ -652,6 +674,161 @@
     .phone-wrapper.dark .photos-header { color: #4a4030; }
 
     /* ════════════════════════
+       리뷰 등록 시트
+    ════════════════════════ */
+    .review-fab {
+      position: absolute;
+      bottom: 16px; right: 16px;
+      z-index: 215;
+      display: flex; align-items: center; gap: 5px;
+      padding: 8px 13px 8px 10px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border: none; border-radius: 20px;
+      color: #fff; font-size: 12px; font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(196,144,80,0.45);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .review-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(196,144,80,0.55); }
+    .review-fab:active { transform: scale(0.95); }
+
+    .review-sheet {
+      position: absolute; inset: 0; z-index: 220;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    .review-sheet.open { pointer-events: all; }
+    .review-backdrop {
+      position: absolute; inset: 0;
+      background: transparent;
+      transition: background 0.25s;
+      cursor: pointer;
+    }
+    .review-sheet.open .review-backdrop { background: rgba(0,0,0,0.45); }
+    .review-panel {
+      position: relative;
+      background: #fff;
+      border-radius: 20px;
+      padding-bottom: 20px;
+      width: calc(100% - 32px);
+      max-height: 80%;
+      overflow-y: auto;
+      scrollbar-width: none;
+      transform: scale(0.88);
+      opacity: 0;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
+    }
+    .review-panel::-webkit-scrollbar { display: none; }
+    .review-sheet.open .review-panel { transform: scale(1); opacity: 1; }
+
+    .review-panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px 10px;
+    }
+    .review-panel-title { font-size: 16px; font-weight: 800; color: #222; }
+    .review-close-btn {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: #f0f0f0; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; color: #888;
+      transition: background 0.15s;
+    }
+    .review-close-btn:hover { background: #e0e0e0; }
+
+    .review-type-list {
+      padding: 4px 16px 8px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .review-type-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px; border-radius: 14px;
+      border: 1.5px solid #f0f0f0; background: #fff;
+      cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .review-type-card:hover {
+      border-color: #D4A96A;
+      box-shadow: 0 2px 12px rgba(212,169,106,0.15);
+    }
+    .review-type-icon {
+      width: 46px; height: 46px; border-radius: 13px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .review-type-icon.receipt { background: #e8f5e9; }
+    .review-type-icon.visit   { background: #fff8ef; }
+    .review-type-text { flex: 1; }
+    .review-type-name { font-size: 14px; font-weight: 700; color: #222; margin-bottom: 3px; }
+    .review-type-desc { font-size: 12px; color: #aaa; }
+
+    .review-form-wrap { padding: 0 16px 4px; display: none; }
+    .review-form-wrap.show { display: block; }
+    .review-type-label-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 12px; border-radius: 20px;
+      font-size: 12px; font-weight: 600; margin-bottom: 16px;
+    }
+    .review-type-label-tag.receipt { background: #e8f5e9; color: #5BAD7F; }
+    .review-type-label-tag.visit   { background: #fff8ef; color: #C49050; }
+
+    .review-field-label { font-size: 12px; color: #aaa; font-weight: 600; margin-bottom: 8px; }
+    .review-stars-input { display: flex; gap: 4px; margin-bottom: 16px; }
+    .review-star-btn {
+      font-size: 28px; cursor: pointer;
+      color: #e0e0e0; background: none; border: none; padding: 0;
+      line-height: 1; transition: color 0.15s, transform 0.1s;
+    }
+    .review-star-btn.lit { color: #D4A96A; }
+    .review-star-btn:hover { transform: scale(1.15); }
+
+    .review-textarea {
+      width: 100%; min-height: 110px;
+      border: 1.5px solid #e8e8e8; border-radius: 12px;
+      padding: 12px 14px; font-size: 13px; color: #333;
+      line-height: 1.65; resize: none; outline: none;
+      box-sizing: border-box; font-family: inherit;
+      transition: border-color 0.2s; margin-bottom: 10px;
+    }
+    .review-textarea:focus { border-color: #D4A96A; }
+    .review-textarea::placeholder { color: #ccc; }
+
+    .review-photo-btn {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 14px; padding: 10px 14px;
+      border: 1.5px dashed #e0e0e0; border-radius: 12px;
+      background: #fafafa; cursor: pointer;
+      font-size: 13px; color: #aaa; font-weight: 500;
+      width: 100%; box-sizing: border-box;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .review-photo-btn:hover { border-color: #D4A96A; color: #D4A96A; }
+
+    .review-submit-btn {
+      width: 100%; padding: 13px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border: none; border-radius: 14px;
+      color: #fff; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: opacity 0.15s;
+    }
+    .review-submit-btn:hover { opacity: 0.9; }
+
+    /* 리뷰 등록 다크 */
+    .phone-wrapper.dark .review-fab { box-shadow: 0 4px 14px rgba(0,0,0,0.4); }
+    .phone-wrapper.dark .review-panel { background: #1e1a14; }
+    .phone-wrapper.dark .review-panel-title { color: #ede8e0; }
+    .phone-wrapper.dark .review-close-btn { background: #2e2818; color: #7a7068; }
+    .phone-wrapper.dark .review-type-card { background: #1e1a14; border-color: #2e2818; }
+    .phone-wrapper.dark .review-type-card:hover { border-color: #D4A96A; }
+    .phone-wrapper.dark .review-type-name { color: #ede8e0; }
+    .phone-wrapper.dark .review-type-desc { color: #4a4030; }
+    .phone-wrapper.dark .review-type-icon.receipt { background: #1a2a1a; }
+    .phone-wrapper.dark .review-type-icon.visit   { background: #26201a; }
+    .phone-wrapper.dark .review-textarea { background: #1e1a14; border-color: #2e2818; color: #ede8e0; }
+    .phone-wrapper.dark .review-textarea:focus { border-color: #D4A96A; }
+    .phone-wrapper.dark .review-textarea::placeholder { color: #3a3020; }
+    .phone-wrapper.dark .review-photo-btn { background: #1a1610; border-color: #2e2818; color: #4a4030; }
+    .phone-wrapper.dark .review-photo-btn:hover { border-color: #D4A96A; color: #D4A96A; }
+    .phone-wrapper.dark .review-field-label { color: #4a4030; }
+
+    /* ════════════════════════
        즐겨찾기 오버레이 다크
     ════════════════════════ */
     .phone-wrapper.dark .fav-overlay { background: #15120e; }
@@ -712,6 +889,7 @@
       </header>
 
       <!-- ── 카테고리 탭 ── -->
+      <div class="category-wrap-outer">
       <div class="category-wrap" id="catWrap">
         <button class="cat-tab active" onclick="selectCat(this,'예식장')">🏛️ 예식장</button>
         <button class="cat-tab" onclick="selectCat(this,'스튜디오')">📷 스튜디오</button>
@@ -723,6 +901,7 @@
         <button class="cat-tab" onclick="selectCat(this,'청첩장')">💌 청첩장</button>
         <button class="cat-tab" onclick="selectCat(this,'상견례식당')">🍽️ 상견례식당</button>
       </div>
+      </div><!-- /category-wrap-outer -->
 
       <!-- ── 검색바 ── -->
       <div class="search-wrap">
@@ -738,10 +917,6 @@
       <div class="result-info" id="resultInfo"></div>
       <div class="vendor-list" id="vendorList"></div>
 
-      <div class="vendor-copyright">
-        © 2025 Weddly. All rights reserved.<br/>
-        당신의 특별한 날을 함께해요 💍
-      </div>
 
     </div><!-- /phone-screen -->
 
@@ -860,6 +1035,75 @@
           <div class="photos-grid" id="photosGrid"></div>
         </div>
       </div>
+
+      <!-- ── 리뷰 등록 FAB ── -->
+      <button class="review-fab" onclick="openReviewSheet()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        리뷰 등록
+      </button>
+
+      <!-- ── 리뷰 등록 시트 ── -->
+      <div class="review-sheet" id="reviewSheet">
+        <div class="review-backdrop" onclick="closeReviewSheet()"></div>
+        <div class="review-panel">
+          <div class="review-panel-header">
+            <div class="review-panel-title" id="reviewPanelTitle">리뷰 유형 선택</div>
+            <button class="review-close-btn" onclick="closeReviewSheet()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- 유형 선택 -->
+          <div class="review-type-list" id="reviewTypeList">
+            <div class="review-type-card" onclick="selectReviewType('receipt')">
+              <div class="review-type-icon receipt">🧾</div>
+              <div class="review-type-text">
+                <div class="review-type-name">영수증 리뷰</div>
+                <div class="review-type-desc">결제 영수증 인증으로 신뢰도 높은 리뷰</div>
+              </div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="review-type-card" onclick="selectReviewType('visit')">
+              <div class="review-type-icon visit">📍</div>
+              <div class="review-type-text">
+                <div class="review-type-name">방문 리뷰</div>
+                <div class="review-type-desc">직접 방문 후 작성하는 생생한 후기</div>
+              </div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+
+          <!-- 리뷰 작성 폼 -->
+          <div class="review-form-wrap" id="reviewFormWrap">
+            <div class="review-type-label-tag" id="reviewTypeTag"></div>
+
+            <div class="review-field-label">별점</div>
+            <div class="review-stars-input" id="reviewStarsWrap">
+              <button class="review-star-btn" data-v="1" onclick="setReviewStar(1)">★</button>
+              <button class="review-star-btn" data-v="2" onclick="setReviewStar(2)">★</button>
+              <button class="review-star-btn" data-v="3" onclick="setReviewStar(3)">★</button>
+              <button class="review-star-btn" data-v="4" onclick="setReviewStar(4)">★</button>
+              <button class="review-star-btn" data-v="5" onclick="setReviewStar(5)">★</button>
+            </div>
+
+            <div class="review-field-label">리뷰 내용</div>
+            <textarea class="review-textarea" id="reviewTextarea" placeholder="업체 이용 후 솔직한 후기를 남겨주세요. (최소 10자)"></textarea>
+
+            <button class="review-photo-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              사진 첨부 (선택)
+            </button>
+
+            <button class="review-submit-btn" onclick="submitReview()">리뷰 등록하기</button>
+          </div>
+        </div>
+      </div>
+
     </div><!-- /detail-overlay -->
 
     <!-- ── 즐겨찾기 오버레이 ── -->
@@ -887,6 +1131,12 @@
         </div>
       </div>
     </div><!-- /fav-overlay -->
+
+    <!-- 저작권 (항상 고정) -->
+    <div class="vendor-copyright">
+      © 2025 Weddly. All rights reserved.<br/>
+      당신의 특별한 날을 함께해요 💍
+    </div>
 
   </div><!-- /phone-wrapper -->
 </div><!-- /page-bg -->
@@ -1259,8 +1509,67 @@ function openFavDetail(id) {
   setTimeout(() => openDetail(id), 100);
 }
 
+/* ── 리뷰 등록 시트 ── */
+let reviewStar = 0;
+
+function openReviewSheet() {
+  reviewStar = 0;
+  document.getElementById('reviewTypeList').style.display = 'flex';
+  document.getElementById('reviewFormWrap').classList.remove('show');
+  document.getElementById('reviewPanelTitle').textContent = '리뷰 유형 선택';
+  document.getElementById('reviewTextarea').value = '';
+  document.querySelectorAll('.review-star-btn').forEach(b => b.classList.remove('lit'));
+  document.getElementById('reviewSheet').classList.add('open');
+}
+
+function closeReviewSheet() {
+  document.getElementById('reviewSheet').classList.remove('open');
+}
+
+function selectReviewType(type) {
+  document.getElementById('reviewTypeList').style.display = 'none';
+  document.getElementById('reviewFormWrap').classList.add('show');
+  const tag = document.getElementById('reviewTypeTag');
+  if (type === 'receipt') {
+    tag.textContent = '🧾 영수증 리뷰';
+    tag.className = 'review-type-label-tag receipt';
+    document.getElementById('reviewPanelTitle').textContent = '영수증 리뷰 작성';
+  } else {
+    tag.textContent = '📍 방문 리뷰';
+    tag.className = 'review-type-label-tag visit';
+    document.getElementById('reviewPanelTitle').textContent = '방문 리뷰 작성';
+  }
+}
+
+function setReviewStar(n) {
+  reviewStar = n;
+  document.querySelectorAll('.review-star-btn').forEach(b => {
+    b.classList.toggle('lit', parseInt(b.dataset.v) <= n);
+  });
+}
+
+function submitReview() {
+  if (reviewStar === 0) { alert('별점을 선택해주세요.'); return; }
+  if (document.getElementById('reviewTextarea').value.trim().length < 10) {
+    alert('리뷰 내용을 10자 이상 작성해주세요.'); return;
+  }
+  closeReviewSheet();
+  setTimeout(() => alert('리뷰가 등록되었습니다! 감사합니다 😊'), 350);
+}
+
 /* ── 초기화 ── */
-renderVendors('');
+(function() {
+  const initCat = localStorage.getItem('weddly-init-cat');
+  if (initCat && VENDORS[initCat]) {
+    localStorage.removeItem('weddly-init-cat');
+    currentCat = initCat;
+    document.querySelectorAll('.cat-tab').forEach(btn => {
+      const match = btn.getAttribute('onclick').includes(`'${initCat}'`);
+      btn.classList.toggle('active', match);
+    });
+  }
+  renderVendors('');
+})();
 </script>
 </body>
 </html>

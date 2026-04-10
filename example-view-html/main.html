@@ -1286,42 +1286,42 @@
       <div class="section">
         <div class="section-header">
           <span class="section-title">🏪 업체 둘러보기</span>
-          <button class="section-more" onclick="alert('전체 업체 보기')">
+          <button class="section-more" onclick="goVendor()">
             더보기
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
         <div class="vendor-scroll-wrap">
           <div class="vendor-scroll">
-            <div class="vendor-card" onclick="alert('스튜디오 업체 목록')">
-              <div class="vendor-icon" style="background:#fff8ef;">📸</div>
+            <div class="vendor-card" onclick="goVendor('예식장')">
+              <div class="vendor-icon" style="background:#fff8ef;">🏛️</div>
+              <div class="vendor-name">예식장</div>
+              <div class="vendor-count">142개</div>
+            </div>
+            <div class="vendor-card" onclick="goVendor('스튜디오')">
+              <div class="vendor-icon" style="background:#f0e8ff;">📸</div>
               <div class="vendor-name">스튜디오</div>
               <div class="vendor-count">287개</div>
             </div>
-            <div class="vendor-card" onclick="alert('드레스 업체 목록')">
+            <div class="vendor-card" onclick="goVendor('드레스')">
               <div class="vendor-icon" style="background:#fff0f5;">👗</div>
               <div class="vendor-name">드레스</div>
               <div class="vendor-count">156개</div>
             </div>
-            <div class="vendor-card" onclick="alert('메이크업 업체 목록')">
+            <div class="vendor-card" onclick="goVendor('메이크업')">
               <div class="vendor-icon" style="background:#f8f0ff;">💄</div>
               <div class="vendor-name">메이크업</div>
               <div class="vendor-count">203개</div>
             </div>
-            <div class="vendor-card" onclick="alert('웨딩홀 목록')">
-              <div class="vendor-icon" style="background:#f0f8ff;">🏛️</div>
-              <div class="vendor-name">웨딩홀</div>
-              <div class="vendor-count">142개</div>
-            </div>
-            <div class="vendor-card" onclick="alert('촬영 업체 목록')">
-              <div class="vendor-icon" style="background:#f0fff6;">🎥</div>
-              <div class="vendor-name">촬영</div>
+            <div class="vendor-card" onclick="goVendor('DVD')">
+              <div class="vendor-icon" style="background:#eef2ff;">🎬</div>
+              <div class="vendor-name">DVD</div>
               <div class="vendor-count">98개</div>
             </div>
-            <div class="vendor-card" onclick="alert('가전 목록')">
-              <div class="vendor-icon" style="background:#f5f5ff;">📺</div>
-              <div class="vendor-name">가전</div>
-              <div class="vendor-count">412개</div>
+            <div class="vendor-card" onclick="goVendor('웨딩플래너')">
+              <div class="vendor-icon" style="background:#fff5eb;">📋</div>
+              <div class="vendor-name">웨딩플래너</div>
+              <div class="vendor-count">64개</div>
             </div>
           </div>
         </div>
@@ -1471,6 +1471,12 @@
   // ════════════════════════════════════════
   // 메인 페이지 스크립트
   // ════════════════════════════════════════
+
+  // ── 업체 둘러보기 이동 ──
+  function goVendor(cat) {
+    if (cat) localStorage.setItem('weddly-init-cat', cat);
+    location.href = 'vendor.html';
+  }
 
   // ── D-Day 자동 계산 ──
   (function () {

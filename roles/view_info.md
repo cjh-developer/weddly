@@ -1,0 +1,111 @@
+
+디렉터리 위치 : D:\2_project_room\personal\weddly\example-view-html
+
+##### 예제 화면 정보
+- 로그인 : login.html 
+- 회원가입 : signup.html
+- 아이디찾기 : find_id.html
+- 비밀번호 초기화 : reset_pw.html
+- 예정일 : wedding_date.html
+- 일정관리 : schedule.html
+- 하객관리 : guest.html
+- 예산관리 : budget.html
+- 메모장 : memo.html
+- 메모장 작성 : memo_write.html
+---
+- 웨딩 관리 : 예정
+- 업체 관리 : 예정
+- 커뮤니티 : 예정
+---
+- 아이콘 관리 : 예정
+- 설정 : 예정
+	- 사용자
+		- 캐시 삭제
+		- 탈퇴
+			- 즉시 전체 정보 삭제
+			- 3개월 보관 후 삭제
+		- 알림 허용 여부
+		- 개인정보 수집 여부
+	- 관리자
+		- 정책
+			- 비밀번호 정책
+				- 비밀번호 암호화 방식
+					- 암호화 방식(SELECT)
+						- SHA512
+						- SHA256
+					- 인코딩 방식 (SELECT)
+						- HEX 
+						- BASE64
+				- 비밀번호 SALT 사용 여부(SELECT)
+					- true/false
+					- true(SELECT)
+						- SALT + PASSWORD
+						- PASSWORD + SALT
+				- SALT 사용 문자(SELECT)
+					- 사용자 ID
+					- 사용자 이름
+					- 휴대번호
+					- 이메일
+				- 연속 문자 허용 여부(SELECT)
+					- true/false
+				- 특수 문자 포함 여부(SELECT)
+					- true/false
+				- 영문자 사용 여부(SELECT)
+					- true/false
+				- 숫자 사용 여부(SELECT)
+					- true/false
+				- 사용 가능한 특수 문자(INPUT)
+				- 비밀번호 변경 일자(INPUT)
+					- 일 단위
+				- 비밀번호 초기화 방법
+					- FIXED
+						- 관리자 직접 지정
+					- INPUT
+						- 사용자 직접 지정
+					- CHOICE (SELECT)
+						- 사용자 휴대번호 뒷4자리
+						- 사용자 이메일 주소
+						- 사용자 아이디 + 00
+				- 비밀번호 시작 문자열 지정 
+					- SELECT
+						- 영문
+						- 한글
+						- 숫자
+						- 특수문자
+						- 해당 없음
+			- 아이디 정책
+				- 아이디 시작 문자열(SELECT)
+					- 영문자
+					- 숫자
+					- 한글
+					- 해당 없음
+				- 영문자 아이디 포함 여부(SELECT)
+					- true/false
+				- 숫자 아이디 포함 여부(SELECT)
+					- true/false
+				- 아이디 최소 길이(INPUT)
+				- 아이디 최대 길이(INPUT)
+			- 토큰 정책
+				- 토큰 만료 기간(INPUT)
+					- 초 단위
+					- 기본 값 86400
+				- 토큰 연장 기간(INPUT)
+					- 초 단위
+					- 기본 값 3600
+			- 시스템 정책
+				- 로그인 이력 로그 삭제 기간(INPUT)
+					- 일 단위
+					- 기본 값 : 365
+				- 비밀번호 이력 로그 삭제 기간(INPUT)
+					- 일 단위
+					- 기본 값 : 365
+				- 토큰 발행 이력 로그 삭제 기간(INPUT)
+					- 일 단위
+					- 기본 값 : 365
+		- 로그인 이력 -> 단순 통계 수집용
+		- 비밀번호 이력 -> 단순 통계 수집용
+		- 토큰 발급 이력 -> 단순 통계 수집용
+		- 활동 로그 -> 사용자 패턴 수집용
+ 
+
+---
