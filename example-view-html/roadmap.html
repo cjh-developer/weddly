@@ -1,0 +1,2638 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 로드맵</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { align-items: flex-start; }
+
+    .phone-wrapper {
+      height: 844px;
+      min-height: unset;
+      position: relative;
+    }
+
+    .phone-screen {
+      padding: 0 0 80px;
+      min-height: unset;
+      height: calc(844px - 30px);
+      overflow-y: auto;
+      display: block;
+    }
+
+    .phone-screen::-webkit-scrollbar { width: 4px; }
+    .phone-screen::-webkit-scrollbar-track { background: transparent; }
+    .phone-screen::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #D4A96A, #C49050);
+      border-radius: 4px;
+    }
+
+    /* ════════════ 헤더 ════════════ */
+    .rm-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px 12px;
+      position: sticky; top: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .rm-header-left { display: flex; align-items: center; gap: 8px; }
+    .rm-header-right { display: flex; align-items: center; gap: 6px; }
+
+    .back-btn {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: #f5f5f5; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #555; transition: background 0.15s; text-decoration: none;
+    }
+    .back-btn:hover { background: #eee; }
+
+    .rm-logo { font-size: 20px; font-weight: 800; font-style: italic; color: #D4A96A; letter-spacing: -0.5px; }
+
+    .icon-btn {
+      width: 36px; height: 36px; border-radius: 11px;
+      background: #f8f8f8; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #666; transition: background 0.15s, color 0.15s;
+    }
+    .icon-btn:hover { background: #f0e8d8; color: #D4A96A; }
+
+    .dark-toggle .icon-sun  { display: none; }
+    .dark-toggle .icon-moon { display: block; }
+    .phone-wrapper.dark .dark-toggle .icon-moon { display: none; }
+    .phone-wrapper.dark .dark-toggle .icon-sun  { display: block; }
+    .phone-wrapper.dark .dark-toggle { background: #2e2616; color: #D4A96A; }
+
+    /* ════════════ 탭 ════════════ */
+    .rm-tab-section { display: flex; align-items: center; padding: 12px 16px 0; overflow-x: auto; scrollbar-width: none; }
+    .rm-tab-section::-webkit-scrollbar { display: none; }
+    .rm-tab-list { display: flex; align-items: center; gap: 6px; flex: 1; overflow-x: auto; scrollbar-width: none; }
+    .rm-tab-list::-webkit-scrollbar { display: none; }
+
+    .rm-tab {
+      display: flex; align-items: center; gap: 5px;
+      padding: 7px 14px; border-radius: 20px;
+      font-size: 13px; font-weight: 600;
+      border: 1.5px solid #e8e8e8; background: #fff; color: #888;
+      cursor: pointer; transition: all 0.15s; white-space: nowrap; flex-shrink: 0;
+    }
+    .rm-tab.active { background: linear-gradient(135deg, #D4A96A, #C49050); border-color: transparent; color: #fff; }
+
+    .rm-tab .tab-del-btn {
+      display: none; width: 16px; height: 16px; border-radius: 50%;
+      background: rgba(0,0,0,0.15); border: none; cursor: pointer;
+      align-items: center; justify-content: center;
+      color: inherit; padding: 0; transition: background 0.15s; flex-shrink: 0;
+    }
+    .rm-tab .tab-del-btn:hover { background: rgba(0,0,0,0.28); }
+    .rm-tab-list.delete-mode .rm-tab.custom-tab .tab-del-btn { display: flex; }
+    .rm-tab-list.delete-mode .rm-tab.custom-tab { padding-right: 8px; }
+
+    .rm-tab-add-btn {
+      flex-shrink: 0; margin-left: 6px; width: 34px; height: 34px; border-radius: 50%;
+      background: #f8f8f8; border: 1.5px dashed #d0c0a8; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #C49050; transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .rm-tab-add-btn:hover { background: #fff8ef; border-color: #D4A96A; color: #D4A96A; }
+    .rm-tab-add-btn.del-mode-active { background: #fff2f2; border-color: #f44336; color: #f44336; }
+
+    /* ════════════ 진행률 카드 ════════════ */
+    .rm-progress-card {
+      margin: 14px 16px 0;
+      background: linear-gradient(130deg, #18110a 0%, #33210a 50%, #a8721e 100%);
+      border-radius: 18px; padding: 18px 20px 16px; position: relative; overflow: hidden;
+    }
+    .rm-progress-card::before { content: ''; position: absolute; top: -28px; right: -28px; width: 120px; height: 120px; border-radius: 50%; background: rgba(212,169,106,0.12); }
+    .rm-progress-card::after  { content: ''; position: absolute; bottom: -40px; right: 40px; width: 90px; height: 90px; border-radius: 50%; background: rgba(212,169,106,0.07); }
+
+    .rm-progress-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; position: relative; z-index: 1; }
+    .rm-progress-label { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 4px; }
+    .rm-progress-title { font-size: 15px; font-weight: 800; color: #fff; }
+    .rm-percent-wrap { text-align: right; }
+    .rm-percent-num { font-size: 34px; font-weight: 800; color: #D4A96A; line-height: 1; }
+    .rm-percent-sign { font-size: 16px; font-weight: 700; color: #D4A96A; }
+    .rm-percent-sub { font-size: 10px; color: rgba(255,255,255,0.4); font-weight: 500; margin-top: 2px; }
+
+    .rm-bar-wrap { position: relative; z-index: 1; margin-bottom: 16px; }
+    .rm-bar-track { width: 100%; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; overflow: hidden; }
+    .rm-bar-fill { height: 100%; background: linear-gradient(90deg, #D4A96A, #f0c87a); border-radius: 3px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+    .rm-stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; position: relative; z-index: 1; }
+    .rm-stat-item { background: rgba(0,0,0,0.2); padding: 10px 0; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .rm-stat-num { font-size: 20px; font-weight: 800; color: #fff; line-height: 1; }
+    .rm-stat-label { font-size: 10px; color: rgba(255,255,255,0.45); font-weight: 500; }
+    .rm-stat-item.completed .rm-stat-num { color: #D4A96A; }
+    .rm-stat-item.incomplete .rm-stat-num { color: rgba(255,255,255,0.55); }
+
+    /* ════════════ 빈 상태 ════════════ */
+    .rm-content { padding: 12px 16px 0; }
+    .rm-empty { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 40px 20px; text-align: center; }
+    .rm-empty-icon { width: 56px; height: 56px; background: #fff8ef; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .rm-empty-title { font-size: 15px; font-weight: 700; color: #333; }
+    .rm-empty-desc { font-size: 13px; color: #bbb; line-height: 1.7; }
+
+    /* ════════════ 타임라인 ════════════ */
+
+    /* 월 구분선 */
+    .tl-month-div {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 0 10px;
+    }
+    .tl-month-line { flex: 1; height: 1px; background: #f0e8d8; }
+    /* 왼쪽 정렬 시 왼쪽 선 없음 */
+    .tl-month-text {
+      font-size: 11px; font-weight: 800; color: #C49050;
+      white-space: nowrap; letter-spacing: 0.4px;
+      background: #fff9f2; border: 1px solid #f0e8d8;
+      padding: 3px 10px; border-radius: 20px;
+    }
+
+    /* 아이템 카드 */
+    .tl-card {
+      background: #fff; border: 1.5px solid #f0f0f0;
+      border-radius: 14px; padding: 12px 14px;
+      margin-bottom: 8px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .tl-card:hover { border-color: #e8d8c0; box-shadow: 0 2px 10px rgba(212,169,106,0.1); }
+    .tl-card.done { opacity: 0.55; }
+    .tl-card.done .tl-card-title { text-decoration: line-through; color: #aaa; }
+
+    .tl-card-top { display: flex; align-items: flex-start; gap: 10px; }
+
+    /* 체크박스 */
+    .tl-card-check {
+      flex-shrink: 0; margin-top: 1px;
+      width: 20px; height: 20px; border-radius: 6px;
+      border: 2px solid #ddd; background: #f8f8f8;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .tl-card-check:hover { border-color: #D4A96A; background: #fff8ef; }
+    .tl-card.done .tl-card-check {
+      background: #D4A96A; border-color: #D4A96A;
+    }
+    .tl-card.done .tl-card-check::after {
+      content: ''; display: block; width: 10px; height: 6px;
+      border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+
+    .tl-card-body { flex: 1; min-width: 0; }
+
+    .tl-card-row {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tl-card-title {
+      flex: 1; font-size: 14px; font-weight: 700; color: #222;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .tl-card-cat {
+      font-size: 10px; font-weight: 600; color: #C49050;
+      background: #fff8ef; border: 1px solid #f0e0c0;
+      border-radius: 20px; padding: 2px 7px;
+      white-space: nowrap; flex-shrink: 0;
+      display: flex; align-items: center; gap: 3px;
+    }
+    .tl-card-more {
+      flex-shrink: 0; width: 26px; height: 26px; border-radius: 8px;
+      background: #f8f8f8; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #bbb; font-size: 14px; font-weight: 700; letter-spacing: 1px;
+      transition: background 0.15s, color 0.15s;
+      line-height: 1;
+    }
+    .tl-card-more:hover { background: #f0e8d8; color: #C49050; }
+
+    .tl-card-dday {
+      margin-top: 4px; font-size: 11px; font-weight: 600;
+      color: #bbb; display: flex; align-items: center; gap: 4px;
+    }
+    .tl-card-dday.upcoming { color: #5B9BD5; }
+    .tl-card-dday.soon     { color: #E89B5B; }
+    .tl-card-dday.today    { color: #D4A96A; font-weight: 800; }
+    .tl-card-dday.past     { color: #ccc; }
+
+    /* ── 다크 타임라인 ── */
+    .phone-wrapper.dark .tl-month-text { background: #221e14; border-color: #3a2e1a; color: #C49050; }
+    .phone-wrapper.dark .tl-month-line { background: #3a2e1a; }
+    .phone-wrapper.dark .tl-card { background: #221e14; border-color: #3a2e1a; }
+    .phone-wrapper.dark .tl-card:hover { border-color: #5a3e20; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+    .phone-wrapper.dark .tl-card.done .tl-card-title { color: #555; }
+    .phone-wrapper.dark .tl-card-check { background: #2a2218; border-color: #4a3828; }
+    .phone-wrapper.dark .tl-card-check:hover { border-color: #D4A96A; }
+    .phone-wrapper.dark .tl-card-title { color: #e0d5c0; }
+    .phone-wrapper.dark .tl-card-cat { background: #2a2010; border-color: #3a2e1a; }
+    .phone-wrapper.dark .tl-card-more { background: #2a2218; color: #666; }
+    .phone-wrapper.dark .tl-card-more:hover { background: #3a2e1e; color: #C49050; }
+
+    /* ── 수정 모달 ── */
+    .edit-modal-box {
+      background: #fff; border-radius: 20px; width: 100%;
+      max-height: calc(100% - 32px);
+      display: flex; flex-direction: column;
+      animation: modalIn 0.22s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    .edit-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px 14px; border-bottom: 1px solid #f0f0f0; flex-shrink: 0; }
+    .edit-modal-cat-badge { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #C49050; }
+    .edit-modal-body { flex: 1; overflow-y: auto; padding: 16px 18px 8px; }
+    .edit-modal-body::-webkit-scrollbar { width: 3px; }
+    .edit-modal-body::-webkit-scrollbar-thumb { background: #e0d8cc; border-radius: 2px; }
+    .edit-modal-footer { padding: 12px 18px 16px; border-top: 1px solid #f0f0f0; flex-shrink: 0; display: flex; gap: 8px; }
+
+    .phone-wrapper.dark .edit-modal-box { background: #1e1a12; }
+    .phone-wrapper.dark .edit-modal-header { border-bottom-color: #2a2218; }
+    .phone-wrapper.dark .edit-modal-footer { border-top-color: #2a2218; }
+
+    /* ════════════ FAB ════════════ */
+    .rm-fab {
+      position: absolute; bottom: 24px; right: 20px;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; color: #fff;
+      box-shadow: 0 6px 20px rgba(212,169,106,0.55);
+      z-index: 90; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .rm-fab:hover  { transform: scale(1.08); box-shadow: 0 8px 26px rgba(212,169,106,0.65); }
+    .rm-fab:active { transform: scale(0.96); }
+
+    /* ════════════ 모달 공통 (중앙) ════════════ */
+    .modal-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 200;
+      display: none; align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.active { display: flex; }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.96) translateY(10px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* ── 탭 추가 모달 ── */
+    .tab-add-box {
+      background: #fff; border-radius: 20px; width: 100%;
+      animation: modalIn 0.22s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .tab-add-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px 14px; border-bottom: 1px solid #f0f0f0; }
+    .tab-add-title { font-size: 16px; font-weight: 700; color: #222; }
+    .tab-add-body { padding: 18px 20px 20px; }
+
+    .field-label-sm { font-size: 12px; font-weight: 700; color: #888; letter-spacing: 0.3px; text-transform: uppercase; margin-bottom: 7px; }
+
+    .title-input-wrap {
+      display: flex; align-items: center;
+      background: #f8f8f8; border: 1.5px solid #e8e8e8;
+      border-radius: 12px; transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 16px;
+    }
+    .title-input-wrap:focus-within { border-color: #D4A96A; box-shadow: 0 0 0 3px rgba(212,169,106,0.15); background: #fff; }
+    .title-input-wrap input { flex: 1; border: none; background: transparent; padding: 14px 14px; font-size: 14px; color: #222; outline: none; font-family: inherit; }
+    .title-input-wrap input::placeholder { color: #ccc; }
+    .title-char { padding-right: 14px; font-size: 12px; color: #ccc; font-weight: 500; flex-shrink: 0; }
+
+    .btn-primary {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      color: #fff; font-size: 15px; font-weight: 700;
+      border: none; border-radius: 12px; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(212,169,106,0.4);
+      transition: opacity 0.2s, transform 0.1s; font-family: inherit;
+    }
+    .btn-primary:hover  { opacity: 0.92; }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { background: #e0e0e0; box-shadow: none; cursor: not-allowed; opacity: 1; }
+
+    /* ── 타임라인 추가 모달 ── */
+    .tl-add-box {
+      background: #fff; border-radius: 20px; width: 100%;
+      max-height: calc(100% - 32px);
+      display: flex; flex-direction: column;
+      animation: modalIn 0.22s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .tl-modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 18px 14px; border-bottom: 1px solid #f0f0f0; flex-shrink: 0;
+    }
+    .tl-modal-title { font-size: 16px; font-weight: 700; color: #222; }
+    .modal-close-btn {
+      background: none; border: none; cursor: pointer; color: #aaa;
+      padding: 4px; display: flex; align-items: center;
+      border-radius: 6px; transition: color 0.15s, background 0.15s;
+    }
+    .modal-close-btn:hover { color: #555; background: #f5f5f5; }
+
+    .tl-modal-body { flex: 1; overflow-y: auto; padding: 16px 18px 8px; }
+    .tl-modal-body::-webkit-scrollbar { width: 3px; }
+    .tl-modal-body::-webkit-scrollbar-thumb { background: #e0d8cc; border-radius: 2px; }
+
+    .tl-modal-footer { padding: 12px 18px 16px; border-top: 1px solid #f0f0f0; flex-shrink: 0; }
+
+    /* ── 필드 공통 ── */
+    .tl-field { margin-bottom: 16px; }
+    .tl-field-label {
+      font-size: 12px; font-weight: 700; color: #888;
+      letter-spacing: 0.3px; text-transform: uppercase;
+      margin-bottom: 7px; display: flex; align-items: center; gap: 4px;
+    }
+    .tl-field-label .req { color: #D4A96A; }
+
+    /* ── 텍스트 입력 ── */
+    .tl-input-wrap {
+      display: flex; align-items: center;
+      background: #f8f8f8; border: 1.5px solid #e8e8e8;
+      border-radius: 12px; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .tl-input-wrap:focus-within { border-color: #D4A96A; box-shadow: 0 0 0 3px rgba(212,169,106,0.15); background: #fff; }
+    .tl-input {
+      flex: 1; border: none; background: transparent;
+      padding: 12px 14px; font-size: 14px; color: #222; outline: none; font-family: inherit;
+    }
+    .tl-input::placeholder { color: #ccc; }
+
+    .tl-textarea {
+      width: 100%; border: 1.5px solid #e8e8e8; background: #f8f8f8;
+      border-radius: 12px; padding: 12px 14px;
+      font-size: 14px; color: #222; outline: none; font-family: inherit;
+      resize: none; min-height: 80px; box-sizing: border-box;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .tl-textarea:focus { border-color: #D4A96A; box-shadow: 0 0 0 3px rgba(212,169,106,0.15); background: #fff; }
+    .tl-textarea::placeholder { color: #ccc; }
+
+    .tl-row { display: flex; gap: 10px; margin-bottom: 16px; }
+    .tl-row .tl-field { flex: 1; margin-bottom: 0; }
+
+    .tl-date-hint { font-size: 11px; font-weight: 600; margin-top: 5px; min-height: 16px; display: flex; align-items: center; gap: 4px; color: #D4A96A; }
+
+    /* ── 색상 선택 ── */
+    .tl-color-list { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tl-color-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 2.5px solid transparent; cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .tl-color-dot:hover { transform: scale(1.15); }
+    .tl-color-dot.selected { border-color: #222 !important; transform: scale(1.1); }
+    .tl-color-dot.selected::after {
+      content: ''; display: block; width: 8px; height: 5px;
+      border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+
+    /* ── 웨딩홀 정보 섹션 ── */
+    .wh-section { display: flex; flex-direction: column; gap: 8px; }
+    .wh-field-label { font-size: 11px; font-weight: 700; color: #b08050; margin-bottom: 3px; }
+    .wh-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .wh-balance-card {
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(212,169,106,0.09); border: 1.5px solid rgba(212,169,106,0.25);
+      border-radius: 10px; padding: 9px 14px;
+    }
+    .wh-balance-label { font-size: 10px; color: #C49050; font-weight: 700; }
+    .wh-balance-val { font-size: 14px; font-weight: 800; color: #D4A96A; font-variant-numeric: tabular-nums; }
+    .wh-balance-val.negative { color: #f44336; }
+    .wh-meal-estimate { font-size: 11px; color: #C49050; font-weight: 700; margin-top: 5px; padding-left: 2px; min-height: 14px; }
+    .phone-wrapper.dark .wh-balance-card { background: rgba(212,169,106,0.05); border-color: rgba(212,169,106,0.15); }
+    .phone-wrapper.dark .wh-balance-val { color: #E8C07A; }
+
+    /* ── 예산 입력 섹션 ── */
+    .tl-budget-input-row {
+      display: flex; align-items: center;
+      background: #fff; border: 1.5px solid #e8e8e8; border-radius: 10px;
+      overflow: hidden; transition: border-color 0.2s;
+    }
+    .tl-budget-input-row:focus-within { border-color: #D4A96A; }
+    .tl-budget-symbol { padding: 0 4px 0 14px; color: #C49050; font-size: 15px; font-weight: 800; flex-shrink: 0; }
+    .tl-budget-unit   { padding-right: 14px; font-size: 13px; color: #C49050; font-weight: 700; flex-shrink: 0; }
+    .tl-budget-display {
+      min-height: 18px; margin-top: 5px;
+      font-size: 12px; color: #999; text-align: right;
+    }
+    .tl-budget-ref {
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(212,169,106,0.08); border: 1.5px solid rgba(212,169,106,0.25);
+      border-radius: 10px; padding: 9px 12px; margin-top: 8px; gap: 8px;
+    }
+    .tl-budget-ref-label { font-size: 11px; color: #C49050; font-weight: 700; margin-bottom: 2px; }
+    .tl-budget-ref-amount { font-size: 14px; font-weight: 800; color: #D4A96A; }
+    .tl-budget-ref-apply {
+      flex-shrink: 0; padding: 5px 12px; background: #D4A96A; color: #fff;
+      border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .tl-budget-ref-apply:hover { background: #C49050; }
+
+    .phone-wrapper.dark .tl-budget-input-row { background: #2a2218; border-color: #3a3020; }
+    .phone-wrapper.dark .tl-budget-symbol { color: #D4A96A; }
+    .phone-wrapper.dark .tl-budget-unit   { color: #D4A96A; }
+    .phone-wrapper.dark .tl-budget-display { color: #6b5f4a; }
+    .phone-wrapper.dark .tl-budget-ref { background: rgba(212,169,106,0.06); border-color: rgba(212,169,106,0.2); }
+    .phone-wrapper.dark .tl-budget-ref-amount { color: #E8C07A; }
+
+    /* ── 웨딩홀 투어 섹션 ── */
+    .venue-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+    .venue-card { background: #fafafa; border: 1.5px solid #f0e8d8; border-radius: 14px; overflow: hidden; }
+    .venue-card-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 11px 12px; cursor: pointer; user-select: none;
+      transition: background 0.15s;
+    }
+    .venue-card-header:hover { background: rgba(212,169,106,0.05); }
+    .venue-num { font-size: 11px; font-weight: 700; color: #D4A96A; background: rgba(212,169,106,0.12); border-radius: 20px; padding: 2px 9px; flex-shrink: 0; }
+    .venue-header-info { flex: 1; min-width: 0; }
+    .venue-title-text { font-size: 13px; font-weight: 700; color: #2a1a0a; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .venue-visit-text { font-size: 11px; color: #aaa; display: block; margin-top: 2px; }
+    .venue-chevron { transition: transform 0.2s; color: #ccc; flex-shrink: 0; }
+    .venue-card.expanded .venue-chevron { transform: rotate(180deg); }
+    .venue-card-body { display: none; padding: 0 12px 12px; border-top: 1.5px solid #f0e8d8; }
+    .venue-card.expanded .venue-card-body { display: block; }
+    .venue-field { margin-top: 10px; }
+    .venue-field-label { font-size: 11px; color: #b08050; font-weight: 700; margin-bottom: 4px; }
+    .venue-input-wrap {
+      background: #fff; border: 1.5px solid #e8e8e8; border-radius: 10px;
+      display: flex; align-items: center; transition: border-color 0.2s;
+    }
+    .venue-input-wrap:focus-within { border-color: #D4A96A; }
+    .venue-input {
+      flex: 1; border: none; background: transparent;
+      padding: 10px 12px; font-size: 13px; font-family: inherit;
+      color: #2a1a0a; outline: none; min-width: 0;
+    }
+    .venue-fee-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .btn-add-venue {
+      width: 100%; padding: 11px; background: rgba(212,169,106,0.08);
+      border: 1.5px dashed rgba(212,169,106,0.4); border-radius: 12px;
+      color: #C49050; font-size: 13px; font-weight: 700; font-family: inherit;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      gap: 6px; transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-add-venue:hover { background: rgba(212,169,106,0.14); border-color: #D4A96A; }
+
+    /* 시간 카드 */
+    .venue-time-row { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+    .venue-time-card {
+      display: flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, rgba(212,169,106,0.10) 0%, rgba(212,169,106,0.03) 100%);
+      border: 1.5px solid rgba(212,169,106,0.28);
+      border-radius: 12px; padding: 10px 14px;
+      cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s;
+      user-select: none;
+    }
+    .venue-time-card:hover { border-color: #D4A96A; box-shadow: 0 0 0 3px rgba(212,169,106,0.12); }
+    .venue-time-badge {
+      font-size: 11px; font-weight: 800; color: #C49050;
+      background: rgba(212,169,106,0.16); border-radius: 20px;
+      padding: 3px 10px; flex-shrink: 0; white-space: nowrap; letter-spacing: -0.2px;
+    }
+    .venue-time-val {
+      flex: 1; font-size: 11px; font-weight: 800; color: #D4A96A;
+      text-align: right; letter-spacing: 0.5px; font-variant-numeric: tabular-nums;
+    }
+    .venue-time-val.empty { font-weight: 600; color: #ccc; letter-spacing: 0; }
+    .venue-time-chevron { color: #D4A96A; flex-shrink: 0; opacity: 0.7; }
+
+    /* ── 시간 선택 피커 (드럼 휠) ── */
+    .vtp-overlay {
+      position: absolute; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.45); backdrop-filter: blur(3px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .vtp-overlay.active { opacity: 1; pointer-events: all; }
+    @keyframes vtpPop {
+      from { transform: scale(0.88); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+    .vtp-box {
+      width: 100%; background: #fff;
+      border-radius: 22px;
+      padding: 16px 16px 16px;
+      animation: vtpPop 0.22s cubic-bezier(0.34,1.2,0.64,1) both;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    .vtp-handle { display: none; }
+    .vtp-title { font-size: 12px; font-weight: 800; color: #C49050; text-align: center; margin-bottom: 10px; }
+
+    /* 드럼 래퍼 */
+    .vtp-drums-wrap {
+      position: relative; display: flex;
+      align-items: center; justify-content: center;
+      height: 170px; overflow: hidden; margin-bottom: 14px;
+    }
+    /* 선택 하이라이트 밴드 */
+    .vtp-band {
+      position: absolute; left: 12px; right: 12px;
+      top: 50%; transform: translateY(-50%);
+      height: 34px;
+      background: rgba(212,169,106,0.13);
+      border-top: 1.5px solid rgba(212,169,106,0.40);
+      border-bottom: 1.5px solid rgba(212,169,106,0.40);
+      border-radius: 10px; pointer-events: none; z-index: 1;
+    }
+    /* 상하 페이드 마스크 */
+    .vtp-fade {
+      position: absolute; inset: 0; pointer-events: none; z-index: 2;
+      background: linear-gradient(to bottom,
+        #fff 0%, rgba(255,255,255,0.7) 20%,
+        transparent 38%, transparent 62%,
+        rgba(255,255,255,0.7) 80%, #fff 100%);
+    }
+    /* 드럼 컬럼 */
+    .vtp-drum {
+      width: 72px; height: 170px;
+      overflow-y: scroll; scroll-snap-type: y mandatory;
+      scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      position: relative; z-index: 0;
+    }
+    .vtp-drum::-webkit-scrollbar { display: none; }
+    .vtp-drum-pad { height: 68px; } /* 위아래 여백 (2 아이템 × 34px) */
+    .vtp-drum-item {
+      height: 34px; display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700; color: #ccc;
+      scroll-snap-align: center; font-variant-numeric: tabular-nums;
+      transition: color 0.15s, font-size 0.15s;
+    }
+    .vtp-drum-item.sel { color: #2a1a0a; font-size: 20px; font-weight: 800; }
+    .vtp-drum-sep {
+      font-size: 20px; font-weight: 900; color: #D4A96A;
+      padding: 0 2px; z-index: 3; flex-shrink: 0; line-height: 34px;
+    }
+    /* 버튼 */
+    .vtp-footer { display: flex; gap: 8px; }
+    .vtp-cancel {
+      flex: 1; padding: 11px; background: #f5f2ee; color: #999;
+      border: none; border-radius: 12px;
+      font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer;
+    }
+    .vtp-cancel:hover { background: #ede9e3; }
+    .vtp-confirm {
+      flex: 2; padding: 11px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      color: #fff; border: none; border-radius: 12px;
+      font-size: 14px; font-weight: 800; font-family: inherit; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(212,169,106,0.35);
+    }
+    .vtp-confirm:hover { opacity: 0.9; }
+
+    .phone-wrapper.dark .venue-card { background: #221e14; border-color: #3a2e1a; }
+    .phone-wrapper.dark .venue-card-header:hover { background: rgba(212,169,106,0.04); }
+    .phone-wrapper.dark .venue-title-text { color: #e0d5c0; }
+    .phone-wrapper.dark .venue-card-body { border-color: #3a2e1a; }
+    .phone-wrapper.dark .venue-input-wrap { background: #2a2218; border-color: #3a3020; }
+    .phone-wrapper.dark .venue-input { color: #e0d5c0; }
+    .phone-wrapper.dark .btn-add-venue { color: #E8C07A; border-color: rgba(212,169,106,0.3); }
+    .phone-wrapper.dark .venue-time-card { background: rgba(212,169,106,0.07); border-color: rgba(212,169,106,0.22); }
+    .phone-wrapper.dark .venue-time-card:hover { box-shadow: 0 0 0 3px rgba(212,169,106,0.08); }
+    .phone-wrapper.dark .venue-time-badge { background: rgba(212,169,106,0.14); color: #D4A96A; }
+    .phone-wrapper.dark .venue-time-val.empty { color: #555; }
+    .phone-wrapper.dark .vtp-box { background: #1c1710; }
+    .phone-wrapper.dark .vtp-handle { background: #3a3020; }
+    .phone-wrapper.dark .vtp-fade {
+      background: linear-gradient(to bottom,
+        #1c1710 0%, rgba(28,23,16,0.7) 20%,
+        transparent 38%, transparent 62%,
+        rgba(28,23,16,0.7) 80%, #1c1710 100%);
+    }
+    .phone-wrapper.dark .vtp-drum-item { color: #3a3020; }
+    .phone-wrapper.dark .vtp-drum-item.sel { color: #e0d5c0; }
+    .phone-wrapper.dark .vtp-cancel { background: #2a2218; color: #6b5f4a; }
+    .phone-wrapper.dark .vtp-cancel:hover { background: #332a1e; }
+
+    /* ── 할 일 목록 ── */
+    .tl-todo-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+    .tl-todo-item { background: #fafafa; border: 1.5px solid #f0e8d8; border-radius: 14px; padding: 12px 12px 10px; }
+    .tl-todo-item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .tl-todo-num { font-size: 11px; font-weight: 700; color: #D4A96A; background: rgba(212,169,106,0.12); border-radius: 20px; padding: 2px 9px; }
+    .tl-todo-del {
+      width: 24px; height: 24px; border-radius: 50%; background: #f0f0f0; border: none;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: #bbb; transition: background 0.15s, color 0.15s;
+    }
+    .tl-todo-del:hover { background: #fde8e8; color: #f44336; }
+    .tl-todo-fields { display: flex; flex-direction: column; gap: 8px; }
+
+    .tl-todo-input-wrap {
+      background: #fff; border: 1.5px solid #e8e8e8; border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+    .tl-todo-input-wrap:focus-within { border-color: #D4A96A; }
+    .tl-todo-input {
+      width: 100%; border: none; background: transparent;
+      padding: 10px 12px; font-size: 13px; color: #222;
+      outline: none; font-family: inherit; box-sizing: border-box;
+    }
+    .tl-todo-input::placeholder { color: #ccc; }
+    .tl-todo-textarea-wrap {
+      background: #fff; border: 1.5px solid #e8e8e8; border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+    .tl-todo-textarea-wrap:focus-within { border-color: #D4A96A; }
+    .tl-todo-textarea {
+      width: 100%; border: none; background: transparent;
+      padding: 10px 12px; font-size: 13px; color: #222;
+      outline: none; font-family: inherit; resize: none; min-height: 56px; box-sizing: border-box;
+    }
+    .tl-todo-textarea::placeholder { color: #ccc; }
+
+    .btn-add-todo {
+      width: 100%; padding: 10px; background: #fff; border: 1.5px dashed #d0c0a8;
+      border-radius: 12px; cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      font-size: 13px; font-weight: 600; color: #C49050;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .btn-add-todo:hover { background: #fff8ef; border-color: #D4A96A; color: #D4A96A; }
+
+    /* ════════════ 커스텀 SELECT ════════════ */
+
+    /* 트리거 버튼 */
+    .cs-trigger {
+      display: flex; align-items: center;
+      background: #f8f8f8; border: 1.5px solid #e8e8e8;
+      border-radius: 12px; padding: 12px 14px;
+      cursor: pointer; user-select: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      gap: 8px;
+    }
+    .cs-trigger:hover { border-color: #d0c0a8; background: #f5f2ec; }
+    .cs-trigger.open {
+      border-color: #D4A96A;
+      box-shadow: 0 0 0 3px rgba(212,169,106,0.15);
+      background: #fff;
+    }
+    .cs-value { flex: 1; font-size: 14px; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cs-value.cs-placeholder { color: #ccc; }
+    .cs-arrow {
+      flex-shrink: 0; color: #C49050;
+      transition: transform 0.2s;
+    }
+    .cs-trigger.open .cs-arrow { transform: rotate(180deg); }
+
+    /* 소형 트리거 (할 일 내 서브카테고리) */
+    .cs-trigger.sm { padding: 10px 12px; border-radius: 10px; }
+    .cs-trigger.sm .cs-value { font-size: 13px; }
+
+    /* 드롭다운 패널 (fixed, body에 append) */
+    .cs-panel {
+      position: fixed;
+      background: #fff;
+      border: 1.5px solid #f0e8d8;
+      border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.16), 0 2px 8px rgba(212,169,106,0.1);
+      overflow-y: auto;
+      max-height: 224px;
+      z-index: 99999;
+      display: none;
+      padding: 6px 0;
+    }
+    .cs-panel.open { display: block; }
+    .cs-panel::-webkit-scrollbar { width: 4px; }
+    .cs-panel::-webkit-scrollbar-track { background: transparent; }
+    .cs-panel::-webkit-scrollbar-thumb { background: #e0d0b0; border-radius: 2px; }
+
+    .cs-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px;
+      font-size: 14px; color: #333; cursor: pointer;
+      transition: background 0.12s, color 0.12s;
+      white-space: nowrap;
+    }
+    .cs-option:hover { background: #fff8ef; color: #C49050; }
+    .cs-option.cs-selected {
+      background: linear-gradient(90deg, #fff8ef, #fff5e8);
+      color: #D4A96A; font-weight: 700;
+    }
+    .cs-option.cs-selected .cs-opt-check { opacity: 1; }
+    .cs-opt-emoji { font-size: 15px; line-height: 1; flex-shrink: 0; }
+    .cs-opt-label { flex: 1; }
+    .cs-opt-check {
+      flex-shrink: 0; opacity: 0; color: #D4A96A;
+      transition: opacity 0.15s;
+    }
+    .cs-option.cs-placeholder-opt { color: #bbb; font-size: 13px; }
+    .cs-option.cs-placeholder-opt:hover { background: #fafafa; color: #bbb; cursor: default; }
+
+    /* 소형 패널 (할 일) */
+    .cs-panel.sm .cs-option { padding: 9px 14px; font-size: 13px; }
+    .cs-panel.sm .cs-opt-emoji { font-size: 13px; }
+
+    /* ════════════ 다크모드 ════════════ */
+    .phone-wrapper.dark { background: #1a1510; }
+    .phone-wrapper.dark .rm-header { background: rgba(26,21,16,0.96); border-bottom-color: #2a2218; }
+    .phone-wrapper.dark .back-btn { background: #2a2218; color: #aaa; }
+    .phone-wrapper.dark .icon-btn { background: #2a2218; color: #888; }
+    .phone-wrapper.dark .icon-btn:hover { background: #3a2e1e; color: #D4A96A; }
+    .phone-wrapper.dark .rm-tab { background: #221e16; border-color: #3a3020; color: #666; }
+    .phone-wrapper.dark .rm-tab.active { background: linear-gradient(135deg, #D4A96A, #C49050); border-color: transparent; color: #fff; }
+    .phone-wrapper.dark .rm-tab-add-btn { background: #221e16; border-color: #4a3a28; color: #C49050; }
+    .phone-wrapper.dark .rm-stat-item { background: rgba(0,0,0,0.35); }
+    .phone-wrapper.dark .rm-empty-icon { background: #2a2218; }
+    .phone-wrapper.dark .rm-empty-title { color: #ccc; }
+    .phone-wrapper.dark .rm-empty-desc { color: #555; }
+    .phone-wrapper.dark .phone-screen::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #3a2e1e, #2a2010); }
+
+    .phone-wrapper.dark .tab-add-box { background: #1e1a12; }
+    .phone-wrapper.dark .tab-add-header { border-bottom-color: #2a2218; }
+    .phone-wrapper.dark .tab-add-title { color: #e0d5c0; }
+    .phone-wrapper.dark .field-label-sm { color: #666; }
+    .phone-wrapper.dark .title-input-wrap { background: #2a2218; border-color: #3a3020; }
+    .phone-wrapper.dark .title-input-wrap:focus-within { background: #221e14; border-color: #D4A96A; }
+    .phone-wrapper.dark .title-input-wrap input { color: #e0d5c0; }
+    .phone-wrapper.dark .title-char { color: #4a4030; }
+
+    .phone-wrapper.dark .tl-add-box { background: #1e1a12; }
+    .phone-wrapper.dark .tl-modal-header { border-bottom-color: #2a2218; }
+    .phone-wrapper.dark .tl-modal-title { color: #e0d5c0; }
+    .phone-wrapper.dark .tl-modal-footer { border-top-color: #2a2218; }
+    .phone-wrapper.dark .tl-field-label { color: #666; }
+    .phone-wrapper.dark .tl-input-wrap { background: #2a2218; border-color: #3a3020; }
+    .phone-wrapper.dark .tl-input-wrap:focus-within { background: #221e14; border-color: #D4A96A; }
+    .phone-wrapper.dark .tl-input { color: #e0d5c0; }
+    .phone-wrapper.dark .tl-textarea { background: #2a2218; border-color: #3a3020; color: #e0d5c0; }
+    .phone-wrapper.dark .tl-textarea:focus { background: #221e14; border-color: #D4A96A; }
+    .phone-wrapper.dark .tl-todo-item { background: #221e14; border-color: #3a2e1a; }
+    .phone-wrapper.dark .tl-todo-input-wrap { background: #2a2218; border-color: #3a3020; }
+    .phone-wrapper.dark .tl-todo-input { color: #e0d5c0; }
+    .phone-wrapper.dark .tl-todo-textarea-wrap { background: #2a2218; border-color: #3a3020; }
+    .phone-wrapper.dark .tl-todo-textarea { color: #e0d5c0; }
+    .phone-wrapper.dark .btn-add-todo { background: #221e14; border-color: #4a3a28; color: #C49050; }
+    .phone-wrapper.dark .btn-add-todo:hover { background: #2e2618; border-color: #D4A96A; color: #D4A96A; }
+    .phone-wrapper.dark .cs-trigger { background: #2a2218; border-color: #3a3020; }
+    .phone-wrapper.dark .cs-trigger:hover { background: #301e14; border-color: #4a3a28; }
+    .phone-wrapper.dark .cs-trigger.open { background: #221e14; border-color: #D4A96A; }
+    .phone-wrapper.dark .cs-value { color: #e0d5c0; }
+
+    /* 다크 패널 - body에 append되므로 별도 .cs-panel.dark 클래스로 제어 */
+    .cs-panel.dark {
+      background: #1e1a12;
+      border-color: #3a2e1a;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .cs-panel.dark .cs-option { color: #c8bfb0; }
+    .cs-panel.dark .cs-option:hover { background: #2e2618; color: #D4A96A; }
+    .cs-panel.dark .cs-option.cs-selected { background: linear-gradient(90deg, #2e2618, #281e10); color: #D4A96A; }
+    .cs-panel.dark .cs-option.cs-placeholder-opt { color: #555; }
+    .cs-panel.dark .cs-option.cs-placeholder-opt:hover { background: transparent; color: #555; }
+    .cs-panel.dark::-webkit-scrollbar-thumb { background: #4a3a28; }
+  </style>
+</head>
+<body>
+<div class="phone-wrapper" id="phoneWrapper">
+  <div class="phone-screen">
+
+    <!-- ── 헤더 ── -->
+    <header class="rm-header">
+      <div class="rm-header-left">
+        <button class="back-btn" onclick="history.back()" aria-label="뒤로가기">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <span class="rm-logo">weddly</span>
+      </div>
+      <div class="rm-header-right">
+        <button class="icon-btn dark-toggle" id="darkToggle" aria-label="다크모드 전환">
+          <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun"  width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        </button>
+        <button class="icon-btn" aria-label="사용자 메뉴">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── 탭 ── -->
+    <div class="rm-tab-section">
+      <div class="rm-tab-list" id="tabList">
+        <button class="rm-tab active default-tab" data-tab="default" onclick="selectTab(this)">기본 로드맵</button>
+      </div>
+      <button class="rm-tab-add-btn" id="tabAddBtn" onclick="onAddBtnClick()" aria-label="로드맵 추가">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>
+
+    <!-- ── 진행률 카드 ── -->
+    <div class="rm-progress-card">
+      <div class="rm-progress-top">
+        <div>
+          <div class="rm-progress-label">Wedding Roadmap</div>
+          <div class="rm-progress-title" id="progressTitle">기본 로드맵</div>
+        </div>
+        <div class="rm-percent-wrap">
+          <span class="rm-percent-num" id="percentNum">0</span><span class="rm-percent-sign">%</span>
+          <div class="rm-percent-sub">완료율</div>
+        </div>
+      </div>
+      <div class="rm-bar-wrap">
+        <div class="rm-bar-track"><div class="rm-bar-fill" id="progressBar" style="width:0%"></div></div>
+      </div>
+      <div class="rm-stats-grid">
+        <div class="rm-stat-item total"><span class="rm-stat-num" id="statTotal">0</span><span class="rm-stat-label">전체 단계</span></div>
+        <div class="rm-stat-item completed"><span class="rm-stat-num" id="statDone">0</span><span class="rm-stat-label">완료</span></div>
+        <div class="rm-stat-item incomplete"><span class="rm-stat-num" id="statLeft">0</span><span class="rm-stat-label">미완료</span></div>
+      </div>
+    </div>
+
+    <!-- ── 콘텐츠 ── -->
+    <div class="rm-content">
+      <div class="rm-empty" id="emptyState" style="display:none">
+        <div class="rm-empty-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#D4A96A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+        </div>
+        <div class="rm-empty-title">아직 타임라인이 없어요</div>
+        <div class="rm-empty-desc">우측 하단 + 버튼을 눌러<br>타임라인 단계를 추가해 보세요.</div>
+      </div>
+      <div id="tlTimeline"></div>
+    </div>
+
+  </div><!-- /phone-screen -->
+
+  <!-- FAB -->
+  <button class="rm-fab" onclick="openTlModal()" aria-label="타임라인 추가">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+
+  <!-- ════ 타임라인 추가 모달 ════ -->
+  <div class="modal-overlay" id="tlModal" onclick="onOverlayClick(event,'tlModal')">
+    <div class="tl-add-box">
+      <div class="tl-modal-header">
+        <span class="tl-modal-title">타임라인 추가</span>
+        <button class="modal-close-btn" onclick="closeTlModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="tl-modal-body" id="tlModalBody">
+
+        <!-- 카테고리 -->
+        <div class="tl-field">
+          <div class="tl-field-label">카테고리 <span class="req">*</span></div>
+          <div id="tlCategoryTriggerWrap">
+            <div class="cs-trigger" id="tlCategoryTrigger" onclick="toggleCS('tlCat')">
+              <span class="cs-value cs-placeholder" id="tlCategoryValue">카테고리를 선택하세요</span>
+              <span class="cs-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 제목 -->
+        <div class="tl-field">
+          <div class="tl-field-label">제목 <span class="req">*</span></div>
+          <div class="tl-input-wrap">
+            <input class="tl-input" id="tlTitle" type="text" placeholder="타임라인 제목을 입력하세요" maxlength="40" autocomplete="off"/>
+          </div>
+        </div>
+
+        <!-- 날짜 · 시간 -->
+        <div class="tl-row">
+          <div class="tl-field">
+            <div class="tl-field-label">날짜</div>
+            <div class="tl-input-wrap">
+              <input class="tl-input" id="tlDate" type="date" onchange="onDateChange()"/>
+            </div>
+            <div class="tl-date-hint" id="tlDateHint"></div>
+          </div>
+          <div class="tl-field">
+            <div class="tl-field-label">시간</div>
+            <div class="tl-input-wrap">
+              <input class="tl-input" id="tlTime" type="time"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- 웨딩홀 정보 (웨딩홀 카테고리 선택 시) -->
+        <div class="tl-field" id="tlWeddingHallSection" style="display:none">
+          <div class="tl-field-label">웨딩홀 정보</div>
+          <div class="wh-section">
+            <!-- 이름 / 위치 -->
+            <div>
+              <div class="wh-field-label">웨딩홀 이름</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="tlWhName" type="text" placeholder="예: 더글라스 하우스" maxlength="40" autocomplete="off"/>
+              </div>
+            </div>
+            <div>
+              <div class="wh-field-label">위치</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="tlWhLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+              </div>
+            </div>
+            <!-- 예식 시간 -->
+            <div>
+              <div class="wh-field-label">예식 시간</div>
+              <div class="venue-time-card" onclick="openVenuePicker('tlWhCeremTime','tlWhCeremTimeDisp','💒 예식 시간 선택')">
+                <span class="venue-time-badge">💒 예식</span>
+                <span class="venue-time-val empty" id="tlWhCeremTimeDisp">시간 선택</span>
+                <svg class="venue-time-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <input type="hidden" id="tlWhCeremTime"/>
+              </div>
+            </div>
+            <!-- 최소 보증 인원 -->
+            <div>
+              <div class="wh-field-label">최소 보증 인원</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="tlWhMinGuest" type="text" inputmode="numeric" placeholder="0" oninput="onWhGuestInput(this)"/>
+                <span style="padding-right:12px;font-size:13px;color:#C49050;font-weight:700;flex-shrink:0">명</span>
+              </div>
+            </div>
+            <!-- 식대 -->
+            <div>
+              <div class="wh-field-label">식대 (1인)</div>
+              <div class="tl-budget-input-row">
+                <span class="tl-budget-symbol">₩</span>
+                <input class="tl-input" id="tlWhMeal" type="text" inputmode="numeric" placeholder="0"
+                       oninput="onWhMealInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                <span class="tl-budget-unit">원</span>
+              </div>
+              <div class="wh-meal-estimate" id="tlWhMealEstimate"></div>
+            </div>
+            <!-- 대관료 -->
+            <div>
+              <div class="wh-field-label">대관료</div>
+              <div class="tl-budget-input-row">
+                <span class="tl-budget-symbol">₩</span>
+                <input class="tl-input" id="tlWhFee" type="text" inputmode="numeric" placeholder="0"
+                       oninput="onWhMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                <span class="tl-budget-unit">원</span>
+              </div>
+            </div>
+            <!-- 계약금 -->
+            <div>
+              <div class="wh-field-label">계약금</div>
+              <div class="tl-budget-input-row">
+                <span class="tl-budget-symbol">₩</span>
+                <input class="tl-input" id="tlWhDeposit" type="text" inputmode="numeric" placeholder="0"
+                       oninput="onWhMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                <span class="tl-budget-unit">원</span>
+              </div>
+            </div>
+            <!-- 잔금 (자동 계산) -->
+            <div>
+              <div class="wh-field-label">잔금 (자동 계산)</div>
+              <div class="tl-budget-input-row" style="background:rgba(212,169,106,0.07);border-color:rgba(212,169,106,0.2);">
+                <span class="tl-budget-symbol">₩</span>
+                <input class="tl-input" id="tlWhBalance" type="text" readonly placeholder="—"
+                       style="padding-left:4px;border:none;background:transparent;color:#D4A96A;font-weight:800;cursor:default;"/>
+                <span class="tl-budget-unit">원</span>
+              </div>
+            </div>
+            <!-- 잔금일 -->
+            <div>
+              <div class="wh-field-label">잔금일</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="tlWhBalanceDate" type="date"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 웨딩홀 투어 (웨딩홀 투어 카테고리 선택 시) -->
+        <div class="tl-field" id="tlVenueSection" style="display:none">
+          <div class="tl-field-label">투어 웨딩홀</div>
+          <div class="venue-list" id="tlVenueList"></div>
+          <button class="btn-add-venue" onclick="addVenueItem()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            웨딩홀 추가
+          </button>
+        </div>
+
+        <!-- 내용 -->
+        <div class="tl-field">
+          <div class="tl-field-label">내용</div>
+          <textarea class="tl-textarea" id="tlContent" placeholder="메모나 상세 내용을 입력하세요" rows="3"></textarea>
+        </div>
+
+        <!-- 색상 -->
+        <div class="tl-field">
+          <div class="tl-field-label">색상</div>
+          <div class="tl-color-list">
+            <div class="tl-color-dot selected" data-color="#D4A96A" style="background:#D4A96A" onclick="selectColor(this)"></div>
+            <div class="tl-color-dot" data-color="#E8857A" style="background:#E8857A" onclick="selectColor(this)"></div>
+            <div class="tl-color-dot" data-color="#C47FC4" style="background:#C47FC4" onclick="selectColor(this)"></div>
+            <div class="tl-color-dot" data-color="#5B9BD5" style="background:#5B9BD5" onclick="selectColor(this)"></div>
+            <div class="tl-color-dot" data-color="#6BBD6E" style="background:#6BBD6E" onclick="selectColor(this)"></div>
+            <div class="tl-color-dot" data-color="#5BBDB8" style="background:#5BBDB8" onclick="selectColor(this)"></div>
+            <div class="tl-color-dot" data-color="#E89B5B" style="background:#E89B5B" onclick="selectColor(this)"></div>
+            <div class="tl-color-dot" data-color="#888888" style="background:#888888" onclick="selectColor(this)"></div>
+          </div>
+        </div>
+
+        <!-- 할 일 목록 -->
+        <div class="tl-field">
+          <div class="tl-field-label">할 일 목록</div>
+          <div class="tl-todo-list" id="tlTodoList"></div>
+          <button class="btn-add-todo" onclick="addTodoItem()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            할 일 추가
+          </button>
+        </div>
+
+        <!-- 예산 입력 (결혼 예산 설정 카테고리 선택 시) -->
+        <div class="tl-field" id="tlBudgetSection" style="display:none">
+          <div class="tl-field-label">예산 금액</div>
+          <div class="tl-budget-input-row">
+            <span class="tl-budget-symbol">₩</span>
+            <input class="tl-input" id="tlBudgetInput" type="text" inputmode="numeric"
+                   placeholder="0" autocomplete="off" oninput="onBudgetInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+            <span class="tl-budget-unit">원</span>
+          </div>
+          <div class="tl-budget-display" id="tlBudgetDisplay"></div>
+          <div class="tl-budget-ref">
+            <div>
+              <div class="tl-budget-ref-label">💡 예산 관리 설정값</div>
+              <div class="tl-budget-ref-amount" id="tlBudgetRefAmount">—</div>
+            </div>
+            <button class="tl-budget-ref-apply" onclick="applyBudgetRef()">적용</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="tl-modal-footer">
+        <button class="btn-primary" onclick="saveTlItem()">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ 탭(로드맵) 추가 모달 ════ -->
+  <div class="modal-overlay" id="tabModal" onclick="onOverlayClick(event,'tabModal')">
+    <div class="tab-add-box">
+      <div class="tab-add-header">
+        <span class="tab-add-title">로드맵 추가</span>
+        <button class="modal-close-btn" onclick="closeTabModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="tab-add-body">
+        <div class="field-label-sm">로드맵 제목</div>
+        <div class="title-input-wrap">
+          <input type="text" id="tabTitleInput" placeholder="예: 드레스 투어, 스드메 준비..." maxlength="20" autocomplete="off" oninput="onTabTitleInput()"/>
+          <span class="title-char"><span id="tabCharCount">0</span>/20</span>
+        </div>
+        <button class="btn-primary" id="btnAddTab" onclick="addRoadmapTab()" disabled>로드맵 추가</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ 수정 모달 ════ -->
+  <div class="modal-overlay" id="editModal" onclick="onOverlayClick(event,'editModal')">
+    <div class="edit-modal-box">
+      <div class="edit-modal-header">
+        <div class="edit-modal-cat-badge" id="editCatBadge"></div>
+        <button class="modal-close-btn" onclick="closeEditModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="edit-modal-body">
+        <div class="tl-field">
+          <div class="tl-field-label">제목 <span class="req">*</span></div>
+          <div class="tl-input-wrap"><input class="tl-input" id="editTitle" type="text" maxlength="40" autocomplete="off"/></div>
+        </div>
+
+        <div class="tl-row">
+          <div class="tl-field">
+            <div class="tl-field-label">날짜</div>
+            <div class="tl-input-wrap"><input class="tl-input" id="editDate" type="date" onchange="onEditDateChange()"/></div>
+            <div class="tl-date-hint" id="editDateHint"></div>
+          </div>
+          <div class="tl-field">
+            <div class="tl-field-label">시간</div>
+            <div class="tl-input-wrap"><input class="tl-input" id="editTime" type="time"/></div>
+          </div>
+        </div>
+
+        <!-- 웨딩홀 정보 (웨딩홀 카테고리 전용) -->
+        <div class="tl-field" id="editWeddingHallSection" style="display:none">
+          <div class="tl-field-label">웨딩홀 정보</div>
+          <div class="wh-section">
+            <div>
+              <div class="wh-field-label">웨딩홀 이름</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="editWhName" type="text" placeholder="예: 더글라스 하우스" maxlength="40" autocomplete="off"/>
+              </div>
+            </div>
+            <div>
+              <div class="wh-field-label">위치</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="editWhLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+              </div>
+            </div>
+            <div>
+              <div class="wh-field-label">예식 시간</div>
+              <div class="venue-time-card" onclick="openVenuePicker('editWhCeremTime','editWhCeremTimeDisp','💒 예식 시간 선택')">
+                <span class="venue-time-badge">💒 예식</span>
+                <span class="venue-time-val empty" id="editWhCeremTimeDisp">시간 선택</span>
+                <svg class="venue-time-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <input type="hidden" id="editWhCeremTime"/>
+              </div>
+            </div>
+            <div>
+              <div class="wh-field-label">최소 보증 인원</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="editWhMinGuest" type="text" inputmode="numeric" placeholder="0" oninput="onEditWhGuestInput(this)"/>
+                <span style="padding-right:12px;font-size:13px;color:#C49050;font-weight:700;flex-shrink:0">명</span>
+              </div>
+            </div>
+            <!-- 식대 -->
+            <div>
+              <div class="wh-field-label">식대 (1인)</div>
+              <div class="tl-budget-input-row">
+                <span class="tl-budget-symbol">₩</span>
+                <input class="tl-input" id="editWhMeal" type="text" inputmode="numeric" placeholder="0"
+                       oninput="onEditWhMealInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                <span class="tl-budget-unit">원</span>
+              </div>
+              <div class="wh-meal-estimate" id="editWhMealEstimate"></div>
+            </div>
+            <!-- 대관료 -->
+            <div>
+              <div class="wh-field-label">대관료</div>
+              <div class="tl-budget-input-row">
+                <span class="tl-budget-symbol">₩</span>
+                <input class="tl-input" id="editWhFee" type="text" inputmode="numeric" placeholder="0"
+                       oninput="onEditWhMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                <span class="tl-budget-unit">원</span>
+              </div>
+            </div>
+            <!-- 계약금 -->
+            <div>
+              <div class="wh-field-label">계약금</div>
+              <div class="tl-budget-input-row">
+                <span class="tl-budget-symbol">₩</span>
+                <input class="tl-input" id="editWhDeposit" type="text" inputmode="numeric" placeholder="0"
+                       oninput="onEditWhMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                <span class="tl-budget-unit">원</span>
+              </div>
+            </div>
+            <!-- 잔금 (자동 계산) -->
+            <div>
+              <div class="wh-field-label">잔금 (자동 계산)</div>
+              <div class="tl-budget-input-row" style="background:rgba(212,169,106,0.07);border-color:rgba(212,169,106,0.2);">
+                <span class="tl-budget-symbol">₩</span>
+                <input class="tl-input" id="editWhBalance" type="text" readonly placeholder="—"
+                       style="padding-left:4px;border:none;background:transparent;color:#D4A96A;font-weight:800;cursor:default;"/>
+                <span class="tl-budget-unit">원</span>
+              </div>
+            </div>
+            <div>
+              <div class="wh-field-label">잔금일</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="editWhBalanceDate" type="date"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 웨딩홀 투어 (웨딩홀 투어 카테고리 전용) -->
+        <div class="tl-field" id="editVenueSection" style="display:none">
+          <div class="tl-field-label">투어 웨딩홀</div>
+          <div class="venue-list" id="editVenueList"></div>
+          <button class="btn-add-venue" onclick="addEditVenueItem()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            웨딩홀 추가
+          </button>
+        </div>
+
+        <div class="tl-field">
+          <div class="tl-field-label">내용</div>
+          <textarea class="tl-textarea" id="editContent" rows="3" placeholder="메모나 상세 내용을 입력하세요"></textarea>
+        </div>
+        <div class="tl-field">
+          <div class="tl-field-label">색상</div>
+          <div class="tl-color-list" id="editColorList">
+            <div class="tl-color-dot" data-color="#D4A96A" style="background:#D4A96A" onclick="selectEditColor(this)"></div>
+            <div class="tl-color-dot" data-color="#E8857A" style="background:#E8857A" onclick="selectEditColor(this)"></div>
+            <div class="tl-color-dot" data-color="#C47FC4" style="background:#C47FC4" onclick="selectEditColor(this)"></div>
+            <div class="tl-color-dot" data-color="#5B9BD5" style="background:#5B9BD5" onclick="selectEditColor(this)"></div>
+            <div class="tl-color-dot" data-color="#6BBD6E" style="background:#6BBD6E" onclick="selectEditColor(this)"></div>
+            <div class="tl-color-dot" data-color="#5BBDB8" style="background:#5BBDB8" onclick="selectEditColor(this)"></div>
+            <div class="tl-color-dot" data-color="#E89B5B" style="background:#E89B5B" onclick="selectEditColor(this)"></div>
+            <div class="tl-color-dot" data-color="#888888" style="background:#888888" onclick="selectEditColor(this)"></div>
+          </div>
+        </div>
+
+        <!-- 할 일 목록 -->
+        <div class="tl-field">
+          <div class="tl-field-label">할 일 목록</div>
+          <div class="tl-todo-list" id="editTodoList"></div>
+          <button class="btn-add-todo" onclick="addEditTodoItem()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            할 일 추가
+          </button>
+        </div>
+
+        <!-- 예산 입력 (결혼 예산 설정 카테고리 전용) -->
+        <div class="tl-field" id="editBudgetSection" style="display:none">
+          <div class="tl-field-label">예산 금액</div>
+          <div class="tl-budget-input-row">
+            <span class="tl-budget-symbol">₩</span>
+            <input class="tl-input" id="editBudgetInput" type="text" inputmode="numeric"
+                   placeholder="0" autocomplete="off"
+                   oninput="onBudgetInput(this,'editBudgetDisplay')"
+                   style="padding-left:4px;border:none;background:transparent;"/>
+            <span class="tl-budget-unit">원</span>
+          </div>
+          <div class="tl-budget-display" id="editBudgetDisplay"></div>
+          <div class="tl-budget-ref">
+            <div>
+              <div class="tl-budget-ref-label">💡 예산 관리 설정값</div>
+              <div class="tl-budget-ref-amount" id="editBudgetRefAmount">—</div>
+            </div>
+            <button class="tl-budget-ref-apply" onclick="applyEditBudgetRef()">적용</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="edit-modal-footer">
+        <button class="btn-primary" style="flex:1" onclick="saveEdit()">저장</button>
+        <button onclick="deleteStage()" style="padding:14px 16px;background:#fde8e8;border:none;border-radius:12px;cursor:pointer;color:#f44336;font-weight:700;font-size:14px;font-family:inherit;transition:background 0.15s" onmouseover="this.style.background='#fcd0d0'" onmouseout="this.style.background='#fde8e8'">삭제</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ 시간 선택 피커 ════ -->
+  <div class="vtp-overlay" id="venuePicker" onclick="onVtpOverlayClick(event)">
+    <div class="vtp-box">
+      <div class="vtp-handle"></div>
+      <div class="vtp-title" id="vtpTitle">시간 선택</div>
+      <div class="vtp-drums-wrap">
+        <div class="vtp-band"></div>
+        <div class="vtp-drum" id="vtpHourDrum"></div>
+        <div class="vtp-drum-sep">:</div>
+        <div class="vtp-drum" id="vtpMinDrum"></div>
+        <div class="vtp-fade"></div>
+      </div>
+      <div class="vtp-footer">
+        <button class="vtp-cancel" onclick="closeVenuePicker()">취소</button>
+        <button class="vtp-confirm" onclick="confirmVenuePicker()">확인</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /phone-wrapper -->
+
+<script>
+/* ════════════════════════════════════
+   데이터
+════════════════════════════════════ */
+const WEDDING_DATE = new Date('2026-11-14');
+
+const CATEGORIES = [
+  { value: '',         label: '카테고리를 선택하세요', emoji: '',   placeholder: true },
+  { value: '결혼 예산 설정', label: '결혼 예산 설정', emoji: '💰' },
+  { value: '웨딩홀',        label: '웨딩홀',        emoji: '🏛️' },
+  { value: '웨딩홀 투어',   label: '웨딩홀 투어',   emoji: '🗺️' },
+  { value: '플래너',        label: '플래너',        emoji: '📋' },
+  { value: '스튜디오',      label: '스튜디오',      emoji: '📸' },
+  { value: '드레스',        label: '드레스',        emoji: '👗' },
+  { value: '신랑 예복',     label: '신랑 예복',     emoji: '🤵' },
+  { value: '메이크업',      label: '메이크업',      emoji: '💄' },
+  { value: '예물',          label: '예물',          emoji: '💍' },
+  { value: '혼수',          label: '혼수',          emoji: '🏠' },
+  { value: '신혼여행',      label: '신혼여행',      emoji: '✈️' },
+  { value: '상견례',        label: '상견례',        emoji: '🥂' },
+  { value: '신혼집',        label: '신혼집',        emoji: '🏡' },
+  { value: 'DVD',           label: 'DVD',           emoji: '🎥' },
+  { value: '사진',          label: '사진',          emoji: '🖼️' },
+  { value: '스냅',          label: '스냅',          emoji: '📷' },
+  { value: '축사',          label: '축사',          emoji: '🎤' },
+  { value: '축가',          label: '축가',          emoji: '🎵' },
+  { value: '한복',          label: '한복',          emoji: '👘' },
+  { value: '청첩장',        label: '청첩장',        emoji: '💌' },
+  { value: '부케',          label: '부케',          emoji: '💐' },
+  { value: '본식',          label: '본식',          emoji: '💒' },
+];
+
+const SUB_CATS = {
+  '결혼 예산 설정': [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'예산 총액 설정', l:'예산 총액 설정' },{ v:'항목별 예산 배분', l:'항목별 예산 배분' },{ v:'예산 조정', l:'예산 조정' }],
+  '웨딩홀':   [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'웨딩홀 투어', l:'웨딩홀 투어' },{ v:'계약', l:'계약' },{ v:'식순 협의', l:'식순 협의' },{ v:'잔금 납부', l:'잔금 납부' }],
+  '플래너':   [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'플래너 상담', l:'플래너 상담' },{ v:'계약', l:'계약' },{ v:'진행 미팅', l:'진행 미팅' }],
+  '스튜디오': [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'스튜디오 투어', l:'스튜디오 투어' },{ v:'계약', l:'계약' },{ v:'본 촬영', l:'본 촬영' },{ v:'보정본 확인', l:'보정본 확인' }],
+  '드레스':   [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'드레스 투어', l:'드레스 투어' },{ v:'1차 피팅', l:'1차 피팅' },{ v:'계약', l:'계약' },{ v:'최종 피팅', l:'최종 피팅' }],
+  '신랑 예복':[{ v:'', l:'하위 카테고리 선택', p:true },{ v:'예복 투어', l:'예복 투어' },{ v:'1차 피팅', l:'1차 피팅' },{ v:'계약', l:'계약' },{ v:'최종 피팅', l:'최종 피팅' }],
+  '메이크업': [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'메이크업샵 투어', l:'메이크업샵 투어' },{ v:'계약', l:'계약' },{ v:'리허설', l:'리허설' },{ v:'본식 메이크업', l:'본식 메이크업' }],
+  '예물':     [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'예물 투어', l:'예물 투어' },{ v:'계약', l:'계약' },{ v:'수령', l:'수령' }],
+  '혼수':     [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'가전 결정', l:'가전 결정' },{ v:'가구 결정', l:'가구 결정' },{ v:'구매 및 배송', l:'구매 및 배송' }],
+  '신혼여행': [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'여행지 결정', l:'여행지 결정' },{ v:'항공권 예매', l:'항공권 예매' },{ v:'숙소 예약', l:'숙소 예약' },{ v:'여행자 보험', l:'여행자 보험' }],
+  '상견례':   [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'장소 결정 및 예약', l:'장소 결정 및 예약' },{ v:'상견례 진행', l:'상견례 진행' }],
+  '신혼집':   [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'지역·집 결정', l:'지역·집 결정' },{ v:'계약', l:'계약' },{ v:'인테리어', l:'인테리어' },{ v:'이사', l:'이사' }],
+  'DVD':      [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'업체 선정', l:'업체 선정' },{ v:'계약', l:'계약' },{ v:'편집본 확인', l:'편집본 확인' },{ v:'최종 수령', l:'최종 수령' }],
+  '사진':     [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'업체 선정', l:'업체 선정' },{ v:'계약', l:'계약' },{ v:'보정본 확인', l:'보정본 확인' },{ v:'최종 수령', l:'최종 수령' }],
+  '스냅':     [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'작가 선정', l:'작가 선정' },{ v:'계약', l:'계약' },{ v:'컷 협의', l:'컷 협의' }],
+  '축사':     [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'축사자 선정', l:'축사자 선정' },{ v:'내용 협의', l:'내용 협의' },{ v:'리허설', l:'리허설' }],
+  '축가':     [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'축가자 선정', l:'축가자 선정' },{ v:'곡 선정', l:'곡 선정' },{ v:'리허설', l:'리허설' }],
+  '한복':     [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'한복 투어', l:'한복 투어' },{ v:'피팅', l:'피팅' },{ v:'계약', l:'계약' }],
+  '청첩장':   [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'문구 작성', l:'문구 작성' },{ v:'디자인 선택', l:'디자인 선택' },{ v:'인쇄', l:'인쇄' },{ v:'발송', l:'발송' }],
+  '부케':     [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'디자인 결정', l:'디자인 결정' },{ v:'계약', l:'계약' },{ v:'수령', l:'수령' }],
+  '본식':     [{ v:'', l:'하위 카테고리 선택', p:true },{ v:'최종 점검', l:'최종 점검' },{ v:'리허설', l:'리허설' },{ v:'본식 당일', l:'본식 당일' }],
+};
+
+/* ── 기본 로드맵 데이터 ── */
+function makeDefaultStages() {
+  const W = WEDDING_DATE;
+  function monthBefore(m) {
+    const d = new Date(W);
+    d.setMonth(d.getMonth() - m);
+    return d.toISOString().split('T')[0];
+  }
+  function weekBefore(w) {
+    const d = new Date(W);
+    d.setDate(d.getDate() - w * 7);
+    return d.toISOString().split('T')[0];
+  }
+  const DAY = W.toISOString().split('T')[0];
+  let id = 1;
+  const mk = (monthLabel, date, title, category, emoji, color) =>
+    ({ id: id++, monthLabel, date, title, category, emoji, color: color||'#D4A96A', done: false, content:'', todos:[] });
+
+  return [
+    mk('12개월 전', monthBefore(12), '결혼 예산 설정', '결혼 예산 설정', '💰', '#D4A96A'),
+    mk('12개월 전', monthBefore(12), '웨딩홀 투어',    '웨딩홀 투어',    '🗺️','#5B9BD5'),
+    mk('12개월 전', monthBefore(12), '웨딩홀 예약',    '웨딩홀',         '🏛️','#5B9BD5'),
+
+    mk('11개월 전', monthBefore(11), '플래너 예약',    '플래너',         '📋','#C47FC4'),
+    mk('11개월 전', monthBefore(11), '스튜디오 예약',  '스튜디오',       '📸','#E8857A'),
+    mk('11개월 전', monthBefore(11), '드레스 예약',    '드레스',         '👗','#E8857A'),
+    mk('11개월 전', monthBefore(11), '메이크업 예약',  '메이크업',       '💄','#E89B5B'),
+
+    mk('9개월 전',  monthBefore(9),  '예물 준비',      '예물',           '💍','#D4A96A'),
+    mk('9개월 전',  monthBefore(9),  '드레스 투어 시작','드레스',        '👗','#E8857A'),
+
+    mk('7개월 전',  monthBefore(7),  '스튜디오 촬영',  '스튜디오',       '📸','#E8857A'),
+    mk('7개월 전',  monthBefore(7),  '신혼여행 계획',  '신혼여행',       '✈️','#5BBDB8'),
+    mk('7개월 전',  monthBefore(7),  '신혼여행 예약',  '신혼여행',       '✈️','#5BBDB8'),
+    mk('7개월 전',  monthBefore(7),  '신혼집 알아보기','신혼집',         '🏡','#6BBD6E'),
+
+    mk('5개월 전',  monthBefore(5),  '혼주 메이크업 예약','메이크업',    '💄','#E89B5B'),
+    mk('5개월 전',  monthBefore(5),  '혼주 한복 예약', '한복',           '👘','#C47FC4'),
+    mk('5개월 전',  monthBefore(5),  '상견례',         '상견례',         '🥂','#D4A96A'),
+    mk('5개월 전',  monthBefore(5),  '웨딩 촬영 예약', '스튜디오',       '📸','#E8857A'),
+
+    mk('4개월 전',  monthBefore(4),  '촬영본 수령',    '사진',           '🖼️','#5B9BD5'),
+    mk('4개월 전',  monthBefore(4),  '부케 예약',      '부케',           '💐','#E8857A'),
+    mk('4개월 전',  monthBefore(4),  '축가 요청',      '축가',           '🎵','#6BBD6E'),
+    mk('4개월 전',  monthBefore(4),  '축사 요청',      '축사',           '🎤','#6BBD6E'),
+    mk('4개월 전',  monthBefore(4),  '혼수 준비',      '혼수',           '🏠','#5BBDB8'),
+    mk('4개월 전',  monthBefore(4),  '청첩장 준비',    '청첩장',         '💌','#D4A96A'),
+
+    mk('3개월 전',  monthBefore(3),  '청첩장 모임 시작','청첩장',        '💌','#D4A96A'),
+    mk('3개월 전',  monthBefore(3),  '하객 명단 작성', '본식',           '💒','#C47FC4'),
+    mk('3개월 전',  monthBefore(3),  '모바일 청첩장 제작','청첩장',      '💌','#D4A96A'),
+    mk('3개월 전',  monthBefore(3),  'DVD 예약',       'DVD',            '🎥','#5B9BD5'),
+
+    mk('1개월 전',  monthBefore(1),  '식순 확정',      '본식',           '💒','#C47FC4'),
+    mk('1개월 전',  monthBefore(1),  '하객 명단 확정', '본식',           '💒','#C47FC4'),
+    mk('1개월 전',  monthBefore(1),  '최종 피팅',      '드레스',         '👗','#E8857A'),
+    mk('1개월 전',  monthBefore(1),  '축사/축가 확정', '축사',           '🎤','#6BBD6E'),
+
+    mk('1주일 전',  weekBefore(1),   '업체 최종 확인', '본식',           '💒','#C47FC4'),
+    mk('1주일 전',  weekBefore(1),   '신혼집 이사',    '신혼집',         '🏡','#6BBD6E'),
+
+    mk('당일',      DAY,             '컨디션 관리',    '본식',           '💒','#D4A96A'),
+    mk('당일',      DAY,             '본식',           '본식',           '💒','#D4A96A'),
+  ];
+}
+
+const state = {
+  tabs: [{ id:'default', label:'기본 로드맵', isDefault:true, stages: makeDefaultStages() }],
+  activeTabId: 'default',
+  deleteMode: false,
+  selectedColor: '#D4A96A',
+  todoCount: 0,
+  venueCount: 0,
+  editingStageId: null,
+  editingColor: '#D4A96A',
+  editTodoCount: 0,
+  editVenueCount: 0,
+};
+
+/* ════════════════════════════════════
+   커스텀 SELECT 엔진
+════════════════════════════════════ */
+const csRegistry = {}; // id → { triggerEl, panelEl, value, onChange }
+
+function createCS(id, triggerEl, items, onChange, small = false) {
+  // 기존 패널 제거
+  destroyCS(id);
+
+  const panel = document.createElement('div');
+  panel.className = 'cs-panel' + (small ? ' sm' : '');
+  panel.id = 'cs_panel_' + id;
+
+  items.forEach(item => {
+    const el = document.createElement('div');
+    const isPlaceholder = !!item.placeholder || !!item.p;
+    el.className = 'cs-option' + (isPlaceholder ? ' cs-placeholder-opt' : '');
+    if (isPlaceholder) {
+      el.innerHTML = `<span class="cs-opt-label">${item.label ?? item.l}</span>`;
+      el.onclick = (e) => { e.stopPropagation(); closeAllCS(); };
+    } else {
+      const emoji = item.emoji ?? '';
+      const label = item.label ?? item.l;
+      el.dataset.value = item.value ?? item.v;
+      el.innerHTML = `${emoji ? `<span class="cs-opt-emoji">${emoji}</span>` : ''}<span class="cs-opt-label">${label}</span><span class="cs-opt-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>`;
+      el.onclick = (e) => {
+        e.stopPropagation();
+        pickCS(id, item.value ?? item.v, emoji ? `${emoji} ${label}` : label);
+      };
+    }
+    panel.appendChild(el);
+  });
+
+  document.body.appendChild(panel);
+  csRegistry[id] = { triggerEl, panelEl: panel, value: '', onChange, items };
+  return panel;
+}
+
+function destroyCS(id) {
+  if (csRegistry[id]) {
+    csRegistry[id].panelEl.remove();
+    delete csRegistry[id];
+  }
+}
+
+function toggleCS(id) {
+  const reg = csRegistry[id];
+  if (!reg) return;
+  const isOpen = reg.panelEl.classList.contains('open');
+  closeAllCS();
+  if (!isOpen) openCS(id);
+}
+
+function openCS(id) {
+  const reg = csRegistry[id];
+  if (!reg) return;
+  const rect = reg.triggerEl.getBoundingClientRect();
+  const panel = reg.panelEl;
+  const isDark = document.getElementById('phoneWrapper').classList.contains('dark');
+
+  panel.classList.toggle('dark', isDark);
+  panel.style.width  = rect.width + 'px';
+  panel.style.left   = rect.left  + 'px';
+  panel.style.minWidth = '160px';
+
+  const estH = Math.min(reg.items.length * 42, 224);
+  const below = window.innerHeight - rect.bottom - 8;
+
+  if (below >= estH || below >= rect.top - 8) {
+    panel.style.top    = (rect.bottom + 4) + 'px';
+    panel.style.bottom = 'auto';
+  } else {
+    panel.style.top    = 'auto';
+    panel.style.bottom = (window.innerHeight - rect.top + 4) + 'px';
+  }
+
+  panel.classList.add('open');
+  reg.triggerEl.classList.add('open');
+}
+
+function closeAllCS() {
+  Object.keys(csRegistry).forEach(id => {
+    csRegistry[id].panelEl.classList.remove('open');
+    csRegistry[id].triggerEl.classList.remove('open');
+  });
+}
+
+function pickCS(id, value, displayText) {
+  const reg = csRegistry[id];
+  if (!reg) return;
+  reg.value = value;
+
+  // 트리거 텍스트 업데이트
+  const valEl = reg.triggerEl.querySelector('.cs-value');
+  if (valEl) {
+    valEl.textContent = displayText;
+    valEl.classList.remove('cs-placeholder');
+  }
+
+  // 선택 표시
+  reg.panelEl.querySelectorAll('.cs-option').forEach(el => {
+    el.classList.toggle('cs-selected', el.dataset.value === value);
+  });
+
+  closeAllCS();
+  if (reg.onChange) reg.onChange(value);
+}
+
+function getCSValue(id) {
+  return csRegistry[id]?.value ?? '';
+}
+
+// 외부 클릭 시 닫기
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.cs-trigger') && !e.target.closest('.cs-panel')) closeAllCS();
+});
+
+/* ════════════════════════════════════
+   타임라인 렌더링
+════════════════════════════════════ */
+function renderTimeline(tabId) {
+  const id  = tabId || state.activeTabId;
+  const tab = state.tabs.find(t => t.id === id);
+  const stages = tab?.stages || [];
+  const container = document.getElementById('tlTimeline');
+  const empty     = document.getElementById('emptyState');
+
+  if (!stages.length) {
+    container.innerHTML = '';
+    empty.style.display = 'flex';
+    return;
+  }
+  empty.style.display = 'none';
+
+  // 월 단위 그룹핑 (순서 유지)
+  const groups = [];
+  const groupMap = {};
+  stages.forEach(s => {
+    if (!groupMap[s.monthLabel]) {
+      groupMap[s.monthLabel] = [];
+      groups.push({ label: s.monthLabel, items: groupMap[s.monthLabel] });
+    }
+    groupMap[s.monthLabel].push(s);
+  });
+
+  container.innerHTML = groups.map(g => `
+    <div class="tl-month-div">
+      <span class="tl-month-text">${g.label}</span>
+      <span class="tl-month-line"></span>
+    </div>
+    ${g.items.map(s => renderCard(s)).join('')}
+  `).join('');
+}
+
+function renderCard(s) {
+  const dday = calcDday(s.date);
+  let ddayClass = 'past', ddayTxt = dday || '';
+  if (dday) {
+    if (dday === 'D-Day') { ddayClass = 'today'; ddayTxt = '🎊 D-Day'; }
+    else if (dday.startsWith('D-')) {
+      const n = parseInt(dday.slice(2));
+      ddayClass = n <= 7 ? 'soon' : 'upcoming';
+    }
+  }
+  return `
+    <div class="tl-card${s.done ? ' done' : ''}" id="card_${s.id}">
+      <div class="tl-card-top">
+        <div class="tl-card-check" onclick="toggleDone(${s.id})"></div>
+        <div class="tl-card-body">
+          <div class="tl-card-row">
+            <span class="tl-card-title">${s.title}</span>
+            <span class="tl-card-cat">${s.emoji} ${s.category}</span>
+            <button class="tl-card-more" onclick="openEditModal(${s.id})" title="더보기">···</button>
+          </div>
+          ${dday ? `<div class="tl-card-dday ${ddayClass}">${ddayTxt}</div>` : ''}
+        </div>
+      </div>
+    </div>`;
+}
+
+function calcDday(dateStr) {
+  if (!dateStr) return null;
+  const today  = new Date(); today.setHours(0,0,0,0);
+  const target = new Date(dateStr); target.setHours(0,0,0,0);
+  const diff = Math.round((target - today) / 86400000);
+  if (diff === 0) return 'D-Day';
+  if (diff > 0)  return `D-${diff}`;
+  return `D+${Math.abs(diff)}`;
+}
+
+function toggleDone(stageId) {
+  const tab = state.tabs.find(t => t.id === state.activeTabId);
+  const s   = tab?.stages.find(s => s.id === stageId);
+  if (!s) return;
+  s.done = !s.done;
+  updateProgress(tab);
+  renderTimeline();
+}
+
+/* ════════════════════════════════════
+   수정 모달
+════════════════════════════════════ */
+function openEditModal(stageId) {
+  const tab = state.tabs.find(t => t.id === state.activeTabId);
+  const s   = tab?.stages.find(s => s.id === stageId);
+  if (!s) return;
+
+  state.editingStageId = stageId;
+  state.editingColor   = s.color || '#D4A96A';
+  state.editTodoCount  = 0;
+
+  document.getElementById('editCatBadge').innerHTML = `${s.emoji} ${s.category}`;
+  document.getElementById('editTitle').value   = s.title;
+  document.getElementById('editDate').value    = s.date    || '';
+  document.getElementById('editTime').value    = s.time    || '';
+  document.getElementById('editContent').value = s.content || '';
+
+  // 예산 섹션 처리
+  const editBudgetSection = document.getElementById('editBudgetSection');
+  const editBudgetInput   = document.getElementById('editBudgetInput');
+  const editBudgetDisplay = document.getElementById('editBudgetDisplay');
+  if (s.category === '결혼 예산 설정') {
+    editBudgetSection.style.display = '';
+    const budgetRaw = s.budget ? String(s.budget).replace(/[^0-9]/g, '') : '';
+    editBudgetInput.value = budgetRaw ? Number(budgetRaw).toLocaleString('ko-KR') : '';
+    editBudgetDisplay.textContent = budgetRaw ? `₩ ${Number(budgetRaw).toLocaleString('ko-KR')} 원` : '';
+    document.getElementById('editBudgetRefAmount').textContent = formatWon(BUDGET_MGMT.total) || '—';
+  } else {
+    editBudgetSection.style.display = 'none';
+    editBudgetInput.value = '';
+    editBudgetDisplay.textContent = '';
+  }
+
+  // 웨딩홀 정보 섹션 처리
+  const editWeddingHallSection = document.getElementById('editWeddingHallSection');
+  if (s.category === '웨딩홀') {
+    editWeddingHallSection.style.display = '';
+    const wh = s.weddingHall || {};
+    document.getElementById('editWhName').value        = wh.name        || '';
+    document.getElementById('editWhLocation').value   = wh.location    || '';
+    document.getElementById('editWhMinGuest').value   = wh.minGuest ? Number(wh.minGuest).toLocaleString('ko-KR') : '';
+    document.getElementById('editWhMeal').value       = wh.meal    ? Number(wh.meal).toLocaleString('ko-KR')    : '';
+    document.getElementById('editWhFee').value        = wh.fee     ? Number(wh.fee).toLocaleString('ko-KR')     : '';
+    document.getElementById('editWhDeposit').value    = wh.deposit ? Number(wh.deposit).toLocaleString('ko-KR') : '';
+    document.getElementById('editWhBalanceDate').value = wh.balanceDate || '';
+    // 예식 시간
+    const ceremVal  = wh.ceremTime || '';
+    const ceremDisp = document.getElementById('editWhCeremTimeDisp');
+    document.getElementById('editWhCeremTime').value = ceremVal;
+    if (ceremVal) {
+      ceremDisp.textContent = ceremVal;
+      ceremDisp.classList.remove('empty');
+    } else {
+      ceremDisp.textContent = '시간 선택';
+      ceremDisp.classList.add('empty');
+    }
+    calcEditWhBalance();
+    calcEditWhMeal();
+  } else {
+    editWeddingHallSection.style.display = 'none';
+    ['editWhName','editWhLocation','editWhMinGuest','editWhMeal','editWhFee','editWhDeposit','editWhBalanceDate'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    const me = document.getElementById('editWhMealEstimate');
+    if (me) me.textContent = '';
+    const d = document.getElementById('editWhCeremTimeDisp');
+    if (d) { d.textContent = '시간 선택'; d.classList.add('empty'); }
+    document.getElementById('editWhCeremTime').value = '';
+  }
+
+  // 웨딩홀 투어 섹션 처리
+  state.editVenueCount = 0;
+  const editVenueSection = document.getElementById('editVenueSection');
+  const editVenueList    = document.getElementById('editVenueList');
+  if (s.category === '웨딩홀 투어') {
+    editVenueSection.style.display = '';
+    editVenueList.innerHTML = '';
+    (s.venues || []).forEach(venue => {
+      state.editVenueCount++;
+      editVenueList.appendChild(makeVenueCardEl(state.editVenueCount, 'e', 'Edit', venue));
+    });
+  } else {
+    editVenueSection.style.display = 'none';
+    editVenueList.innerHTML = '';
+  }
+
+  // 색상 초기화
+  document.querySelectorAll('#editColorList .tl-color-dot').forEach(d => {
+    d.classList.toggle('selected', d.dataset.color === state.editingColor);
+  });
+
+  // 기존 할 일 목록 렌더링
+  const todoList = document.getElementById('editTodoList');
+  todoList.innerHTML = '';
+  (s.todos || []).forEach(todo => {
+    state.editTodoCount++;
+    todoList.appendChild(buildEditTodoEl(state.editTodoCount, s.category, todo));
+  });
+
+  onEditDateChange();
+  document.getElementById('editModal').classList.add('active');
+}
+
+function buildEditTodoEl(n, category, todo) {
+  const subs    = SUB_CATS[category] || [];
+  const subOpts = subs.filter(o => !o.p)
+    .map(o => `<option value="${o.v}" ${(todo?.subCat === o.v) ? 'selected' : ''}>${o.l}</option>`)
+    .join('');
+
+  const item = document.createElement('div');
+  item.className = 'tl-todo-item';
+  item.id = `etodo_${n}`;
+  item.innerHTML = `
+    <div class="tl-todo-item-header">
+      <span class="tl-todo-num">할 일 ${n}</span>
+      <button class="tl-todo-del" onclick="removeEditTodoItem(${n})" aria-label="삭제">${svgClose(10)}</button>
+    </div>
+    <div class="tl-todo-fields">
+      <div class="cs-trigger sm" id="etodo_trigger_${n}" data-etodo-cs-id="etodo_${n}_sub" onclick="toggleCS('etodo_${n}_sub')">
+        <span class="cs-value${todo?.subCat ? '' : ' cs-placeholder'}">${todo?.subCat || '하위 카테고리 선택'}</span>
+        <span class="cs-arrow"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="tl-todo-input-wrap">
+        <input class="tl-todo-input" type="text" placeholder="할 일 제목" maxlength="40" autocomplete="off" value="${todo?.title || ''}"/>
+      </div>
+      <div class="tl-todo-textarea-wrap">
+        <textarea class="tl-todo-textarea" placeholder="내용 (선택 사항)" rows="2">${todo?.content || ''}</textarea>
+      </div>
+    </div>`;
+
+  // 커스텀 셀렉트 등록 (다음 프레임에 triggerEl 사용 가능)
+  requestAnimationFrame(() => {
+    const triggerEl = document.getElementById(`etodo_trigger_${n}`);
+    if (!triggerEl) return;
+    const csId  = `etodo_${n}_sub`;
+    const items = [
+      { v:'', l:'하위 카테고리 선택', p:true },
+      ...( SUB_CATS[category] || [] ).filter(o => !o.p)
+    ];
+    createCS(csId, triggerEl, items, null, true);
+    // 기존 값 표시
+    if (todo?.subCat) {
+      const valEl = triggerEl.querySelector('.cs-value');
+      if (valEl) { valEl.textContent = todo.subCat; valEl.classList.remove('cs-placeholder'); }
+      if (csRegistry[csId]) csRegistry[csId].value = todo.subCat;
+    }
+  });
+
+  return item;
+}
+
+function addEditTodoItem() {
+  state.editTodoCount++;
+  const n   = state.editTodoCount;
+  const tab = state.tabs.find(t => t.id === state.activeTabId);
+  const s   = tab?.stages.find(s => s.id === state.editingStageId);
+  const cat = s?.category || '';
+
+  const item = buildEditTodoEl(n, cat, null);
+  document.getElementById('editTodoList').appendChild(item);
+  requestAnimationFrame(() => item.scrollIntoView({ behavior:'smooth', block:'nearest' }));
+}
+
+function removeEditTodoItem(n) {
+  destroyCS(`etodo_${n}_sub`);
+  document.getElementById(`etodo_${n}`)?.remove();
+  document.querySelectorAll('#editTodoList .tl-todo-item').forEach((el, i) => {
+    el.querySelector('.tl-todo-num').textContent = `할 일 ${i + 1}`;
+  });
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('active');
+  state.editingStageId = null;
+}
+
+function selectEditColor(el) {
+  document.querySelectorAll('#editColorList .tl-color-dot').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  state.editingColor = el.dataset.color;
+}
+
+function onEditDateChange() {
+  const val  = document.getElementById('editDate').value;
+  const hint = document.getElementById('editDateHint');
+  if (!val) { hint.innerHTML = ''; return; }
+  const diff  = WEDDING_DATE - new Date(val);
+  if (diff <= 0) { hint.innerHTML = '<span style="color:#aaa">결혼식 당일 또는 이후</span>'; return; }
+  const days   = Math.floor(diff / 86400000);
+  const months = Math.floor(days / 30.44);
+  const txt    = months > 0 ? `결혼식 ${months}개월 전` : `결혼식 ${days}일 전`;
+  hint.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#D4A96A" stroke-width="2.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg> ${txt}`;
+  hint.style.color = '#D4A96A';
+}
+
+function saveEdit() {
+  const tab = state.tabs.find(t => t.id === state.activeTabId);
+  const s   = tab?.stages.find(s => s.id === state.editingStageId);
+  if (!s) return;
+  const title = document.getElementById('editTitle').value.trim();
+  if (!title) { alert('제목을 입력해 주세요.'); return; }
+
+  s.title   = title;
+  s.date    = document.getElementById('editDate').value;
+  s.time    = document.getElementById('editTime').value;
+  s.content = document.getElementById('editContent').value.trim();
+  s.color   = state.editingColor;
+  if (s.category === '결혼 예산 설정') {
+    s.budget = document.getElementById('editBudgetInput').value.replace(/,/g, '') || '';
+  }
+  if (s.category === '웨딩홀') {
+    s.weddingHall = {
+      name:        document.getElementById('editWhName')?.value.trim()                     || '',
+      location:    document.getElementById('editWhLocation')?.value.trim()                 || '',
+      ceremTime:   document.getElementById('editWhCeremTime')?.value                       || '',
+      minGuest:    document.getElementById('editWhMinGuest')?.value.replace(/,/g,'')       || '',
+      meal:        document.getElementById('editWhMeal')?.value.replace(/,/g,'')            || '',
+      fee:         document.getElementById('editWhFee')?.value.replace(/,/g,'')            || '',
+      deposit:     document.getElementById('editWhDeposit')?.value.replace(/,/g,'')        || '',
+      balanceDate: document.getElementById('editWhBalanceDate')?.value                     || '',
+    };
+  }
+  if (s.category === '웨딩홀 투어') {
+    s.venues = collectEditVenues();
+  }
+
+  // 할 일 목록 수집
+  s.todos = [];
+  document.querySelectorAll('#editTodoList .tl-todo-item').forEach(itemEl => {
+    const n       = itemEl.id.replace('etodo_', '');
+    const csId    = `etodo_${n}_sub`;
+    const subCat  = getCSValue(csId);
+    const inputs  = itemEl.querySelectorAll('.tl-todo-input');
+    const textarea = itemEl.querySelector('.tl-todo-textarea');
+    const todoTitle = inputs[0]?.value.trim() || '';
+    if (!todoTitle) return; // 제목 없으면 스킵
+    s.todos.push({ subCat, title: todoTitle, content: textarea?.value.trim() || '' });
+  });
+
+  // 수정 모달의 커스텀 셀렉트 정리
+  Object.keys(csRegistry).filter(k => k.startsWith('etodo_')).forEach(k => destroyCS(k));
+
+  closeEditModal();
+  renderTimeline();
+}
+
+function deleteStage() {
+  if (!confirm('이 단계를 삭제할까요?')) return;
+  const tab = state.tabs.find(t => t.id === state.activeTabId);
+  if (!tab) return;
+  tab.stages = tab.stages.filter(s => s.id !== state.editingStageId);
+  updateProgress(tab);
+  closeEditModal();
+  renderTimeline();
+}
+
+/* ════════════════════════════════════
+   탭 관련
+════════════════════════════════════ */
+function selectTab(el) {
+  state.activeTabId = el.dataset.tab;
+  document.querySelectorAll('.rm-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const tab = state.tabs.find(t => t.id === state.activeTabId);
+  updateProgress(tab);
+  document.getElementById('progressTitle').textContent = tab?.label || '';
+  renderTimeline();
+}
+
+function onAddBtnClick() {
+  state.deleteMode ? exitDeleteMode() : openTabModal();
+}
+
+function exitDeleteMode() {
+  state.deleteMode = false;
+  document.getElementById('tabList').classList.remove('delete-mode');
+  const btn = document.getElementById('tabAddBtn');
+  btn.classList.remove('del-mode-active');
+  btn.innerHTML = svgPlus(16);
+}
+
+function enterDeleteMode() {
+  state.deleteMode = true;
+  document.getElementById('tabList').classList.add('delete-mode');
+  const btn = document.getElementById('tabAddBtn');
+  btn.classList.add('del-mode-active');
+  btn.innerHTML = svgClose(14);
+}
+
+function deleteTab(tabId, e) {
+  e.stopPropagation();
+  state.tabs = state.tabs.filter(t => t.id !== tabId);
+  document.querySelector(`[data-tab="${tabId}"]`)?.remove();
+  if (state.activeTabId === tabId) {
+    const def = document.querySelector('[data-tab="default"]');
+    if (def) selectTab(def);
+  }
+  if (!state.tabs.some(t => !t.isDefault)) exitDeleteMode();
+}
+
+/* ════════════════════════════════════
+   탭 추가 모달
+════════════════════════════════════ */
+function openTabModal() {
+  document.getElementById('tabModal').classList.add('active');
+  setTimeout(() => document.getElementById('tabTitleInput').focus(), 80);
+}
+
+function closeTabModal() {
+  document.getElementById('tabModal').classList.remove('active');
+  document.getElementById('tabTitleInput').value = '';
+  document.getElementById('tabCharCount').textContent = '0';
+  document.getElementById('btnAddTab').disabled = true;
+}
+
+function onTabTitleInput() {
+  const v = document.getElementById('tabTitleInput').value;
+  document.getElementById('tabCharCount').textContent = v.length;
+  document.getElementById('btnAddTab').disabled = v.trim().length === 0;
+}
+
+function addRoadmapTab() {
+  const label = document.getElementById('tabTitleInput').value.trim();
+  if (!label) return;
+  const id = 'tab_' + Date.now();
+  state.tabs.push({ id, label, isDefault: false, stages: [] });
+
+  const el = document.createElement('button');
+  el.className = 'rm-tab custom-tab';
+  el.dataset.tab = id;
+  el.onclick = function() { selectTab(this); };
+  el.innerHTML = `${label}<button class="tab-del-btn" onclick="deleteTab('${id}',event)" aria-label="삭제">${svgClose(8)}</button>`;
+  document.getElementById('tabList').appendChild(el);
+
+  closeTabModal();
+  selectTab(el);
+  enterDeleteMode();
+}
+
+/* ════════════════════════════════════
+   시간 선택 피커 (드럼 휠)
+════════════════════════════════════ */
+const VTP_ITEM_H = 34; // 아이템 높이 px
+const vtpState   = { inputId: null, dispId: null, h: 0, m: 0 };
+
+function openVenuePicker(inputId, dispId, title) {
+  vtpState.inputId = inputId;
+  vtpState.dispId  = dispId;
+
+  const val = document.getElementById(inputId)?.value || '';
+  if (val) {
+    const [hh, mm] = val.split(':').map(Number);
+    vtpState.h = hh; vtpState.m = mm;
+  } else {
+    const now = new Date();
+    vtpState.h = now.getHours();
+    vtpState.m = Math.round(now.getMinutes() / 5) * 5 % 60;
+  }
+
+  document.getElementById('vtpTitle').textContent = title;
+
+  // 드럼 빌드
+  buildDrum('vtpHourDrum', Array.from({length:24}, (_,i) => i), vtpState.h);
+  buildDrum('vtpMinDrum',  Array.from({length:12}, (_,i) => i*5), vtpState.m);
+
+  document.getElementById('venuePicker').classList.add('active');
+}
+
+function buildDrum(colId, items, selectedVal) {
+  const col = document.getElementById(colId);
+  col.innerHTML = '';
+
+  // 위 여백
+  const top = document.createElement('div');
+  top.className = 'vtp-drum-pad'; col.appendChild(top);
+
+  items.forEach(val => {
+    const div = document.createElement('div');
+    div.className = 'vtp-drum-item' + (val === selectedVal ? ' sel' : '');
+    div.textContent = String(val).padStart(2, '0');
+    div.dataset.val = val;
+    col.appendChild(div);
+  });
+
+  // 아래 여백
+  const bot = document.createElement('div');
+  bot.className = 'vtp-drum-pad'; col.appendChild(bot);
+
+  // 초기 스크롤 위치 (즉시 반영)
+  const idx = items.indexOf(selectedVal);
+  col.scrollTop = (idx >= 0 ? idx : 0) * VTP_ITEM_H;
+}
+
+function vtpOnScroll(col, isHour) {
+  clearTimeout(col._snapTimer);
+  // 실시간 선택값 업데이트
+  const idx = Math.round(col.scrollTop / VTP_ITEM_H);
+  const items = col.querySelectorAll('.vtp-drum-item');
+  items.forEach((el, i) => el.classList.toggle('sel', i === idx));
+  if (items[idx]) {
+    const val = parseInt(items[idx].dataset.val);
+    if (isHour) vtpState.h = val; else vtpState.m = val;
+  }
+  // 스크롤 멈춘 뒤 스냅
+  col._snapTimer = setTimeout(() => {
+    const snapIdx = Math.round(col.scrollTop / VTP_ITEM_H);
+    col.scrollTo({ top: snapIdx * VTP_ITEM_H, behavior: 'smooth' });
+  }, 120);
+}
+
+function initVtpScrollListeners() {
+  const hCol = document.getElementById('vtpHourDrum');
+  const mCol = document.getElementById('vtpMinDrum');
+  hCol.addEventListener('scroll', () => vtpOnScroll(hCol, true),  { passive: true });
+  mCol.addEventListener('scroll', () => vtpOnScroll(mCol, false), { passive: true });
+}
+
+function closeVenuePicker() {
+  document.getElementById('venuePicker').classList.remove('active');
+}
+
+function confirmVenuePicker() {
+  const val  = `${String(vtpState.h).padStart(2,'0')}:${String(vtpState.m).padStart(2,'0')}`;
+  const input = document.getElementById(vtpState.inputId);
+  const disp  = document.getElementById(vtpState.dispId);
+  if (input) { input.value = val; input.dispatchEvent(new Event('input', { bubbles:true })); }
+  if (disp)  { disp.textContent = val; disp.classList.remove('empty'); }
+  closeVenuePicker();
+}
+
+function onVtpOverlayClick(e) {
+  if (e.target === document.getElementById('venuePicker')) closeVenuePicker();
+}
+
+/* ════════════════════════════════════
+   웨딩홀 투어 섹션
+════════════════════════════════════ */
+const _svgChev  = `<svg class="venue-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
+const _svgX     = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+function makeVenueCardEl(n, idPfx, fnPfx, data) {
+  const el = document.createElement('div');
+  el.className = 'venue-card expanded';
+  el.id = `${idPfx}venue_${n}`;
+  el.innerHTML = `
+    <div class="venue-card-header" onclick="toggle${fnPfx}VenueCard(${n})">
+      <span class="venue-num">${n}</span>
+      <div class="venue-header-info">
+        <span class="venue-title-text" id="${idPfx}vname_${n}">웨딩홀 이름을 입력하세요</span>
+        <span class="venue-visit-text" id="${idPfx}vvisit_${n}">방문 시간 미정</span>
+      </div>
+      ${_svgChev}
+      <button class="tl-todo-del" onclick="remove${fnPfx}VenueItem(${n},event)" aria-label="삭제">${_svgX}</button>
+    </div>
+    <div class="venue-card-body">
+      <div class="venue-field">
+        <div class="venue-field-label">웨딩홀 이름</div>
+        <div class="venue-input-wrap">
+          <input class="venue-input" type="text" id="${idPfx}vname_in_${n}" placeholder="예: 더글라스 하우스" maxlength="40" autocomplete="off" oninput="update${fnPfx}VenueHeader(${n})"/>
+        </div>
+      </div>
+      <div class="venue-field">
+        <div class="venue-field-label">위치</div>
+        <div class="venue-input-wrap">
+          <input class="venue-input" type="text" id="${idPfx}vloc_${n}" placeholder="주소 또는 지역 입력" maxlength="60" autocomplete="off"/>
+        </div>
+      </div>
+      <div class="venue-time-row">
+        <div class="venue-time-card" onclick="openVenuePicker('${idPfx}vvisit_in_${n}','${idPfx}vvisit_disp_${n}','🕐 방문 예정 시간 선택')">
+          <span class="venue-time-badge">🕐 방문 예정</span>
+          <span class="venue-time-val empty" id="${idPfx}vvisit_disp_${n}">시간 선택</span>
+          <svg class="venue-time-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <input type="hidden" id="${idPfx}vvisit_in_${n}" oninput="update${fnPfx}VenueHeader(${n})"/>
+        </div>
+        <div class="venue-time-card" onclick="openVenuePicker('${idPfx}vcerem_in_${n}','${idPfx}vcerem_disp_${n}','💒 예식 시간 선택')">
+          <span class="venue-time-badge">💒 예식</span>
+          <span class="venue-time-val empty" id="${idPfx}vcerem_disp_${n}">시간 선택</span>
+          <svg class="venue-time-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <input type="hidden" id="${idPfx}vcerem_in_${n}"/>
+        </div>
+      </div>
+      <div class="venue-field">
+        <div class="venue-field-label">대관료</div>
+        <div class="venue-input-wrap">
+          <span class="tl-budget-symbol" style="font-size:13px">₩</span>
+          <input class="venue-input" type="text" inputmode="numeric" id="${idPfx}vfee_${n}" placeholder="0" oninput="onVenueFeeInput(this)" style="padding-left:2px"/>
+          <span class="tl-budget-unit" style="font-size:11px">원</span>
+        </div>
+      </div>
+      <div class="venue-field">
+        <div class="venue-field-label">식대 (1인)</div>
+        <div class="venue-input-wrap">
+          <span class="tl-budget-symbol" style="font-size:13px">₩</span>
+          <input class="venue-input" type="text" inputmode="numeric" id="${idPfx}vmeal_${n}" placeholder="0" oninput="onVenueFeeInput(this)" style="padding-left:2px"/>
+          <span class="tl-budget-unit" style="font-size:11px">원</span>
+        </div>
+      </div>
+      <div class="venue-field">
+        <div class="venue-field-label">최소 보증 인원</div>
+        <div class="venue-input-wrap">
+          <input class="venue-input" type="text" inputmode="numeric" id="${idPfx}vguest_${n}" placeholder="0" oninput="onVenueGuestInput(this)"/>
+          <span style="padding-right:12px;font-size:12px;color:#C49050;font-weight:700;flex-shrink:0">명</span>
+        </div>
+      </div>
+    </div>`;
+
+  if (data) {
+    el.querySelector(`#${idPfx}vname_in_${n}`).value = data.name || '';
+    el.querySelector(`#${idPfx}vloc_${n}`).value     = data.location || '';
+    if (data.visitTime) {
+      el.querySelector(`#${idPfx}vvisit_in_${n}`).value = data.visitTime;
+      const vd = el.querySelector(`#${idPfx}vvisit_disp_${n}`);
+      if (vd) { vd.textContent = data.visitTime; vd.classList.remove('empty'); }
+    }
+    if (data.ceremonyTime) {
+      el.querySelector(`#${idPfx}vcerem_in_${n}`).value = data.ceremonyTime;
+      const cd = el.querySelector(`#${idPfx}vcerem_disp_${n}`);
+      if (cd) { cd.textContent = data.ceremonyTime; cd.classList.remove('empty'); }
+    }
+    el.querySelector(`#${idPfx}vfee_${n}`).value  = data.fee      ? Number(data.fee).toLocaleString('ko-KR')      : '';
+    el.querySelector(`#${idPfx}vmeal_${n}`).value = data.mealPrice ? Number(data.mealPrice).toLocaleString('ko-KR') : '';
+    el.querySelector(`#${idPfx}vguest_${n}`).value = data.minGuests ? Number(data.minGuests).toLocaleString('ko-KR') : '';
+    if (data.name)      el.querySelector(`#${idPfx}vname_${n}`).textContent  = data.name;
+    if (data.visitTime) el.querySelector(`#${idPfx}vvisit_${n}`).textContent = `방문 예정 ${data.visitTime}`;
+  }
+  return el;
+}
+
+/* ── 타임라인 추가 모달용 ── */
+function addVenueItem() {
+  state.venueCount++;
+  const el = makeVenueCardEl(state.venueCount, '', '', null);
+  document.getElementById('tlVenueList').appendChild(el);
+  requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+}
+function removeVenueItem(n, e) {
+  e?.stopPropagation();
+  document.getElementById(`venue_${n}`)?.remove();
+  document.querySelectorAll('#tlVenueList .venue-card').forEach((el, i) => { el.querySelector('.venue-num').textContent = i + 1; });
+}
+function toggleVenueCard(n)  { document.getElementById(`venue_${n}`)?.classList.toggle('expanded'); }
+function updateVenueHeader(n) {
+  const name  = document.getElementById(`vname_in_${n}`)?.value.trim();
+  const visit = document.getElementById(`vvisit_in_${n}`)?.value;
+  const nameEl  = document.getElementById(`vname_${n}`);
+  const visitEl = document.getElementById(`vvisit_${n}`);
+  if (nameEl)  nameEl.textContent  = name  || '웨딩홀 이름을 입력하세요';
+  if (visitEl) visitEl.textContent = visit ? `방문 예정 ${visit}` : '방문 시간 미정';
+}
+function collectVenues() {
+  const venues = [];
+  document.querySelectorAll('#tlVenueList .venue-card').forEach(card => {
+    const n = card.id.replace('venue_', '');
+    venues.push({
+      name:         document.getElementById(`vname_in_${n}`)?.value.trim()         || '',
+      location:     document.getElementById(`vloc_${n}`)?.value.trim()              || '',
+      visitTime:    document.getElementById(`vvisit_in_${n}`)?.value                || '',
+      ceremonyTime: document.getElementById(`vcerem_in_${n}`)?.value                 || '',
+      fee:          document.getElementById(`vfee_${n}`)?.value.replace(/,/g,'')    || '',
+      mealPrice:    document.getElementById(`vmeal_${n}`)?.value.replace(/,/g,'')   || '',
+      minGuests:    document.getElementById(`vguest_${n}`)?.value.replace(/,/g,'')  || '',
+    });
+  });
+  return venues;
+}
+
+function onVenueFeeInput(el) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value  = raw ? Number(raw).toLocaleString('ko-KR') : '';
+}
+function onVenueGuestInput(el) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value  = raw ? Number(raw).toLocaleString('ko-KR') : '';
+}
+
+/* ── 수정 모달용 ── */
+function addEditVenueItem() {
+  state.editVenueCount++;
+  const el = makeVenueCardEl(state.editVenueCount, 'e', 'Edit', null);
+  document.getElementById('editVenueList').appendChild(el);
+  requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+}
+function removeEditVenueItem(n, e) {
+  e?.stopPropagation();
+  document.getElementById(`evenue_${n}`)?.remove();
+  document.querySelectorAll('#editVenueList .venue-card').forEach((el, i) => { el.querySelector('.venue-num').textContent = i + 1; });
+}
+function toggleEditVenueCard(n) { document.getElementById(`evenue_${n}`)?.classList.toggle('expanded'); }
+function updateEditVenueHeader(n) {
+  const name  = document.getElementById(`evname_in_${n}`)?.value.trim();
+  const visit = document.getElementById(`evvisit_in_${n}`)?.value;
+  const nameEl  = document.getElementById(`evname_${n}`);
+  const visitEl = document.getElementById(`evvisit_${n}`);
+  if (nameEl)  nameEl.textContent  = name  || '웨딩홀 이름을 입력하세요';
+  if (visitEl) visitEl.textContent = visit ? `방문 예정 ${visit}` : '방문 시간 미정';
+}
+function collectEditVenues() {
+  const venues = [];
+  document.querySelectorAll('#editVenueList .venue-card').forEach(card => {
+    const n = card.id.replace('evenue_', '');
+    venues.push({
+      name:         document.getElementById(`evname_in_${n}`)?.value.trim()         || '',
+      location:     document.getElementById(`evloc_${n}`)?.value.trim()              || '',
+      visitTime:    document.getElementById(`evvisit_in_${n}`)?.value                || '',
+      ceremonyTime: document.getElementById(`evcerem_in_${n}`)?.value                 || '',
+      fee:          document.getElementById(`evfee_${n}`)?.value.replace(/,/g,'')    || '',
+      mealPrice:    document.getElementById(`evmeal_${n}`)?.value.replace(/,/g,'')   || '',
+      minGuests:    document.getElementById(`evguest_${n}`)?.value.replace(/,/g,'')  || '',
+    });
+  });
+  return venues;
+}
+
+/* ════════════════════════════════════
+   웨딩홀 정보 섹션 유틸
+════════════════════════════════════ */
+function onWhMoneyInput(el) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value  = raw ? Number(raw).toLocaleString('ko-KR') : '';
+  calcWhBalance();
+}
+
+function onWhGuestInput(el) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value  = raw ? Number(raw).toLocaleString('ko-KR') : '';
+  calcWhMeal();
+}
+
+function onWhMealInput(el) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value  = raw ? Number(raw).toLocaleString('ko-KR') : '';
+  calcWhMeal();
+}
+
+function calcWhMeal() {
+  const guest = Number((document.getElementById('tlWhMinGuest')?.value || '0').replace(/,/g,'')) || 0;
+  const meal  = Number((document.getElementById('tlWhMeal')?.value     || '0').replace(/,/g,'')) || 0;
+  const el    = document.getElementById('tlWhMealEstimate');
+  if (!el) return;
+  el.textContent = (guest > 0 && meal > 0)
+    ? `예상 식대 : ₩ ${(guest * meal).toLocaleString('ko-KR')} 원`
+    : '';
+}
+
+function onEditWhMoneyInput(el) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value  = raw ? Number(raw).toLocaleString('ko-KR') : '';
+  calcEditWhBalance();
+}
+
+function onEditWhGuestInput(el) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value  = raw ? Number(raw).toLocaleString('ko-KR') : '';
+  calcEditWhMeal();
+}
+
+function onEditWhMealInput(el) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value  = raw ? Number(raw).toLocaleString('ko-KR') : '';
+  calcEditWhMeal();
+}
+
+function calcEditWhMeal() {
+  const guest = Number((document.getElementById('editWhMinGuest')?.value || '0').replace(/,/g,'')) || 0;
+  const meal  = Number((document.getElementById('editWhMeal')?.value     || '0').replace(/,/g,'')) || 0;
+  const el    = document.getElementById('editWhMealEstimate');
+  if (!el) return;
+  el.textContent = (guest > 0 && meal > 0)
+    ? `예상 식대 : ₩ ${(guest * meal).toLocaleString('ko-KR')} 원`
+    : '';
+}
+
+function calcEditWhBalance() {
+  const fee     = Number((document.getElementById('editWhFee')?.value     || '0').replace(/,/g,'')) || 0;
+  const deposit = Number((document.getElementById('editWhDeposit')?.value || '0').replace(/,/g,'')) || 0;
+  const balEl   = document.getElementById('editWhBalance');
+  if (!balEl) return;
+  if (fee === 0 && deposit === 0) {
+    balEl.value = '';
+    balEl.style.color = '#D4A96A';
+  } else {
+    const bal = fee - deposit;
+    balEl.value = Math.abs(bal).toLocaleString('ko-KR') + (bal < 0 ? ' (초과)' : '');
+    balEl.style.color = bal < 0 ? '#f44336' : '#D4A96A';
+  }
+}
+
+function calcWhBalance() {
+  const fee     = Number((document.getElementById('tlWhFee')?.value     || '0').replace(/,/g,'')) || 0;
+  const deposit = Number((document.getElementById('tlWhDeposit')?.value || '0').replace(/,/g,'')) || 0;
+  const balEl   = document.getElementById('tlWhBalance');
+  if (!balEl) return;
+  if (fee === 0 && deposit === 0) {
+    balEl.value = '';
+    balEl.style.color = '#D4A96A';
+  } else {
+    const bal = fee - deposit;
+    balEl.value = Math.abs(bal).toLocaleString('ko-KR') + (bal < 0 ? ' (초과)' : '');
+    balEl.style.color = bal < 0 ? '#f44336' : '#D4A96A';
+  }
+}
+
+/* ════════════════════════════════════
+   예산 입력 유틸
+════════════════════════════════════ */
+// 예산 관리 메뉴에서 설정된 참조값 (실제 앱에서는 공유 상태에서 읽어옴)
+const BUDGET_MGMT = { total: 30000000 }; // 3천만원 기본값 예시
+
+function formatWon(num) {
+  if (!num && num !== 0) return '';
+  return Number(num).toLocaleString('ko-KR') + '원';
+}
+
+function onBudgetInput(el, displayId) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value  = raw ? Number(raw).toLocaleString('ko-KR') : '';
+  const displayEl = document.getElementById(displayId || 'tlBudgetDisplay');
+  if (displayEl) {
+    displayEl.textContent = raw ? `₩ ${Number(raw).toLocaleString('ko-KR')} 원` : '';
+  }
+}
+
+function applyBudgetRef() {
+  const input = document.getElementById('tlBudgetInput');
+  if (!input) return;
+  const raw = String(BUDGET_MGMT.total).replace(/[^0-9]/g, '');
+  input.value = raw ? Number(raw).toLocaleString('ko-KR') : '';
+  onBudgetInput(input, 'tlBudgetDisplay');
+}
+
+function applyEditBudgetRef() {
+  const input = document.getElementById('editBudgetInput');
+  if (!input) return;
+  const raw = String(BUDGET_MGMT.total).replace(/[^0-9]/g, '');
+  input.value = raw ? Number(raw).toLocaleString('ko-KR') : '';
+  onBudgetInput(input, 'editBudgetDisplay');
+}
+
+/* ════════════════════════════════════
+   타임라인 추가 모달
+════════════════════════════════════ */
+function openTlModal() {
+  state.todoCount = 0;
+  // 폼 초기화
+  document.getElementById('tlTodoList').innerHTML = '';
+  document.getElementById('tlTitle').value   = '';
+  document.getElementById('tlDate').value    = '';
+  document.getElementById('tlTime').value    = '';
+  document.getElementById('tlContent').value = '';
+  document.getElementById('tlDateHint').textContent = '';
+  // 색상 초기화
+  document.querySelectorAll('.tl-color-dot').forEach(d => d.classList.remove('selected'));
+  document.querySelector('[data-color="#D4A96A"]').classList.add('selected');
+  state.selectedColor = '#D4A96A';
+
+  // 웨딩홀 정보 섹션 초기화
+  document.getElementById('tlWeddingHallSection').style.display = 'none';
+  ['tlWhName','tlWhLocation','tlWhMinGuest','tlWhMeal','tlWhFee','tlWhDeposit','tlWhBalanceDate'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  const mealEst = document.getElementById('tlWhMealEstimate');
+  if (mealEst) mealEst.textContent = '';
+  const tlWhCeremTimeDisp = document.getElementById('tlWhCeremTimeDisp');
+  if (tlWhCeremTimeDisp) { tlWhCeremTimeDisp.textContent = '시간 선택'; tlWhCeremTimeDisp.classList.add('empty'); }
+  const tlWhCeremTime = document.getElementById('tlWhCeremTime');
+  if (tlWhCeremTime) tlWhCeremTime.value = '';
+  const tlWhBalance = document.getElementById('tlWhBalance');
+  if (tlWhBalance) { tlWhBalance.textContent = '—'; tlWhBalance.className = 'wh-balance-val'; }
+
+  // 웨딩홀 투어 섹션 초기화
+  document.getElementById('tlVenueSection').style.display = 'none';
+  document.getElementById('tlVenueList').innerHTML = '';
+  state.venueCount = 0;
+
+  // 예산 섹션 초기화
+  document.getElementById('tlBudgetSection').style.display = 'none';
+  document.getElementById('tlBudgetInput').value = '';
+  document.getElementById('tlBudgetDisplay').textContent = '';
+  document.getElementById('tlBudgetRefAmount').textContent = formatWon(BUDGET_MGMT.total) || '—';
+
+  // 카테고리 커스텀 셀렉트 생성
+  const triggerEl = document.getElementById('tlCategoryTrigger');
+  const valEl     = document.getElementById('tlCategoryValue');
+  valEl.textContent = '카테고리를 선택하세요';
+  valEl.classList.add('cs-placeholder');
+  createCS('tlCat', triggerEl, CATEGORIES, (val) => {
+    onCategoryChange(val);
+  });
+
+  document.getElementById('tlModal').classList.add('active');
+}
+
+function closeTlModal() {
+  document.getElementById('tlModal').classList.remove('active');
+  closeAllCS();
+  // 할 일의 커스텀 셀렉트 정리
+  Object.keys(csRegistry).forEach(id => {
+    if (id.startsWith('todo_')) destroyCS(id);
+  });
+  destroyCS('tlCat');
+}
+
+function onCategoryChange(cat) {
+  // 결혼 예산 설정 카테고리 선택 시 예산 섹션 토글
+  const budgetSection = document.getElementById('tlBudgetSection');
+  if (budgetSection) {
+    budgetSection.style.display = (cat === '결혼 예산 설정') ? '' : 'none';
+  }
+
+  // 웨딩홀 카테고리 선택 시 웨딩홀 정보 섹션 토글
+  const weddingHallSection = document.getElementById('tlWeddingHallSection');
+  if (weddingHallSection) weddingHallSection.style.display = (cat === '웨딩홀') ? '' : 'none';
+
+  // 웨딩홀 투어 카테고리 선택 시 웨딩홀 투어 섹션 토글
+  const venueSection = document.getElementById('tlVenueSection');
+  if (venueSection) {
+    const show = cat === '웨딩홀 투어';
+    venueSection.style.display = show ? '' : 'none';
+    if (!show) {
+      document.getElementById('tlVenueList').innerHTML = '';
+      state.venueCount = 0;
+    }
+  }
+
+  // 이미 있는 할 일 아이템의 서브카테고리 옵션 갱신
+  document.querySelectorAll('[data-todo-cs]').forEach(triggerEl => {
+    const todoId = triggerEl.dataset.todoCsId;
+    const subs   = SUB_CATS[cat] || [{ v:'', l:'하위 카테고리 선택', p:true }];
+    const valEl  = triggerEl.querySelector('.cs-value');
+    if (valEl) { valEl.textContent = '하위 카테고리 선택'; valEl.classList.add('cs-placeholder'); }
+    createCS(todoId, triggerEl, subs, null, true);
+  });
+}
+
+function onDateChange() {
+  const val  = document.getElementById('tlDate').value;
+  const hint = document.getElementById('tlDateHint');
+  if (!val) { hint.innerHTML = ''; return; }
+
+  const sel  = new Date(val);
+  const diff = WEDDING_DATE - sel;
+
+  if (diff <= 0) {
+    hint.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> 결혼식 당일 또는 이후`;
+    hint.style.color = '#aaa';
+    return;
+  }
+
+  const days   = Math.floor(diff / 86400000);
+  const months = Math.floor(days / 30.44);
+  const rem    = days - Math.round(months * 30.44);
+  const txt    = months > 0
+    ? `결혼식 ${months}개월${Math.abs(rem) >= 5 ? ` ${rem > 0 ? rem + '일' : ''}` : ''} 전`
+    : `결혼식 ${days}일 전`;
+
+  hint.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg> ${txt}`;
+  hint.style.color = '#D4A96A';
+}
+
+function selectColor(el) {
+  document.querySelectorAll('.tl-color-dot').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  state.selectedColor = el.dataset.color;
+}
+
+function addTodoItem() {
+  state.todoCount++;
+  const n = state.todoCount;
+  const csId = `todo_${n}_sub`;
+  const cat  = getCSValue('tlCat');
+  const subs = SUB_CATS[cat] || [{ v:'', l:'하위 카테고리 선택', p:true }];
+
+  const item = document.createElement('div');
+  item.className = 'tl-todo-item';
+  item.id = `todo_item_${n}`;
+  item.innerHTML = `
+    <div class="tl-todo-item-header">
+      <span class="tl-todo-num">할 일 ${n}</span>
+      <button class="tl-todo-del" onclick="removeTodoItem(${n})" aria-label="삭제">${svgClose(10)}</button>
+    </div>
+    <div class="tl-todo-fields">
+      <div class="cs-trigger sm" id="todo_trigger_${n}" data-todo-cs data-todo-cs-id="${csId}" onclick="toggleCS('${csId}')">
+        <span class="cs-value cs-placeholder">하위 카테고리 선택</span>
+        <span class="cs-arrow"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="tl-todo-input-wrap">
+        <input class="tl-todo-input" type="text" placeholder="할 일 제목" maxlength="40" autocomplete="off"/>
+      </div>
+      <div class="tl-todo-textarea-wrap">
+        <textarea class="tl-todo-textarea" placeholder="내용 (선택 사항)" rows="2"></textarea>
+      </div>
+    </div>`;
+
+  document.getElementById('tlTodoList').appendChild(item);
+
+  // 커스텀 셀렉트 생성
+  const triggerEl = document.getElementById(`todo_trigger_${n}`);
+  createCS(csId, triggerEl, subs, null, true);
+
+  requestAnimationFrame(() => item.scrollIntoView({ behavior:'smooth', block:'nearest' }));
+}
+
+function removeTodoItem(n) {
+  destroyCS(`todo_${n}_sub`);
+  document.getElementById(`todo_item_${n}`)?.remove();
+  // 번호 재정렬
+  document.querySelectorAll('.tl-todo-item').forEach((el, i) => {
+    el.querySelector('.tl-todo-num').textContent = `할 일 ${i + 1}`;
+  });
+}
+
+function saveTlItem() {
+  const category = getCSValue('tlCat');
+  const title    = document.getElementById('tlTitle').value.trim();
+  if (!category) { alert('카테고리를 선택해 주세요.'); return; }
+  if (!title)    { alert('제목을 입력해 주세요.'); return; }
+
+  const cat    = CATEGORIES.find(c => c.value === category);
+  const tab    = state.tabs.find(t => t.id === state.activeTabId);
+  if (tab) {
+    // 날짜로 monthLabel 결정
+    const dateVal = document.getElementById('tlDate').value;
+    let monthLabel = '기타';
+    if (dateVal) {
+      const diff  = WEDDING_DATE - new Date(dateVal);
+      const days  = Math.floor(diff / 86400000);
+      const months = Math.round(days / 30.44);
+      if (days >= 0 && days <= 10)       monthLabel = '당일';
+      else if (days > 0 && days <= 14)   monthLabel = '1주일 전';
+      else if (months <= 1)              monthLabel = '1개월 전';
+      else if (months <= 3)              monthLabel = `${months}개월 전`;
+      else                               monthLabel = `${months}개월 전`;
+    }
+
+    // 새 단계를 같은 monthLabel 그룹 끝에 추가
+    const lastIdx = tab.stages.reduce((acc, s, i) => s.monthLabel === monthLabel ? i : acc, -1);
+    const newStage = {
+      id: Date.now(), monthLabel, date: dateVal,
+      time: document.getElementById('tlTime').value,
+      title, category, emoji: cat?.emoji || '', color: state.selectedColor,
+      content: document.getElementById('tlContent').value.trim(),
+      done: false, todos: [],
+      venues: category === '웨딩홀 투어' ? collectVenues() : [],
+      weddingHall: category === '웨딩홀' ? {
+        name:        document.getElementById('tlWhName')?.value.trim()                    || '',
+        location:    document.getElementById('tlWhLocation')?.value.trim()                || '',
+        ceremTime:   document.getElementById('tlWhCeremTime')?.value                      || '',
+        minGuest:    document.getElementById('tlWhMinGuest')?.value.replace(/,/g,'')      || '',
+        meal:        document.getElementById('tlWhMeal')?.value.replace(/,/g,'')          || '',
+        fee:         document.getElementById('tlWhFee')?.value.replace(/,/g,'')           || '',
+        deposit:     document.getElementById('tlWhDeposit')?.value.replace(/,/g,'')       || '',
+        balanceDate: document.getElementById('tlWhBalanceDate')?.value                    || '',
+      } : null,
+      budget: category === '결혼 예산 설정'
+        ? (document.getElementById('tlBudgetInput').value.replace(/,/g, '') || '')
+        : '',
+    };
+    if (lastIdx >= 0) tab.stages.splice(lastIdx + 1, 0, newStage);
+    else              tab.stages.push(newStage);
+
+    updateProgress(tab);
+    renderTimeline();
+  }
+  closeTlModal();
+}
+
+/* ════════════════════════════════════
+   공통 유틸
+════════════════════════════════════ */
+function onOverlayClick(e, id) {
+  if (e.target === document.getElementById(id)) {
+    if (id === 'tlModal')   closeTlModal();
+    else if (id === 'editModal') closeEditModal();
+    else closeTabModal();
+  }
+}
+
+function updateProgress(tab) {
+  const total = tab?.stages?.length || 0;
+  const done  = tab?.stages?.filter(s => s.done)?.length || 0;
+  const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
+  document.getElementById('statTotal').textContent   = total;
+  document.getElementById('statDone').textContent    = done;
+  document.getElementById('statLeft').textContent    = total - done;
+  document.getElementById('percentNum').textContent  = pct;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function svgPlus(s) {
+  return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+}
+function svgClose(s) {
+  return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+}
+
+/* 다크모드 */
+document.getElementById('darkToggle').addEventListener('click', () => {
+  document.getElementById('phoneWrapper').classList.toggle('dark');
+  // 열린 패널 다크 반영
+  const isDark = document.getElementById('phoneWrapper').classList.contains('dark');
+  Object.values(csRegistry).forEach(reg => reg.panelEl.classList.toggle('dark', isDark));
+});
+
+/* 초기화 */
+updateProgress(state.tabs[0]);
+renderTimeline('default');
+initVtpScrollListeners();
+</script>
+</body>
+</html>
