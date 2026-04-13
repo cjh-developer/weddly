@@ -217,6 +217,198 @@
     .tl-card-dday.today    { color: #D4A96A; font-weight: 800; }
     .tl-card-dday.past     { color: #ccc; }
 
+    /* ════════════ 플래너 정보 섹션 ════════════ */
+    .pl-section { display: flex; flex-direction: column; gap: 8px; }
+    .pl-field-label { font-size: 11px; font-weight: 700; color: #b08050; margin-bottom: 3px; }
+
+    .pl-balance-card {
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(212,169,106,0.09); border: 1.5px solid rgba(212,169,106,0.25);
+      border-radius: 10px; padding: 9px 14px;
+    }
+    .pl-balance-label { font-size: 10px; color: #C49050; font-weight: 700; }
+    .pl-balance-val { font-size: 14px; font-weight: 800; color: #D4A96A; font-variant-numeric: tabular-nums; }
+    .pl-balance-val.negative { color: #f44336; }
+
+    .pl-dress-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+    .pl-dress-item { background: #fafafa; border: 1.5px solid #f0e8d8; border-radius: 12px; overflow: hidden; }
+    .pl-dress-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 12px;
+    }
+    .pl-dress-num {
+      font-size: 11px; font-weight: 700; color: #D4A96A;
+      background: rgba(212,169,106,0.12); border-radius: 20px;
+      padding: 2px 9px; flex-shrink: 0;
+    }
+    .pl-dress-input {
+      flex: 1; border: none; background: transparent;
+      font-size: 13px; font-weight: 600; color: #2a1a0a;
+      font-family: inherit; outline: none; min-width: 0; padding: 2px 4px;
+    }
+    .pl-dress-input::placeholder { color: #ccc; font-weight: 400; }
+    .pl-final-btn {
+      flex-shrink: 0; padding: 4px 10px;
+      border: 1.5px solid #D4A96A; border-radius: 20px;
+      background: #fff; color: #D4A96A;
+      font-size: 11px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .pl-final-btn:hover { background: #D4A96A; color: #fff; }
+    .pl-final-btn.selected {
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      color: #fff; border-color: transparent;
+      box-shadow: 0 2px 8px rgba(212,169,106,0.35);
+    }
+
+    .phone-wrapper.dark .pl-balance-card { background: rgba(212,169,106,0.05); border-color: rgba(212,169,106,0.15); }
+    .phone-wrapper.dark .pl-balance-val { color: #E8C07A; }
+    .phone-wrapper.dark .pl-dress-item { background: #221e14; border-color: #3a2e1a; }
+    .phone-wrapper.dark .pl-dress-input { color: #e0d5c0; }
+    .phone-wrapper.dark .pl-final-btn { background: #2a2218; border-color: #4a3828; color: #C49050; }
+    .phone-wrapper.dark .pl-final-btn:hover { background: #D4A96A; color: #fff; border-color: transparent; }
+    .phone-wrapper.dark .pl-final-btn.selected { background: linear-gradient(135deg, #D4A96A, #C49050); color: #fff; border-color: transparent; }
+
+    /* ════════════ 스튜디오 섹션 ════════════ */
+    .st-tab-row { display: flex; gap: 8px; margin-bottom: 4px; }
+    .st-tab-btn {
+      flex: 1; padding: 9px 12px;
+      border: 1.5px solid #e8e8e8; border-radius: 10px;
+      background: #f8f8f8; color: #888;
+      font-size: 13px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .st-tab-btn .st-tab-check {
+      width: 16px; height: 16px; border-radius: 4px;
+      border: 1.5px solid #ddd; background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s; flex-shrink: 0;
+    }
+    .st-tab-btn.active { border-color: #D4A96A; background: #fff8ef; color: #C49050; }
+    .st-tab-btn.active .st-tab-check { background: #D4A96A; border-color: #D4A96A; }
+    .st-tab-btn.active .st-tab-check::after {
+      content: ''; display: block; width: 8px; height: 5px;
+      border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+
+    .st-sub-section { display: none; flex-direction: column; gap: 8px; padding: 12px 14px; background: #fafafa; border: 1.5px solid #f0e8d8; border-radius: 12px; }
+    .st-sub-section.show { display: flex; }
+    .st-sub-title { font-size: 12px; font-weight: 800; color: #C49050; margin-bottom: 4px; }
+
+    .st-planner-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 8px; border-bottom: 1px solid #f0e8d8; margin-bottom: 4px;
+    }
+    .st-planner-label { font-size: 11px; font-weight: 700; color: #888; }
+    .st-planner-btn {
+      padding: 4px 12px;
+      border: 1.5px solid #e0e0e0; border-radius: 20px;
+      background: #f8f8f8; color: #999;
+      font-size: 11px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .st-planner-btn.active { border-color: #D4A96A; background: #fff8ef; color: #C49050; }
+
+    .st-book-fields { display: flex; flex-direction: column; gap: 8px; transition: opacity 0.2s; }
+    .st-book-fields.pl-off { opacity: 0.4; pointer-events: none; }
+
+    .st-item-list { display: flex; flex-direction: column; gap: 6px; }
+    .st-item-row { display: flex; align-items: center; gap: 6px; }
+    .st-item-num { font-size: 11px; font-weight: 700; color: #D4A96A; background: rgba(212,169,106,0.12); border-radius: 20px; padding: 2px 8px; flex-shrink: 0; }
+    .st-item-del {
+      width: 24px; height: 24px; border-radius: 50%; background: #f0f0f0; border: none;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: #bbb; flex-shrink: 0; transition: background 0.15s, color 0.15s;
+    }
+    .st-item-del:hover { background: #fde8e8; color: #f44336; }
+    .st-add-item-btn {
+      width: 100%; padding: 9px; background: #fff; border: 1.5px dashed #d0c0a8;
+      border-radius: 10px; cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      font-size: 12px; font-weight: 600; color: #C49050;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .st-add-item-btn:hover { background: #fff8ef; border-color: #D4A96A; color: #D4A96A; }
+
+    .phone-wrapper.dark .st-tab-btn { background: #2a2218; border-color: #3a3020; color: #555; }
+    .phone-wrapper.dark .st-tab-btn .st-tab-check { background: #221e14; border-color: #3a3020; }
+    .phone-wrapper.dark .st-tab-btn.active { border-color: #D4A96A; background: #2a1e10; color: #C49050; }
+    .phone-wrapper.dark .st-sub-section { background: #221e14; border-color: #3a2e1a; }
+    .phone-wrapper.dark .st-planner-row { border-bottom-color: #3a2e1a; }
+    .phone-wrapper.dark .st-planner-btn { background: #2a2218; border-color: #3a3020; color: #555; }
+    .phone-wrapper.dark .st-planner-btn.active { border-color: #D4A96A; background: #2a1e10; color: #C49050; }
+    .phone-wrapper.dark .st-item-del { background: #2a2218; color: #555; }
+    .phone-wrapper.dark .st-item-del:hover { background: #400; color: #f44336; }
+    .phone-wrapper.dark .st-add-item-btn { background: #221e14; border-color: #4a3a28; color: #C49050; }
+    .phone-wrapper.dark .st-add-item-btn:hover { background: #2e2618; border-color: #D4A96A; color: #D4A96A; }
+
+    /* ── 드레스 섹션 ── */
+    .dr-design-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 6px; }
+    .dr-design-item { border: 1px solid #e8dcc8; border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+    .dr-design-header { display: flex; align-items: center; gap: 8px; }
+    .dr-design-num { font-size: 12px; color: #b8975a; font-weight: 600; flex: 1; }
+    .dr-design-del { background: none; border: none; color: #bbb; cursor: pointer; padding: 2px 6px; font-size: 18px; line-height: 1; border-radius: 4px; }
+    .dr-design-del:hover { color: #e88; background: #fff3f3; }
+    .dr-file-label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .dr-file-btn { font-size: 11px; color: #D4A96A; border: 1px solid #D4A96A; border-radius: 6px; padding: 4px 10px; white-space: nowrap; }
+    .dr-file-name { font-size: 11px; color: #aaa; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .phone-wrapper.dark .dr-design-item { border-color: #3a2e20; }
+    .phone-wrapper.dark .dr-design-del:hover { background: #3a1e1e; color: #f88; }
+    .phone-wrapper.dark .dr-file-btn { color: #C49050; border-color: #C49050; }
+    .phone-wrapper.dark .dr-file-name { color: #666; }
+
+    /* ── 메이크업 섹션 ── */
+    .mk-inner-section { border-left: 2px solid #f0e8d8; padding-left: 10px; margin-top: 4px; }
+    .phone-wrapper.dark .mk-inner-section { border-left-color: #3a2e20; }
+    .mk-cost-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+    .mk-cost-item {
+      background: #fff; border: 1.5px solid #f0e8d8; border-radius: 14px;
+      overflow: hidden; box-shadow: 0 1px 5px rgba(212,169,106,0.08);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .mk-cost-item:focus-within {
+      border-color: rgba(212,169,106,0.55);
+      box-shadow: 0 2px 10px rgba(212,169,106,0.15);
+    }
+    .mk-cost-top {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 10px 8px;
+      background: linear-gradient(to right, rgba(212,169,106,0.07), rgba(212,169,106,0.02));
+      border-bottom: 1px solid #f5ede0;
+    }
+    .mk-cost-dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, #D4A96A, #c49050);
+      box-shadow: 0 1px 3px rgba(212,169,106,0.4);
+    }
+    .mk-cost-top .tl-input { flex: 1; padding: 1px 0; font-size: 13px; }
+    .mk-cost-del {
+      background: none; border: none; width: 22px; height: 22px;
+      display: flex; align-items: center; justify-content: center;
+      color: #d0c8bc; cursor: pointer; font-size: 13px; line-height: 1;
+      border-radius: 50%; flex-shrink: 0; transition: color 0.15s, background 0.15s;
+    }
+    .mk-cost-del:hover { color: #e88888; background: rgba(255,100,100,0.1); }
+    .mk-cost-bottom { display: flex; align-items: center; gap: 6px; padding: 7px 12px 9px; }
+    .mk-cost-symbol { font-size: 13px; color: #b8975a; font-weight: 700; flex-shrink: 0; }
+    .mk-cost-bottom .tl-input { flex: 1; padding: 1px 4px; font-size: 13px; text-align: right; }
+    .mk-cost-unit { font-size: 12px; color: #bbb; flex-shrink: 0; }
+    .btn-add-mk-cost {
+      width: 100%; padding: 10px; background: rgba(212,169,106,0.07);
+      border: 1.5px dashed rgba(212,169,106,0.38); border-radius: 12px;
+      color: #C49050; font-size: 13px; font-weight: 700; font-family: inherit;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      gap: 6px; transition: background 0.15s, border-color 0.15s; margin-top: 2px;
+    }
+    .btn-add-mk-cost:hover { background: rgba(212,169,106,0.13); border-color: #D4A96A; }
+    .phone-wrapper.dark .mk-cost-item { background: #221e14; border-color: #3a2e1a; }
+    .phone-wrapper.dark .mk-cost-top { background: linear-gradient(to right, rgba(212,169,106,0.08), rgba(212,169,106,0.02)); border-bottom-color: #3a2e1a; }
+    .phone-wrapper.dark .mk-cost-del:hover { background: rgba(255,80,80,0.1); color: #f88; }
+    .phone-wrapper.dark .btn-add-mk-cost { color: #E8C07A; border-color: rgba(212,169,106,0.28); }
+    .phone-wrapper.dark .btn-add-mk-cost:hover { background: rgba(212,169,106,0.12); border-color: #D4A96A; }
+
     /* ── 다크 타임라인 ── */
     .phone-wrapper.dark .tl-month-text { background: #221e14; border-color: #3a2e1a; color: #C49050; }
     .phone-wrapper.dark .tl-month-line { background: #3a2e1a; }
@@ -921,6 +1113,419 @@
           </div>
         </div>
 
+        <!-- 예산 입력 (결혼 예산 설정 카테고리 선택 시) -->
+        <div class="tl-field" id="tlBudgetSection" style="display:none">
+          <div class="tl-field-label">예산 금액</div>
+          <div class="tl-budget-input-row">
+            <span class="tl-budget-symbol">₩</span>
+            <input class="tl-input" id="tlBudgetInput" type="text" inputmode="numeric"
+                   placeholder="0" autocomplete="off" oninput="onBudgetInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+            <span class="tl-budget-unit">원</span>
+          </div>
+          <div class="tl-budget-display" id="tlBudgetDisplay"></div>
+          <div class="tl-budget-ref">
+            <div>
+              <div class="tl-budget-ref-label">💡 예산 관리 설정값</div>
+              <div class="tl-budget-ref-amount" id="tlBudgetRefAmount">—</div>
+            </div>
+            <button class="tl-budget-ref-apply" onclick="applyBudgetRef()">적용</button>
+          </div>
+        </div>
+
+        <!-- 플래너 정보 (플래너 카테고리 선택 시) -->
+        <div class="tl-field" id="tlPlannerSection" style="display:none">
+          <div class="tl-field-label">플래너 정보</div>
+          <div class="pl-section">
+            <div>
+              <div class="pl-field-label">플래너 업체명</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="tlPlName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">플래너 전체 금액</div>
+              <div class="tl-budget-input-row">
+                <span class="tl-budget-symbol">₩</span>
+                <input class="tl-input" id="tlPlTotal" type="text" inputmode="numeric" placeholder="0"
+                       oninput="onPlMoneyInput(this);calcTlPlBalance()" style="padding-left:4px;border:none;background:transparent;"/>
+                <span class="tl-budget-unit">원</span>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">계약금</div>
+              <div class="tl-budget-input-row">
+                <span class="tl-budget-symbol">₩</span>
+                <input class="tl-input" id="tlPlDeposit" type="text" inputmode="numeric" placeholder="0"
+                       oninput="onPlMoneyInput(this);calcTlPlBalance()" style="padding-left:4px;border:none;background:transparent;"/>
+                <span class="tl-budget-unit">원</span>
+              </div>
+            </div>
+            <div class="pl-balance-card">
+              <div>
+                <div class="pl-balance-label">잔금 (자동 계산)</div>
+                <div class="pl-balance-val" id="tlPlBalance">—</div>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">잔금일</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="tlPlBalanceDate" type="date"/>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">계약 항목</div>
+              <textarea class="tl-textarea" id="tlPlContract" placeholder="계약 항목을 입력하세요" rows="3"></textarea>
+            </div>
+            <div>
+              <div class="pl-field-label">스튜디오 업체명</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="tlPlStudio" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">드레스 업체명</div>
+              <div class="pl-dress-list">
+                <div class="pl-dress-item">
+                  <div class="pl-dress-header">
+                    <span class="pl-dress-num">업체 1</span>
+                    <input class="pl-dress-input" id="tlPlDress1" type="text" placeholder="업체명을 입력하세요" maxlength="40"/>
+                    <button class="pl-final-btn" onclick="selectFinalDress('tl',1)" id="tlPlDressFinal1">최종 선택</button>
+                  </div>
+                </div>
+                <div class="pl-dress-item">
+                  <div class="pl-dress-header">
+                    <span class="pl-dress-num">업체 2</span>
+                    <input class="pl-dress-input" id="tlPlDress2" type="text" placeholder="업체명을 입력하세요" maxlength="40"/>
+                    <button class="pl-final-btn" onclick="selectFinalDress('tl',2)" id="tlPlDressFinal2">최종 선택</button>
+                  </div>
+                </div>
+                <div class="pl-dress-item">
+                  <div class="pl-dress-header">
+                    <span class="pl-dress-num">업체 3</span>
+                    <input class="pl-dress-input" id="tlPlDress3" type="text" placeholder="업체명을 입력하세요" maxlength="40"/>
+                    <button class="pl-final-btn" onclick="selectFinalDress('tl',3)" id="tlPlDressFinal3">최종 선택</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">메이크업 업체명</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="tlPlMakeup" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 드레스 정보 (드레스 카테고리 선택 시) -->
+        <div class="tl-field" id="tlDressSection" style="display:none">
+          <div class="tl-field-label">드레스 정보</div>
+          <div class="pl-section">
+            <!-- 투어 / 예약 탭 -->
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="tlDrTabTour" onclick="toggleDrTab('tl','tour')">
+                <span class="st-tab-check"></span>드레스 투어
+              </button>
+              <button class="st-tab-btn" id="tlDrTabBook" onclick="toggleDrTab('tl','book')">
+                <span class="st-tab-check"></span>드레스 예약
+              </button>
+            </div>
+            <!-- 드레스 투어 서브섹션 -->
+            <div class="st-sub-section" id="tlDrTourSection">
+              <div class="st-sub-title">👗 드레스 투어</div>
+              <div class="venue-list" id="tlDrTourVendorList"></div>
+              <button class="btn-add-venue" onclick="addDrTourVendor('tl')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                업체 추가
+              </button>
+            </div>
+            <!-- 드레스 예약 서브섹션 -->
+            <div class="st-sub-section" id="tlDrBookSection">
+              <div class="st-sub-title">💍 드레스 예약</div>
+              <div>
+                <div class="pl-field-label">드레스 업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlDrBookName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">드레스 업체 위치</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlDrBookLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+              <div class="st-planner-row">
+                <span class="st-planner-label">금액 정보</span>
+                <button class="st-planner-btn" id="tlDrPlannerBtn" onclick="toggleDrPlanner('tl')">플래너 계약</button>
+              </div>
+              <div class="st-book-fields" id="tlDrMoneyFields">
+                <div>
+                  <div class="pl-field-label">전체 금액</div>
+                  <div class="tl-budget-input-row">
+                    <span class="tl-budget-symbol">₩</span>
+                    <input class="tl-input" id="tlDrTotal" type="text" inputmode="numeric" placeholder="0"
+                           oninput="onPlMoneyInput(this);calcTlDrBalance()" style="padding-left:4px;border:none;background:transparent;"/>
+                    <span class="tl-budget-unit">원</span>
+                  </div>
+                </div>
+                <div>
+                  <div class="pl-field-label">계약금</div>
+                  <div class="tl-budget-input-row">
+                    <span class="tl-budget-symbol">₩</span>
+                    <input class="tl-input" id="tlDrDeposit" type="text" inputmode="numeric" placeholder="0"
+                           oninput="onPlMoneyInput(this);calcTlDrBalance()" style="padding-left:4px;border:none;background:transparent;"/>
+                    <span class="tl-budget-unit">원</span>
+                  </div>
+                </div>
+                <div class="pl-balance-card">
+                  <div>
+                    <div class="pl-balance-label">잔금 (자동 계산)</div>
+                    <div class="pl-balance-val" id="tlDrBalance">—</div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">드레스 디자인</div>
+                <div class="dr-design-list" id="tlDrDesignList"></div>
+                <button class="st-add-item-btn" onclick="addDrDesign('tl')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  디자인 추가
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 메이크업 정보 (메이크업 카테고리 선택 시) -->
+        <div class="tl-field" id="tlMakeupSection" style="display:none">
+          <div class="tl-field-label">메이크업 정보</div>
+          <div class="pl-section">
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="tlMkTabCouple" onclick="toggleMkTab('tl','couple')">
+                <span class="st-tab-check"></span>신랑신부
+              </button>
+              <button class="st-tab-btn" id="tlMkTabParents" onclick="toggleMkTab('tl','parents')">
+                <span class="st-tab-check"></span>혼주
+              </button>
+            </div>
+            <!-- 신랑신부 서브섹션 -->
+            <div class="st-sub-section" id="tlMkCoupleSection">
+              <div class="st-sub-title">💑 신랑신부 메이크업</div>
+              <div>
+                <div class="pl-field-label">메이크업 업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlMkCoupleName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">메이크업 업체 위치</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlMkCoupleLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+              <div class="st-tab-row" style="margin-top:6px">
+                <button class="st-tab-btn" id="tlMkTabPhoto" onclick="toggleMkInnerTab('tl','photo')">
+                  <span class="st-tab-check"></span>촬영 메이크업
+                </button>
+                <button class="st-tab-btn" id="tlMkTabMain" onclick="toggleMkInnerTab('tl','main')">
+                  <span class="st-tab-check"></span>본식 메이크업
+                </button>
+              </div>
+              <div class="st-sub-section mk-inner-section" id="tlMkPhotoSection">
+                <div class="st-sub-title">📸 촬영 메이크업</div>
+                <div>
+                  <div class="pl-field-label">메이크업 담당자</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="tlMkPhotoManager" type="text" placeholder="담당자 이름" maxlength="30" autocomplete="off"/>
+                  </div>
+                </div>
+                <div class="tl-row">
+                  <div class="tl-field">
+                    <div class="pl-field-label">메이크업 일자</div>
+                    <div class="tl-input-wrap">
+                      <input class="tl-input" id="tlMkPhotoDate" type="date"/>
+                    </div>
+                  </div>
+                  <div class="tl-field">
+                    <div class="pl-field-label">메이크업 시간</div>
+                    <div class="tl-input-wrap">
+                      <input class="tl-input" id="tlMkPhotoTime" type="time"/>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="pl-field-label">추가 비용 목록</div>
+                  <div class="mk-cost-list" id="tlMkPhotoCostList"></div>
+                  <button type="button" class="btn-add-mk-cost" onclick="addMkCost('tl','Photo')">+ 항목 추가</button>
+                </div>
+              </div>
+              <div class="st-sub-section mk-inner-section" id="tlMkMainSection">
+                <div class="st-sub-title">💒 본식 메이크업</div>
+                <div>
+                  <div class="pl-field-label">메이크업 담당자</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="tlMkMainManager" type="text" placeholder="담당자 이름" maxlength="30" autocomplete="off"/>
+                  </div>
+                </div>
+                <div class="tl-row">
+                  <div class="tl-field">
+                    <div class="pl-field-label">메이크업 일자</div>
+                    <div class="tl-input-wrap">
+                      <input class="tl-input" id="tlMkMainDate" type="date"/>
+                    </div>
+                  </div>
+                  <div class="tl-field">
+                    <div class="pl-field-label">메이크업 시간</div>
+                    <div class="tl-input-wrap">
+                      <input class="tl-input" id="tlMkMainTime" type="time"/>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="pl-field-label">추가 비용 목록</div>
+                  <div class="mk-cost-list" id="tlMkMainCostList"></div>
+                  <button type="button" class="btn-add-mk-cost" onclick="addMkCost('tl','Main')">+ 항목 추가</button>
+                </div>
+              </div>
+            </div>
+            <!-- 혼주 서브섹션 -->
+            <div class="st-sub-section" id="tlMkParentsSection">
+              <div class="st-sub-title">👨‍👩‍👧 혼주 메이크업</div>
+              <div>
+                <div class="pl-field-label">메이크업 업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlMkParentsName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">메이크업 업체 위치</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlMkParentsLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">메이크업 담당자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlMkParentsManager" type="text" placeholder="담당자 이름" maxlength="30" autocomplete="off"/>
+                </div>
+              </div>
+              <div class="tl-row">
+                <div class="tl-field">
+                  <div class="pl-field-label">메이크업 일자</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="tlMkParentsDate" type="date"/>
+                  </div>
+                </div>
+                <div class="tl-field">
+                  <div class="pl-field-label">메이크업 시간</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="tlMkParentsTime" type="time"/>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">추가 비용 목록</div>
+                <div class="mk-cost-list" id="tlMkParentsCostList"></div>
+                <button type="button" class="btn-add-mk-cost" onclick="addMkCost('tl','Parents')">+ 항목 추가</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 스튜디오 정보 (스튜디오 카테고리 선택 시) -->
+        <div class="tl-field" id="tlStudioSection" style="display:none">
+          <div class="tl-field-label">스튜디오 정보</div>
+          <div class="pl-section">
+            <div>
+              <div class="pl-field-label">스튜디오 업체명</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="tlStName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">스튜디오 위치</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="tlStLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+              </div>
+            </div>
+            <!-- 예약 / 촬영 탭 -->
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="tlStTabBook" onclick="toggleStTab('tl','book')">
+                <span class="st-tab-check"></span>스튜디오 예약
+              </button>
+              <button class="st-tab-btn" id="tlStTabShoot" onclick="toggleStTab('tl','shoot')">
+                <span class="st-tab-check"></span>스튜디오 촬영
+              </button>
+            </div>
+            <!-- 예약 서브섹션 -->
+            <div class="st-sub-section" id="tlStBookSection">
+              <div class="st-sub-title">📋 스튜디오 예약</div>
+              <div class="st-planner-row">
+                <span class="st-planner-label">금액 정보</span>
+                <button class="st-planner-btn" id="tlStPlannerBtn" onclick="toggleStPlanner('tl')">플래너 계약</button>
+              </div>
+              <div class="st-book-fields" id="tlStBookFields">
+                <div>
+                  <div class="pl-field-label">스튜디오 전체 금액</div>
+                  <div class="tl-budget-input-row">
+                    <span class="tl-budget-symbol">₩</span>
+                    <input class="tl-input" id="tlStTotal" type="text" inputmode="numeric" placeholder="0"
+                           oninput="onPlMoneyInput(this);calcTlStBalance()" style="padding-left:4px;border:none;background:transparent;"/>
+                    <span class="tl-budget-unit">원</span>
+                  </div>
+                </div>
+                <div>
+                  <div class="pl-field-label">계약금</div>
+                  <div class="tl-budget-input-row">
+                    <span class="tl-budget-symbol">₩</span>
+                    <input class="tl-input" id="tlStDeposit" type="text" inputmode="numeric" placeholder="0"
+                           oninput="onPlMoneyInput(this);calcTlStBalance()" style="padding-left:4px;border:none;background:transparent;"/>
+                    <span class="tl-budget-unit">원</span>
+                  </div>
+                </div>
+                <div class="pl-balance-card">
+                  <div>
+                    <div class="pl-balance-label">잔금 (자동 계산)</div>
+                    <div class="pl-balance-val" id="tlStBalance">—</div>
+                  </div>
+                </div>
+                <div>
+                  <div class="pl-field-label">잔금일</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="tlStBalanceDate" type="date"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 촬영 서브섹션 -->
+            <div class="st-sub-section" id="tlStShootSection">
+              <div class="st-sub-title">📷 스튜디오 촬영</div>
+              <div class="tl-row">
+                <div class="tl-field">
+                  <div class="pl-field-label">촬영 날짜</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="tlStShootDate" type="date"/>
+                  </div>
+                </div>
+                <div class="tl-field">
+                  <div class="pl-field-label">촬영 시간</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="tlStShootTime" type="time"/>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">준비물</div>
+                <div class="st-item-list" id="tlStItemList"></div>
+                <button class="st-add-item-btn" onclick="addStItem('tl')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  항목 추가
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- 웨딩홀 정보 (웨딩홀 카테고리 선택 시) -->
         <div class="tl-field" id="tlWeddingHallSection" style="display:none">
           <div class="tl-field-label">웨딩홀 정보</div>
@@ -1048,25 +1653,6 @@
           </button>
         </div>
 
-        <!-- 예산 입력 (결혼 예산 설정 카테고리 선택 시) -->
-        <div class="tl-field" id="tlBudgetSection" style="display:none">
-          <div class="tl-field-label">예산 금액</div>
-          <div class="tl-budget-input-row">
-            <span class="tl-budget-symbol">₩</span>
-            <input class="tl-input" id="tlBudgetInput" type="text" inputmode="numeric"
-                   placeholder="0" autocomplete="off" oninput="onBudgetInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
-            <span class="tl-budget-unit">원</span>
-          </div>
-          <div class="tl-budget-display" id="tlBudgetDisplay"></div>
-          <div class="tl-budget-ref">
-            <div>
-              <div class="tl-budget-ref-label">💡 예산 관리 설정값</div>
-              <div class="tl-budget-ref-amount" id="tlBudgetRefAmount">—</div>
-            </div>
-            <button class="tl-budget-ref-apply" onclick="applyBudgetRef()">적용</button>
-          </div>
-        </div>
-
       </div>
       <div class="tl-modal-footer">
         <button class="btn-primary" onclick="saveTlItem()">저장</button>
@@ -1118,6 +1704,415 @@
           <div class="tl-field">
             <div class="tl-field-label">시간</div>
             <div class="tl-input-wrap"><input class="tl-input" id="editTime" type="time"/></div>
+          </div>
+        </div>
+
+        <!-- 예산 입력 (결혼 예산 설정 카테고리 전용) -->
+        <div class="tl-field" id="editBudgetSection" style="display:none">
+          <div class="tl-field-label">예산 금액</div>
+          <div class="tl-budget-input-row">
+            <span class="tl-budget-symbol">₩</span>
+            <input class="tl-input" id="editBudgetInput" type="text" inputmode="numeric"
+                   placeholder="0" autocomplete="off"
+                   oninput="onBudgetInput(this,'editBudgetDisplay')"
+                   style="padding-left:4px;border:none;background:transparent;"/>
+            <span class="tl-budget-unit">원</span>
+          </div>
+          <div class="tl-budget-display" id="editBudgetDisplay"></div>
+          <div class="tl-budget-ref">
+            <div>
+              <div class="tl-budget-ref-label">💡 예산 관리 설정값</div>
+              <div class="tl-budget-ref-amount" id="editBudgetRefAmount">—</div>
+            </div>
+            <button class="tl-budget-ref-apply" onclick="applyEditBudgetRef()">적용</button>
+          </div>
+        </div>
+
+        <!-- 플래너 정보 (플래너 카테고리 전용) -->
+        <div class="tl-field" id="editPlannerSection" style="display:none">
+          <div class="tl-field-label">플래너 정보</div>
+          <div class="pl-section">
+            <div>
+              <div class="pl-field-label">플래너 업체명</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="editPlName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">플래너 전체 금액</div>
+              <div class="tl-budget-input-row">
+                <span class="tl-budget-symbol">₩</span>
+                <input class="tl-input" id="editPlTotal" type="text" inputmode="numeric" placeholder="0"
+                       oninput="onPlMoneyInput(this);calcEditPlBalance()" style="padding-left:4px;border:none;background:transparent;"/>
+                <span class="tl-budget-unit">원</span>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">계약금</div>
+              <div class="tl-budget-input-row">
+                <span class="tl-budget-symbol">₩</span>
+                <input class="tl-input" id="editPlDeposit" type="text" inputmode="numeric" placeholder="0"
+                       oninput="onPlMoneyInput(this);calcEditPlBalance()" style="padding-left:4px;border:none;background:transparent;"/>
+                <span class="tl-budget-unit">원</span>
+              </div>
+            </div>
+            <div class="pl-balance-card">
+              <div>
+                <div class="pl-balance-label">잔금 (자동 계산)</div>
+                <div class="pl-balance-val" id="editPlBalance">—</div>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">잔금일</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="editPlBalanceDate" type="date"/>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">계약 항목</div>
+              <textarea class="tl-textarea" id="editPlContract" placeholder="계약 항목을 입력하세요" rows="3"></textarea>
+            </div>
+            <div>
+              <div class="pl-field-label">스튜디오 업체명</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="editPlStudio" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">드레스 업체명</div>
+              <div class="pl-dress-list">
+                <div class="pl-dress-item">
+                  <div class="pl-dress-header">
+                    <span class="pl-dress-num">업체 1</span>
+                    <input class="pl-dress-input" id="editPlDress1" type="text" placeholder="업체명을 입력하세요" maxlength="40"/>
+                    <button class="pl-final-btn" onclick="selectFinalDress('edit',1)" id="editPlDressFinal1">최종 선택</button>
+                  </div>
+                </div>
+                <div class="pl-dress-item">
+                  <div class="pl-dress-header">
+                    <span class="pl-dress-num">업체 2</span>
+                    <input class="pl-dress-input" id="editPlDress2" type="text" placeholder="업체명을 입력하세요" maxlength="40"/>
+                    <button class="pl-final-btn" onclick="selectFinalDress('edit',2)" id="editPlDressFinal2">최종 선택</button>
+                  </div>
+                </div>
+                <div class="pl-dress-item">
+                  <div class="pl-dress-header">
+                    <span class="pl-dress-num">업체 3</span>
+                    <input class="pl-dress-input" id="editPlDress3" type="text" placeholder="업체명을 입력하세요" maxlength="40"/>
+                    <button class="pl-final-btn" onclick="selectFinalDress('edit',3)" id="editPlDressFinal3">최종 선택</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">메이크업 업체명</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="editPlMakeup" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 드레스 정보 (드레스 카테고리 전용) -->
+        <div class="tl-field" id="editDressSection" style="display:none">
+          <div class="tl-field-label">드레스 정보</div>
+          <div class="pl-section">
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="editDrTabTour" onclick="toggleDrTab('edit','tour')">
+                <span class="st-tab-check"></span>드레스 투어
+              </button>
+              <button class="st-tab-btn" id="editDrTabBook" onclick="toggleDrTab('edit','book')">
+                <span class="st-tab-check"></span>드레스 예약
+              </button>
+            </div>
+            <div class="st-sub-section" id="editDrTourSection">
+              <div class="st-sub-title">👗 드레스 투어</div>
+              <div class="venue-list" id="editDrTourVendorList"></div>
+              <button class="btn-add-venue" onclick="addDrTourVendor('edit')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                업체 추가
+              </button>
+            </div>
+            <div class="st-sub-section" id="editDrBookSection">
+              <div class="st-sub-title">💍 드레스 예약</div>
+              <div>
+                <div class="pl-field-label">드레스 업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editDrBookName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">드레스 업체 위치</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editDrBookLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+              <div class="st-planner-row">
+                <span class="st-planner-label">금액 정보</span>
+                <button class="st-planner-btn" id="editDrPlannerBtn" onclick="toggleDrPlanner('edit')">플래너 계약</button>
+              </div>
+              <div class="st-book-fields" id="editDrMoneyFields">
+                <div>
+                  <div class="pl-field-label">전체 금액</div>
+                  <div class="tl-budget-input-row">
+                    <span class="tl-budget-symbol">₩</span>
+                    <input class="tl-input" id="editDrTotal" type="text" inputmode="numeric" placeholder="0"
+                           oninput="onPlMoneyInput(this);calcEditDrBalance()" style="padding-left:4px;border:none;background:transparent;"/>
+                    <span class="tl-budget-unit">원</span>
+                  </div>
+                </div>
+                <div>
+                  <div class="pl-field-label">계약금</div>
+                  <div class="tl-budget-input-row">
+                    <span class="tl-budget-symbol">₩</span>
+                    <input class="tl-input" id="editDrDeposit" type="text" inputmode="numeric" placeholder="0"
+                           oninput="onPlMoneyInput(this);calcEditDrBalance()" style="padding-left:4px;border:none;background:transparent;"/>
+                    <span class="tl-budget-unit">원</span>
+                  </div>
+                </div>
+                <div class="pl-balance-card">
+                  <div>
+                    <div class="pl-balance-label">잔금 (자동 계산)</div>
+                    <div class="pl-balance-val" id="editDrBalance">—</div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">드레스 디자인</div>
+                <div class="dr-design-list" id="editDrDesignList"></div>
+                <button class="st-add-item-btn" onclick="addDrDesign('edit')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  디자인 추가
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 메이크업 정보 (메이크업 카테고리 전용) -->
+        <div class="tl-field" id="editMakeupSection" style="display:none">
+          <div class="tl-field-label">메이크업 정보</div>
+          <div class="pl-section">
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="editMkTabCouple" onclick="toggleMkTab('edit','couple')">
+                <span class="st-tab-check"></span>신랑신부
+              </button>
+              <button class="st-tab-btn" id="editMkTabParents" onclick="toggleMkTab('edit','parents')">
+                <span class="st-tab-check"></span>혼주
+              </button>
+            </div>
+            <!-- 신랑신부 서브섹션 -->
+            <div class="st-sub-section" id="editMkCoupleSection">
+              <div class="st-sub-title">💑 신랑신부 메이크업</div>
+              <div>
+                <div class="pl-field-label">메이크업 업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editMkCoupleName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">메이크업 업체 위치</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editMkCoupleLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+              <div class="st-tab-row" style="margin-top:6px">
+                <button class="st-tab-btn" id="editMkTabPhoto" onclick="toggleMkInnerTab('edit','photo')">
+                  <span class="st-tab-check"></span>촬영 메이크업
+                </button>
+                <button class="st-tab-btn" id="editMkTabMain" onclick="toggleMkInnerTab('edit','main')">
+                  <span class="st-tab-check"></span>본식 메이크업
+                </button>
+              </div>
+              <div class="st-sub-section mk-inner-section" id="editMkPhotoSection">
+                <div class="st-sub-title">📸 촬영 메이크업</div>
+                <div>
+                  <div class="pl-field-label">메이크업 담당자</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="editMkPhotoManager" type="text" placeholder="담당자 이름" maxlength="30" autocomplete="off"/>
+                  </div>
+                </div>
+                <div class="tl-row">
+                  <div class="tl-field">
+                    <div class="pl-field-label">메이크업 일자</div>
+                    <div class="tl-input-wrap">
+                      <input class="tl-input" id="editMkPhotoDate" type="date"/>
+                    </div>
+                  </div>
+                  <div class="tl-field">
+                    <div class="pl-field-label">메이크업 시간</div>
+                    <div class="tl-input-wrap">
+                      <input class="tl-input" id="editMkPhotoTime" type="time"/>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="pl-field-label">추가 비용 목록</div>
+                  <div class="mk-cost-list" id="editMkPhotoCostList"></div>
+                  <button type="button" class="btn-add-mk-cost" onclick="addMkCost('edit','Photo')">+ 항목 추가</button>
+                </div>
+              </div>
+              <div class="st-sub-section mk-inner-section" id="editMkMainSection">
+                <div class="st-sub-title">💒 본식 메이크업</div>
+                <div>
+                  <div class="pl-field-label">메이크업 담당자</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="editMkMainManager" type="text" placeholder="담당자 이름" maxlength="30" autocomplete="off"/>
+                  </div>
+                </div>
+                <div class="tl-row">
+                  <div class="tl-field">
+                    <div class="pl-field-label">메이크업 일자</div>
+                    <div class="tl-input-wrap">
+                      <input class="tl-input" id="editMkMainDate" type="date"/>
+                    </div>
+                  </div>
+                  <div class="tl-field">
+                    <div class="pl-field-label">메이크업 시간</div>
+                    <div class="tl-input-wrap">
+                      <input class="tl-input" id="editMkMainTime" type="time"/>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="pl-field-label">추가 비용 목록</div>
+                  <div class="mk-cost-list" id="editMkMainCostList"></div>
+                  <button type="button" class="btn-add-mk-cost" onclick="addMkCost('edit','Main')">+ 항목 추가</button>
+                </div>
+              </div>
+            </div>
+            <!-- 혼주 서브섹션 -->
+            <div class="st-sub-section" id="editMkParentsSection">
+              <div class="st-sub-title">👨‍👩‍👧 혼주 메이크업</div>
+              <div>
+                <div class="pl-field-label">메이크업 업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editMkParentsName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">메이크업 업체 위치</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editMkParentsLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">메이크업 담당자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editMkParentsManager" type="text" placeholder="담당자 이름" maxlength="30" autocomplete="off"/>
+                </div>
+              </div>
+              <div class="tl-row">
+                <div class="tl-field">
+                  <div class="pl-field-label">메이크업 일자</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="editMkParentsDate" type="date"/>
+                  </div>
+                </div>
+                <div class="tl-field">
+                  <div class="pl-field-label">메이크업 시간</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="editMkParentsTime" type="time"/>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">추가 비용 목록</div>
+                <div class="mk-cost-list" id="editMkParentsCostList"></div>
+                <button type="button" class="btn-add-mk-cost" onclick="addMkCost('edit','Parents')">+ 항목 추가</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 스튜디오 정보 (스튜디오 카테고리 전용) -->
+        <div class="tl-field" id="editStudioSection" style="display:none">
+          <div class="tl-field-label">스튜디오 정보</div>
+          <div class="pl-section">
+            <div>
+              <div class="pl-field-label">스튜디오 업체명</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="editStName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+              </div>
+            </div>
+            <div>
+              <div class="pl-field-label">스튜디오 위치</div>
+              <div class="tl-input-wrap">
+                <input class="tl-input" id="editStLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+              </div>
+            </div>
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="editStTabBook" onclick="toggleStTab('edit','book')">
+                <span class="st-tab-check"></span>스튜디오 예약
+              </button>
+              <button class="st-tab-btn" id="editStTabShoot" onclick="toggleStTab('edit','shoot')">
+                <span class="st-tab-check"></span>스튜디오 촬영
+              </button>
+            </div>
+            <div class="st-sub-section" id="editStBookSection">
+              <div class="st-sub-title">📋 스튜디오 예약</div>
+              <div class="st-planner-row">
+                <span class="st-planner-label">금액 정보</span>
+                <button class="st-planner-btn" id="editStPlannerBtn" onclick="toggleStPlanner('edit')">플래너 계약</button>
+              </div>
+              <div class="st-book-fields" id="editStBookFields">
+                <div>
+                  <div class="pl-field-label">스튜디오 전체 금액</div>
+                  <div class="tl-budget-input-row">
+                    <span class="tl-budget-symbol">₩</span>
+                    <input class="tl-input" id="editStTotal" type="text" inputmode="numeric" placeholder="0"
+                           oninput="onPlMoneyInput(this);calcEditStBalance()" style="padding-left:4px;border:none;background:transparent;"/>
+                    <span class="tl-budget-unit">원</span>
+                  </div>
+                </div>
+                <div>
+                  <div class="pl-field-label">계약금</div>
+                  <div class="tl-budget-input-row">
+                    <span class="tl-budget-symbol">₩</span>
+                    <input class="tl-input" id="editStDeposit" type="text" inputmode="numeric" placeholder="0"
+                           oninput="onPlMoneyInput(this);calcEditStBalance()" style="padding-left:4px;border:none;background:transparent;"/>
+                    <span class="tl-budget-unit">원</span>
+                  </div>
+                </div>
+                <div class="pl-balance-card">
+                  <div>
+                    <div class="pl-balance-label">잔금 (자동 계산)</div>
+                    <div class="pl-balance-val" id="editStBalance">—</div>
+                  </div>
+                </div>
+                <div>
+                  <div class="pl-field-label">잔금일</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="editStBalanceDate" type="date"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="st-sub-section" id="editStShootSection">
+              <div class="st-sub-title">📷 스튜디오 촬영</div>
+              <div class="tl-row">
+                <div class="tl-field">
+                  <div class="pl-field-label">촬영 날짜</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="editStShootDate" type="date"/>
+                  </div>
+                </div>
+                <div class="tl-field">
+                  <div class="pl-field-label">촬영 시간</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="editStShootTime" type="time"/>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">준비물</div>
+                <div class="st-item-list" id="editStItemList"></div>
+                <button class="st-add-item-btn" onclick="addStItem('edit')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  항목 추가
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1239,27 +2234,6 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             할 일 추가
           </button>
-        </div>
-
-        <!-- 예산 입력 (결혼 예산 설정 카테고리 전용) -->
-        <div class="tl-field" id="editBudgetSection" style="display:none">
-          <div class="tl-field-label">예산 금액</div>
-          <div class="tl-budget-input-row">
-            <span class="tl-budget-symbol">₩</span>
-            <input class="tl-input" id="editBudgetInput" type="text" inputmode="numeric"
-                   placeholder="0" autocomplete="off"
-                   oninput="onBudgetInput(this,'editBudgetDisplay')"
-                   style="padding-left:4px;border:none;background:transparent;"/>
-            <span class="tl-budget-unit">원</span>
-          </div>
-          <div class="tl-budget-display" id="editBudgetDisplay"></div>
-          <div class="tl-budget-ref">
-            <div>
-              <div class="tl-budget-ref-label">💡 예산 관리 설정값</div>
-              <div class="tl-budget-ref-amount" id="editBudgetRefAmount">—</div>
-            </div>
-            <button class="tl-budget-ref-apply" onclick="applyEditBudgetRef()">적용</button>
-          </div>
         </div>
 
       </div>
@@ -1712,6 +2686,158 @@ function openEditModal(stageId) {
     editVenueList.innerHTML = '';
   }
 
+  // 플래너 정보 섹션 처리
+  const editPlannerSection = document.getElementById('editPlannerSection');
+  if (s.category === '플래너') {
+    editPlannerSection.style.display = '';
+    const p = s.planner || {};
+    document.getElementById('editPlName').value        = p.name        || '';
+    document.getElementById('editPlTotal').value       = p.total       ? Number(p.total).toLocaleString('ko-KR')   : '';
+    document.getElementById('editPlDeposit').value     = p.deposit     ? Number(p.deposit).toLocaleString('ko-KR') : '';
+    document.getElementById('editPlBalanceDate').value = p.balanceDate || '';
+    document.getElementById('editPlContract').value    = p.contract    || '';
+    document.getElementById('editPlStudio').value      = p.studio      || '';
+    (p.dress || ['','','']).forEach((v, i) => { const el = document.getElementById(`editPlDress${i+1}`); if (el) el.value = v; });
+    [1,2,3].forEach(n => { const b = document.getElementById(`editPlDressFinal${n}`); if (b) b.classList.toggle('selected', n === (p.dressSelected || 0)); });
+    document.getElementById('editPlMakeup').value = p.makeup || '';
+    calcEditPlBalance();
+  } else {
+    editPlannerSection.style.display = 'none';
+    ['editPlName','editPlTotal','editPlDeposit','editPlBalanceDate','editPlContract','editPlStudio','editPlDress1','editPlDress2','editPlDress3','editPlMakeup'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    [1,2,3].forEach(n => { const b = document.getElementById(`editPlDressFinal${n}`); if (b) b.classList.remove('selected'); });
+    const editPlBal = document.getElementById('editPlBalance');
+    if (editPlBal) { editPlBal.textContent = '—'; editPlBal.className = 'pl-balance-val'; }
+  }
+
+  // 스튜디오 정보 섹션 처리
+  const editStudioSection = document.getElementById('editStudioSection');
+  if (s.category === '스튜디오') {
+    editStudioSection.style.display = '';
+    const st = s.studio || {};
+    document.getElementById('editStName').value     = st.name     || '';
+    document.getElementById('editStLocation').value = st.location || '';
+    // 탭 복원
+    ['book','shoot'].forEach(t => {
+      const btn = document.getElementById(`editStTab${t === 'book' ? 'Book' : 'Shoot'}`);
+      const sec = document.getElementById(`editSt${t === 'book' ? 'Book' : 'Shoot'}Section`);
+      const active = !!(t === 'book' ? st.booking : st.shooting);
+      if (btn) btn.classList.toggle('active', active);
+      if (sec) sec.classList.toggle('show', active);
+    });
+    // 예약 데이터 복원
+    const bk = st.booking || {};
+    document.getElementById('editStTotal').value       = bk.total   ? Number(bk.total).toLocaleString('ko-KR')   : '';
+    document.getElementById('editStDeposit').value     = bk.deposit ? Number(bk.deposit).toLocaleString('ko-KR') : '';
+    document.getElementById('editStBalanceDate').value = bk.balanceDate || '';
+    const plannerActive = !!bk.plannerContract;
+    const plannerBtn = document.getElementById('editStPlannerBtn');
+    const bookFields = document.getElementById('editStBookFields');
+    if (plannerBtn) plannerBtn.classList.toggle('active', plannerActive);
+    if (bookFields) bookFields.classList.toggle('pl-off', plannerActive);
+    calcEditStBalance();
+    // 촬영 데이터 복원
+    const sh = st.shooting || {};
+    document.getElementById('editStShootDate').value = sh.shootDate || '';
+    document.getElementById('editStShootTime').value = sh.shootTime || '';
+    const itemList = document.getElementById('editStItemList');
+    itemList.innerHTML = '';
+    (sh.items || []).forEach((v, i) => itemList.appendChild(makeStItemEl('edit', i + 1, v)));
+    stItemCount['edit'] = (sh.items || []).length;
+  } else {
+    editStudioSection.style.display = 'none';
+    resetStudio('edit');
+  }
+
+  // 드레스 정보 섹션 처리
+  const editDressSection = document.getElementById('editDressSection');
+  if (s.category === '드레스') {
+    editDressSection.style.display = '';
+    const dr = s.dress || {};
+    // 탭 복원
+    ['Tour','Book'].forEach(t => {
+      const btn = document.getElementById(`editDrTab${t}`);
+      const sec = document.getElementById(`editDr${t}Section`);
+      const active = !!(t === 'Tour' ? dr.tour : dr.booking);
+      if (btn) btn.classList.toggle('active', active);
+      if (sec) sec.classList.toggle('show', active);
+    });
+    // 투어 업체 목록 복원
+    const tourVendorList = document.getElementById('editDrTourVendorList');
+    tourVendorList.innerHTML = '';
+    (Array.isArray(dr.tour) ? dr.tour : []).forEach((vd, i) => {
+      tourVendorList.appendChild(makeDrTourVendorEl('edit', i + 1, vd));
+    });
+    drTourVendorCount['edit'] = tourVendorList.querySelectorAll('.venue-card').length;
+    // 예약 데이터 복원
+    const bk = dr.booking || {};
+    document.getElementById('editDrBookName').value     = bk.name     || '';
+    document.getElementById('editDrBookLocation').value = bk.location || '';
+    const plannerActive = !!bk.plannerContract;
+    const drPlannerBtn  = document.getElementById('editDrPlannerBtn');
+    const drMoneyFields = document.getElementById('editDrMoneyFields');
+    if (drPlannerBtn)  drPlannerBtn.classList.toggle('active', plannerActive);
+    if (drMoneyFields) drMoneyFields.classList.toggle('pl-off', plannerActive);
+    document.getElementById('editDrTotal').value   = bk.total   ? Number(bk.total).toLocaleString('ko-KR')   : '';
+    document.getElementById('editDrDeposit').value = bk.deposit ? Number(bk.deposit).toLocaleString('ko-KR') : '';
+    calcEditDrBalance();
+    const designList = document.getElementById('editDrDesignList');
+    designList.innerHTML = '';
+    (bk.designs || []).forEach((d, i) => designList.appendChild(makeDrDesignEl('edit', i + 1, d)));
+    drDesignCount['edit'] = (bk.designs || []).length;
+  } else {
+    editDressSection.style.display = 'none';
+    resetDress('edit');
+  }
+
+  // 메이크업 정보 섹션 처리
+  const editMakeupSection = document.getElementById('editMakeupSection');
+  if (s.category === '메이크업') {
+    editMakeupSection.style.display = '';
+    const mk = s.makeup || {};
+    ['Couple','Parents'].forEach(t => {
+      const btn = document.getElementById(`editMkTab${t}`);
+      const sec = document.getElementById(`editMk${t}Section`);
+      const active = !!(t === 'Couple' ? mk.couple : mk.parents);
+      if (btn) btn.classList.toggle('active', active);
+      if (sec) sec.classList.toggle('show', active);
+    });
+    const couple = mk.couple || {};
+    document.getElementById('editMkCoupleName').value     = couple.name     || '';
+    document.getElementById('editMkCoupleLocation').value = couple.location || '';
+    ['Photo','Main'].forEach(t => {
+      const btn = document.getElementById(`editMkTab${t}`);
+      const sec = document.getElementById(`editMk${t}Section`);
+      const active = !!(t === 'Photo' ? couple.photo : couple.main);
+      if (btn) btn.classList.toggle('active', active);
+      if (sec) sec.classList.toggle('show', active);
+    });
+    const photo = couple.photo || {};
+    document.getElementById('editMkPhotoManager').value = photo.manager || '';
+    document.getElementById('editMkPhotoDate').value    = photo.date    || '';
+    document.getElementById('editMkPhotoTime').value    = photo.time    || '';
+    const photoList = document.getElementById('editMkPhotoCostList');
+    if (photoList) { photoList.innerHTML = ''; (photo.costs || []).forEach(c => photoList.appendChild(makeMkCostEl(c))); }
+    const main = couple.main || {};
+    document.getElementById('editMkMainManager').value = main.manager || '';
+    document.getElementById('editMkMainDate').value    = main.date    || '';
+    document.getElementById('editMkMainTime').value    = main.time    || '';
+    const mainList = document.getElementById('editMkMainCostList');
+    if (mainList) { mainList.innerHTML = ''; (main.costs || []).forEach(c => mainList.appendChild(makeMkCostEl(c))); }
+    const parents = mk.parents || {};
+    document.getElementById('editMkParentsName').value     = parents.name     || '';
+    document.getElementById('editMkParentsLocation').value = parents.location || '';
+    document.getElementById('editMkParentsManager').value  = parents.manager  || '';
+    document.getElementById('editMkParentsDate').value     = parents.date     || '';
+    document.getElementById('editMkParentsTime').value     = parents.time     || '';
+    const parentsList = document.getElementById('editMkParentsCostList');
+    if (parentsList) { parentsList.innerHTML = ''; (parents.costs || []).forEach(c => parentsList.appendChild(makeMkCostEl(c))); }
+  } else {
+    editMakeupSection.style.display = 'none';
+    resetMakeup('edit');
+  }
+
   // 색상 초기화
   document.querySelectorAll('#editColorList .tl-color-dot').forEach(d => {
     d.classList.toggle('selected', d.dataset.color === state.editingColor);
@@ -1850,6 +2976,28 @@ function saveEdit() {
   }
   if (s.category === '웨딩홀 투어') {
     s.venues = collectEditVenues();
+  }
+  if (s.category === '스튜디오') {
+    s.studio = collectStudio('edit');
+  }
+  if (s.category === '드레스') {
+    s.dress = collectDress('edit');
+  }
+  if (s.category === '메이크업') {
+    s.makeup = collectMakeup('edit');
+  }
+  if (s.category === '플래너') {
+    s.planner = {
+      name:        document.getElementById('editPlName')?.value.trim()                           || '',
+      total:       document.getElementById('editPlTotal')?.value.replace(/,/g,'')                || '',
+      deposit:     document.getElementById('editPlDeposit')?.value.replace(/,/g,'')              || '',
+      balanceDate: document.getElementById('editPlBalanceDate')?.value                            || '',
+      contract:    document.getElementById('editPlContract')?.value.trim()                        || '',
+      studio:      document.getElementById('editPlStudio')?.value.trim()                          || '',
+      dress:       [1,2,3].map(n => document.getElementById(`editPlDress${n}`)?.value.trim() || ''),
+      dressSelected: (() => { for(let n=1;n<=3;n++) { if(document.getElementById(`editPlDressFinal${n}`)?.classList.contains('selected')) return n; } return 0; })(),
+      makeup:      document.getElementById('editPlMakeup')?.value.trim()                          || '',
+    };
   }
 
   // 할 일 목록 수집
@@ -2240,6 +3388,574 @@ function collectEditVenues() {
 }
 
 /* ════════════════════════════════════
+   스튜디오 섹션 유틸
+════════════════════════════════════ */
+const stItemCount = { tl: 0, edit: 0 };
+
+function toggleStTab(prefix, type) {
+  const capType = type === 'book' ? 'Book' : 'Shoot';
+  const btn = document.getElementById(`${prefix}StTab${capType}`);
+  const sec = document.getElementById(`${prefix}St${capType}Section`);
+  const isActive = btn.classList.toggle('active');
+  sec.classList.toggle('show', isActive);
+}
+
+function toggleStPlanner(prefix) {
+  const btn    = document.getElementById(`${prefix}StPlannerBtn`);
+  const fields = document.getElementById(`${prefix}StBookFields`);
+  const active = btn.classList.toggle('active');
+  fields.classList.toggle('pl-off', active);
+}
+
+function calcTlStBalance() {
+  const total   = Number((document.getElementById('tlStTotal')?.value   || '0').replace(/,/g,'')) || 0;
+  const deposit = Number((document.getElementById('tlStDeposit')?.value || '0').replace(/,/g,'')) || 0;
+  const balance = total - deposit;
+  const el = document.getElementById('tlStBalance');
+  if (!el) return;
+  if (total === 0 && deposit === 0) { el.textContent = '—'; el.className = 'pl-balance-val'; return; }
+  el.textContent = (balance < 0 ? '-' : '') + formatWon(Math.abs(balance));
+  el.className   = 'pl-balance-val' + (balance < 0 ? ' negative' : '');
+}
+
+function calcEditStBalance() {
+  const total   = Number((document.getElementById('editStTotal')?.value   || '0').replace(/,/g,'')) || 0;
+  const deposit = Number((document.getElementById('editStDeposit')?.value || '0').replace(/,/g,'')) || 0;
+  const balance = total - deposit;
+  const el = document.getElementById('editStBalance');
+  if (!el) return;
+  if (total === 0 && deposit === 0) { el.textContent = '—'; el.className = 'pl-balance-val'; return; }
+  el.textContent = (balance < 0 ? '-' : '') + formatWon(Math.abs(balance));
+  el.className   = 'pl-balance-val' + (balance < 0 ? ' negative' : '');
+}
+
+function makeStItemEl(prefix, n, value) {
+  const div = document.createElement('div');
+  div.className = 'st-item-row';
+  div.id = `${prefix}StItem_${n}`;
+  div.innerHTML =
+    `<span class="st-item-num">항목 ${n}</span>` +
+    `<div class="tl-input-wrap" style="flex:1"><input class="tl-input" id="${prefix}StItemInput_${n}" type="text" placeholder="준비물을 입력하세요" maxlength="40" value="${(value||'').replace(/"/g,'&quot;')}" autocomplete="off"/></div>` +
+    `<button class="st-item-del" onclick="removeStItem('${prefix}',${n})" aria-label="삭제"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  return div;
+}
+
+function addStItem(prefix) {
+  stItemCount[prefix]++;
+  const list = document.getElementById(`${prefix}StItemList`);
+  if (list) list.appendChild(makeStItemEl(prefix, stItemCount[prefix], ''));
+}
+
+function removeStItem(prefix, n) {
+  const el = document.getElementById(`${prefix}StItem_${n}`);
+  if (el) el.remove();
+  // 남은 항목 번호 재정렬
+  const list = document.getElementById(`${prefix}StItemList`);
+  if (!list) return;
+  list.querySelectorAll('.st-item-row').forEach((row, i) => {
+    row.querySelector('.st-item-num').textContent = `항목 ${i + 1}`;
+  });
+}
+
+/* ════════════════════════════════════
+   드레스 섹션 유틸
+════════════════════════════════════ */
+const drDesignCount      = { tl: 0, edit: 0 };
+const drTourVendorCount  = { tl: 0, edit: 0 };
+
+function toggleDrTab(prefix, type) {
+  const cap = type === 'tour' ? 'Tour' : 'Book';
+  const btn = document.getElementById(`${prefix}DrTab${cap}`);
+  const sec = document.getElementById(`${prefix}Dr${cap}Section`);
+  if (!btn || !sec) return;
+  btn.classList.toggle('active');
+  sec.classList.toggle('show');
+}
+
+function toggleDrPlanner(prefix) {
+  const btn    = document.getElementById(`${prefix}DrPlannerBtn`);
+  const fields = document.getElementById(`${prefix}DrMoneyFields`);
+  if (!btn || !fields) return;
+  btn.classList.toggle('active');
+  fields.classList.toggle('pl-off');
+}
+
+function calcTlDrBalance() {
+  const total   = Number((document.getElementById('tlDrTotal')?.value   || '0').replace(/,/g,'')) || 0;
+  const deposit = Number((document.getElementById('tlDrDeposit')?.value || '0').replace(/,/g,'')) || 0;
+  const el = document.getElementById('tlDrBalance');
+  if (!el) return;
+  if (total === 0 && deposit === 0) { el.textContent = '—'; el.className = 'pl-balance-val'; return; }
+  const balance = total - deposit;
+  el.textContent = formatWon(balance);
+  el.className = 'pl-balance-val' + (balance < 0 ? ' negative' : '');
+}
+
+function calcEditDrBalance() {
+  const total   = Number((document.getElementById('editDrTotal')?.value   || '0').replace(/,/g,'')) || 0;
+  const deposit = Number((document.getElementById('editDrDeposit')?.value || '0').replace(/,/g,'')) || 0;
+  const el = document.getElementById('editDrBalance');
+  if (!el) return;
+  if (total === 0 && deposit === 0) { el.textContent = '—'; el.className = 'pl-balance-val'; return; }
+  const balance = total - deposit;
+  el.textContent = formatWon(balance);
+  el.className = 'pl-balance-val' + (balance < 0 ? ' negative' : '');
+}
+
+function onDrFileChange(input) {
+  const nameSpan = input.closest('.dr-file-label')?.querySelector('.dr-file-name');
+  if (nameSpan) nameSpan.textContent = input.files[0]?.name || '선택된 파일 없음';
+}
+
+function onDrTourVendorFileChange(input) {
+  const nameSpan = input.closest('.dr-file-label')?.querySelector('.dr-tv-file-name');
+  if (nameSpan) nameSpan.textContent = input.files[0]?.name || '선택된 파일 없음';
+}
+
+function makeDrTourVendorEl(prefix, n, data) {
+  const d = data || {};
+  const el = document.createElement('div');
+  el.className = 'venue-card expanded';
+  el.id = `${prefix}DrTourV_${n}`;
+  el.innerHTML = `
+    <div class="venue-card-header" onclick="toggleDrTourVendor('${prefix}',${n})">
+      <span class="venue-num">${n}</span>
+      <div class="venue-header-info">
+        <span class="venue-title-text dr-tv-h-name">업체명을 입력하세요</span>
+        <span class="venue-visit-text dr-tv-h-date">투어 예정일 미정</span>
+      </div>
+      ${_svgChev}
+      <button class="tl-todo-del" onclick="removeDrTourVendor('${prefix}',${n},event)" aria-label="삭제">${_svgX}</button>
+    </div>
+    <div class="venue-card-body">
+      <div class="venue-field">
+        <div class="venue-field-label">드레스 업체명</div>
+        <div class="venue-input-wrap">
+          <input class="venue-input dr-tv-name" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"
+                 oninput="updateDrTourVendorHeader(this)"/>
+        </div>
+      </div>
+      <div class="venue-field">
+        <div class="venue-field-label">드레스 업체 위치</div>
+        <div class="venue-input-wrap">
+          <input class="venue-input dr-tv-loc" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+        </div>
+      </div>
+      <div class="venue-field">
+        <div class="venue-field-label">드레스 투어 예정일</div>
+        <div class="venue-input-wrap">
+          <input class="venue-input dr-tv-date" type="date" oninput="updateDrTourVendorHeader(this)"/>
+        </div>
+      </div>
+      <div class="venue-field">
+        <div class="venue-field-label">피팅 비용</div>
+        <div class="venue-input-wrap">
+          <span class="tl-budget-symbol" style="font-size:13px">₩</span>
+          <input class="venue-input dr-tv-fit" type="text" inputmode="numeric" placeholder="0"
+                 oninput="onPlMoneyInput(this)" style="padding-left:2px"/>
+          <span class="tl-budget-unit" style="font-size:11px">원</span>
+        </div>
+      </div>
+      <div class="venue-field">
+        <div class="venue-field-label">착용 드레스 목록</div>
+        <div class="st-item-list dr-tv-dress-list" data-count="0"></div>
+        <button class="st-add-item-btn" onclick="addDrTourDress(this.previousElementSibling)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          드레스 추가
+        </button>
+      </div>
+      <div class="venue-field">
+        <div class="venue-field-label">첨부 파일</div>
+        <label class="dr-file-label">
+          <span class="dr-file-btn">파일 선택</span>
+          <span class="dr-file-name dr-tv-file-name">선택된 파일 없음</span>
+          <input type="file" style="display:none" onchange="onDrTourVendorFileChange(this)"/>
+        </label>
+      </div>
+    </div>`;
+  // 데이터 채우기
+  if (d.name) {
+    el.querySelector('.dr-tv-name').value         = d.name;
+    el.querySelector('.dr-tv-h-name').textContent = d.name;
+  }
+  if (d.location)    el.querySelector('.dr-tv-loc').value  = d.location;
+  if (d.tourDate) {
+    el.querySelector('.dr-tv-date').value          = d.tourDate;
+    el.querySelector('.dr-tv-h-date').textContent  = `투어 예정 ${d.tourDate}`;
+  }
+  if (d.fittingCost) el.querySelector('.dr-tv-fit').value  = Number(d.fittingCost).toLocaleString('ko-KR');
+  if (d.fileName)    el.querySelector('.dr-tv-file-name').textContent = d.fileName;
+  const dressList = el.querySelector('.dr-tv-dress-list');
+  (d.items || []).forEach((v, i) => {
+    const row = document.createElement('div');
+    row.className = 'st-item-row';
+    row.innerHTML = `<span class="st-item-num">${i+1}</span><input class="tl-input" type="text" placeholder="드레스 이름 / 스타일" value="${(v||'').replace(/"/g,'&quot;')}"/><button class="st-item-del" onclick="removeDrTourDress(this)" title="삭제">×</button>`;
+    dressList.appendChild(row);
+  });
+  dressList.dataset.count = (d.items || []).length;
+  return el;
+}
+
+function addDrTourVendor(prefix) {
+  drTourVendorCount[prefix]++;
+  const list = document.getElementById(`${prefix}DrTourVendorList`);
+  if (!list) return;
+  const el = makeDrTourVendorEl(prefix, drTourVendorCount[prefix], null);
+  list.appendChild(el);
+  requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+}
+
+function removeDrTourVendor(prefix, n, e) {
+  e?.stopPropagation();
+  document.getElementById(`${prefix}DrTourV_${n}`)?.remove();
+  const list = document.getElementById(`${prefix}DrTourVendorList`);
+  if (!list) return;
+  list.querySelectorAll('.venue-card').forEach((card, i) => {
+    card.querySelector('.venue-num').textContent = i + 1;
+  });
+  drTourVendorCount[prefix] = list.querySelectorAll('.venue-card').length;
+}
+
+function toggleDrTourVendor(prefix, n) {
+  document.getElementById(`${prefix}DrTourV_${n}`)?.classList.toggle('expanded');
+}
+
+function updateDrTourVendorHeader(input) {
+  const card    = input.closest('.venue-card');
+  if (!card) return;
+  const name    = card.querySelector('.dr-tv-name')?.value.trim();
+  const date    = card.querySelector('.dr-tv-date')?.value;
+  const nameEl  = card.querySelector('.dr-tv-h-name');
+  const dateEl  = card.querySelector('.dr-tv-h-date');
+  if (nameEl) nameEl.textContent = name || '업체명을 입력하세요';
+  if (dateEl) dateEl.textContent = date ? `투어 예정 ${date}` : '투어 예정일 미정';
+}
+
+function addDrTourDress(listEl) {
+  if (!listEl) return;
+  const cnt = (parseInt(listEl.dataset.count) || 0) + 1;
+  listEl.dataset.count = cnt;
+  const row = document.createElement('div');
+  row.className = 'st-item-row';
+  row.innerHTML = `<span class="st-item-num">${cnt}</span><input class="tl-input" type="text" placeholder="드레스 이름 / 스타일"/><button class="st-item-del" onclick="removeDrTourDress(this)" title="삭제">×</button>`;
+  listEl.appendChild(row);
+}
+
+function removeDrTourDress(btn) {
+  const list = btn.closest('.dr-tv-dress-list');
+  btn.closest('.st-item-row')?.remove();
+  if (!list) return;
+  list.querySelectorAll('.st-item-row').forEach((row, idx) => {
+    const numEl = row.querySelector('.st-item-num');
+    if (numEl) numEl.textContent = idx + 1;
+  });
+  list.dataset.count = list.querySelectorAll('.st-item-row').length;
+}
+
+function makeDrDesignEl(prefix, n, data) {
+  const d = data || {};
+  const div = document.createElement('div');
+  div.className = 'dr-design-item';
+  div.innerHTML = `
+    <div class="dr-design-header">
+      <span class="dr-design-num">디자인 ${n}</span>
+      <button class="dr-design-del" onclick="removeDrDesign('${prefix}',this)" title="삭제">×</button>
+    </div>
+    <div>
+      <div class="pl-field-label">설명</div>
+      <div class="tl-input-wrap">
+        <input class="tl-input dr-desc" type="text" placeholder="디자인 설명을 입력하세요" maxlength="100" value="${(d.desc||'').replace(/"/g,'&quot;')}"/>
+      </div>
+    </div>
+    <div>
+      <div class="pl-field-label">첨부 파일</div>
+      <label class="dr-file-label">
+        <span class="dr-file-btn">파일 선택</span>
+        <span class="dr-file-name">${d.fileName || '선택된 파일 없음'}</span>
+        <input type="file" style="display:none" onchange="onDrFileChange(this)"/>
+      </label>
+    </div>`;
+  return div;
+}
+
+function addDrDesign(prefix) {
+  drDesignCount[prefix]++;
+  const list = document.getElementById(`${prefix}DrDesignList`);
+  if (list) list.appendChild(makeDrDesignEl(prefix, drDesignCount[prefix], null));
+}
+
+function removeDrDesign(prefix, btn) {
+  btn.closest('.dr-design-item')?.remove();
+  const list = document.getElementById(`${prefix}DrDesignList`);
+  if (!list) return;
+  list.querySelectorAll('.dr-design-item').forEach((item, idx) => {
+    const numEl = item.querySelector('.dr-design-num');
+    if (numEl) numEl.textContent = `디자인 ${idx + 1}`;
+  });
+  drDesignCount[prefix] = list.querySelectorAll('.dr-design-item').length;
+}
+
+function collectDress(prefix) {
+  const tourActive    = document.getElementById(`${prefix}DrTabTour`)?.classList.contains('active');
+  const bookingActive = document.getElementById(`${prefix}DrTabBook`)?.classList.contains('active');
+  // 투어 업체 목록 수집
+  const tourVendors = [];
+  document.getElementById(`${prefix}DrTourVendorList`)?.querySelectorAll('.venue-card').forEach(card => {
+    const items = [];
+    card.querySelectorAll('.dr-tv-dress-list .tl-input').forEach(inp => {
+      const v = inp.value.trim(); if (v) items.push(v);
+    });
+    const rawFile = card.querySelector('.dr-tv-file-name')?.textContent.trim() || '';
+    tourVendors.push({
+      name:        card.querySelector('.dr-tv-name')?.value.trim()             || '',
+      location:    card.querySelector('.dr-tv-loc')?.value.trim()              || '',
+      tourDate:    card.querySelector('.dr-tv-date')?.value                    || '',
+      fittingCost: card.querySelector('.dr-tv-fit')?.value.replace(/,/g,'')   || '',
+      items,
+      fileName:    rawFile === '선택된 파일 없음' ? '' : rawFile,
+    });
+  });
+  // 예약 디자인 수집
+  const designs = [];
+  document.getElementById(`${prefix}DrDesignList`)?.querySelectorAll('.dr-design-item').forEach(item => {
+    const desc    = item.querySelector('.dr-desc')?.value.trim() || '';
+    const rawName = item.querySelector('.dr-file-name')?.textContent.trim() || '';
+    designs.push({ desc, fileName: rawName === '선택된 파일 없음' ? '' : rawName });
+  });
+  return {
+    tour: tourActive ? tourVendors : [],
+    booking: bookingActive ? {
+      name:            document.getElementById(`${prefix}DrBookName`)?.value.trim()        || '',
+      location:        document.getElementById(`${prefix}DrBookLocation`)?.value.trim()    || '',
+      plannerContract: document.getElementById(`${prefix}DrPlannerBtn`)?.classList.contains('active'),
+      total:           document.getElementById(`${prefix}DrTotal`)?.value.replace(/,/g,'')   || '',
+      deposit:         document.getElementById(`${prefix}DrDeposit`)?.value.replace(/,/g,'') || '',
+      designs,
+    } : null,
+  };
+}
+
+function resetDress(prefix) {
+  ['Tour','Book'].forEach(t => {
+    const btn = document.getElementById(`${prefix}DrTab${t}`);
+    const sec = document.getElementById(`${prefix}Dr${t}Section`);
+    if (btn) btn.classList.remove('active');
+    if (sec) sec.classList.remove('show');
+  });
+  ['BookName','BookLocation','Total','Deposit'].forEach(f => {
+    const el = document.getElementById(`${prefix}Dr${f}`); if (el) el.value = '';
+  });
+  const tourVendorList = document.getElementById(`${prefix}DrTourVendorList`);
+  if (tourVendorList) tourVendorList.innerHTML = '';
+  drTourVendorCount[prefix] = 0;
+  const plannerBtn  = document.getElementById(`${prefix}DrPlannerBtn`);
+  const moneyFields = document.getElementById(`${prefix}DrMoneyFields`);
+  if (plannerBtn)  plannerBtn.classList.remove('active');
+  if (moneyFields) moneyFields.classList.remove('pl-off');
+  const bal = document.getElementById(`${prefix}DrBalance`);
+  if (bal) { bal.textContent = '—'; bal.className = 'pl-balance-val'; }
+  const designList = document.getElementById(`${prefix}DrDesignList`);
+  if (designList) designList.innerHTML = '';
+  drDesignCount[prefix] = 0;
+}
+
+/* ════════════════════════════════════
+   메이크업 섹션 유틸
+════════════════════════════════════ */
+function makeMkCostEl(data) {
+  const div = document.createElement('div');
+  div.className = 'mk-cost-item';
+  div.innerHTML = `
+    <div class="mk-cost-top">
+      <span class="mk-cost-dot"></span>
+      <input class="tl-input mk-cost-item-name" type="text" placeholder="항목명 (예: 가발, 헤어)" maxlength="40" autocomplete="off" value="${(data?.item || '').replace(/"/g,'&quot;')}"/>
+      <button type="button" class="mk-cost-del" onclick="removeMkCost(this)">✕</button>
+    </div>
+    <div class="mk-cost-bottom">
+      <span class="mk-cost-symbol">₩</span>
+      <input class="tl-input mk-cost-item-cost" type="text" inputmode="numeric" placeholder="0"
+             oninput="onPlMoneyInput(this)"
+             value="${data?.cost ? Number(data.cost).toLocaleString('ko-KR') : ''}"/>
+      <span class="mk-cost-unit">원</span>
+    </div>
+  `;
+  return div;
+}
+function addMkCost(prefix, section) {
+  const list = document.getElementById(`${prefix}Mk${section}CostList`);
+  if (list) list.appendChild(makeMkCostEl(null));
+}
+function removeMkCost(btn) {
+  btn.closest('.mk-cost-item').remove();
+}
+function collectMkCosts(listId) {
+  const list = document.getElementById(listId);
+  if (!list) return [];
+  return Array.from(list.querySelectorAll('.mk-cost-item')).map(el => ({
+    item: el.querySelector('.mk-cost-item-name')?.value.trim() || '',
+    cost: el.querySelector('.mk-cost-item-cost')?.value.replace(/,/g,'') || '',
+  })).filter(c => c.item || c.cost);
+}
+
+function toggleMkTab(prefix, type) {
+  const cap = type === 'couple' ? 'Couple' : 'Parents';
+  const btn = document.getElementById(`${prefix}MkTab${cap}`);
+  const sec = document.getElementById(`${prefix}Mk${cap}Section`);
+  if (!btn || !sec) return;
+  btn.classList.toggle('active');
+  sec.classList.toggle('show');
+}
+
+function toggleMkInnerTab(prefix, type) {
+  const cap = type === 'photo' ? 'Photo' : 'Main';
+  const btn = document.getElementById(`${prefix}MkTab${cap}`);
+  const sec = document.getElementById(`${prefix}Mk${cap}Section`);
+  if (!btn || !sec) return;
+  btn.classList.toggle('active');
+  sec.classList.toggle('show');
+}
+
+function collectMakeup(prefix) {
+  const coupleActive  = document.getElementById(`${prefix}MkTabCouple`)?.classList.contains('active');
+  const parentsActive = document.getElementById(`${prefix}MkTabParents`)?.classList.contains('active');
+  const photoActive   = document.getElementById(`${prefix}MkTabPhoto`)?.classList.contains('active');
+  const mainActive    = document.getElementById(`${prefix}MkTabMain`)?.classList.contains('active');
+  return {
+    couple: coupleActive ? {
+      name:     document.getElementById(`${prefix}MkCoupleName`)?.value.trim()     || '',
+      location: document.getElementById(`${prefix}MkCoupleLocation`)?.value.trim() || '',
+      photo: photoActive ? {
+        manager: document.getElementById(`${prefix}MkPhotoManager`)?.value.trim()            || '',
+        date:    document.getElementById(`${prefix}MkPhotoDate`)?.value                      || '',
+        time:    document.getElementById(`${prefix}MkPhotoTime`)?.value || '',
+        costs:   collectMkCosts(`${prefix}MkPhotoCostList`),
+      } : null,
+      main: mainActive ? {
+        manager: document.getElementById(`${prefix}MkMainManager`)?.value.trim() || '',
+        date:    document.getElementById(`${prefix}MkMainDate`)?.value            || '',
+        time:    document.getElementById(`${prefix}MkMainTime`)?.value            || '',
+        costs:   collectMkCosts(`${prefix}MkMainCostList`),
+      } : null,
+    } : null,
+    parents: parentsActive ? {
+      name:     document.getElementById(`${prefix}MkParentsName`)?.value.trim()     || '',
+      location: document.getElementById(`${prefix}MkParentsLocation`)?.value.trim() || '',
+      manager:  document.getElementById(`${prefix}MkParentsManager`)?.value.trim()  || '',
+      date:     document.getElementById(`${prefix}MkParentsDate`)?.value            || '',
+      time:     document.getElementById(`${prefix}MkParentsTime`)?.value            || '',
+      costs:    collectMkCosts(`${prefix}MkParentsCostList`),
+    } : null,
+  };
+}
+
+function resetMakeup(prefix) {
+  ['Couple','Parents'].forEach(t => {
+    const btn = document.getElementById(`${prefix}MkTab${t}`);
+    const sec = document.getElementById(`${prefix}Mk${t}Section`);
+    if (btn) btn.classList.remove('active');
+    if (sec) sec.classList.remove('show');
+  });
+  ['Photo','Main'].forEach(t => {
+    const btn = document.getElementById(`${prefix}MkTab${t}`);
+    const sec = document.getElementById(`${prefix}Mk${t}Section`);
+    if (btn) btn.classList.remove('active');
+    if (sec) sec.classList.remove('show');
+  });
+  ['CoupleName','CoupleLocation','PhotoManager','PhotoDate','PhotoTime',
+   'MainManager','MainDate','MainTime',
+   'ParentsName','ParentsLocation','ParentsManager','ParentsDate','ParentsTime'].forEach(f => {
+    const el = document.getElementById(`${prefix}Mk${f}`); if (el) el.value = '';
+  });
+  ['Photo','Main','Parents'].forEach(s => {
+    const list = document.getElementById(`${prefix}Mk${s}CostList`);
+    if (list) list.innerHTML = '';
+  });
+}
+
+function collectStudio(prefix) {
+  const bookActive  = document.getElementById(`${prefix}StTabBook`)?.classList.contains('active');
+  const shootActive = document.getElementById(`${prefix}StTabShoot`)?.classList.contains('active');
+  const plannerOn   = document.getElementById(`${prefix}StPlannerBtn`)?.classList.contains('active');
+  const items = [];
+  document.getElementById(`${prefix}StItemList`)?.querySelectorAll('.tl-input').forEach(inp => {
+    const v = inp.value.trim(); if (v) items.push(v);
+  });
+  return {
+    name:     document.getElementById(`${prefix}StName`)?.value.trim()     || '',
+    location: document.getElementById(`${prefix}StLocation`)?.value.trim() || '',
+    booking: bookActive ? {
+      plannerContract: plannerOn,
+      total:       document.getElementById(`${prefix}StTotal`)?.value.replace(/,/g,'')       || '',
+      deposit:     document.getElementById(`${prefix}StDeposit`)?.value.replace(/,/g,'')     || '',
+      balanceDate: document.getElementById(`${prefix}StBalanceDate`)?.value                  || '',
+    } : null,
+    shooting: shootActive ? {
+      shootDate: document.getElementById(`${prefix}StShootDate`)?.value || '',
+      shootTime: document.getElementById(`${prefix}StShootTime`)?.value || '',
+      items,
+    } : null,
+  };
+}
+
+function resetStudio(prefix) {
+  ['Name','Location','Total','Deposit','BalanceDate','ShootDate','ShootTime'].forEach(f => {
+    const el = document.getElementById(`${prefix}St${f}`); if (el) el.value = '';
+  });
+  ['Book','Shoot'].forEach(t => {
+    const btn = document.getElementById(`${prefix}StTab${t}`);
+    const sec = document.getElementById(`${prefix}St${t}Section`);
+    if (btn) btn.classList.remove('active');
+    if (sec) sec.classList.remove('show');
+  });
+  const plannerBtn = document.getElementById(`${prefix}StPlannerBtn`);
+  const bookFields = document.getElementById(`${prefix}StBookFields`);
+  if (plannerBtn) plannerBtn.classList.remove('active');
+  if (bookFields) bookFields.classList.remove('pl-off');
+  const bal = document.getElementById(`${prefix}StBalance`);
+  if (bal) { bal.textContent = '—'; bal.className = 'pl-balance-val'; }
+  const itemList = document.getElementById(`${prefix}StItemList`);
+  if (itemList) itemList.innerHTML = '';
+  stItemCount[prefix] = 0;
+}
+
+/* ════════════════════════════════════
+   플래너 섹션 유틸
+════════════════════════════════════ */
+function onPlMoneyInput(el) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value = raw ? Number(raw).toLocaleString('ko-KR') : '';
+}
+
+function calcTlPlBalance() {
+  const total   = Number((document.getElementById('tlPlTotal')?.value   || '0').replace(/,/g,'')) || 0;
+  const deposit = Number((document.getElementById('tlPlDeposit')?.value || '0').replace(/,/g,'')) || 0;
+  const balance = total - deposit;
+  const el = document.getElementById('tlPlBalance');
+  if (!el) return;
+  if (total === 0 && deposit === 0) { el.textContent = '—'; el.className = 'pl-balance-val'; return; }
+  el.textContent = (balance < 0 ? '-' : '') + formatWon(Math.abs(balance));
+  el.className   = 'pl-balance-val' + (balance < 0 ? ' negative' : '');
+}
+
+function calcEditPlBalance() {
+  const total   = Number((document.getElementById('editPlTotal')?.value   || '0').replace(/,/g,'')) || 0;
+  const deposit = Number((document.getElementById('editPlDeposit')?.value || '0').replace(/,/g,'')) || 0;
+  const balance = total - deposit;
+  const el = document.getElementById('editPlBalance');
+  if (!el) return;
+  if (total === 0 && deposit === 0) { el.textContent = '—'; el.className = 'pl-balance-val'; return; }
+  el.textContent = (balance < 0 ? '-' : '') + formatWon(Math.abs(balance));
+  el.className   = 'pl-balance-val' + (balance < 0 ? ' negative' : '');
+}
+
+function selectFinalDress(prefix, num) {
+  [1, 2, 3].forEach(n => {
+    const btn = document.getElementById(`${prefix}PlDressFinal${n}`);
+    if (btn) btn.classList.toggle('selected', n === num);
+  });
+}
+
+/* ════════════════════════════════════
    웨딩홀 정보 섹션 유틸
 ════════════════════════════════════ */
 function onWhMoneyInput(el) {
@@ -2406,6 +4122,27 @@ function openTlModal() {
   document.getElementById('tlBudgetDisplay').textContent = '';
   document.getElementById('tlBudgetRefAmount').textContent = formatWon(BUDGET_MGMT.total) || '—';
 
+  // 플래너 섹션 초기화
+  document.getElementById('tlPlannerSection').style.display = 'none';
+  ['tlPlName','tlPlTotal','tlPlDeposit','tlPlBalanceDate','tlPlContract','tlPlStudio','tlPlDress1','tlPlDress2','tlPlDress3','tlPlMakeup'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  [1,2,3].forEach(n => { const b = document.getElementById(`tlPlDressFinal${n}`); if (b) b.classList.remove('selected'); });
+  const tlPlBal = document.getElementById('tlPlBalance');
+  if (tlPlBal) { tlPlBal.textContent = '—'; tlPlBal.className = 'pl-balance-val'; }
+
+  // 스튜디오 섹션 초기화
+  document.getElementById('tlStudioSection').style.display = 'none';
+  resetStudio('tl');
+
+  // 드레스 섹션 초기화
+  document.getElementById('tlDressSection').style.display = 'none';
+  resetDress('tl');
+
+  // 메이크업 섹션 초기화
+  document.getElementById('tlMakeupSection').style.display = 'none';
+  resetMakeup('tl');
+
   // 카테고리 커스텀 셀렉트 생성
   const triggerEl = document.getElementById('tlCategoryTrigger');
   const valEl     = document.getElementById('tlCategoryValue');
@@ -2449,6 +4186,22 @@ function onCategoryChange(cat) {
       state.venueCount = 0;
     }
   }
+
+  // 플래너 카테고리 선택 시 플래너 정보 섹션 토글
+  const plannerSection = document.getElementById('tlPlannerSection');
+  if (plannerSection) plannerSection.style.display = (cat === '플래너') ? '' : 'none';
+
+  // 스튜디오 카테고리 선택 시 스튜디오 정보 섹션 토글
+  const studioSection = document.getElementById('tlStudioSection');
+  if (studioSection) studioSection.style.display = (cat === '스튜디오') ? '' : 'none';
+
+  // 드레스 카테고리 선택 시 드레스 정보 섹션 토글
+  const dressSection = document.getElementById('tlDressSection');
+  if (dressSection) dressSection.style.display = (cat === '드레스') ? '' : 'none';
+
+  // 메이크업 카테고리 선택 시 메이크업 정보 섹션 토글
+  const makeupSection = document.getElementById('tlMakeupSection');
+  if (makeupSection) makeupSection.style.display = (cat === '메이크업') ? '' : 'none';
 
   // 이미 있는 할 일 아이템의 서브카테고리 옵션 갱신
   document.querySelectorAll('[data-todo-cs]').forEach(triggerEl => {
@@ -2582,6 +4335,20 @@ function saveTlItem() {
       budget: category === '결혼 예산 설정'
         ? (document.getElementById('tlBudgetInput').value.replace(/,/g, '') || '')
         : '',
+      studio: category === '스튜디오' ? collectStudio('tl') : null,
+      dress:  category === '드레스'   ? collectDress('tl')  : null,
+      makeup: category === '메이크업' ? collectMakeup('tl') : null,
+      planner: category === '플래너' ? {
+        name:        document.getElementById('tlPlName')?.value.trim()                          || '',
+        total:       document.getElementById('tlPlTotal')?.value.replace(/,/g,'')               || '',
+        deposit:     document.getElementById('tlPlDeposit')?.value.replace(/,/g,'')             || '',
+        balanceDate: document.getElementById('tlPlBalanceDate')?.value                           || '',
+        contract:    document.getElementById('tlPlContract')?.value.trim()                       || '',
+        studio:      document.getElementById('tlPlStudio')?.value.trim()                         || '',
+        dress:       [1,2,3].map(n => document.getElementById(`tlPlDress${n}`)?.value.trim() || ''),
+        dressSelected: (() => { for(let n=1;n<=3;n++) { if(document.getElementById(`tlPlDressFinal${n}`)?.classList.contains('selected')) return n; } return 0; })(),
+        makeup:      document.getElementById('tlPlMakeup')?.value.trim()                         || '',
+      } : null,
     };
     if (lastIdx >= 0) tab.stages.splice(lastIdx + 1, 0, newStage);
     else              tab.stages.push(newStage);
