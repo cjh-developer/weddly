@@ -1260,6 +1260,58 @@
     .phone-wrapper.dark .btn-add-flight,
     .phone-wrapper.dark .btn-add-sched { color: #E8C07A; border-color: rgba(212,169,106,0.25); background: rgba(212,169,106,0.04); }
 
+    /* ── 신혼집 섹션 ── */
+    .nh-type-tabs { display: flex; gap: 6px; margin-top: 2px; }
+    .nh-type-tab {
+      flex: 1; padding: 8px 0;
+      border: 1.5px solid rgba(212,169,106,0.35); border-radius: 8px;
+      background: transparent; color: #C49050;
+      font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .nh-type-tab.active { background: rgba(212,169,106,0.15); border-color: #D4A96A; color: #9a6a20; }
+    .nh-type-fields { display: flex; flex-direction: column; gap: 8px; }
+    .nh-toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 8px; border-bottom: 1px solid #f0e8d8;
+    }
+    .nh-toggle-btn {
+      padding: 4px 12px;
+      border: 1.5px solid #e0e0e0; border-radius: 20px;
+      background: #f8f8f8; color: #999;
+      font-size: 11px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .nh-toggle-btn.active { border-color: #D4A96A; background: #fff8ef; color: #C49050; }
+    .nh-amount-row { display: flex; gap: 6px; align-items: center; }
+    .nh-amount-row .tl-budget-input-row { flex: 1; min-width: 0; }
+    .nh-status-btn {
+      flex-shrink: 0; padding: 0 11px; height: 42px;
+      border: 1.5px solid #e0e0e0; border-radius: 10px;
+      background: #f8f8f8; color: #bbb;
+      font-size: 11px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: all 0.18s; white-space: nowrap;
+    }
+    .nh-status-btn.done {
+      border-color: #6BBD6E; background: #f0faf0; color: #4a9e4e;
+    }
+    .tl-budget-input-row.locked { background: #f5f5f5; border-color: #e8e8e8; }
+    .tl-budget-input-row.locked .tl-input { color: #aaa; cursor: not-allowed; }
+    .tl-budget-input-row.locked .tl-budget-symbol,
+    .tl-budget-input-row.locked .tl-budget-unit { color: #ccc; }
+    /* 다크모드 */
+    .phone-wrapper.dark .nh-type-tab { border-color: rgba(212,169,106,0.2); color: #C49050; }
+    .phone-wrapper.dark .nh-type-tab.active { background: rgba(212,169,106,0.1); border-color: #C49050; color: #E8C07A; }
+    .phone-wrapper.dark .nh-toggle-row { border-bottom-color: #3a2e1a; }
+    .phone-wrapper.dark .nh-toggle-btn { background: #2a2218; border-color: #3a3020; color: #555; }
+    .phone-wrapper.dark .nh-toggle-btn.active { border-color: #D4A96A; background: #2a1e10; color: #C49050; }
+    .phone-wrapper.dark .nh-status-btn { background: #2a2218; border-color: #3a3020; color: #555; }
+    .phone-wrapper.dark .nh-status-btn.done { border-color: #4a8a4e; background: #1a2e1a; color: #6BBD6E; }
+    .phone-wrapper.dark .tl-budget-input-row.locked { background: #222018; border-color: #3a3020; }
+    .phone-wrapper.dark .tl-budget-input-row.locked .tl-input { color: #555; }
+    .phone-wrapper.dark .tl-budget-input-row.locked .tl-budget-symbol,
+    .phone-wrapper.dark .tl-budget-input-row.locked .tl-budget-unit { color: #444; }
+
     /* ── 시간 선택 트리거 (기존 vtp 재활용) ── */
     .hm-time-input-wrap { position: relative; }
     .hm-time-trigger {
@@ -2113,6 +2165,186 @@
 
         </div>
 
+        <!-- 신혼집 정보 (신혼집 카테고리 선택 시) -->
+        <div class="tl-field" id="tlNewHouseSection" style="display:none">
+          <div class="tl-field-label">신혼집 정보</div>
+
+          <!-- 기본 정보 -->
+          <div class="hm-card">
+            <div class="hm-card-title">🏡 기본 정보</div>
+            <div class="hm-card-body">
+              <!-- 집 주소 -->
+              <div>
+                <div class="hm-field-label">집 주소</div>
+                <div class="tl-input-wrap"><input class="tl-input" id="tlNhAddress" placeholder="주소를 입력하세요"></div>
+              </div>
+              <!-- 거래 유형 -->
+              <div>
+                <div class="hm-field-label">거래 유형</div>
+                <div class="nh-type-tabs">
+                  <button class="nh-type-tab active" id="tlNhTabSale" onclick="onNhTypeChange('tl','sale')">매매</button>
+                  <button class="nh-type-tab" id="tlNhTabJeonse" onclick="onNhTypeChange('tl','jeonse')">전세</button>
+                  <button class="nh-type-tab" id="tlNhTabMonthly" onclick="onNhTypeChange('tl','monthly')">월세</button>
+                </div>
+              </div>
+              <!-- 매매 필드 -->
+              <div id="tlNhSaleFields" class="nh-type-fields">
+                <div>
+                  <div class="hm-field-label">매매가</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlNhSalePrice" placeholder="0" oninput="onNhPriceInput(this,'tlNhSalePrice','tlNhSaleDeposit','tlNhSaleBalance')"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">계약금</div>
+                  <div class="nh-amount-row">
+                    <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlNhSaleDeposit" placeholder="0" oninput="onNhPriceInput(this,'tlNhSalePrice','tlNhSaleDeposit','tlNhSaleBalance')"><span class="tl-budget-unit">원</span></div>
+                    <button class="nh-status-btn" id="tlNhSaleDepositStatus" data-input-id="tlNhSaleDeposit" onclick="onNhStatusToggle(this)">미완료</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금</div>
+                  <div class="nh-amount-row">
+                    <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlNhSaleBalance" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                    <button class="nh-status-btn" id="tlNhSaleBalanceStatus" data-input-id="tlNhSaleBalance" onclick="onNhStatusToggle(this)">미완료</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금일</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="tlNhSaleBalDate" type="date"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">이사일자</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="tlNhSaleMoveDate" type="date"></div>
+                </div>
+              </div>
+              <!-- 전세 필드 -->
+              <div id="tlNhJeonseFields" class="nh-type-fields" style="display:none">
+                <div>
+                  <div class="hm-field-label">전세보증금</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlNhJeonseSecurity" placeholder="0" oninput="onNhPriceInput(this,'tlNhJeonseSecurity','tlNhJeonseDeposit','tlNhJeonseBalance')"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">계약금</div>
+                  <div class="nh-amount-row">
+                    <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlNhJeonseDeposit" placeholder="0" oninput="onNhPriceInput(this,'tlNhJeonseSecurity','tlNhJeonseDeposit','tlNhJeonseBalance')"><span class="tl-budget-unit">원</span></div>
+                    <button class="nh-status-btn" id="tlNhJeonseDepositStatus" data-input-id="tlNhJeonseDeposit" onclick="onNhStatusToggle(this)">미완료</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금</div>
+                  <div class="nh-amount-row">
+                    <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlNhJeonseBalance" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                    <button class="nh-status-btn" id="tlNhJeonseBalanceStatus" data-input-id="tlNhJeonseBalance" onclick="onNhStatusToggle(this)">미완료</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금일</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="tlNhJeonseBalDate" type="date"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">이사일자</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="tlNhJeonseMoveDate" type="date"></div>
+                </div>
+              </div>
+              <!-- 월세 필드 -->
+              <div id="tlNhMonthlyFields" class="nh-type-fields" style="display:none">
+                <div>
+                  <div class="hm-field-label">보증금</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlNhMonthlySecurity" placeholder="0" oninput="onNhPriceInput(this,'tlNhMonthlySecurity','tlNhMonthlyDeposit','tlNhMonthlyBalance')"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">계약금</div>
+                  <div class="nh-amount-row">
+                    <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlNhMonthlyDeposit" placeholder="0" oninput="onNhPriceInput(this,'tlNhMonthlySecurity','tlNhMonthlyDeposit','tlNhMonthlyBalance')"><span class="tl-budget-unit">원</span></div>
+                    <button class="nh-status-btn" id="tlNhMonthlyDepositStatus" data-input-id="tlNhMonthlyDeposit" onclick="onNhStatusToggle(this)">미완료</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금</div>
+                  <div class="nh-amount-row">
+                    <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlNhMonthlyBalance" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                    <button class="nh-status-btn" id="tlNhMonthlyBalanceStatus" data-input-id="tlNhMonthlyBalance" onclick="onNhStatusToggle(this)">미완료</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="hm-field-label">월세</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlNhMonthlyRent" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                </div>          
+                <div>
+                  <div class="hm-field-label">잔금일</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="tlNhMonthlyBalDate" type="date"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">이사일자</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="tlNhMonthlyMoveDate" type="date"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 이사 업체 -->
+          <div class="hm-card">
+            <div class="hm-card-title">🚛 이사 업체</div>
+            <div class="hm-card-body">
+              <div class="nh-toggle-row">
+                <span class="hm-field-label" style="margin:0">이사 업체 사용 여부</span>
+                <button class="nh-toggle-btn" id="tlNhMovingCompanyToggle" onclick="onNhToggle('tl','movingCompany')">미사용</button>
+              </div>
+              <div id="tlNhMovingCompanyFields" class="nh-type-fields" style="display:none">
+                <div>
+                  <div class="hm-field-label">이사 업체명</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="tlNhMovingName" placeholder="업체명"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">연락처</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="tlNhMovingPhone" placeholder="010-0000-0000" type="tel"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">전체 금액</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlNhMovingTotal" placeholder="0" oninput="onNhPriceInput(this,'tlNhMovingTotal','tlNhMovingDeposit','tlNhMovingBalance')"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">계약금</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlNhMovingDeposit" placeholder="0" oninput="onNhPriceInput(this,'tlNhMovingTotal','tlNhMovingDeposit','tlNhMovingBalance')"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlNhMovingBalance" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금 납부일</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="tlNhMovingBalDate" type="date"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 행정 처리 -->
+          <div class="hm-card">
+            <div class="hm-card-title">📋 행정 처리</div>
+            <div class="hm-card-body">
+              <!-- 확정 일자 -->
+              <div class="nh-toggle-row">
+                <span class="hm-field-label" style="margin:0">확정 일자 발급 여부</span>
+                <button class="nh-toggle-btn" id="tlNhConfirmDateToggle" onclick="onNhToggle('tl','confirmDate')">미발급</button>
+              </div>
+              <div id="tlNhConfirmDateField" style="display:none">
+                <div class="hm-field-label" style="margin-top:6px">확정 일자 발급 일자</div>
+                <div class="tl-input-wrap"><input class="tl-input" id="tlNhConfirmDate" type="date"></div>
+              </div>
+              <!-- 전입 신고 -->
+              <div class="nh-toggle-row" style="margin-top:8px">
+                <span class="hm-field-label" style="margin:0">전입 신고 여부</span>
+                <button class="nh-toggle-btn" id="tlNhMoveInReportToggle" onclick="onNhToggle('tl','moveInReport')">미신고</button>
+              </div>
+              <div id="tlNhMoveInReportField" style="display:none">
+                <div class="hm-field-label" style="margin-top:6px">전입 신고 일자</div>
+                <div class="tl-input-wrap"><input class="tl-input" id="tlNhMoveInReportDate" type="date"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
         <!-- 내용 -->
         <div class="tl-field">
           <div class="tl-field-label">내용</div>
@@ -2895,6 +3127,182 @@
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                   일정 추가
                 </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 신혼집 정보 (신혼집 카테고리 선택 시) -->
+        <div class="tl-field" id="editNewHouseSection" style="display:none">
+          <div class="tl-field-label">신혼집 정보</div>
+
+          <!-- 기본 정보 -->
+          <div class="hm-card">
+            <div class="hm-card-title">🏡 기본 정보</div>
+            <div class="hm-card-body">
+              <div>
+                <div class="hm-field-label">집 주소</div>
+                <div class="tl-input-wrap"><input class="tl-input" id="editNhAddress" placeholder="주소를 입력하세요"></div>
+              </div>
+              <div>
+                <div class="hm-field-label">거래 유형</div>
+                <div class="nh-type-tabs">
+                  <button class="nh-type-tab active" id="editNhTabSale" onclick="onNhTypeChange('edit','sale')">매매</button>
+                  <button class="nh-type-tab" id="editNhTabJeonse" onclick="onNhTypeChange('edit','jeonse')">전세</button>
+                  <button class="nh-type-tab" id="editNhTabMonthly" onclick="onNhTypeChange('edit','monthly')">월세</button>
+                </div>
+              </div>
+              <!-- 매매 필드 -->
+              <div id="editNhSaleFields" class="nh-type-fields">
+                <div>
+                  <div class="hm-field-label">매매가</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editNhSalePrice" placeholder="0" oninput="onNhPriceInput(this,'editNhSalePrice','editNhSaleDeposit','editNhSaleBalance')"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">계약금</div>
+                  <div class="nh-amount-row">
+                    <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editNhSaleDeposit" placeholder="0" oninput="onNhPriceInput(this,'editNhSalePrice','editNhSaleDeposit','editNhSaleBalance')"><span class="tl-budget-unit">원</span></div>
+                    <button class="nh-status-btn" id="editNhSaleDepositStatus" data-input-id="editNhSaleDeposit" onclick="onNhStatusToggle(this)">미완료</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금</div>
+                  <div class="nh-amount-row">
+                    <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editNhSaleBalance" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                    <button class="nh-status-btn" id="editNhSaleBalanceStatus" data-input-id="editNhSaleBalance" onclick="onNhStatusToggle(this)">미완료</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금일</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="editNhSaleBalDate" type="date"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">이사일자</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="editNhSaleMoveDate" type="date"></div>
+                </div>
+              </div>
+              <!-- 전세 필드 -->
+              <div id="editNhJeonseFields" class="nh-type-fields" style="display:none">
+                <div>
+                  <div class="hm-field-label">전세보증금</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editNhJeonseSecurity" placeholder="0" oninput="onNhPriceInput(this,'editNhJeonseSecurity','editNhJeonseDeposit','editNhJeonseBalance')"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">계약금</div>
+                  <div class="nh-amount-row">
+                    <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editNhJeonseDeposit" placeholder="0" oninput="onNhPriceInput(this,'editNhJeonseSecurity','editNhJeonseDeposit','editNhJeonseBalance')"><span class="tl-budget-unit">원</span></div>
+                    <button class="nh-status-btn" id="editNhJeonseDepositStatus" data-input-id="editNhJeonseDeposit" onclick="onNhStatusToggle(this)">미완료</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금</div>
+                  <div class="nh-amount-row">
+                    <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editNhJeonseBalance" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                    <button class="nh-status-btn" id="editNhJeonseBalanceStatus" data-input-id="editNhJeonseBalance" onclick="onNhStatusToggle(this)">미완료</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금일</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="editNhJeonseBalDate" type="date"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">이사일자</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="editNhJeonseMoveDate" type="date"></div>
+                </div>
+              </div>
+              <!-- 월세 필드 -->
+              <div id="editNhMonthlyFields" class="nh-type-fields" style="display:none">
+                <div>
+                  <div class="hm-field-label">보증금</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editNhMonthlySecurity" placeholder="0" oninput="onNhPriceInput(this,'editNhMonthlySecurity','editNhMonthlyDeposit','editNhMonthlyBalance')"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">계약금</div>
+                  <div class="nh-amount-row">
+                    <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editNhMonthlyDeposit" placeholder="0" oninput="onNhPriceInput(this,'editNhMonthlySecurity','editNhMonthlyDeposit','editNhMonthlyBalance')"><span class="tl-budget-unit">원</span></div>
+                    <button class="nh-status-btn" id="editNhMonthlyDepositStatus" data-input-id="editNhMonthlyDeposit" onclick="onNhStatusToggle(this)">미완료</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="hm-field-label">월세</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editNhMonthlyRent" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금</div>
+                  <div class="nh-amount-row">
+                    <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editNhMonthlyBalance" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                    <button class="nh-status-btn" id="editNhMonthlyBalanceStatus" data-input-id="editNhMonthlyBalance" onclick="onNhStatusToggle(this)">미완료</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금일</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="editNhMonthlyBalDate" type="date"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">이사일자</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="editNhMonthlyMoveDate" type="date"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 이사 업체 -->
+          <div class="hm-card">
+            <div class="hm-card-title">🚛 이사 업체</div>
+            <div class="hm-card-body">
+              <div class="nh-toggle-row">
+                <span class="hm-field-label" style="margin:0">이사 업체 사용 여부</span>
+                <button class="nh-toggle-btn" id="editNhMovingCompanyToggle" onclick="onNhToggle('edit','movingCompany')">미사용</button>
+              </div>
+              <div id="editNhMovingCompanyFields" class="nh-type-fields" style="display:none">
+                <div>
+                  <div class="hm-field-label">이사 업체명</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="editNhMovingName" placeholder="업체명"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">연락처</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="editNhMovingPhone" placeholder="010-0000-0000" type="tel"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">전체 금액</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editNhMovingTotal" placeholder="0" oninput="onNhPriceInput(this,'editNhMovingTotal','editNhMovingDeposit','editNhMovingBalance')"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">계약금</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editNhMovingDeposit" placeholder="0" oninput="onNhPriceInput(this,'editNhMovingTotal','editNhMovingDeposit','editNhMovingBalance')"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editNhMovingBalance" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금 납부일</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="editNhMovingBalDate" type="date"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 행정 처리 -->
+          <div class="hm-card">
+            <div class="hm-card-title">📋 행정 처리</div>
+            <div class="hm-card-body">
+              <div class="nh-toggle-row">
+                <span class="hm-field-label" style="margin:0">확정 일자 발급 여부</span>
+                <button class="nh-toggle-btn" id="editNhConfirmDateToggle" onclick="onNhToggle('edit','confirmDate')">미발급</button>
+              </div>
+              <div id="editNhConfirmDateField" style="display:none">
+                <div class="hm-field-label" style="margin-top:6px">확정 일자 발급 일자</div>
+                <div class="tl-input-wrap"><input class="tl-input" id="editNhConfirmDate" type="date"></div>
+              </div>
+              <div class="nh-toggle-row" style="margin-top:8px">
+                <span class="hm-field-label" style="margin:0">전입 신고 여부</span>
+                <button class="nh-toggle-btn" id="editNhMoveInReportToggle" onclick="onNhToggle('edit','moveInReport')">미신고</button>
+              </div>
+              <div id="editNhMoveInReportField" style="display:none">
+                <div class="hm-field-label" style="margin-top:6px">전입 신고 일자</div>
+                <div class="tl-input-wrap"><input class="tl-input" id="editNhMoveInReportDate" type="date"></div>
               </div>
             </div>
           </div>
@@ -3697,6 +4105,80 @@ function openEditModal(stageId) {
     }
   } else {
     resetHmSection('edit');
+  }
+
+  // 신혼집 섹션 로드
+  const editNhSection = document.getElementById('editNewHouseSection');
+  if (s.category === '신혼집') {
+    resetNhSection('edit');
+    editNhSection.style.display = '';
+    const nh = s.newHouse;
+    if (nh) {
+      const setV  = (id, val) => { const el = document.getElementById(`edit${id}`); if (el) el.value = val || ''; };
+      const setMon = (id, val) => { const el = document.getElementById(`edit${id}`); if (el) el.value = val ? Number(String(val).replace(/[^0-9]/g,'')).toLocaleString('ko-KR') : ''; };
+      setV('NhAddress', nh.address);
+      // 거래 유형 탭
+      const type = nh.type || 'sale';
+      onNhTypeChange('edit', type);
+      if (type === 'sale') {
+        setMon('NhSalePrice',   nh.salePrice);
+        setMon('NhSaleDeposit', nh.saleDeposit);
+        setMon('NhSaleBalance', nh.saleBalance);
+        setV('NhSaleBalDate',   nh.saleBalDate);
+        setV('NhSaleMoveDate',  nh.saleMoveDate);
+        applyNhStatus('edit','NhSaleDepositStatus', nh.saleDepositDone);
+        applyNhStatus('edit','NhSaleBalanceStatus',  nh.saleBalanceDone);
+      } else if (type === 'jeonse') {
+        setMon('NhJeonseSecurity', nh.jeonseSecurity);
+        setMon('NhJeonseDeposit',  nh.jeonseDeposit);
+        setMon('NhJeonseBalance',  nh.jeonseBalance);
+        setV('NhJeonseBalDate',    nh.jeonseBalDate);
+        setV('NhJeonseMoveDate',   nh.jeonseMoveDate);
+        applyNhStatus('edit','NhJeonseDepositStatus', nh.jeonseDepositDone);
+        applyNhStatus('edit','NhJeonseBalanceStatus',  nh.jeonseBalanceDone);
+      } else {
+        setMon('NhMonthlySecurity', nh.monthlySecurity);
+        setMon('NhMonthlyDeposit',  nh.monthlyDeposit);
+        setMon('NhMonthlyRent',     nh.monthlyRent);
+        setMon('NhMonthlyBalance',  nh.monthlyBalance);
+        setV('NhMonthlyBalDate',    nh.monthlyBalDate);
+        setV('NhMonthlyMoveDate',   nh.monthlyMoveDate);
+        applyNhStatus('edit','NhMonthlyDepositStatus', nh.monthlyDepositDone);
+        applyNhStatus('edit','NhMonthlyBalanceStatus',  nh.monthlyBalanceDone);
+      }
+      // 이사 업체
+      if (nh.movingCompany) {
+        const btn = document.getElementById('editNhMovingCompanyToggle');
+        const fld = document.getElementById('editNhMovingCompanyFields');
+        if (btn) { btn.classList.add('active'); btn.textContent = '사용'; }
+        if (fld) fld.style.display = '';
+        setV('NhMovingName',    nh.movingName);
+        setV('NhMovingPhone',   nh.movingPhone);
+        setMon('NhMovingTotal',   nh.movingTotal);
+        setMon('NhMovingDeposit', nh.movingDeposit);
+        setMon('NhMovingBalance', nh.movingBalance);
+        setV('NhMovingBalDate', nh.movingBalDate);
+      }
+      // 확정 일자
+      if (nh.confirmDateIssued) {
+        const btn = document.getElementById('editNhConfirmDateToggle');
+        const fld = document.getElementById('editNhConfirmDateField');
+        if (btn) { btn.classList.add('active'); btn.textContent = '발급'; }
+        if (fld) fld.style.display = '';
+        setV('NhConfirmDate', nh.confirmDate);
+      }
+      // 전입 신고
+      if (nh.moveInReported) {
+        const btn = document.getElementById('editNhMoveInReportToggle');
+        const fld = document.getElementById('editNhMoveInReportField');
+        if (btn) { btn.classList.add('active'); btn.textContent = '신고'; }
+        if (fld) fld.style.display = '';
+        setV('NhMoveInReportDate', nh.moveInReportDate);
+      }
+    }
+  } else {
+    resetNhSection('edit');
+    editNhSection.style.display = 'none';
   }
 
   // 색상 초기화
@@ -5027,6 +5509,10 @@ function openTlModal() {
   // 신혼여행 섹션 초기화
   resetHmSection('tl');
 
+  // 신혼집 섹션 초기화
+  document.getElementById('tlNewHouseSection').style.display = 'none';
+  resetNhSection('tl');
+
   // 카테고리 커스텀 셀렉트 생성
   const triggerEl = document.getElementById('tlCategoryTrigger');
   const valEl     = document.getElementById('tlCategoryValue');
@@ -5116,6 +5602,14 @@ function onCategoryChange(cat) {
     const showHm = cat === '신혼여행';
     hmSection.style.display = showHm ? '' : 'none';
     if (!showHm) resetHmSection('tl');
+  }
+
+  // 신혼집 카테고리 선택 시 신혼집 섹션 토글
+  const nhSection = document.getElementById('tlNewHouseSection');
+  if (nhSection) {
+    const showNh = cat === '신혼집';
+    nhSection.style.display = showNh ? '' : 'none';
+    if (!showNh) resetNhSection('tl');
   }
 
   // 이미 있는 할 일 아이템의 서브카테고리 옵션 갱신
@@ -5873,6 +6367,106 @@ function collectHoneymoon(prefix) {
     result.schedules    = getSchedules('pkg');
   }
   return result;
+}
+
+// ── 신혼집 섹션 함수 ──
+function onNhPriceInput(el, totalId, depositId, balanceId) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value  = raw ? Number(raw).toLocaleString('ko-KR') : '';
+  const balEl = document.getElementById(balanceId);
+  if (balEl && !balEl.readOnly) {
+    const toNum = id => Number((document.getElementById(id)?.value || '').replace(/[^0-9]/g, '')) || 0;
+    const balance = Math.max(0, toNum(totalId) - toNum(depositId));
+    balEl.value = balance > 0 ? balance.toLocaleString('ko-KR') : '';
+  }
+}
+
+function onNhStatusToggle(btn) {
+  const inputId = btn.dataset.inputId;
+  const inputEl = document.getElementById(inputId);
+  if (!inputEl) return;
+  const isDone = btn.classList.toggle('done');
+  btn.textContent = isDone ? '완료' : '미완료';
+  inputEl.readOnly = isDone;
+  inputEl.closest('.tl-budget-input-row')?.classList.toggle('locked', isDone);
+}
+
+function applyNhStatus(prefix, btnSuffix, isDone) {
+  if (!isDone) return;
+  const btn = document.getElementById(`${prefix}${btnSuffix}`);
+  if (!btn) return;
+  btn.classList.add('done');
+  btn.textContent = '완료';
+  const inputEl = document.getElementById(btn.dataset.inputId);
+  if (inputEl) {
+    inputEl.readOnly = true;
+    inputEl.closest('.tl-budget-input-row')?.classList.add('locked');
+  }
+}
+
+function onNhTypeChange(prefix, type) {
+  const typeMap = { sale: 'Sale', jeonse: 'Jeonse', monthly: 'Monthly' };
+  Object.entries(typeMap).forEach(([key, cap]) => {
+    const isActive = key === type;
+    const btn    = document.getElementById(`${prefix}NhTab${cap}`);
+    const fields = document.getElementById(`${prefix}Nh${cap}Fields`);
+    if (btn)    btn.classList.toggle('active', isActive);
+    if (fields) fields.style.display = isActive ? '' : 'none';
+  });
+}
+
+function onNhToggle(prefix, type) {
+  const map = {
+    movingCompany: { btn: 'MovingCompanyToggle', fields: 'MovingCompanyFields', on: '사용',  off: '미사용' },
+    confirmDate:   { btn: 'ConfirmDateToggle',   fields: 'ConfirmDateField',   on: '발급',  off: '미발급' },
+    moveInReport:  { btn: 'MoveInReportToggle',  fields: 'MoveInReportField',  on: '신고',  off: '미신고' },
+  };
+  const m      = map[type];
+  const btnEl  = document.getElementById(`${prefix}Nh${m.btn}`);
+  const fldEl  = document.getElementById(`${prefix}Nh${m.fields}`);
+  if (!btnEl || !fldEl) return;
+  const active = btnEl.classList.toggle('active');
+  btnEl.textContent = active ? m.on : m.off;
+  fldEl.style.display = active ? '' : 'none';
+}
+
+function resetNhSection(prefix) {
+  onNhTypeChange(prefix, 'sale');
+  // 완료/미완료 상태 버튼 초기화
+  ['SaleDepositStatus','SaleBalanceStatus',
+   'JeonseDepositStatus','JeonseBalanceStatus',
+   'MonthlyDepositStatus','MonthlyBalanceStatus'].forEach(sfx => {
+    const btn = document.getElementById(`${prefix}Nh${sfx}`);
+    if (!btn) return;
+    btn.classList.remove('done');
+    btn.textContent = '미완료';
+    const inputEl = document.getElementById(btn.dataset.inputId);
+    if (inputEl) {
+      inputEl.readOnly = false;
+      inputEl.closest('.tl-budget-input-row')?.classList.remove('locked');
+    }
+  });
+  [
+    { btn: 'MovingCompanyToggle', fields: 'MovingCompanyFields', off: '미사용' },
+    { btn: 'ConfirmDateToggle',   fields: 'ConfirmDateField',   off: '미발급' },
+    { btn: 'MoveInReportToggle',  fields: 'MoveInReportField',  off: '미신고' },
+  ].forEach(m => {
+    const btnEl = document.getElementById(`${prefix}Nh${m.btn}`);
+    const fldEl = document.getElementById(`${prefix}Nh${m.fields}`);
+    if (btnEl) { btnEl.classList.remove('active'); btnEl.textContent = m.off; }
+    if (fldEl) fldEl.style.display = 'none';
+  });
+  [
+    'NhAddress',
+    'NhSalePrice','NhSaleDeposit','NhSaleBalance','NhSaleBalDate','NhSaleMoveDate',
+    'NhJeonseSecurity','NhJeonseDeposit','NhJeonseBalance','NhJeonseBalDate','NhJeonseMoveDate',
+    'NhMonthlySecurity','NhMonthlyDeposit','NhMonthlyRent','NhMonthlyBalance','NhMonthlyBalDate','NhMonthlyMoveDate',
+    'NhMovingName','NhMovingPhone','NhMovingTotal','NhMovingDeposit','NhMovingBalance','NhMovingBalDate',
+    'NhConfirmDate','NhMoveInReportDate',
+  ].forEach(id => {
+    const el = document.getElementById(`${prefix}${id}`);
+    if (el) el.value = '';
+  });
 }
 
 function resetHmSection(prefix) {
