@@ -151,6 +151,48 @@
       padding: 3px 10px; border-radius: 20px;
     }
 
+    /* ── 신혼여행 카드 상세 ── */
+    .hm-card-detail { display: none; border-top: 1px solid #f0e8d8; padding: 10px 12px 12px; }
+    .hm-card-detail.open { display: block; }
+    .hm-card-detail-type {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(212,169,106,0.1); border: 1px solid rgba(212,169,106,0.28);
+      border-radius: 20px; padding: 3px 10px;
+      font-size: 11px; font-weight: 700; color: #C49050; margin-bottom: 8px;
+    }
+    .hm-card-section { margin-bottom: 10px; }
+    .hm-card-section-title { font-size: 10px; font-weight: 800; color: #C49050; margin-bottom: 5px; letter-spacing: 0.3px; text-transform: uppercase; }
+    .hm-card-row { display: flex; gap: 4px; margin-bottom: 3px; font-size: 12px; color: #444; }
+    .hm-card-lbl { font-size: 10px; font-weight: 700; color: #b08050; flex-shrink: 0; width: 50px; }
+    .hm-card-val { flex: 1; font-size: 12px; color: #333; word-break: break-all; }
+    .hm-card-flight { background: #faf6f0; border: 1px solid #ede5d5; border-radius: 8px; padding: 7px 9px; margin-bottom: 5px; }
+    .hm-card-flight-title { font-size: 11px; font-weight: 700; color: #C49050; margin-bottom: 3px; }
+    .hm-card-sched { display: flex; gap: 7px; align-items: flex-start; background: #faf6f0; border: 1px solid #ede5d5; border-radius: 8px; padding: 7px 9px; margin-bottom: 5px; }
+    .hm-card-sched-cat { font-size: 10px; font-weight: 700; color: #fff; background: #D4A96A; border-radius: 4px; padding: 2px 6px; flex-shrink: 0; white-space: nowrap; }
+    .hm-card-sched-info { flex: 1; min-width: 0; }
+    .hm-card-sched-date { font-size: 10px; color: #aaa; margin-bottom: 1px; }
+    .hm-card-sched-title { font-size: 12px; font-weight: 700; color: #333; }
+    .hm-card-sched-price { font-size: 11px; color: #C49050; margin-top: 2px; }
+    .hm-card-sched-note { font-size: 11px; color: #888; margin-top: 1px; }
+    .tl-card-expand-btn {
+      width: 100%; padding: 7px 12px; border: none; border-top: 1px solid #f5ede0;
+      background: rgba(212,169,106,0.04); cursor: pointer; font-family: inherit;
+      font-size: 11px; font-weight: 700; color: #C49050;
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+      transition: background 0.15s;
+    }
+    .tl-card-expand-btn:hover { background: rgba(212,169,106,0.1); }
+    .tl-card-expand-btn svg { transition: transform 0.2s; }
+    .tl-card-expand-btn.open svg { transform: rotate(180deg); }
+    /* 다크모드 */
+    .phone-wrapper.dark .hm-card-detail { border-top-color: #3a2e1a; }
+    .phone-wrapper.dark .hm-card-detail-type { background: rgba(212,169,106,0.07); border-color: rgba(212,169,106,0.2); }
+    .phone-wrapper.dark .hm-card-flight,
+    .phone-wrapper.dark .hm-card-sched { background: #1e1a10; border-color: #3a2e1a; }
+    .phone-wrapper.dark .hm-card-val { color: #d0c8b8; }
+    .phone-wrapper.dark .tl-card-expand-btn { background: rgba(212,169,106,0.03); border-top-color: #3a2e1a; }
+    .phone-wrapper.dark .tl-card-expand-btn:hover { background: rgba(212,169,106,0.08); }
+
     /* 아이템 카드 */
     .tl-card {
       background: #fff; border: 1.5px solid #f0f0f0;
@@ -982,6 +1024,253 @@
     .cs-panel.dark .cs-option.cs-placeholder-opt { color: #555; }
     .cs-panel.dark .cs-option.cs-placeholder-opt:hover { background: transparent; color: #555; }
     .cs-panel.dark::-webkit-scrollbar-thumb { background: #4a3a28; }
+
+    /* ── 예물 섹션 ── */
+    .gift-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+    .gift-item { background: #fafafa; border: 1.5px solid #f0e8d8; border-radius: 12px; overflow: hidden; }
+    .gift-item-header {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 10px; border-bottom: 1px solid #f5ede0;
+    }
+    .gift-item-num {
+      font-size: 10px; font-weight: 700; color: #D4A96A;
+      background: rgba(212,169,106,0.12); border-radius: 20px;
+      padding: 2px 8px; flex-shrink: 0;
+    }
+    .gift-item-del {
+      width: 20px; height: 20px; border-radius: 50%; background: #f0f0f0; border: none;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: #bbb; margin-left: auto; flex-shrink: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .gift-item-del:hover { background: #fde8e8; color: #f44336; }
+    .gift-item-body { display: flex; flex-direction: column; gap: 7px; padding: 10px 12px 12px; }
+    .gift-field-label { font-size: 11px; font-weight: 700; color: #b08050; margin-bottom: 2px; }
+
+    /* 예물 카드 내부 입력 요소 */
+    .gift-item .tl-input-wrap { border-radius: 9px; }
+    .gift-item .tl-input { padding: 10px 12px; font-size: 13px; }
+    .gift-item .tl-textarea {
+      border-radius: 9px; padding: 10px 12px;
+      font-size: 13px; min-height: 56px;
+    }
+    .gift-item .tl-budget-input-row { border-radius: 9px; }
+    .gift-item .tl-budget-symbol { font-size: 13px; padding: 0 2px 0 12px; }
+    .gift-item .tl-budget-unit   { font-size: 12px; padding-right: 12px; }
+
+    .gift-cat-select {
+      flex: 1; border: none; background: transparent;
+      padding: 10px 12px; font-size: 13px; color: #222;
+      outline: none; font-family: inherit; cursor: pointer;
+      appearance: none; -webkit-appearance: none;
+    }
+    .gift-cat-select option { color: #222; background: #fff; }
+    .gift-cat-arrow {
+      padding-right: 10px; color: #C49050; flex-shrink: 0;
+      display: flex; align-items: center; pointer-events: none;
+    }
+    .btn-add-gift {
+      width: 100%; padding: 10px;
+      background: rgba(212,169,106,0.08);
+      border: 1.5px dashed rgba(212,169,106,0.4); border-radius: 10px;
+      color: #C49050; font-size: 13px; font-weight: 700; font-family: inherit;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      gap: 5px; transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-add-gift:hover { background: rgba(212,169,106,0.14); border-color: #D4A96A; }
+
+    .phone-wrapper.dark .gift-item { background: #221e14; border-color: #3a2e1a; }
+    .phone-wrapper.dark .gift-item-header { border-bottom-color: #3a2e1a; }
+    .phone-wrapper.dark .gift-item-del { background: #2a2218; color: #555; }
+    .phone-wrapper.dark .gift-item-del:hover { background: #400; color: #f44336; }
+    .phone-wrapper.dark .gift-cat-select { color: #e0d5c0; }
+    .phone-wrapper.dark .btn-add-gift { color: #E8C07A; border-color: rgba(212,169,106,0.28); background: rgba(212,169,106,0.04); }
+    .phone-wrapper.dark .btn-add-gift:hover { background: rgba(212,169,106,0.12); border-color: #D4A96A; }
+
+    /* ── 혼수 섹션 ── */
+    .honsu-summary {
+      background: linear-gradient(135deg, rgba(212,169,106,0.1), rgba(196,144,80,0.05));
+      border: 1.5px solid rgba(212,169,106,0.28); border-radius: 12px;
+      padding: 11px 13px; margin-bottom: 8px;
+    }
+    .honsu-summary-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+    .honsu-summary-label { font-size: 10px; font-weight: 700; color: #C49050; letter-spacing: 0.3px; display: block; margin-bottom: 2px; }
+    .honsu-summary-progress { font-size: 12px; font-weight: 700; color: #555; }
+    .honsu-summary-pct { font-size: 22px; font-weight: 800; color: #D4A96A; line-height: 1; }
+    .honsu-bar-track { width: 100%; height: 4px; background: rgba(212,169,106,0.18); border-radius: 2px; overflow: hidden; margin-bottom: 9px; }
+    .honsu-bar-fill { height: 100%; background: linear-gradient(90deg, #D4A96A, #C49050); border-radius: 2px; transition: width 0.35s; }
+    .honsu-summary-cost { display: flex; align-items: center; justify-content: space-between; }
+    .honsu-cost-label { font-size: 10px; font-weight: 700; color: #C49050; }
+    .honsu-cost-val { font-size: 13px; font-weight: 800; color: #D4A96A; }
+
+    .honsu-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 8px; }
+    .honsu-item { background: #fff; border: 1.5px solid #f0e8d8; border-radius: 12px; overflow: hidden; transition: border-color 0.2s, opacity 0.2s; }
+    .honsu-item.done { opacity: 0.55; }
+    .honsu-item.done .honsu-item-name-text { text-decoration: line-through; color: #aaa; }
+    .honsu-item-header { display: flex; align-items: center; gap: 6px; padding: 7px 10px; border-bottom: 1px solid #f5ede0; }
+    .honsu-check {
+      flex-shrink: 0; width: 18px; height: 18px; border-radius: 5px;
+      border: 1.5px solid #ddd; background: #f8f8f8;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .honsu-check:hover { border-color: #D4A96A; background: #fff8ef; }
+    .honsu-item.done .honsu-check { background: #D4A96A; border-color: #D4A96A; }
+    .honsu-item.done .honsu-check::after {
+      content: ''; display: block; width: 8px; height: 5px;
+      border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+    .honsu-item-num { font-size: 10px; font-weight: 700; color: #D4A96A; background: rgba(212,169,106,0.12); border-radius: 20px; padding: 2px 8px; flex-shrink: 0; }
+    .honsu-item-name-text { flex: 1; font-size: 12px; font-weight: 600; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+    .honsu-item-del { width: 20px; height: 20px; border-radius: 50%; background: #f0f0f0; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #bbb; flex-shrink: 0; transition: background 0.15s, color 0.15s; }
+    .honsu-item-del:hover { background: #fde8e8; color: #f44336; }
+    .honsu-item-body { display: flex; flex-direction: column; gap: 7px; padding: 10px 12px 12px; }
+    .honsu-field-label { font-size: 11px; font-weight: 700; color: #b08050; margin-bottom: 2px; }
+    .honsu-item .tl-input-wrap { border-radius: 9px; }
+    .honsu-item .tl-input { padding: 10px 12px; font-size: 13px; }
+    .honsu-item .tl-textarea { border-radius: 9px; padding: 10px 12px; font-size: 13px; min-height: 56px; }
+    .honsu-item .tl-budget-input-row { border-radius: 9px; }
+    .honsu-item .tl-budget-symbol { font-size: 13px; padding: 0 2px 0 12px; }
+    .honsu-item .tl-budget-unit { font-size: 12px; padding-right: 12px; }
+    .honsu-cat-select {
+      flex: 1; border: none; background: transparent;
+      padding: 10px 12px; font-size: 13px; color: #222;
+      outline: none; font-family: inherit; cursor: pointer;
+      appearance: none; -webkit-appearance: none;
+    }
+    .honsu-cat-select option { color: #222; background: #fff; }
+    .honsu-cat-arrow { padding-right: 10px; color: #C49050; flex-shrink: 0; display: flex; align-items: center; pointer-events: none; }
+    .btn-add-honsu {
+      width: 100%; padding: 10px;
+      background: rgba(212,169,106,0.08);
+      border: 1.5px dashed rgba(212,169,106,0.4); border-radius: 10px;
+      color: #C49050; font-size: 13px; font-weight: 700; font-family: inherit;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      gap: 5px; transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-add-honsu:hover { background: rgba(212,169,106,0.14); border-color: #D4A96A; }
+    .phone-wrapper.dark .honsu-summary { background: rgba(212,169,106,0.05); border-color: rgba(212,169,106,0.18); }
+    .phone-wrapper.dark .honsu-summary-progress { color: #888; }
+    .phone-wrapper.dark .honsu-bar-track { background: rgba(212,169,106,0.1); }
+    .phone-wrapper.dark .honsu-item { background: #221e14; border-color: #3a2e1a; }
+    .phone-wrapper.dark .honsu-item-header { border-bottom-color: #3a2e1a; }
+    .phone-wrapper.dark .honsu-check { background: #2a2218; border-color: #4a3828; }
+    .phone-wrapper.dark .honsu-item.done .honsu-check { background: #D4A96A; border-color: #D4A96A; }
+    .phone-wrapper.dark .honsu-item-name-text { color: #c8b8a0; }
+    .phone-wrapper.dark .honsu-item.done .honsu-item-name-text { color: #555; }
+    .phone-wrapper.dark .honsu-item-del { background: #2a2218; color: #555; }
+    .phone-wrapper.dark .honsu-item-del:hover { background: #400; color: #f44336; }
+    .phone-wrapper.dark .honsu-cat-select { color: #e0d5c0; }
+    .phone-wrapper.dark .btn-add-honsu { color: #E8C07A; border-color: rgba(212,169,106,0.28); background: rgba(212,169,106,0.04); }
+    .phone-wrapper.dark .btn-add-honsu:hover { background: rgba(212,169,106,0.12); border-color: #D4A96A; }
+
+    /* ── 신혼여행 섹션 ── */
+    .hm-type-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+    .hm-type-tab {
+      flex: 1; padding: 8px 0; border: 1.5px solid rgba(212,169,106,0.35);
+      border-radius: 8px; background: transparent; color: #C49050;
+      font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .hm-type-tab.active { background: rgba(212,169,106,0.15); border-color: #D4A96A; color: #9a6a20; }
+    .hm-card { background: #fafafa; border: 1.5px solid #f0e8d8; border-radius: 12px; overflow: hidden; margin-bottom: 8px; }
+    .hm-card-title { font-size: 11px; font-weight: 800; color: #C49050; background: rgba(212,169,106,0.08); padding: 7px 12px; border-bottom: 1px solid #f0e8d8; }
+    .hm-card-body { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 12px; }
+    .hm-field-label { font-size: 11px; font-weight: 700; color: #b08050; margin-bottom: 2px; }
+    .hm-row { display: flex; gap: 8px; }
+    .hm-row > * { flex: 1; min-width: 0; overflow: hidden; }
+
+    /* 경유지 */
+    .hm-waypoint-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 5px; }
+    .hm-waypoint-item { display: flex; align-items: center; gap: 6px; }
+    .hm-waypoint-item .tl-input-wrap { flex: 1; border-radius: 8px; }
+    .hm-waypoint-item .tl-input { padding: 8px 10px; font-size: 13px; }
+    .hm-wp-del { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: #fde8e8; border: none; color: #e57373; font-size: 14px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .hm-wp-del:hover { background: #fca5a5; }
+    .btn-add-waypoint { width: 100%; padding: 7px; background: rgba(212,169,106,0.06); border: 1.5px dashed rgba(212,169,106,0.35); border-radius: 8px; color: #C49050; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; transition: background 0.15s; }
+    .btn-add-waypoint:hover { background: rgba(212,169,106,0.12); }
+
+    /* 여행 기간 */
+    .hm-period-result { font-size: 12px; font-weight: 700; color: #D4A96A; padding: 6px 10px; background: rgba(212,169,106,0.08); border-radius: 7px; text-align: center; margin-top: 3px; }
+
+    /* 비행 정보 */
+    .hm-flight-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
+    .hm-flight-item { background: #fff; border: 1.5px solid #ede5d5; border-radius: 10px; overflow: hidden; }
+    .hm-flight-header { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-bottom: 1px solid #f0e8d8; background: rgba(212,169,106,0.04); }
+    .hm-flight-num { font-size: 10px; font-weight: 700; color: #D4A96A; background: rgba(212,169,106,0.12); border-radius: 20px; padding: 2px 8px; flex-shrink: 0; }
+    .hm-flight-del { margin-left: auto; width: 20px; height: 20px; border-radius: 50%; background: #fde8e8; border: none; color: #e57373; font-size: 13px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .hm-flight-del:hover { background: #fca5a5; }
+    .hm-flight-body { display: flex; flex-direction: column; gap: 7px; padding: 9px 10px 10px; }
+    .hm-flight-body .tl-input-wrap { border-radius: 8px; }
+    .hm-flight-body .tl-input { padding: 8px 10px; font-size: 13px; }
+    .hm-flight-body .tl-budget-input-row { border-radius: 8px; }
+    .hm-flight-body .tl-budget-symbol { font-size: 13px; padding: 0 2px 0 10px; }
+    .hm-flight-body .tl-budget-unit { font-size: 12px; padding-right: 10px; }
+    .btn-add-flight { width: 100%; padding: 9px; background: rgba(212,169,106,0.06); border: 1.5px dashed rgba(212,169,106,0.35); border-radius: 9px; color: #C49050; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: background 0.15s; }
+    .btn-add-flight:hover { background: rgba(212,169,106,0.12); }
+
+    /* 여행 일정 */
+    .hm-sched-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
+    .hm-sched-item { background: #fff; border: 1.5px solid #ede5d5; border-radius: 10px; overflow: hidden; }
+    .hm-sched-header { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-bottom: 1px solid #f0e8d8; background: rgba(212,169,106,0.04); }
+    .hm-sched-num { font-size: 10px; font-weight: 700; color: #D4A96A; background: rgba(212,169,106,0.12); border-radius: 20px; padding: 2px 8px; flex-shrink: 0; }
+    .hm-sched-del { margin-left: auto; width: 20px; height: 20px; border-radius: 50%; background: #fde8e8; border: none; color: #e57373; font-size: 13px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .hm-sched-del:hover { background: #fca5a5; }
+    .hm-sched-body { display: flex; flex-direction: column; gap: 7px; padding: 9px 10px 10px; }
+    .hm-sched-body .tl-input-wrap { border-radius: 8px; }
+    .hm-sched-body .tl-input { padding: 8px 10px; font-size: 13px; }
+    .hm-sched-cat-select { flex: 1; border: none; background: transparent; padding: 9px 10px; font-size: 13px; color: #222; outline: none; font-family: inherit; cursor: pointer; appearance: none; -webkit-appearance: none; }
+    .hm-sched-cat-select option { color: #222; background: #fff; }
+    .hm-sched-cat-arrow { padding-right: 10px; color: #C49050; flex-shrink: 0; display: flex; align-items: center; pointer-events: none; }
+    /* 금액 + 환율 */
+    .hm-currency-row { display: flex; gap: 6px; align-items: stretch; }
+    .hm-currency-select-wrap { flex-shrink: 0; width: 72px; border: 1.5px solid #e8ddd0; border-radius: 8px; background: #fff; display: flex; align-items: center; overflow: hidden; }
+    .hm-currency-select { width: 100%; border: none; background: transparent; padding: 8px 4px 8px 8px; font-size: 12px; font-weight: 700; color: #C49050; font-family: inherit; outline: none; cursor: pointer; appearance: none; -webkit-appearance: none; }
+    .hm-currency-select option { color: #222; background: #fff; }
+    .hm-currency-input-wrap { flex: 1; }
+    .hm-krw-hint { font-size: 11px; color: #C49050; padding: 4px 2px 0; font-weight: 600; min-height: 17px; }
+    .btn-add-sched { width: 100%; padding: 9px; background: rgba(212,169,106,0.06); border: 1.5px dashed rgba(212,169,106,0.35); border-radius: 9px; color: #C49050; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: background 0.15s; }
+    .btn-add-sched:hover { background: rgba(212,169,106,0.12); }
+
+    /* 여행사 정보 금액 */
+    .hm-agency-body .tl-input-wrap { border-radius: 8px; }
+    .hm-agency-body .tl-input { padding: 9px 11px; font-size: 13px; }
+    .hm-agency-body .tl-budget-input-row { border-radius: 8px; }
+    .hm-agency-body .tl-budget-symbol { font-size: 13px; padding: 0 2px 0 11px; }
+    .hm-agency-body .tl-budget-unit { font-size: 12px; padding-right: 11px; }
+
+    /* 다크모드 */
+    .phone-wrapper.dark .hm-type-tab { border-color: rgba(212,169,106,0.2); color: #C49050; }
+    .phone-wrapper.dark .hm-type-tab.active { background: rgba(212,169,106,0.1); border-color: #C49050; color: #E8C07A; }
+    .phone-wrapper.dark .hm-card { background: #221e14; border-color: #3a2e1a; }
+    .phone-wrapper.dark .hm-card-title { background: rgba(212,169,106,0.05); border-bottom-color: #3a2e1a; }
+    .phone-wrapper.dark .hm-flight-item,
+    .phone-wrapper.dark .hm-sched-item { background: #1e1a10; border-color: #3a2e1a; }
+    .phone-wrapper.dark .hm-flight-header,
+    .phone-wrapper.dark .hm-sched-header { background: rgba(212,169,106,0.04); border-bottom-color: #3a2e1a; }
+    .phone-wrapper.dark .hm-flight-del,
+    .phone-wrapper.dark .hm-sched-del,
+    .phone-wrapper.dark .hm-wp-del { background: #3a1818; color: #f44336; }
+    .phone-wrapper.dark .hm-sched-cat-select,
+    .phone-wrapper.dark .hm-currency-select { color: #e0d5c0; }
+    .phone-wrapper.dark .hm-currency-select-wrap { border-color: #3a2e1a; background: #1e1a10; }
+    .phone-wrapper.dark .hm-period-result { background: rgba(212,169,106,0.06); }
+    .phone-wrapper.dark .btn-add-waypoint,
+    .phone-wrapper.dark .btn-add-flight,
+    .phone-wrapper.dark .btn-add-sched { color: #E8C07A; border-color: rgba(212,169,106,0.25); background: rgba(212,169,106,0.04); }
+
+    /* ── 시간 선택 트리거 (기존 vtp 재활용) ── */
+    .hm-time-input-wrap { position: relative; }
+    .hm-time-trigger {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none;
+    }
+    .hm-time-disp { font-size: 11px; font-weight: 700; color: #C49050; letter-spacing: 0.5px; white-space: nowrap; }
+    .hm-time-icon { color: #C49050; display: flex; align-items: center; }
+    .hm-time-input { padding-right: 80px !important; }
+    .phone-wrapper.dark .hm-time-disp { color: #E8C07A; }
+    .phone-wrapper.dark .hm-time-icon { color: #E8C07A; }
   </style>
 </head>
 <body>
@@ -1622,6 +1911,208 @@
           </button>
         </div>
 
+        <!-- 예물 정보 (예물 카테고리 선택 시) -->
+        <div class="tl-field" id="tlGiftSection" style="display:none">
+          <div class="tl-field-label">예물 정보</div>
+          <div class="gift-list" id="tlGiftList"></div>
+          <button class="btn-add-gift" onclick="addGiftItem('tl')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            예물 추가
+          </button>
+        </div>
+
+        <!-- 혼수 정보 (혼수 카테고리 선택 시) -->
+        <div class="tl-field" id="tlHonsuSection" style="display:none">
+          <div class="tl-field-label">혼수 정보</div>
+          <div class="honsu-summary">
+            <div class="honsu-summary-top">
+              <div>
+                <span class="honsu-summary-label">전체 진행률</span>
+                <span class="honsu-summary-progress" id="tlHonsuProgress">0 / 0</span>
+              </div>
+              <span class="honsu-summary-pct" id="tlHonsuPct">0%</span>
+            </div>
+            <div class="honsu-bar-track"><div class="honsu-bar-fill" id="tlHonsuBar" style="width:0%"></div></div>
+            <div class="honsu-summary-cost">
+              <span class="honsu-cost-label">전체 혼수 비용</span>
+              <span class="honsu-cost-val" id="tlHonsuTotal">₩ 0원</span>
+            </div>
+          </div>
+          <div class="honsu-list" id="tlHonsuList"></div>
+          <button class="btn-add-honsu" onclick="addHonsuItem('tl')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            혼수 추가
+          </button>
+        </div>
+
+        <!-- 신혼여행 정보 (신혼여행 카테고리 선택 시) -->
+        <div class="tl-field" id="tlHoneymoonSection" style="display:none">
+          <div class="tl-field-label">신혼여행 정보</div>
+
+          <!-- 자유여행 / 패키지 탭 -->
+          <div class="hm-type-tabs">
+            <button class="hm-type-tab active" onclick="onHmTypeChange('tl','free',this)">자유여행</button>
+            <button class="hm-type-tab" onclick="onHmTypeChange('tl','pkg',this)">패키지</button>
+          </div>
+
+          <!-- 자유여행 -->
+          <div id="tlHmFree">
+            <!-- 여행 정보 -->
+            <div class="hm-card">
+              <div class="hm-card-title">✈ 여행 정보</div>
+              <div class="hm-card-body">
+                <!-- 출발지 / 출발시간 -->
+                <div>
+                  <div class="hm-field-label">출발지 / 출발 시간</div>
+                  <div class="tl-input-wrap hm-time-input-wrap">
+                    <input class="tl-input hm-time-input" id="tlFreeDep" placeholder="출발지 (예: 인천국제공항)">
+                    <div class="hm-time-trigger" onclick="openVenuePicker('tlFreeDepTime','tlFreeDepTimeDisp','출발 시간')">
+                      <span class="hm-time-disp" id="tlFreeDepTimeDisp"></span>
+                      <span class="hm-time-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+                    </div>
+                    <input type="hidden" id="tlFreeDepTime">
+                  </div>
+                </div>
+                <!-- 목적지 -->
+                <div>
+                  <div class="hm-field-label">목적지 / 도착 시간</div>
+                  <div class="tl-input-wrap hm-time-input-wrap">
+                    <input class="tl-input hm-time-input" id="tlFreeDest" placeholder="목적지 (예: 파리 샤를드골)">
+                    <div class="hm-time-trigger" onclick="openVenuePicker('tlFreeArrTime','tlFreeArrTimeDisp','도착 시간')">
+                      <span class="hm-time-disp" id="tlFreeArrTimeDisp"></span>
+                      <span class="hm-time-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+                    </div>
+                    <input type="hidden" id="tlFreeArrTime">
+                  </div>
+                </div>
+                <!-- 경유지 -->
+                <div>
+                  <div class="hm-field-label">경유지</div>
+                  <div class="hm-waypoint-list" id="tlFreeWpList"></div>
+                  <button class="btn-add-waypoint" onclick="addHmWaypoint('tl','free')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    경유지 추가
+                  </button>
+                </div>
+                <!-- 여행 기간 -->
+                <div>
+                  <div class="hm-field-label">여행 기간</div>
+                  <div class="hm-row">
+                    <div class="tl-input-wrap"><input class="tl-input" id="tlFreeStart" type="date" oninput="calcHmDays('tl','free')"></div>
+                    <div class="tl-input-wrap"><input class="tl-input" id="tlFreeEnd" type="date" oninput="calcHmDays('tl','free')"></div>
+                  </div>
+                  <div class="hm-period-result" id="tlFreePeriod">출발일·귀국일을 선택하세요</div>
+                </div>
+              </div>
+            </div>
+            <!-- 비행 정보 -->
+            <div class="hm-card">
+              <div class="hm-card-title">🛫 비행 정보</div>
+              <div class="hm-card-body">
+                <div class="hm-flight-list" id="tlFreeFlightList"></div>
+                <button class="btn-add-flight" onclick="addHmFlight('tl','free')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  비행 정보 추가
+                </button>
+              </div>
+            </div>
+            <!-- 여행 일정 -->
+            <div class="hm-card">
+              <div class="hm-card-title">📅 여행 일정</div>
+              <div class="hm-card-body">
+                <div class="hm-sched-list" id="tlFreeSchedList"></div>
+                <button class="btn-add-sched" onclick="addHmSched('tl','free')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  일정 추가
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 패키지 -->
+          <div id="tlHmPkg" style="display:none">
+            <!-- 여행사 정보 -->
+            <div class="hm-card">
+              <div class="hm-card-title">🏢 여행사 정보</div>
+              <div class="hm-card-body hm-agency-body">
+                <div>
+                  <div class="hm-field-label">여행사 명</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="tlPkgAgency" placeholder="여행사 이름"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">전체 금액</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlPkgTotal" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">계약금</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlPkgDeposit" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="tlPkgBalance" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금 납부 일시</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="tlPkgBalDate" type="date"></div>
+                </div>
+              </div>
+            </div>
+            <!-- 여행 정보 (패키지) -->
+            <div class="hm-card">
+              <div class="hm-card-title">✈ 여행 정보</div>
+              <div class="hm-card-body">
+                <div>
+                  <div class="hm-field-label">출발지</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="tlPkgDep" placeholder="출발지 (예: 인천국제공항)"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">목적지</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="tlPkgDest" placeholder="목적지"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">경유지</div>
+                  <div class="hm-waypoint-list" id="tlPkgWpList"></div>
+                  <button class="btn-add-waypoint" onclick="addHmWaypoint('tl','pkg')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    경유지 추가
+                  </button>
+                </div>
+                <div>
+                  <div class="hm-field-label">여행 기간</div>
+                  <div class="hm-row">
+                    <div class="tl-input-wrap"><input class="tl-input" id="tlPkgStart" type="date" oninput="calcHmDays('tl','pkg')"></div>
+                    <div class="tl-input-wrap"><input class="tl-input" id="tlPkgEnd" type="date" oninput="calcHmDays('tl','pkg')"></div>
+                  </div>
+                  <div class="hm-period-result" id="tlPkgPeriod">출발일·귀국일을 선택하세요</div>
+                </div>
+              </div>
+            </div>
+            <!-- 비행 정보 (패키지) -->
+            <div class="hm-card">
+              <div class="hm-card-title">🛫 비행 정보</div>
+              <div class="hm-card-body">
+                <div class="hm-flight-list" id="tlPkgFlightList"></div>
+                <button class="btn-add-flight" onclick="addHmFlight('tl','pkg')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  비행 정보 추가
+                </button>
+              </div>
+            </div>
+            <!-- 여행 일정 (패키지) -->
+            <div class="hm-card">
+              <div class="hm-card-title">📅 여행 일정</div>
+              <div class="hm-card-body">
+                <div class="hm-sched-list" id="tlPkgSchedList"></div>
+                <button class="btn-add-sched" onclick="addHmSched('tl','pkg')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  일정 추가
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
         <!-- 내용 -->
         <div class="tl-field">
           <div class="tl-field-label">내용</div>
@@ -2208,6 +2699,208 @@
           </button>
         </div>
 
+        <!-- 예물 정보 (예물 카테고리 전용) -->
+        <div class="tl-field" id="editGiftSection" style="display:none">
+          <div class="tl-field-label">예물 정보</div>
+          <div class="gift-list" id="editGiftList"></div>
+          <button class="btn-add-gift" onclick="addGiftItem('edit')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            예물 추가
+          </button>
+        </div>
+
+        <!-- 혼수 정보 (혼수 카테고리 전용) -->
+        <div class="tl-field" id="editHonsuSection" style="display:none">
+          <div class="tl-field-label">혼수 정보</div>
+          <div class="honsu-summary">
+            <div class="honsu-summary-top">
+              <div>
+                <span class="honsu-summary-label">전체 진행률</span>
+                <span class="honsu-summary-progress" id="editHonsuProgress">0 / 0</span>
+              </div>
+              <span class="honsu-summary-pct" id="editHonsuPct">0%</span>
+            </div>
+            <div class="honsu-bar-track"><div class="honsu-bar-fill" id="editHonsuBar" style="width:0%"></div></div>
+            <div class="honsu-summary-cost">
+              <span class="honsu-cost-label">전체 혼수 비용</span>
+              <span class="honsu-cost-val" id="editHonsuTotal">₩ 0원</span>
+            </div>
+          </div>
+          <div class="honsu-list" id="editHonsuList"></div>
+          <button class="btn-add-honsu" onclick="addHonsuItem('edit')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            혼수 추가
+          </button>
+        </div>
+
+        <!-- 신혼여행 정보 (신혼여행 카테고리 선택 시) -->
+        <div class="tl-field" id="editHoneymoonSection" style="display:none">
+          <div class="tl-field-label">신혼여행 정보</div>
+
+          <!-- 자유여행 / 패키지 탭 -->
+          <div class="hm-type-tabs">
+            <button class="hm-type-tab active" onclick="onHmTypeChange('edit','free',this)">자유여행</button>
+            <button class="hm-type-tab" onclick="onHmTypeChange('edit','pkg',this)">패키지</button>
+          </div>
+
+          <!-- 자유여행 -->
+          <div id="editHmFree">
+            <!-- 여행 정보 -->
+            <div class="hm-card">
+              <div class="hm-card-title">✈ 여행 정보</div>
+              <div class="hm-card-body">
+                <!-- 출발지 / 출발시간 -->
+                <div>
+                  <div class="hm-field-label">출발지 / 출발 시간</div>
+                  <div class="tl-input-wrap hm-time-input-wrap">
+                    <input class="tl-input hm-time-input" id="editFreeDep" placeholder="출발지 (예: 인천국제공항)">
+                    <div class="hm-time-trigger" onclick="openVenuePicker('editFreeDepTime','editFreeDepTimeDisp','출발 시간')">
+                      <span class="hm-time-disp" id="editFreeDepTimeDisp"></span>
+                      <span class="hm-time-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+                    </div>
+                    <input type="hidden" id="editFreeDepTime">
+                  </div>
+                </div>
+                <!-- 목적지 -->
+                <div>
+                  <div class="hm-field-label">목적지 / 도착 시간</div>
+                  <div class="tl-input-wrap hm-time-input-wrap">
+                    <input class="tl-input hm-time-input" id="editFreeDest" placeholder="목적지 (예: 파리 샤를드골)">
+                    <div class="hm-time-trigger" onclick="openVenuePicker('editFreeArrTime','editFreeArrTimeDisp','도착 시간')">
+                      <span class="hm-time-disp" id="editFreeArrTimeDisp"></span>
+                      <span class="hm-time-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+                    </div>
+                    <input type="hidden" id="editFreeArrTime">
+                  </div>
+                </div>
+                <!-- 경유지 -->
+                <div>
+                  <div class="hm-field-label">경유지</div>
+                  <div class="hm-waypoint-list" id="editFreeWpList"></div>
+                  <button class="btn-add-waypoint" onclick="addHmWaypoint('edit','free')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    경유지 추가
+                  </button>
+                </div>
+                <!-- 여행 기간 -->
+                <div>
+                  <div class="hm-field-label">여행 기간</div>
+                  <div class="hm-row">
+                    <div class="tl-input-wrap"><input class="tl-input" id="editFreeStart" type="date" oninput="calcHmDays('edit','free')"></div>
+                    <div class="tl-input-wrap"><input class="tl-input" id="editFreeEnd" type="date" oninput="calcHmDays('edit','free')"></div>
+                  </div>
+                  <div class="hm-period-result" id="editFreePeriod">출발일·귀국일을 선택하세요</div>
+                </div>
+              </div>
+            </div>
+            <!-- 비행 정보 -->
+            <div class="hm-card">
+              <div class="hm-card-title">🛫 비행 정보</div>
+              <div class="hm-card-body">
+                <div class="hm-flight-list" id="editFreeFlightList"></div>
+                <button class="btn-add-flight" onclick="addHmFlight('edit','free')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  비행 정보 추가
+                </button>
+              </div>
+            </div>
+            <!-- 여행 일정 -->
+            <div class="hm-card">
+              <div class="hm-card-title">📅 여행 일정</div>
+              <div class="hm-card-body">
+                <div class="hm-sched-list" id="editFreeSchedList"></div>
+                <button class="btn-add-sched" onclick="addHmSched('edit','free')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  일정 추가
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 패키지 -->
+          <div id="editHmPkg" style="display:none">
+            <!-- 여행사 정보 -->
+            <div class="hm-card">
+              <div class="hm-card-title">🏢 여행사 정보</div>
+              <div class="hm-card-body hm-agency-body">
+                <div>
+                  <div class="hm-field-label">여행사 명</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="editPkgAgency" placeholder="여행사 이름"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">전체 금액</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editPkgTotal" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">계약금</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editPkgDeposit" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금</div>
+                  <div class="tl-budget-input-row"><span class="tl-budget-symbol">₩</span><input class="tl-input" id="editPkgBalance" placeholder="0" oninput="onHmPriceInput(this)"><span class="tl-budget-unit">원</span></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">잔금 납부 일시</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="editPkgBalDate" type="date"></div>
+                </div>
+              </div>
+            </div>
+            <!-- 여행 정보 (패키지) -->
+            <div class="hm-card">
+              <div class="hm-card-title">✈ 여행 정보</div>
+              <div class="hm-card-body">
+                <div>
+                  <div class="hm-field-label">출발지</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="editPkgDep" placeholder="출발지 (예: 인천국제공항)"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">목적지</div>
+                  <div class="tl-input-wrap"><input class="tl-input" id="editPkgDest" placeholder="목적지"></div>
+                </div>
+                <div>
+                  <div class="hm-field-label">경유지</div>
+                  <div class="hm-waypoint-list" id="editPkgWpList"></div>
+                  <button class="btn-add-waypoint" onclick="addHmWaypoint('edit','pkg')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    경유지 추가
+                  </button>
+                </div>
+                <div>
+                  <div class="hm-field-label">여행 기간</div>
+                  <div class="hm-row">
+                    <div class="tl-input-wrap"><input class="tl-input" id="editPkgStart" type="date" oninput="calcHmDays('edit','pkg')"></div>
+                    <div class="tl-input-wrap"><input class="tl-input" id="editPkgEnd" type="date" oninput="calcHmDays('edit','pkg')"></div>
+                  </div>
+                  <div class="hm-period-result" id="editPkgPeriod">출발일·귀국일을 선택하세요</div>
+                </div>
+              </div>
+            </div>
+            <!-- 비행 정보 (패키지) -->
+            <div class="hm-card">
+              <div class="hm-card-title">🛫 비행 정보</div>
+              <div class="hm-card-body">
+                <div class="hm-flight-list" id="editPkgFlightList"></div>
+                <button class="btn-add-flight" onclick="addHmFlight('edit','pkg')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  비행 정보 추가
+                </button>
+              </div>
+            </div>
+            <!-- 여행 일정 (패키지) -->
+            <div class="hm-card">
+              <div class="hm-card-title">📅 여행 일정</div>
+              <div class="hm-card-body">
+                <div class="hm-sched-list" id="editPkgSchedList"></div>
+                <button class="btn-add-sched" onclick="addHmSched('edit','pkg')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  일정 추가
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
         <div class="tl-field">
           <div class="tl-field-label">내용</div>
           <textarea class="tl-textarea" id="editContent" rows="3" placeholder="메모나 상세 내용을 입력하세요"></textarea>
@@ -2564,6 +3257,7 @@ function renderCard(s) {
       ddayClass = n <= 7 ? 'soon' : 'upcoming';
     }
   }
+  const hasHm = s.category === '신혼여행' && s.honeymoon;
   return `
     <div class="tl-card${s.done ? ' done' : ''}" id="card_${s.id}">
       <div class="tl-card-top">
@@ -2577,7 +3271,90 @@ function renderCard(s) {
           ${dday ? `<div class="tl-card-dday ${ddayClass}">${ddayTxt}</div>` : ''}
         </div>
       </div>
+      ${hasHm ? `
+      <div class="hm-card-detail" id="hmCardDetail_${s.id}">
+        ${buildHoneymoonDetailHtml(s.honeymoon)}
+      </div>
+      <button class="tl-card-expand-btn" id="hmExpandBtn_${s.id}" onclick="toggleHmCardDetail(${s.id})">
+        신혼여행 상세 보기
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>` : ''}
     </div>`;
+}
+
+function buildHoneymoonDetailHtml(hm) {
+  if (!hm) return '';
+  const type = hm.type === 'pkg' ? '패키지' : '자유여행';
+  const typeEmoji = hm.type === 'pkg' ? '🏢' : '✈️';
+  let html = `<span class="hm-card-detail-type">${typeEmoji} ${type}</span>`;
+
+  function row(lbl, val) {
+    return val ? `<div class="hm-card-row"><span class="hm-card-lbl">${lbl}</span><span class="hm-card-val">${val}</span></div>` : '';
+  }
+  function section(title, content) {
+    return content.trim() ? `<div class="hm-card-section"><div class="hm-card-section-title">${title}</div>${content}</div>` : '';
+  }
+  function periodStr(s, e) {
+    if (!s || !e) return '';
+    const diff = Math.round((new Date(e) - new Date(s)) / 86400000);
+    return diff > 0 ? `${s} ~ ${e} · ${diff}박 ${diff+1}일` : `${s} ~ ${e}`;
+  }
+
+  if (hm.type === 'pkg') {
+    let agencyContent = '';
+    agencyContent += row('여행사', hm.agencyName);
+    agencyContent += row('전체금액', hm.totalCost ? `₩ ${Number(hm.totalCost).toLocaleString('ko-KR')}원` : '');
+    agencyContent += row('계약금', hm.deposit   ? `₩ ${Number(hm.deposit).toLocaleString('ko-KR')}원` : '');
+    agencyContent += row('잔금', hm.balance ? `₩ ${Number(hm.balance).toLocaleString('ko-KR')}원${hm.balDate ? ` (${hm.balDate})` : ''}` : '');
+    html += section('🏢 여행사 정보', agencyContent);
+  }
+
+  let travelContent = '';
+  const depLabel = hm.type === 'free' ? row('출발지', hm.departure ? `${hm.departure}${hm.depTime ? ' · ' + hm.depTime : ''}` : '') : row('출발지', hm.departure);
+  const destLabel = hm.type === 'free' ? row('목적지', hm.destination ? `${hm.destination}${hm.arrTime ? ' · ' + hm.arrTime : ''}` : '') : row('목적지', hm.destination);
+  travelContent += depLabel;
+  travelContent += destLabel;
+  if (hm.waypoints?.length) travelContent += row('경유지', hm.waypoints.join(' → '));
+  travelContent += row('기간', periodStr(hm.startDate, hm.endDate));
+  html += section('✈ 여행 정보', travelContent);
+
+  if (hm.flights?.length) {
+    const flightHtml = hm.flights.map((f, i) => `
+      <div class="hm-card-flight">
+        <div class="hm-card-flight-title">비행 ${i+1}${f.airline ? ' · ' + f.airline : ''}${f.flightNo ? ' ' + f.flightNo : ''}</div>
+        ${row('시간', f.depTime || f.arrTime ? `${f.depTime||'?'} → ${f.arrTime||'?'}` : '')}
+        ${row('좌석', [f.gate, f.seat].filter(Boolean).join(' · '))}
+        ${row('비용', f.cost ? `₩ ${Number(f.cost).toLocaleString('ko-KR')}원` : '')}
+      </div>`).join('');
+    html += section(`🛫 비행 정보 (${hm.flights.length}편)`, flightHtml);
+  }
+
+  if (hm.schedules?.length) {
+    const schedHtml = hm.schedules.map(sc => `
+      <div class="hm-card-sched">
+        ${sc.cat ? `<span class="hm-card-sched-cat">${sc.cat}</span>` : ''}
+        <div class="hm-card-sched-info">
+          ${sc.date ? `<div class="hm-card-sched-date">${sc.date}</div>` : ''}
+          <div class="hm-card-sched-title">${sc.title || '(제목없음)'}</div>
+          ${sc.price ? `<div class="hm-card-sched-price">${sc.price} ${sc.currency||'KRW'}</div>` : ''}
+          ${sc.note  ? `<div class="hm-card-sched-note">${sc.note}</div>` : ''}
+        </div>
+      </div>`).join('');
+    html += section(`📅 여행 일정 (${hm.schedules.length}개)`, schedHtml);
+  }
+
+  return html;
+}
+
+function toggleHmCardDetail(stageId) {
+  const detail = document.getElementById(`hmCardDetail_${stageId}`);
+  const btn    = document.getElementById(`hmExpandBtn_${stageId}`);
+  if (!detail) return;
+  const isOpen = detail.classList.toggle('open');
+  if (btn) {
+    btn.classList.toggle('open', isOpen);
+    btn.childNodes[0].textContent = isOpen ? '신혼여행 상세 접기 ' : '신혼여행 상세 보기 ';
+  }
 }
 
 function calcDday(dateStr) {
@@ -2838,6 +3615,90 @@ function openEditModal(stageId) {
     resetMakeup('edit');
   }
 
+  // 예물 정보 섹션 처리
+  const editGiftSection = document.getElementById('editGiftSection');
+  const editGiftList    = document.getElementById('editGiftList');
+  if (s.category === '예물') {
+    editGiftSection.style.display = '';
+    editGiftList.innerHTML = '';
+    giftItemCount['edit'] = 0;
+    (s.gifts || []).forEach(gift => {
+      giftItemCount['edit']++;
+      editGiftList.appendChild(makeGiftItemEl('edit', giftItemCount['edit'], gift));
+    });
+  } else {
+    editGiftSection.style.display = 'none';
+    editGiftList.innerHTML = '';
+    giftItemCount['edit'] = 0;
+  }
+
+  // 혼수 정보 섹션 처리
+  const editHonsuSection = document.getElementById('editHonsuSection');
+  const editHonsuList    = document.getElementById('editHonsuList');
+  if (s.category === '혼수') {
+    editHonsuSection.style.display = '';
+    editHonsuList.innerHTML = '';
+    honsuItemCount['edit'] = 0;
+    (s.honsu || []).forEach(item => {
+      honsuItemCount['edit']++;
+      editHonsuList.appendChild(makeHonsuItemEl('edit', honsuItemCount['edit'], item));
+    });
+    updateHonsuSummary('edit');
+  } else {
+    editHonsuSection.style.display = 'none';
+    editHonsuList.innerHTML = '';
+    honsuItemCount['edit'] = 0;
+    updateHonsuSummary('edit');
+  }
+
+  // 신혼여행 섹션 로드
+  const editHmSection = document.getElementById('editHoneymoonSection');
+  if (s.category === '신혼여행') {
+    resetHmSection('edit');           // 먼저 초기화 후 표시
+    editHmSection.style.display = '';
+    const hm = s.honeymoon;
+    if (hm) {
+      // 탭 전환
+      if (hm.type === 'pkg') {
+        const tabs = editHmSection.querySelectorAll('.hm-type-tab');
+        tabs.forEach((t,i) => t.classList.toggle('active', i===1));
+        document.getElementById('editHmFree').style.display = 'none';
+        document.getElementById('editHmPkg').style.display  = '';
+      }
+      function setVal(id, val) { const el = document.getElementById(`edit${id}`); if(el) el.value = val||''; }
+      function setTimeVal(id, val) {
+        setVal(id, val);
+        const disp = document.getElementById(`edit${id}Disp`);
+        if (disp) disp.textContent = val || '';
+      }
+      if (hm.type === 'free') {
+        setVal('FreeDep', hm.departure); setTimeVal('FreeDepTime', hm.depTime);
+        setVal('FreeDest', hm.destination); setTimeVal('FreeArrTime', hm.arrTime);
+        setVal('FreeStart', hm.startDate); setVal('FreeEnd', hm.endDate);
+        calcHmDays('edit','free');
+        (hm.waypoints||[]).forEach(() => addHmWaypoint('edit','free'));
+        document.querySelectorAll('#editFreeWpList .hm-waypoint-item').forEach((wp,i) => {
+          const inp = wp.querySelector('input'); if(inp) inp.value = hm.waypoints[i]||'';
+        });
+        (hm.flights||[]).forEach(f => { addHmFlight('edit','free'); const n=hmFlightCount[hmKey('edit','free')]; const el=document.getElementById(`editflight_free_${n}`); if(el){ document.getElementById(`editfl_airline_free_${n}`).value=f.airline||''; document.getElementById(`editfl_no_free_${n}`).value=f.flightNo||''; document.getElementById(`editfl_cost_free_${n}`).value=f.cost?Number(f.cost).toLocaleString('ko-KR'):''; document.getElementById(`editfl_dep_free_${n}`).value=f.depTime||''; document.getElementById(`editfl_arr_free_${n}`).value=f.arrTime||''; document.getElementById(`editfl_gate_free_${n}`).value=f.gate||''; document.getElementById(`editfl_seat_free_${n}`).value=f.seat||''; } });
+        (hm.schedules||[]).forEach(sc => { const k=hmKey('edit','free'); hmSchedCount[k]++; const n=hmSchedCount[k]; const list=document.getElementById('editFreeSchedList'); if(list) list.appendChild(makeHmSchedEl('edit','free',n,sc)); });
+      } else {
+        setVal('PkgAgency',hm.agencyName); setVal('PkgTotal',hm.totalCost?Number(hm.totalCost).toLocaleString('ko-KR'):''); setVal('PkgDeposit',hm.deposit?Number(hm.deposit).toLocaleString('ko-KR'):''); setVal('PkgBalance',hm.balance?Number(hm.balance).toLocaleString('ko-KR'):''); setVal('PkgBalDate',hm.balDate);
+        setVal('PkgDep',hm.departure); setVal('PkgDest',hm.destination);
+        setVal('PkgStart',hm.startDate); setVal('PkgEnd',hm.endDate);
+        calcHmDays('edit','pkg');
+        (hm.waypoints||[]).forEach(() => addHmWaypoint('edit','pkg'));
+        document.querySelectorAll('#editPkgWpList .hm-waypoint-item').forEach((wp,i) => {
+          const inp = wp.querySelector('input'); if(inp) inp.value = hm.waypoints[i]||'';
+        });
+        (hm.flights||[]).forEach(f => { addHmFlight('edit','pkg'); const n=hmFlightCount[hmKey('edit','pkg')]; document.getElementById(`editfl_airline_pkg_${n}`).value=f.airline||''; document.getElementById(`editfl_no_pkg_${n}`).value=f.flightNo||''; document.getElementById(`editfl_cost_pkg_${n}`).value=f.cost?Number(f.cost).toLocaleString('ko-KR'):''; document.getElementById(`editfl_dep_pkg_${n}`).value=f.depTime||''; document.getElementById(`editfl_arr_pkg_${n}`).value=f.arrTime||''; document.getElementById(`editfl_gate_pkg_${n}`).value=f.gate||''; document.getElementById(`editfl_seat_pkg_${n}`).value=f.seat||''; });
+        (hm.schedules||[]).forEach(sc => { const k=hmKey('edit','pkg'); hmSchedCount[k]++; const n=hmSchedCount[k]; const list=document.getElementById('editPkgSchedList'); if(list) list.appendChild(makeHmSchedEl('edit','pkg',n,sc)); });
+      }
+    }
+  } else {
+    resetHmSection('edit');
+  }
+
   // 색상 초기화
   document.querySelectorAll('#editColorList .tl-color-dot').forEach(d => {
     d.classList.toggle('selected', d.dataset.color === state.editingColor);
@@ -2985,6 +3846,15 @@ function saveEdit() {
   }
   if (s.category === '메이크업') {
     s.makeup = collectMakeup('edit');
+  }
+  if (s.category === '예물') {
+    s.gifts = collectGifts('edit');
+  }
+  if (s.category === '혼수') {
+    s.honsu = collectHonsu('edit');
+  }
+  if (s.category === '신혼여행') {
+    s.honeymoon = collectHoneymoon('edit');
   }
   if (s.category === '플래너') {
     s.planner = {
@@ -4143,6 +5013,20 @@ function openTlModal() {
   document.getElementById('tlMakeupSection').style.display = 'none';
   resetMakeup('tl');
 
+  // 예물 섹션 초기화
+  document.getElementById('tlGiftSection').style.display = 'none';
+  document.getElementById('tlGiftList').innerHTML = '';
+  giftItemCount['tl'] = 0;
+
+  // 혼수 섹션 초기화
+  document.getElementById('tlHonsuSection').style.display = 'none';
+  document.getElementById('tlHonsuList').innerHTML = '';
+  honsuItemCount['tl'] = 0;
+  updateHonsuSummary('tl');
+
+  // 신혼여행 섹션 초기화
+  resetHmSection('tl');
+
   // 카테고리 커스텀 셀렉트 생성
   const triggerEl = document.getElementById('tlCategoryTrigger');
   const valEl     = document.getElementById('tlCategoryValue');
@@ -4202,6 +5086,37 @@ function onCategoryChange(cat) {
   // 메이크업 카테고리 선택 시 메이크업 정보 섹션 토글
   const makeupSection = document.getElementById('tlMakeupSection');
   if (makeupSection) makeupSection.style.display = (cat === '메이크업') ? '' : 'none';
+
+  // 예물 카테고리 선택 시 예물 정보 섹션 토글
+  const giftSection = document.getElementById('tlGiftSection');
+  if (giftSection) {
+    const showGift = cat === '예물';
+    giftSection.style.display = showGift ? '' : 'none';
+    if (!showGift) {
+      document.getElementById('tlGiftList').innerHTML = '';
+      giftItemCount['tl'] = 0;
+    }
+  }
+
+  // 혼수 카테고리 선택 시 혼수 정보 섹션 토글
+  const honsuSection = document.getElementById('tlHonsuSection');
+  if (honsuSection) {
+    const showHonsu = cat === '혼수';
+    honsuSection.style.display = showHonsu ? '' : 'none';
+    if (!showHonsu) {
+      document.getElementById('tlHonsuList').innerHTML = '';
+      honsuItemCount['tl'] = 0;
+      updateHonsuSummary('tl');
+    }
+  }
+
+  // 신혼여행 카테고리 선택 시 신혼여행 섹션 토글
+  const hmSection = document.getElementById('tlHoneymoonSection');
+  if (hmSection) {
+    const showHm = cat === '신혼여행';
+    hmSection.style.display = showHm ? '' : 'none';
+    if (!showHm) resetHmSection('tl');
+  }
 
   // 이미 있는 할 일 아이템의 서브카테고리 옵션 갱신
   document.querySelectorAll('[data-todo-cs]').forEach(triggerEl => {
@@ -4349,6 +5264,9 @@ function saveTlItem() {
         dressSelected: (() => { for(let n=1;n<=3;n++) { if(document.getElementById(`tlPlDressFinal${n}`)?.classList.contains('selected')) return n; } return 0; })(),
         makeup:      document.getElementById('tlPlMakeup')?.value.trim()                         || '',
       } : null,
+      gifts: category === '예물' ? collectGifts('tl') : [],
+      honsu: category === '혼수' ? collectHonsu('tl') : [],
+      honeymoon: category === '신혼여행' ? collectHoneymoon('tl') : null,
     };
     if (lastIdx >= 0) tab.stages.splice(lastIdx + 1, 0, newStage);
     else              tab.stages.push(newStage);
@@ -4357,6 +5275,253 @@ function saveTlItem() {
     renderTimeline();
   }
   closeTlModal();
+}
+
+/* ════════════════════════════════════
+   혼수 섹션 유틸
+════════════════════════════════════ */
+const HONSU_CATS = ['가전','가구','인터넷','TV','침구','생활용품','주방용품'];
+const honsuItemCount = { tl: 0, edit: 0 };
+
+function makeHonsuItemEl(prefix, n, data) {
+  const isDone = data?.done || false;
+  const catOptions = HONSU_CATS.map(c =>
+    `<option value="${c}"${data?.cat === c ? ' selected' : ''}>${c}</option>`
+  ).join('');
+
+  const svgX = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  const div = document.createElement('div');
+  div.className = 'honsu-item' + (isDone ? ' done' : '');
+  div.id = `${prefix}honsu_${n}`;
+  div.innerHTML = `
+    <div class="honsu-item-header">
+      <div class="honsu-check" id="${prefix}honsuCheck_${n}" onclick="toggleHonsuDone('${prefix}',${n})"></div>
+      <span class="honsu-item-num">혼수 ${n}</span>
+      <span class="honsu-item-name-text" id="${prefix}honsuNameDisp_${n}">${(data?.name || '혼수명 미입력').replace(/</g,'&lt;')}</span>
+      <button class="honsu-item-del" onclick="removeHonsuItem('${prefix}',${n})" aria-label="삭제">${svgX}</button>
+    </div>
+    <div class="honsu-item-body">
+      <div>
+        <div class="honsu-field-label">카테고리</div>
+        <div class="tl-input-wrap">
+          <select class="honsu-cat-select" id="${prefix}hcat_${n}">
+            <option value="">선택하세요</option>
+            ${catOptions}
+          </select>
+          <span class="honsu-cat-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </div>
+      </div>
+      <div>
+        <div class="honsu-field-label">혼수명</div>
+        <div class="tl-input-wrap">
+          <input class="tl-input" id="${prefix}hname_${n}" type="text" placeholder="혼수명을 입력하세요" maxlength="40" autocomplete="off"
+                 oninput="updateHonsuNameDisp('${prefix}',${n})"
+                 value="${(data?.name||'').replace(/"/g,'&quot;')}"/>
+        </div>
+      </div>
+      <div>
+        <div class="honsu-field-label">혼수 가격</div>
+        <div class="tl-budget-input-row">
+          <span class="tl-budget-symbol">₩</span>
+          <input class="tl-input" id="${prefix}hprice_${n}" type="text" inputmode="numeric" placeholder="0"
+                 oninput="onHonsuPriceInput(this,'${prefix}')" style="padding-left:4px;border:none;background:transparent;"
+                 value="${data?.price ? Number(data.price).toLocaleString('ko-KR') : ''}"/>
+          <span class="tl-budget-unit">원</span>
+        </div>
+      </div>
+      <div>
+        <div class="honsu-field-label">혼수 구매처</div>
+        <div class="tl-input-wrap">
+          <input class="tl-input" id="${prefix}hstore_${n}" type="text" placeholder="구매처를 입력하세요" maxlength="40" autocomplete="off"
+                 value="${(data?.store||'').replace(/"/g,'&quot;')}"/>
+        </div>
+      </div>
+      <div>
+        <div class="honsu-field-label">혼수 내용</div>
+        <textarea class="tl-textarea" id="${prefix}hnote_${n}" placeholder="혼수 내용을 입력하세요" rows="2" style="min-height:48px">${data?.note||''}</textarea>
+      </div>
+    </div>`;
+  return div;
+}
+
+function addHonsuItem(prefix) {
+  honsuItemCount[prefix]++;
+  const n    = honsuItemCount[prefix];
+  const list = document.getElementById(`${prefix}HonsuList`);
+  if (!list) return;
+  const el = makeHonsuItemEl(prefix, n, null);
+  list.appendChild(el);
+  updateHonsuSummary(prefix);
+  requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+}
+
+function removeHonsuItem(prefix, n) {
+  document.getElementById(`${prefix}honsu_${n}`)?.remove();
+  document.querySelectorAll(`#${prefix}HonsuList .honsu-item`).forEach((el, i) => {
+    el.querySelector('.honsu-item-num').textContent = `혼수 ${i + 1}`;
+  });
+  updateHonsuSummary(prefix);
+}
+
+function toggleHonsuDone(prefix, n) {
+  const item = document.getElementById(`${prefix}honsu_${n}`);
+  if (!item) return;
+  item.classList.toggle('done');
+  updateHonsuSummary(prefix);
+}
+
+function updateHonsuNameDisp(prefix, n) {
+  const name = document.getElementById(`${prefix}hname_${n}`)?.value.trim();
+  const disp = document.getElementById(`${prefix}honsuNameDisp_${n}`);
+  if (disp) disp.textContent = name || '혼수명 미입력';
+}
+
+function onHonsuPriceInput(el, prefix) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value  = raw ? Number(raw).toLocaleString('ko-KR') : '';
+  updateHonsuSummary(prefix);
+}
+
+function updateHonsuSummary(prefix) {
+  const items = document.querySelectorAll(`#${prefix}HonsuList .honsu-item`);
+  const total = items.length;
+  const done  = document.querySelectorAll(`#${prefix}HonsuList .honsu-item.done`).length;
+  const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
+
+  let totalCost = 0;
+  items.forEach(item => {
+    const n = item.id.replace(`${prefix}honsu_`, '');
+    const price = Number((document.getElementById(`${prefix}hprice_${n}`)?.value || '0').replace(/,/g,'')) || 0;
+    totalCost += price;
+  });
+
+  const progEl  = document.getElementById(`${prefix}HonsuProgress`);
+  const pctEl   = document.getElementById(`${prefix}HonsuPct`);
+  const barEl   = document.getElementById(`${prefix}HonsuBar`);
+  const totalEl = document.getElementById(`${prefix}HonsuTotal`);
+  if (progEl)  progEl.textContent  = `${done} / ${total}`;
+  if (pctEl)   pctEl.textContent   = `${pct}%`;
+  if (barEl)   barEl.style.width   = `${pct}%`;
+  if (totalEl) totalEl.textContent = totalCost > 0
+    ? `₩ ${totalCost.toLocaleString('ko-KR')}원`
+    : '₩ 0원';
+}
+
+function collectHonsu(prefix) {
+  const items = [];
+  document.querySelectorAll(`#${prefix}HonsuList .honsu-item`).forEach(item => {
+    const n = item.id.replace(`${prefix}honsu_`, '');
+    items.push({
+      done:  item.classList.contains('done'),
+      cat:   document.getElementById(`${prefix}hcat_${n}`)?.value          || '',
+      name:  document.getElementById(`${prefix}hname_${n}`)?.value.trim()  || '',
+      price: document.getElementById(`${prefix}hprice_${n}`)?.value.replace(/,/g,'') || '',
+      store: document.getElementById(`${prefix}hstore_${n}`)?.value.trim() || '',
+      note:  document.getElementById(`${prefix}hnote_${n}`)?.value.trim()  || '',
+    });
+  });
+  return items;
+}
+
+/* ════════════════════════════════════
+   예물 섹션 유틸
+════════════════════════════════════ */
+const GIFT_CATS = ['반지','목걸이','귀걸이','예복','지갑','넥타이','스카프','시계','현금','가방','이불','수저','정장','기타'];
+const giftItemCount = { tl: 0, edit: 0 };
+
+function makeGiftItemEl(prefix, n, data) {
+  const catOptions = GIFT_CATS.map(c =>
+    `<option value="${c}"${data?.cat === c ? ' selected' : ''}>${c}</option>`
+  ).join('');
+
+  const div = document.createElement('div');
+  div.className = 'gift-item';
+  div.id = `${prefix}gift_${n}`;
+  div.innerHTML = `
+    <div class="gift-item-header">
+      <span class="gift-item-num">예물 ${n}</span>
+      <button class="gift-item-del" onclick="removeGiftItem('${prefix}',${n})" aria-label="삭제">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="gift-item-body">
+      <div>
+        <div class="gift-field-label">카테고리</div>
+        <div class="tl-input-wrap">
+          <select class="gift-cat-select" id="${prefix}gcat_${n}">
+            <option value="">선택하세요</option>
+            ${catOptions}
+          </select>
+          <span class="gift-cat-arrow">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+      <div>
+        <div class="gift-field-label">예물명</div>
+        <div class="tl-input-wrap">
+          <input class="tl-input" id="${prefix}gname_${n}" type="text" placeholder="예물명을 입력하세요" maxlength="40" autocomplete="off" value="${(data?.name||'').replace(/"/g,'&quot;')}"/>
+        </div>
+      </div>
+      <div>
+        <div class="gift-field-label">예물 가격</div>
+        <div class="tl-budget-input-row">
+          <span class="tl-budget-symbol">₩</span>
+          <input class="tl-input" id="${prefix}gprice_${n}" type="text" inputmode="numeric" placeholder="0"
+                 oninput="onGiftPriceInput(this)" style="padding-left:4px;border:none;background:transparent;"
+                 value="${data?.price ? Number(data.price).toLocaleString('ko-KR') : ''}"/>
+          <span class="tl-budget-unit">원</span>
+        </div>
+      </div>
+      <div>
+        <div class="gift-field-label">예물 구매 일자</div>
+        <div class="tl-input-wrap">
+          <input class="tl-input" id="${prefix}gdate_${n}" type="date" value="${data?.buyDate||''}"/>
+        </div>
+      </div>
+      <div>
+        <div class="gift-field-label">비고</div>
+        <textarea class="tl-textarea" id="${prefix}gnote_${n}" placeholder="비고를 입력하세요" rows="2" style="min-height:56px">${data?.note||''}</textarea>
+      </div>
+    </div>`;
+  return div;
+}
+
+function addGiftItem(prefix) {
+  giftItemCount[prefix]++;
+  const n    = giftItemCount[prefix];
+  const list = document.getElementById(`${prefix}GiftList`);
+  if (!list) return;
+  const el = makeGiftItemEl(prefix, n, null);
+  list.appendChild(el);
+  requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+}
+
+function removeGiftItem(prefix, n) {
+  document.getElementById(`${prefix}gift_${n}`)?.remove();
+  document.querySelectorAll(`#${prefix}GiftList .gift-item`).forEach((el, i) => {
+    el.querySelector('.gift-item-num').textContent = `예물 ${i + 1}`;
+  });
+}
+
+function onGiftPriceInput(el) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value  = raw ? Number(raw).toLocaleString('ko-KR') : '';
+}
+
+function collectGifts(prefix) {
+  const gifts = [];
+  document.querySelectorAll(`#${prefix}GiftList .gift-item`).forEach(item => {
+    const n = item.id.replace(`${prefix}gift_`, '');
+    gifts.push({
+      cat:     document.getElementById(`${prefix}gcat_${n}`)?.value          || '',
+      name:    document.getElementById(`${prefix}gname_${n}`)?.value.trim()  || '',
+      price:   document.getElementById(`${prefix}gprice_${n}`)?.value.replace(/,/g,'') || '',
+      buyDate: document.getElementById(`${prefix}gdate_${n}`)?.value         || '',
+      note:    document.getElementById(`${prefix}gnote_${n}`)?.value.trim()  || '',
+    });
+  });
+  return gifts;
 }
 
 /* ════════════════════════════════════
@@ -4400,6 +5565,360 @@ document.getElementById('darkToggle').addEventListener('click', () => {
 updateProgress(state.tabs[0]);
 renderTimeline('default');
 initVtpScrollListeners();
+
+/* ════════════════════════════════════
+   신혼여행 섹션
+════════════════════════════════════ */
+const HM_SCHED_CATS = ['숙소','투어','관광지','식사','선물','물품','편의점','기타'];
+const HM_CURRENCIES = [
+  {code:'KRW',rate:1,symbol:'₩'},
+  {code:'USD',rate:1350,symbol:'$'},
+  {code:'EUR',rate:1460,symbol:'€'},
+  {code:'JPY',rate:9.2,symbol:'¥'},
+  {code:'CNY',rate:186,symbol:'¥'},
+  {code:'THB',rate:38,symbol:'฿'},
+  {code:'VND',rate:0.053,symbol:'₫'},
+  {code:'HKD',rate:173,symbol:'HK$'}
+];
+const hmWpCount    = { tl_free:0, tl_pkg:0, edit_free:0, edit_pkg:0 };
+const hmFlightCount= { tl_free:0, tl_pkg:0, edit_free:0, edit_pkg:0 };
+const hmSchedCount = { tl_free:0, tl_pkg:0, edit_free:0, edit_pkg:0 };
+
+function hmKey(prefix, mode) { return `${prefix}_${mode}`; }
+
+function onHmTypeChange(prefix, type, el) {
+  const tabs = el.parentElement.querySelectorAll('.hm-type-tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const freeEl = document.getElementById(`${prefix}HmFree`);
+  const pkgEl  = document.getElementById(`${prefix}HmPkg`);
+  if (freeEl) freeEl.style.display = type === 'free' ? '' : 'none';
+  if (pkgEl)  pkgEl.style.display  = type === 'pkg'  ? '' : 'none';
+}
+
+/* 경유지 */
+function addHmWaypoint(prefix, mode) {
+  const k = hmKey(prefix, mode);
+  hmWpCount[k]++;
+  const n    = hmWpCount[k];
+  const list = document.getElementById(`${prefix}${mode === 'free' ? 'Free' : 'Pkg'}WpList`);
+  if (!list) return;
+  const div = document.createElement('div');
+  div.className = 'hm-waypoint-item';
+  div.id = `${prefix}wp_${mode}_${n}`;
+  div.innerHTML = `
+    <div class="tl-input-wrap"><input class="tl-input" id="${prefix}wpVal_${mode}_${n}" placeholder="경유지 입력"></div>
+    <button class="hm-wp-del" onclick="removeHmWaypoint('${prefix}','${mode}',${n})" title="삭제">×</button>`;
+  list.appendChild(div);
+}
+
+function removeHmWaypoint(prefix, mode, n) {
+  const el = document.getElementById(`${prefix}wp_${mode}_${n}`);
+  if (el) el.remove();
+}
+
+/* 여행 기간 계산 */
+function calcHmDays(prefix, mode) {
+  const cap  = mode === 'free' ? 'Free' : 'Pkg';
+  const s    = document.getElementById(`${prefix}${cap}Start`)?.value;
+  const e    = document.getElementById(`${prefix}${cap}End`)?.value;
+  const res  = document.getElementById(`${prefix}${cap}Period`);
+  if (!res) return;
+  if (!s || !e) { res.textContent = '출발일·귀국일을 선택하세요'; return; }
+  const diff = (new Date(e) - new Date(s)) / 86400000;
+  if (diff <= 0) { res.textContent = '귀국일이 출발일보다 앞설 수 없어요'; return; }
+  res.textContent = `${diff}박 ${diff + 1}일`;
+}
+
+/* 비행 정보 아이템 생성 */
+function makeHmFlightEl(prefix, mode, n, data) {
+  data = data || {};
+  const cap = mode === 'free' ? 'Free' : 'Pkg';
+  const el = document.createElement('div');
+  el.className = 'hm-flight-item';
+  el.id = `${prefix}flight_${mode}_${n}`;
+  el.innerHTML = `
+    <div class="hm-flight-header">
+      <span class="hm-flight-num">비행 ${n}</span>
+      <button class="hm-flight-del" onclick="removeHmFlight('${prefix}','${mode}',${n})" title="삭제">×</button>
+    </div>
+    <div class="hm-flight-body">
+      <div>
+        <div class="hm-field-label">비행사</div>
+        <div class="tl-input-wrap"><input class="tl-input" id="${prefix}fl_airline_${mode}_${n}" placeholder="항공사 이름" value="${data.airline||''}"></div>
+      </div>
+      <div>
+        <div class="hm-field-label">항공편</div>
+        <div class="tl-input-wrap"><input class="tl-input" id="${prefix}fl_no_${mode}_${n}" placeholder="예: KE001" value="${data.flightNo||''}"></div>
+      </div>
+      <div>
+        <div class="hm-field-label">예매 비용</div>
+        <div class="tl-budget-input-row">
+          <span class="tl-budget-symbol">₩</span>
+          <input class="tl-input" id="${prefix}fl_cost_${mode}_${n}" placeholder="0" value="${data.cost||''}" oninput="onHmPriceInput(this)">
+          <span class="tl-budget-unit">원</span>
+        </div>
+      </div>
+      <div class="hm-row">
+        <div>
+          <div class="hm-field-label">출발 시간</div>
+          <div class="tl-input-wrap"><input class="tl-input" id="${prefix}fl_dep_${mode}_${n}" type="time" value="${data.depTime||''}"></div>
+        </div>
+        <div>
+          <div class="hm-field-label">도착 시간</div>
+          <div class="tl-input-wrap"><input class="tl-input" id="${prefix}fl_arr_${mode}_${n}" type="time" value="${data.arrTime||''}"></div>
+        </div>
+      </div>
+      <div class="hm-row">
+        <div>
+          <div class="hm-field-label">탑승 구역</div>
+          <div class="tl-input-wrap"><input class="tl-input" id="${prefix}fl_gate_${mode}_${n}" placeholder="예: A12" value="${data.gate||''}"></div>
+        </div>
+        <div>
+          <div class="hm-field-label">좌석</div>
+          <div class="tl-input-wrap"><input class="tl-input" id="${prefix}fl_seat_${mode}_${n}" placeholder="예: 15A" value="${data.seat||''}"></div>
+        </div>
+      </div>
+    </div>`;
+  return el;
+}
+
+function addHmFlight(prefix, mode) {
+  const k = hmKey(prefix, mode);
+  hmFlightCount[k]++;
+  const n    = hmFlightCount[k];
+  const cap  = mode === 'free' ? 'Free' : 'Pkg';
+  const list = document.getElementById(`${prefix}${cap}FlightList`);
+  if (!list) return;
+  list.appendChild(makeHmFlightEl(prefix, mode, n, null));
+}
+
+function removeHmFlight(prefix, mode, n) {
+  const el = document.getElementById(`${prefix}flight_${mode}_${n}`);
+  if (el) el.remove();
+}
+
+/* 여행 일정 아이템 생성 */
+function makeHmSchedEl(prefix, mode, n, data) {
+  data = data || {};
+  const catOpts = HM_SCHED_CATS.map(c =>
+    `<option value="${c}" ${data.cat===c?'selected':''}>${c}</option>`
+  ).join('');
+  const curOpts = HM_CURRENCIES.map(c =>
+    `<option value="${c.code}" ${(data.currency||'KRW')===c.code?'selected':''}>${c.code}</option>`
+  ).join('');
+  const el = document.createElement('div');
+  el.className = 'hm-sched-item';
+  el.id = `${prefix}sched_${mode}_${n}`;
+  el.innerHTML = `
+    <div class="hm-sched-header">
+      <span class="hm-sched-num">일정 ${n}</span>
+      <button class="hm-sched-del" onclick="removeHmSched('${prefix}','${mode}',${n})" title="삭제">×</button>
+    </div>
+    <div class="hm-sched-body">
+      <div>
+        <div class="hm-field-label">카테고리</div>
+        <div class="tl-input-wrap" style="display:flex;align-items:center">
+          <select class="hm-sched-cat-select" id="${prefix}sc_cat_${mode}_${n}">
+            <option value="">선택하세요</option>${catOpts}
+          </select>
+          <span class="hm-sched-cat-arrow">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+      <div>
+        <div class="hm-field-label">날짜</div>
+        <div class="tl-input-wrap"><input class="tl-input" id="${prefix}sc_date_${mode}_${n}" type="date" value="${data.date||''}"></div>
+      </div>
+      <div>
+        <div class="hm-field-label">제목</div>
+        <div class="tl-input-wrap"><input class="tl-input" id="${prefix}sc_title_${mode}_${n}" placeholder="일정 제목" value="${data.title||''}"></div>
+      </div>
+      <div>
+        <div class="hm-field-label">금액</div>
+        <div class="hm-currency-row">
+          <div class="hm-currency-select-wrap">
+            <select class="hm-currency-select" id="${prefix}sc_cur_${mode}_${n}" onchange="onHmSchedPriceInput(document.getElementById('${prefix}sc_price_${mode}_${n}'),'${prefix}','${mode}',${n})">
+              ${curOpts}
+            </select>
+          </div>
+          <div class="hm-currency-input-wrap">
+            <div class="tl-input-wrap" style="border-radius:8px">
+              <input class="tl-input" id="${prefix}sc_price_${mode}_${n}" placeholder="0" value="${data.price||''}"
+                oninput="onHmSchedPriceInput(this,'${prefix}','${mode}',${n})">
+            </div>
+          </div>
+        </div>
+        <div class="hm-krw-hint" id="${prefix}sc_krw_${mode}_${n}"></div>
+      </div>
+      <div>
+        <div class="hm-field-label">기타</div>
+        <div class="tl-input-wrap"><input class="tl-input" id="${prefix}sc_note_${mode}_${n}" placeholder="기타 메모" value="${data.note||''}"></div>
+      </div>
+    </div>`;
+  return el;
+}
+
+function addHmSched(prefix, mode) {
+  const k = hmKey(prefix, mode);
+  hmSchedCount[k]++;
+  const n    = hmSchedCount[k];
+  const cap  = mode === 'free' ? 'Free' : 'Pkg';
+  const list = document.getElementById(`${prefix}${cap}SchedList`);
+  if (!list) return;
+  list.appendChild(makeHmSchedEl(prefix, mode, n, null));
+}
+
+function removeHmSched(prefix, mode, n) {
+  const el = document.getElementById(`${prefix}sched_${mode}_${n}`);
+  if (el) el.remove();
+}
+
+function onHmPriceInput(el) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value  = raw ? Number(raw).toLocaleString('ko-KR') : '';
+}
+
+function onHmSchedPriceInput(el, prefix, mode, n) {
+  const raw  = el.value.replace(/[^0-9.]/g, '');
+  const num  = parseFloat(raw) || 0;
+  const curSel = document.getElementById(`${prefix}sc_cur_${mode}_${n}`);
+  const hint   = document.getElementById(`${prefix}sc_krw_${mode}_${n}`);
+  if (!curSel || !hint) return;
+  const cur  = HM_CURRENCIES.find(c => c.code === curSel.value) || HM_CURRENCIES[0];
+  if (cur.code === 'KRW') {
+    const r = raw ? Number(raw.replace(/[^0-9]/g,'')) : 0;
+    el.value = r ? Number(r).toLocaleString('ko-KR') : '';
+    hint.textContent = '';
+  } else {
+    hint.textContent = num > 0
+      ? `≈ ₩ ${Math.round(num * cur.rate).toLocaleString('ko-KR')}원 (${cur.code} 기준)`
+      : '';
+  }
+}
+
+function collectHoneymoon(prefix) {
+  const section = document.getElementById(`${prefix}HoneymoonSection`);
+  if (!section || section.style.display === 'none') return null;
+  const tab  = section.querySelector('.hm-type-tab.active');
+  const type = tab?.textContent?.trim() === '패키지' ? 'pkg' : 'free';
+  const cap  = type === 'pkg' ? 'Pkg' : 'Free';
+
+  function getVal(id) { return document.getElementById(`${prefix}${id}`)?.value?.trim() || ''; }
+  function getWaypoints(mode) {
+    const pts = [];
+    document.querySelectorAll(`#${prefix}${mode==='free'?'Free':'Pkg'}WpList .hm-waypoint-item`).forEach(wp => {
+      const inp = wp.querySelector('input');
+      if (inp?.value?.trim()) pts.push(inp.value.trim());
+    });
+    return pts;
+  }
+  function getFlights(mode) {
+    const flights = [];
+    document.querySelectorAll(`#${prefix}${mode==='free'?'Free':'Pkg'}FlightList .hm-flight-item`).forEach(el => {
+      const n = el.id.replace(`${prefix}flight_${mode}_`,'');
+      const costRaw = document.getElementById(`${prefix}fl_cost_${mode}_${n}`)?.value?.replace(/[^0-9]/g,'') || '0';
+      flights.push({
+        airline:  document.getElementById(`${prefix}fl_airline_${mode}_${n}`)?.value?.trim() || '',
+        flightNo: document.getElementById(`${prefix}fl_no_${mode}_${n}`)?.value?.trim() || '',
+        cost:     costRaw,
+        depTime:  document.getElementById(`${prefix}fl_dep_${mode}_${n}`)?.value || '',
+        arrTime:  document.getElementById(`${prefix}fl_arr_${mode}_${n}`)?.value || '',
+        gate:     document.getElementById(`${prefix}fl_gate_${mode}_${n}`)?.value?.trim() || '',
+        seat:     document.getElementById(`${prefix}fl_seat_${mode}_${n}`)?.value?.trim() || '',
+      });
+    });
+    return flights;
+  }
+  function getSchedules(mode) {
+    const scheds = [];
+    document.querySelectorAll(`#${prefix}${mode==='free'?'Free':'Pkg'}SchedList .hm-sched-item`).forEach(el => {
+      const n = el.id.replace(`${prefix}sched_${mode}_`,'');
+      scheds.push({
+        cat:      document.getElementById(`${prefix}sc_cat_${mode}_${n}`)?.value || '',
+        date:     document.getElementById(`${prefix}sc_date_${mode}_${n}`)?.value || '',
+        title:    document.getElementById(`${prefix}sc_title_${mode}_${n}`)?.value?.trim() || '',
+        price:    document.getElementById(`${prefix}sc_price_${mode}_${n}`)?.value?.trim() || '',
+        currency: document.getElementById(`${prefix}sc_cur_${mode}_${n}`)?.value || 'KRW',
+        note:     document.getElementById(`${prefix}sc_note_${mode}_${n}`)?.value?.trim() || '',
+      });
+    });
+    return scheds;
+  }
+
+  const result = { type };
+  if (type === 'free') {
+    result.departure  = getVal('FreeDep');
+    result.depTime    = getVal('FreeDepTime');
+    result.destination= getVal('FreeDest');
+    result.arrTime    = getVal('FreeArrTime');
+    result.waypoints  = getWaypoints('free');
+    result.startDate  = getVal('FreeStart');
+    result.endDate    = getVal('FreeEnd');
+    result.flights    = getFlights('free');
+    result.schedules  = getSchedules('free');
+  } else {
+    result.agencyName   = getVal('PkgAgency');
+    result.totalCost    = getVal('PkgTotal').replace(/[^0-9]/g,'');
+    result.deposit      = getVal('PkgDeposit').replace(/[^0-9]/g,'');
+    result.balance      = getVal('PkgBalance').replace(/[^0-9]/g,'');
+    result.balDate      = getVal('PkgBalDate');
+    result.departure    = getVal('PkgDep');
+    result.destination  = getVal('PkgDest');
+    result.waypoints    = getWaypoints('pkg');
+    result.startDate    = getVal('PkgStart');
+    result.endDate      = getVal('PkgEnd');
+    result.flights      = getFlights('pkg');
+    result.schedules    = getSchedules('pkg');
+  }
+  return result;
+}
+
+function resetHmSection(prefix) {
+  const sec = document.getElementById(`${prefix}HoneymoonSection`);
+  if (!sec) return;
+  sec.style.display = 'none';
+  // 탭 초기화
+  sec.querySelectorAll('.hm-type-tab').forEach((t,i) => t.classList.toggle('active', i===0));
+  const freeEl = document.getElementById(`${prefix}HmFree`);
+  const pkgEl  = document.getElementById(`${prefix}HmPkg`);
+  if (freeEl) freeEl.style.display = '';
+  if (pkgEl)  pkgEl.style.display  = 'none';
+  // 카운터 초기화
+  ['free','pkg'].forEach(mode => {
+    const k = hmKey(prefix, mode);
+    hmWpCount[k] = 0;
+    hmFlightCount[k] = 0;
+    hmSchedCount[k] = 0;
+  });
+  // 리스트 클리어
+  ['Free','Pkg'].forEach(cap => {
+    const wpList = document.getElementById(`${prefix}${cap}WpList`);
+    const flList = document.getElementById(`${prefix}${cap}FlightList`);
+    const scList = document.getElementById(`${prefix}${cap}SchedList`);
+    if (wpList) wpList.innerHTML = '';
+    if (flList) flList.innerHTML = '';
+    if (scList) scList.innerHTML = '';
+  });
+  // 텍스트/날짜 초기화
+  ['FreeDep','FreeDepTime','FreeDest','FreeArrTime','FreeStart','FreeEnd',
+   'PkgAgency','PkgTotal','PkgDeposit','PkgBalance','PkgBalDate','PkgDep','PkgDest','PkgStart','PkgEnd']
+    .forEach(id => {
+      const el = document.getElementById(`${prefix}${id}`);
+      if (el) el.value = '';
+    });
+  ['FreePeriod','PkgPeriod'].forEach(id => {
+    const el = document.getElementById(`${prefix}${id}`);
+    if (el) el.textContent = '출발일·귀국일을 선택하세요';
+  });
+  // 시간 표시 초기화
+  ['FreeDepTimeDisp','FreeArrTimeDisp'].forEach(id => {
+    const el = document.getElementById(`${prefix}${id}`);
+    if (el) el.textContent = '';
+  });
+}
+
 </script>
 </body>
 </html>
