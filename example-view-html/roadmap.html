@@ -2345,6 +2345,485 @@
 
         </div>
 
+        <!-- 한복 정보 (한복 카테고리 선택 시) -->
+        <div class="tl-field" id="tlHanbokSection" style="display:none">
+          <div class="tl-field-label">한복 정보</div>
+          <div class="hm-card">
+            <div class="hm-card-title">👘 한복 정보</div>
+            <div class="hm-card-body">
+              <div>
+                <div class="hm-field-label">한복 업체</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlHbVendor" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">한복 대여료</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlHbFee" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onHmPriceInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div class="tl-row" style="margin-bottom:0">
+                <div class="tl-field">
+                  <div class="hm-field-label">한복 대여 시간</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="tlHbRentTime" type="time"/>
+                  </div>
+                </div>
+                <div class="tl-field">
+                  <div class="hm-field-label">한복 반납 시간</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="tlHbReturnTime" type="time"/>
+                  </div>
+                </div>
+              </div>
+              <div class="nh-toggle-row">
+                <span class="hm-field-label" style="margin:0">신랑측 대여 여부</span>
+                <button class="nh-toggle-btn" id="tlHbGroomToggle" onclick="onHbToggle('tl','groom')">미대여</button>
+              </div>
+              <div class="nh-toggle-row" style="border-bottom:none;padding-bottom:0">
+                <span class="hm-field-label" style="margin:0">신부측 대여 여부</span>
+                <button class="nh-toggle-btn" id="tlHbBrideToggle" onclick="onHbToggle('tl','bride')">미대여</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 사진 정보 (사진 카테고리 선택 시) -->
+        <div class="tl-field" id="tlPhotoSection" style="display:none">
+          <div class="tl-field-label">사진 정보</div>
+          <div class="pl-section">
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="tlPhotoTabMain" onclick="togglePhotoTab('tl','main')">
+                <span class="st-tab-check"></span>본식
+              </button>
+              <button class="st-tab-btn" id="tlPhotoTabIphone" onclick="togglePhotoTab('tl','iphone')">
+                <span class="st-tab-check"></span>아이폰 스냅
+              </button>
+            </div>
+            <div class="st-sub-section" id="tlPhotoMainSection">
+              <div class="st-sub-title">📸 본식</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlPhMainName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlPhMainContractDate" type="date"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">연락처</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlPhMainContact" type="tel" placeholder="연락처를 입력하세요" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlPhMainTotal" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcPhotoBalance('tl','Main')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약금</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlPhMainDeposit" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcPhotoBalance('tl','Main')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div class="pl-balance-card">
+                <div>
+                  <div class="pl-balance-label">잔금 (자동 계산)</div>
+                  <div class="pl-balance-val" id="tlPhMainBalance">—</div>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">잔금 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlPhMainBalanceDate" type="date"/>
+                </div>
+              </div>
+            </div>
+            <div class="st-sub-section" id="tlPhotoIphoneSection">
+              <div class="st-sub-title">📱 아이폰 스냅</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlPhIphoneName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlPhIphoneContractDate" type="date"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">연락처</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlPhIphoneContact" type="tel" placeholder="연락처를 입력하세요" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlPhIphoneTotal" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcPhotoBalance('tl','Iphone')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약금</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlPhIphoneDeposit" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcPhotoBalance('tl','Iphone')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div class="pl-balance-card">
+                <div>
+                  <div class="pl-balance-label">잔금 (자동 계산)</div>
+                  <div class="pl-balance-val" id="tlPhIphoneBalance">—</div>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">잔금 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlPhIphoneBalanceDate" type="date"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DVD 정보 (DVD 카테고리 선택 시) -->
+        <div class="tl-field" id="tlDvdSection" style="display:none">
+          <div class="tl-field-label">DVD 정보</div>
+          <div class="pl-section">
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="tlDvdTabMain" onclick="toggleDvdTab('tl','main')">
+                <span class="st-tab-check"></span>본식 DVD
+              </button>
+              <button class="st-tab-btn" id="tlDvdTabPre" onclick="toggleDvdTab('tl','pre')">
+                <span class="st-tab-check"></span>식전 영상
+              </button>
+              <button class="st-tab-btn" id="tlDvdTabDuring" onclick="toggleDvdTab('tl','during')">
+                <span class="st-tab-check"></span>식중 영상
+              </button>
+            </div>
+            <div class="st-sub-section" id="tlDvdMainSection">
+              <div class="st-sub-title">🎬 본식 DVD</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlDvMainName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlDvMainContractDate" type="date"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약 상세 정보</div>
+                <div class="tl-input-wrap">
+                  <textarea class="tl-input" id="tlDvMainContractDetail" rows="3" placeholder="계약 상세 정보를 입력하세요" style="resize:vertical;min-height:60px"></textarea>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">연락처</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlDvMainContact" type="tel" placeholder="연락처를 입력하세요" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlDvMainTotal" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcDvdBalance('tl')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약금</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlDvMainDeposit" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcDvdBalance('tl')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div class="pl-balance-card">
+                <div>
+                  <div class="pl-balance-label">잔금 (자동 계산)</div>
+                  <div class="pl-balance-val" id="tlDvMainBalance">—</div>
+                </div>
+              </div>
+            </div>
+            <div class="st-sub-section" id="tlDvdPreSection">
+              <div class="st-sub-title">🎞️ 식전 영상</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlDvPreName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">홈페이지 주소</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlDvPreWebsite" type="url" placeholder="https://" maxlength="200" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlDvPreAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">영상 길이</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlDvPreDuration" type="text" placeholder="예: 3분" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+            </div>
+            <div class="st-sub-section" id="tlDvdDuringSection">
+              <div class="st-sub-title">🎥 식중 영상</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlDvDuringName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">홈페이지 주소</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlDvDuringWebsite" type="url" placeholder="https://" maxlength="200" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlDvDuringAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">영상 길이</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlDvDuringDuration" type="text" placeholder="예: 3분" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 상견례 정보 (상견례 카테고리 선택 시) -->
+        <div class="tl-field" id="tlSangyeonSection" style="display:none">
+          <div class="tl-field-label">상견례 정보</div>
+          <div class="hm-card" style="margin-bottom:8px">
+            <div class="hm-card-title">🥂 상견례</div>
+            <div class="hm-card-body">
+              <div>
+                <div class="hm-field-label">식당명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlSgRestaurant" type="text" placeholder="식당명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div class="tl-row" style="margin-bottom:0">
+                <div class="tl-field">
+                  <div class="hm-field-label">예약 날짜</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="tlSgDate" type="date"/>
+                  </div>
+                </div>
+                <div class="tl-field">
+                  <div class="hm-field-label">예약 시간</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="tlSgTime" type="time"/>
+                  </div>
+                </div>
+              </div>
+              <div class="tl-row" style="margin-bottom:0">
+                <div class="tl-field">
+                  <div class="hm-field-label">예약자 명</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="tlSgReserver" type="text" placeholder="이름" maxlength="20" autocomplete="off"/>
+                  </div>
+                </div>
+                <div class="tl-field">
+                  <div class="hm-field-label">예약 인원 수</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="tlSgPeople" type="number" placeholder="0" min="1" style="text-align:right"/>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">예상 금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlSgAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onHmPriceInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">식당 위치</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlSgLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="hm-card">
+            <div class="hm-card-title">🎁 선물</div>
+            <div class="hm-card-body">
+              <div class="gift-list" id="tlSgGiftList"></div>
+              <button class="btn-add-gift" onclick="addSgGift('tl')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                선물 추가
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 부케 정보 (부케 카테고리 선택 시) -->
+        <div class="tl-field" id="tlBouquetSection" style="display:none">
+          <div class="tl-field-label">부케 정보</div>
+          <div class="hm-card">
+            <div class="hm-card-title">💐 부케 정보</div>
+            <div class="hm-card-body">
+              <div>
+                <div class="hm-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlBqVendor" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">계약 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlBqContractDate" type="date"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">연락처</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlBqContact" type="tel" placeholder="연락처를 입력하세요" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">부케명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlBqName" type="text" placeholder="부케명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlBqAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">전달 방법</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlBqDelivery" type="text" placeholder="예: 직접 수령, 배송 등" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 축사 정보 (축사 카테고리 선택 시) -->
+        <div class="tl-field" id="tlSpeechSection" style="display:none">
+          <div class="tl-field-label">축사 정보</div>
+          <div class="hm-card">
+            <div class="hm-card-title">🎤 축사 정보</div>
+            <div class="hm-card-body">
+              <div>
+                <div class="hm-field-label">축사자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlSpSpeaker" type="text" placeholder="축사자 이름을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">연락처</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlSpContact" type="tel" placeholder="연락처를 입력하세요" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">감사 금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlSpGiftAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 축가 정보 (축가 카테고리 선택 시) -->
+        <div class="tl-field" id="tlSongSection" style="display:none">
+          <div class="tl-field-label">축가 정보</div>
+          <div class="hm-card">
+            <div class="hm-card-title">🎵 축가 정보</div>
+            <div class="hm-card-body">
+              <div>
+                <div class="hm-field-label">축가자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlSgSinger" type="text" placeholder="축가자 이름을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">연락처</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlSgContact" type="tel" placeholder="연락처를 입력하세요" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">노래 제목</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlSgSongTitle" type="text" placeholder="노래 제목을 입력하세요" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">감사 금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlSgGiftAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- 내용 -->
         <div class="tl-field">
           <div class="tl-field-label">내용</div>
@@ -3309,6 +3788,485 @@
 
         </div>
 
+        <!-- 한복 정보 (한복 카테고리 전용) -->
+        <div class="tl-field" id="editHanbokSection" style="display:none">
+          <div class="tl-field-label">한복 정보</div>
+          <div class="hm-card">
+            <div class="hm-card-title">👘 한복 정보</div>
+            <div class="hm-card-body">
+              <div>
+                <div class="hm-field-label">한복 업체</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editHbVendor" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">한복 대여료</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editHbFee" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onHmPriceInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div class="tl-row" style="margin-bottom:0">
+                <div class="tl-field">
+                  <div class="hm-field-label">한복 대여 시간</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="editHbRentTime" type="time"/>
+                  </div>
+                </div>
+                <div class="tl-field">
+                  <div class="hm-field-label">한복 반납 시간</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="editHbReturnTime" type="time"/>
+                  </div>
+                </div>
+              </div>
+              <div class="nh-toggle-row">
+                <span class="hm-field-label" style="margin:0">신랑측 대여 여부</span>
+                <button class="nh-toggle-btn" id="editHbGroomToggle" onclick="onHbToggle('edit','groom')">미대여</button>
+              </div>
+              <div class="nh-toggle-row" style="border-bottom:none;padding-bottom:0">
+                <span class="hm-field-label" style="margin:0">신부측 대여 여부</span>
+                <button class="nh-toggle-btn" id="editHbBrideToggle" onclick="onHbToggle('edit','bride')">미대여</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 사진 정보 (사진 카테고리 전용) -->
+        <div class="tl-field" id="editPhotoSection" style="display:none">
+          <div class="tl-field-label">사진 정보</div>
+          <div class="pl-section">
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="editPhotoTabMain" onclick="togglePhotoTab('edit','main')">
+                <span class="st-tab-check"></span>본식
+              </button>
+              <button class="st-tab-btn" id="editPhotoTabIphone" onclick="togglePhotoTab('edit','iphone')">
+                <span class="st-tab-check"></span>아이폰 스냅
+              </button>
+            </div>
+            <div class="st-sub-section" id="editPhotoMainSection">
+              <div class="st-sub-title">📸 본식</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editPhMainName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editPhMainContractDate" type="date"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">연락처</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editPhMainContact" type="tel" placeholder="연락처를 입력하세요" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editPhMainTotal" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcPhotoBalance('edit','Main')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약금</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editPhMainDeposit" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcPhotoBalance('edit','Main')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div class="pl-balance-card">
+                <div>
+                  <div class="pl-balance-label">잔금 (자동 계산)</div>
+                  <div class="pl-balance-val" id="editPhMainBalance">—</div>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">잔금 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editPhMainBalanceDate" type="date"/>
+                </div>
+              </div>
+            </div>
+            <div class="st-sub-section" id="editPhotoIphoneSection">
+              <div class="st-sub-title">📱 아이폰 스냅</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editPhIphoneName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editPhIphoneContractDate" type="date"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">연락처</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editPhIphoneContact" type="tel" placeholder="연락처를 입력하세요" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editPhIphoneTotal" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcPhotoBalance('edit','Iphone')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약금</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editPhIphoneDeposit" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcPhotoBalance('edit','Iphone')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div class="pl-balance-card">
+                <div>
+                  <div class="pl-balance-label">잔금 (자동 계산)</div>
+                  <div class="pl-balance-val" id="editPhIphoneBalance">—</div>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">잔금 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editPhIphoneBalanceDate" type="date"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DVD 정보 (DVD 카테고리 전용) -->
+        <div class="tl-field" id="editDvdSection" style="display:none">
+          <div class="tl-field-label">DVD 정보</div>
+          <div class="pl-section">
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="editDvdTabMain" onclick="toggleDvdTab('edit','main')">
+                <span class="st-tab-check"></span>본식 DVD
+              </button>
+              <button class="st-tab-btn" id="editDvdTabPre" onclick="toggleDvdTab('edit','pre')">
+                <span class="st-tab-check"></span>식전 영상
+              </button>
+              <button class="st-tab-btn" id="editDvdTabDuring" onclick="toggleDvdTab('edit','during')">
+                <span class="st-tab-check"></span>식중 영상
+              </button>
+            </div>
+            <div class="st-sub-section" id="editDvdMainSection">
+              <div class="st-sub-title">🎬 본식 DVD</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editDvMainName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editDvMainContractDate" type="date"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약 상세 정보</div>
+                <div class="tl-input-wrap">
+                  <textarea class="tl-input" id="editDvMainContractDetail" rows="3" placeholder="계약 상세 정보를 입력하세요" style="resize:vertical;min-height:60px"></textarea>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">연락처</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editDvMainContact" type="tel" placeholder="연락처를 입력하세요" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editDvMainTotal" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcDvdBalance('edit')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약금</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editDvMainDeposit" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcDvdBalance('edit')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div class="pl-balance-card">
+                <div>
+                  <div class="pl-balance-label">잔금 (자동 계산)</div>
+                  <div class="pl-balance-val" id="editDvMainBalance">—</div>
+                </div>
+              </div>
+            </div>
+            <div class="st-sub-section" id="editDvdPreSection">
+              <div class="st-sub-title">🎞️ 식전 영상</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editDvPreName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">홈페이지 주소</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editDvPreWebsite" type="url" placeholder="https://" maxlength="200" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editDvPreAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">영상 길이</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editDvPreDuration" type="text" placeholder="예: 3분" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+            </div>
+            <div class="st-sub-section" id="editDvdDuringSection">
+              <div class="st-sub-title">🎥 식중 영상</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editDvDuringName" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">홈페이지 주소</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editDvDuringWebsite" type="url" placeholder="https://" maxlength="200" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editDvDuringAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">영상 길이</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editDvDuringDuration" type="text" placeholder="예: 3분" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 상견례 정보 (상견례 카테고리 전용) -->
+        <div class="tl-field" id="editSangyeonSection" style="display:none">
+          <div class="tl-field-label">상견례 정보</div>
+          <div class="hm-card" style="margin-bottom:8px">
+            <div class="hm-card-title">🥂 상견례</div>
+            <div class="hm-card-body">
+              <div>
+                <div class="hm-field-label">식당명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editSgRestaurant" type="text" placeholder="식당명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div class="tl-row" style="margin-bottom:0">
+                <div class="tl-field">
+                  <div class="hm-field-label">예약 날짜</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="editSgDate" type="date"/>
+                  </div>
+                </div>
+                <div class="tl-field">
+                  <div class="hm-field-label">예약 시간</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="editSgTime" type="time"/>
+                  </div>
+                </div>
+              </div>
+              <div class="tl-row" style="margin-bottom:0">
+                <div class="tl-field">
+                  <div class="hm-field-label">예약자 명</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="editSgReserver" type="text" placeholder="이름" maxlength="20" autocomplete="off"/>
+                  </div>
+                </div>
+                <div class="tl-field">
+                  <div class="hm-field-label">예약 인원 수</div>
+                  <div class="tl-input-wrap">
+                    <input class="tl-input" id="editSgPeople" type="number" placeholder="0" min="1" style="text-align:right"/>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">예상 금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editSgAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onHmPriceInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">식당 위치</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editSgLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="hm-card">
+            <div class="hm-card-title">🎁 선물</div>
+            <div class="hm-card-body">
+              <div class="gift-list" id="editSgGiftList"></div>
+              <button class="btn-add-gift" onclick="addSgGift('edit')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                선물 추가
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 부케 정보 (부케 카테고리 전용) -->
+        <div class="tl-field" id="editBouquetSection" style="display:none">
+          <div class="tl-field-label">부케 정보</div>
+          <div class="hm-card">
+            <div class="hm-card-title">💐 부케 정보</div>
+            <div class="hm-card-body">
+              <div>
+                <div class="hm-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editBqVendor" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">계약 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editBqContractDate" type="date"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">연락처</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editBqContact" type="tel" placeholder="연락처를 입력하세요" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">부케명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editBqName" type="text" placeholder="부케명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editBqAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">전달 방법</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editBqDelivery" type="text" placeholder="예: 직접 수령, 배송 등" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 축사 정보 (축사 카테고리 전용) -->
+        <div class="tl-field" id="editSpeechSection" style="display:none">
+          <div class="tl-field-label">축사 정보</div>
+          <div class="hm-card">
+            <div class="hm-card-title">🎤 축사 정보</div>
+            <div class="hm-card-body">
+              <div>
+                <div class="hm-field-label">축사자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editSpSpeaker" type="text" placeholder="축사자 이름을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">연락처</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editSpContact" type="tel" placeholder="연락처를 입력하세요" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">감사 금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editSpGiftAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 축가 정보 (축가 카테고리 전용) -->
+        <div class="tl-field" id="editSongSection" style="display:none">
+          <div class="tl-field-label">축가 정보</div>
+          <div class="hm-card">
+            <div class="hm-card-title">🎵 축가 정보</div>
+            <div class="hm-card-body">
+              <div>
+                <div class="hm-field-label">축가자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editSgSinger" type="text" placeholder="축가자 이름을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">연락처</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editSgContact" type="tel" placeholder="연락처를 입력하세요" maxlength="20" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">노래 제목</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editSgSongTitle" type="text" placeholder="노래 제목을 입력하세요" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="hm-field-label">감사 금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editSgGiftAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="tl-field">
           <div class="tl-field-label">내용</div>
           <textarea class="tl-textarea" id="editContent" rows="3" placeholder="메모나 상세 내용을 입력하세요"></textarea>
@@ -4186,6 +5144,162 @@ function openEditModal(stageId) {
     d.classList.toggle('selected', d.dataset.color === state.editingColor);
   });
 
+  // 상견례 섹션 처리
+  const editSangyeonSection = document.getElementById('editSangyeonSection');
+  if (s.category === '상견례') {
+    editSangyeonSection.style.display = '';
+    const sg = s.sangyeon || {};
+    document.getElementById('editSgRestaurant').value = sg.restaurant || '';
+    document.getElementById('editSgDate').value       = sg.date       || '';
+    document.getElementById('editSgTime').value       = sg.time       || '';
+    document.getElementById('editSgReserver').value   = sg.reserver   || '';
+    document.getElementById('editSgPeople').value     = sg.people     || '';
+    document.getElementById('editSgAmount').value     = sg.amount ? Number(sg.amount).toLocaleString('ko-KR') : '';
+    document.getElementById('editSgLocation').value   = sg.location   || '';
+    const giftList = document.getElementById('editSgGiftList');
+    giftList.innerHTML = '';
+    sgGiftCount['edit'] = 0;
+    (sg.gifts || []).forEach(g => {
+      sgGiftCount['edit']++;
+      giftList.appendChild(makeSgGiftEl('edit', sgGiftCount['edit'], g));
+    });
+  } else {
+    editSangyeonSection.style.display = 'none';
+    resetSangyeon('edit');
+  }
+
+  // 한복 섹션 처리
+  const editHanbokSection = document.getElementById('editHanbokSection');
+  if (s.category === '한복') {
+    editHanbokSection.style.display = '';
+    const hb = s.hanbok || {};
+    document.getElementById('editHbVendor').value = hb.vendor || '';
+    document.getElementById('editHbFee').value = hb.fee ? Number(String(hb.fee).replace(/[^0-9]/g,'')).toLocaleString('ko-KR') : '';
+    document.getElementById('editHbRentTime').value = hb.rentTime || '';
+    document.getElementById('editHbReturnTime').value = hb.returnTime || '';
+    const groomBtn = document.getElementById('editHbGroomToggle');
+    const brideBtn = document.getElementById('editHbBrideToggle');
+    if (groomBtn) { groomBtn.classList.toggle('active', !!hb.groom); groomBtn.textContent = hb.groom ? '대여' : '미대여'; }
+    if (brideBtn) { brideBtn.classList.toggle('active', !!hb.bride); brideBtn.textContent = hb.bride ? '대여' : '미대여'; }
+  } else {
+    editHanbokSection.style.display = 'none';
+    resetHanbok('edit');
+  }
+
+  // 축가 섹션 처리
+  const editSongSection = document.getElementById('editSongSection');
+  if (s.category === '축가') {
+    editSongSection.style.display = '';
+    const sg = s.song || {};
+    document.getElementById('editSgSinger').value     = sg.singer     || '';
+    document.getElementById('editSgContact').value    = sg.contact    || '';
+    document.getElementById('editSgSongTitle').value  = sg.songTitle  || '';
+    document.getElementById('editSgGiftAmount').value = sg.giftAmount ? Number(String(sg.giftAmount).replace(/[^0-9]/g,'')).toLocaleString('ko-KR') : '';
+  } else {
+    editSongSection.style.display = 'none';
+    resetSong('edit');
+  }
+
+  // 축사 섹션 처리
+  const editSpeechSection = document.getElementById('editSpeechSection');
+  if (s.category === '축사') {
+    editSpeechSection.style.display = '';
+    const sp = s.speech || {};
+    document.getElementById('editSpSpeaker').value    = sp.speaker    || '';
+    document.getElementById('editSpContact').value    = sp.contact    || '';
+    document.getElementById('editSpGiftAmount').value = sp.giftAmount ? Number(String(sp.giftAmount).replace(/[^0-9]/g,'')).toLocaleString('ko-KR') : '';
+  } else {
+    editSpeechSection.style.display = 'none';
+    resetSpeech('edit');
+  }
+
+  // 부케 섹션 처리
+  const editBouquetSection = document.getElementById('editBouquetSection');
+  if (s.category === '부케') {
+    editBouquetSection.style.display = '';
+    const bq = s.bouquet || {};
+    document.getElementById('editBqVendor').value       = bq.vendor       || '';
+    document.getElementById('editBqContractDate').value = bq.contractDate  || '';
+    document.getElementById('editBqContact').value      = bq.contact       || '';
+    document.getElementById('editBqName').value         = bq.name          || '';
+    document.getElementById('editBqAmount').value       = bq.amount ? Number(String(bq.amount).replace(/[^0-9]/g,'')).toLocaleString('ko-KR') : '';
+    document.getElementById('editBqDelivery').value     = bq.delivery      || '';
+  } else {
+    editBouquetSection.style.display = 'none';
+    resetBouquet('edit');
+  }
+
+  // DVD 섹션 처리
+  const editDvdSection = document.getElementById('editDvdSection');
+  if (s.category === 'DVD') {
+    editDvdSection.style.display = '';
+    resetDvd('edit');
+    const dv = s.dvd || {};
+    const setV   = (id, val) => { const el = document.getElementById(`edit${id}`); if (el) el.value = val || ''; };
+    const setMon = (id, val) => { const el = document.getElementById(`edit${id}`); if (el) el.value = val ? Number(String(val).replace(/[^0-9]/g,'')).toLocaleString('ko-KR') : ''; };
+    if (dv.main) {
+      document.getElementById('editDvdTabMain')?.classList.add('active');
+      document.getElementById('editDvdMainSection')?.classList.add('show');
+      const m = dv.main;
+      setV  ('DvMainName',           m.name);
+      setV  ('DvMainContractDate',   m.contractDate);
+      setV  ('DvMainContractDetail', m.contractDetail);
+      setV  ('DvMainContact',        m.contact);
+      setMon('DvMainTotal',          m.total);
+      setMon('DvMainDeposit',        m.deposit);
+      calcDvdBalance('edit');
+    }
+    if (dv.pre) {
+      document.getElementById('editDvdTabPre')?.classList.add('active');
+      document.getElementById('editDvdPreSection')?.classList.add('show');
+      const p = dv.pre;
+      setV  ('DvPreName',     p.name);
+      setV  ('DvPreWebsite',  p.website);
+      setMon('DvPreAmount',   p.amount);
+      setV  ('DvPreDuration', p.duration);
+    }
+    if (dv.during) {
+      document.getElementById('editDvdTabDuring')?.classList.add('active');
+      document.getElementById('editDvdDuringSection')?.classList.add('show');
+      const d = dv.during;
+      setV  ('DvDuringName',     d.name);
+      setV  ('DvDuringWebsite',  d.website);
+      setMon('DvDuringAmount',   d.amount);
+      setV  ('DvDuringDuration', d.duration);
+    }
+  } else {
+    editDvdSection.style.display = 'none';
+    resetDvd('edit');
+  }
+
+  // 사진 섹션 처리
+  const editPhotoSection = document.getElementById('editPhotoSection');
+  if (s.category === '사진') {
+    editPhotoSection.style.display = '';
+    resetPhoto('edit');
+    const ph = s.photo || {};
+    ['Main','Iphone'].forEach(cap => {
+      const data = ph[cap === 'Main' ? 'main' : 'iphone'];
+      if (!data) return;
+      const btn = document.getElementById(`editPhotoTab${cap}`);
+      const sec = document.getElementById(`editPhoto${cap}Section`);
+      if (btn) btn.classList.add('active');
+      if (sec) sec.classList.add('show');
+      const setV   = (id, val) => { const el = document.getElementById(`edit${id}`); if (el) el.value = val || ''; };
+      const setMon = (id, val) => { const el = document.getElementById(`edit${id}`); if (el) el.value = val ? Number(String(val).replace(/[^0-9]/g,'')).toLocaleString('ko-KR') : ''; };
+      setV  (`Ph${cap}Name`,         data.name);
+      setV  (`Ph${cap}ContractDate`, data.contractDate);
+      setV  (`Ph${cap}Contact`,      data.contact);
+      setMon(`Ph${cap}Total`,        data.total);
+      setMon(`Ph${cap}Deposit`,      data.deposit);
+      setV  (`Ph${cap}BalanceDate`,  data.balanceDate);
+      calcPhotoBalance('edit', cap);
+    });
+  } else {
+    editPhotoSection.style.display = 'none';
+    resetPhoto('edit');
+  }
+
   // 기존 할 일 목록 렌더링
   const todoList = document.getElementById('editTodoList');
   todoList.innerHTML = '';
@@ -4350,6 +5464,27 @@ function saveEdit() {
       dressSelected: (() => { for(let n=1;n<=3;n++) { if(document.getElementById(`editPlDressFinal${n}`)?.classList.contains('selected')) return n; } return 0; })(),
       makeup:      document.getElementById('editPlMakeup')?.value.trim()                          || '',
     };
+  }
+  if (s.category === '한복') {
+    s.hanbok = collectHanbok('edit');
+  }
+  if (s.category === '상견례') {
+    s.sangyeon = collectSangyeon('edit');
+  }
+  if (s.category === '사진') {
+    s.photo = collectPhoto('edit');
+  }
+  if (s.category === 'DVD') {
+    s.dvd = collectDvd('edit');
+  }
+  if (s.category === '부케') {
+    s.bouquet = collectBouquet('edit');
+  }
+  if (s.category === '축사') {
+    s.speech = collectSpeech('edit');
+  }
+  if (s.category === '축가') {
+    s.song = collectSong('edit');
   }
 
   // 할 일 목록 수집
@@ -5513,6 +6648,34 @@ function openTlModal() {
   document.getElementById('tlNewHouseSection').style.display = 'none';
   resetNhSection('tl');
 
+  // 한복 섹션 초기화
+  document.getElementById('tlHanbokSection').style.display = 'none';
+  resetHanbok('tl');
+
+  // 사진 섹션 초기화
+  document.getElementById('tlPhotoSection').style.display = 'none';
+  resetPhoto('tl');
+
+  // DVD 섹션 초기화
+  document.getElementById('tlDvdSection').style.display = 'none';
+  resetDvd('tl');
+
+  // 부케 섹션 초기화
+  document.getElementById('tlBouquetSection').style.display = 'none';
+  resetBouquet('tl');
+
+  // 축사 섹션 초기화
+  document.getElementById('tlSpeechSection').style.display = 'none';
+  resetSpeech('tl');
+
+  // 축가 섹션 초기화
+  document.getElementById('tlSongSection').style.display = 'none';
+  resetSong('tl');
+
+  // 상견례 섹션 초기화
+  document.getElementById('tlSangyeonSection').style.display = 'none';
+  resetSangyeon('tl');
+
   // 카테고리 커스텀 셀렉트 생성
   const triggerEl = document.getElementById('tlCategoryTrigger');
   const valEl     = document.getElementById('tlCategoryValue');
@@ -5610,6 +6773,62 @@ function onCategoryChange(cat) {
     const showNh = cat === '신혼집';
     nhSection.style.display = showNh ? '' : 'none';
     if (!showNh) resetNhSection('tl');
+  }
+
+  // 한복 카테고리 선택 시 한복 정보 섹션 토글
+  const hanbokSection = document.getElementById('tlHanbokSection');
+  if (hanbokSection) {
+    const showHb = cat === '한복';
+    hanbokSection.style.display = showHb ? '' : 'none';
+    if (!showHb) resetHanbok('tl');
+  }
+
+  // 사진 카테고리 선택 시 사진 정보 섹션 토글
+  const photoSection = document.getElementById('tlPhotoSection');
+  if (photoSection) {
+    const showPh = cat === '사진';
+    photoSection.style.display = showPh ? '' : 'none';
+    if (!showPh) resetPhoto('tl');
+  }
+
+  // 축가 카테고리 선택 시 축가 정보 섹션 토글
+  const songSection = document.getElementById('tlSongSection');
+  if (songSection) {
+    const showSg = cat === '축가';
+    songSection.style.display = showSg ? '' : 'none';
+    if (!showSg) resetSong('tl');
+  }
+
+  // 축사 카테고리 선택 시 축사 정보 섹션 토글
+  const speechSection = document.getElementById('tlSpeechSection');
+  if (speechSection) {
+    const showSp = cat === '축사';
+    speechSection.style.display = showSp ? '' : 'none';
+    if (!showSp) resetSpeech('tl');
+  }
+
+  // 부케 카테고리 선택 시 부케 정보 섹션 토글
+  const bouquetSection = document.getElementById('tlBouquetSection');
+  if (bouquetSection) {
+    const showBq = cat === '부케';
+    bouquetSection.style.display = showBq ? '' : 'none';
+    if (!showBq) resetBouquet('tl');
+  }
+
+  // DVD 카테고리 선택 시 DVD 정보 섹션 토글
+  const dvdSection = document.getElementById('tlDvdSection');
+  if (dvdSection) {
+    const showDv = cat === 'DVD';
+    dvdSection.style.display = showDv ? '' : 'none';
+    if (!showDv) resetDvd('tl');
+  }
+
+  // 상견례 카테고리 선택 시 상견례 정보 섹션 토글
+  const sangyeonSection = document.getElementById('tlSangyeonSection');
+  if (sangyeonSection) {
+    const showSg = cat === '상견례';
+    sangyeonSection.style.display = showSg ? '' : 'none';
+    if (!showSg) resetSangyeon('tl');
   }
 
   // 이미 있는 할 일 아이템의 서브카테고리 옵션 갱신
@@ -5761,6 +6980,13 @@ function saveTlItem() {
       gifts: category === '예물' ? collectGifts('tl') : [],
       honsu: category === '혼수' ? collectHonsu('tl') : [],
       honeymoon: category === '신혼여행' ? collectHoneymoon('tl') : null,
+      hanbok:    category === '한복'    ? collectHanbok('tl')    : null,
+      sangyeon:  category === '상견례'  ? collectSangyeon('tl')  : null,
+      photo:     category === '사진'    ? collectPhoto('tl')     : null,
+      dvd:       category === 'DVD'     ? collectDvd('tl')       : null,
+      bouquet:   category === '부케'    ? collectBouquet('tl')   : null,
+      speech:    category === '축사'    ? collectSpeech('tl')    : null,
+      song:      category === '축가'    ? collectSong('tl')      : null,
     };
     if (lastIdx >= 0) tab.stages.splice(lastIdx + 1, 0, newStage);
     else              tab.stages.push(newStage);
@@ -6467,6 +7693,314 @@ function resetNhSection(prefix) {
     const el = document.getElementById(`${prefix}${id}`);
     if (el) el.value = '';
   });
+}
+
+/* ════════════════════════════════════
+   상견례 섹션 유틸
+════════════════════════════════════ */
+const sgGiftCount = { tl: 0, edit: 0 };
+
+function makeSgGiftEl(prefix, n, data) {
+  const svgX = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  const div = document.createElement('div');
+  div.className = 'gift-item';
+  div.id = `${prefix}sggift_${n}`;
+  div.innerHTML = `
+    <div class="gift-item-header">
+      <span class="gift-item-num">선물 ${n}</span>
+      <button class="gift-item-del" onclick="removeSgGift('${prefix}',${n})" aria-label="삭제">${svgX}</button>
+    </div>
+    <div class="gift-item-body">
+      <div>
+        <div class="gift-field-label">선물명</div>
+        <div class="tl-input-wrap" style="border-radius:9px">
+          <input class="tl-input" id="${prefix}sggname_${n}" type="text" placeholder="선물명을 입력하세요" maxlength="40" autocomplete="off"
+                 style="padding:10px 12px;font-size:13px" value="${(data?.name||'').replace(/"/g,'&quot;')}"/>
+        </div>
+      </div>
+      <div>
+        <div class="gift-field-label">금액</div>
+        <div class="tl-budget-input-row" style="border-radius:9px">
+          <span class="tl-budget-symbol">₩</span>
+          <input class="tl-input" id="${prefix}sggamt_${n}" type="text" inputmode="numeric" placeholder="0"
+                 oninput="onHmPriceInput(this)" style="padding-left:4px;border:none;background:transparent;font-size:13px"
+                 value="${data?.amount ? Number(data.amount).toLocaleString('ko-KR') : ''}"/>
+          <span class="tl-budget-unit">원</span>
+        </div>
+      </div>
+    </div>`;
+  return div;
+}
+
+function addSgGift(prefix) {
+  sgGiftCount[prefix]++;
+  const n    = sgGiftCount[prefix];
+  const list = document.getElementById(`${prefix}SgGiftList`);
+  if (!list) return;
+  const el = makeSgGiftEl(prefix, n, null);
+  list.appendChild(el);
+  requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+}
+
+function removeSgGift(prefix, n) {
+  document.getElementById(`${prefix}sggift_${n}`)?.remove();
+  document.querySelectorAll(`#${prefix}SgGiftList .gift-item`).forEach((el, i) => {
+    el.querySelector('.gift-item-num').textContent = `선물 ${i + 1}`;
+  });
+}
+
+function collectSangyeon(prefix) {
+  const gifts = [];
+  document.querySelectorAll(`#${prefix}SgGiftList .gift-item`).forEach(el => {
+    const n      = el.id.replace(`${prefix}sggift_`, '');
+    const name   = document.getElementById(`${prefix}sggname_${n}`)?.value.trim() || '';
+    const amount = document.getElementById(`${prefix}sggamt_${n}`)?.value.replace(/,/g,'') || '';
+    if (name || amount) gifts.push({ name, amount });
+  });
+  return {
+    restaurant: document.getElementById(`${prefix}SgRestaurant`)?.value.trim()        || '',
+    date:       document.getElementById(`${prefix}SgDate`)?.value                     || '',
+    time:       document.getElementById(`${prefix}SgTime`)?.value                     || '',
+    reserver:   document.getElementById(`${prefix}SgReserver`)?.value.trim()          || '',
+    people:     document.getElementById(`${prefix}SgPeople`)?.value                   || '',
+    amount:     document.getElementById(`${prefix}SgAmount`)?.value.replace(/,/g,'')  || '',
+    location:   document.getElementById(`${prefix}SgLocation`)?.value.trim()          || '',
+    gifts,
+  };
+}
+
+function resetSangyeon(prefix) {
+  ['SgRestaurant','SgDate','SgTime','SgReserver','SgPeople','SgAmount','SgLocation'].forEach(id => {
+    const el = document.getElementById(`${prefix}${id}`);
+    if (el) el.value = '';
+  });
+  const list = document.getElementById(`${prefix}SgGiftList`);
+  if (list) list.innerHTML = '';
+  sgGiftCount[prefix] = 0;
+}
+
+/* ════════════════════════════════════
+   사진 섹션 유틸
+════════════════════════════════════ */
+function togglePhotoTab(prefix, type) {
+  const cap = type === 'main' ? 'Main' : 'Iphone';
+  const btn = document.getElementById(`${prefix}PhotoTab${cap}`);
+  const sec = document.getElementById(`${prefix}Photo${cap}Section`);
+  if (!btn || !sec) return;
+  const active = !btn.classList.contains('active');
+  btn.classList.toggle('active', active);
+  sec.classList.toggle('show', active);
+}
+
+function calcPhotoBalance(prefix, cap) {
+  const total   = parseInt((document.getElementById(`${prefix}Ph${cap}Total`)?.value   || '').replace(/,/g,'')) || 0;
+  const deposit = parseInt((document.getElementById(`${prefix}Ph${cap}Deposit`)?.value || '').replace(/,/g,'')) || 0;
+  const bal = total - deposit;
+  const el  = document.getElementById(`${prefix}Ph${cap}Balance`);
+  if (!el) return;
+  if (!total && !deposit) { el.textContent = '—'; el.className = 'pl-balance-val'; return; }
+  el.textContent = formatWon(bal);
+  el.className   = 'pl-balance-val' + (bal < 0 ? ' over' : '');
+}
+
+function collectPhoto(prefix) {
+  const getV   = id => document.getElementById(`${prefix}${id}`)?.value || '';
+  const getMon = id => (document.getElementById(`${prefix}${id}`)?.value || '').replace(/,/g,'');
+  const hasMain   = document.getElementById(`${prefix}PhotoTabMain`)?.classList.contains('active')   || false;
+  const hasIphone = document.getElementById(`${prefix}PhotoTabIphone`)?.classList.contains('active') || false;
+  return {
+    main: hasMain ? {
+      name:         getV('PhMainName'),
+      contractDate: getV('PhMainContractDate'),
+      contact:      getV('PhMainContact'),
+      total:        getMon('PhMainTotal'),
+      deposit:      getMon('PhMainDeposit'),
+      balanceDate:  getV('PhMainBalanceDate'),
+    } : null,
+    iphone: hasIphone ? {
+      name:         getV('PhIphoneName'),
+      contractDate: getV('PhIphoneContractDate'),
+      contact:      getV('PhIphoneContact'),
+      total:        getMon('PhIphoneTotal'),
+      deposit:      getMon('PhIphoneDeposit'),
+      balanceDate:  getV('PhIphoneBalanceDate'),
+    } : null,
+  };
+}
+
+function resetPhoto(prefix) {
+  ['Main','Iphone'].forEach(cap => {
+    const btn = document.getElementById(`${prefix}PhotoTab${cap}`);
+    const sec = document.getElementById(`${prefix}Photo${cap}Section`);
+    if (btn) btn.classList.remove('active');
+    if (sec) sec.classList.remove('show');
+    [`Ph${cap}Name`,`Ph${cap}ContractDate`,`Ph${cap}Contact`,`Ph${cap}Total`,`Ph${cap}Deposit`,`Ph${cap}BalanceDate`].forEach(id => {
+      const el = document.getElementById(`${prefix}${id}`); if (el) el.value = '';
+    });
+    const bal = document.getElementById(`${prefix}Ph${cap}Balance`);
+    if (bal) { bal.textContent = '—'; bal.className = 'pl-balance-val'; }
+  });
+}
+
+/* ════════════════════════════════════
+   축가 섹션 유틸
+════════════════════════════════════ */
+function collectSong(prefix) {
+  return {
+    singer:     document.getElementById(`${prefix}SgSinger`)?.value.trim()               || '',
+    contact:    document.getElementById(`${prefix}SgContact`)?.value.trim()              || '',
+    songTitle:  document.getElementById(`${prefix}SgSongTitle`)?.value.trim()            || '',
+    giftAmount: (document.getElementById(`${prefix}SgGiftAmount`)?.value || '').replace(/,/g,''),
+  };
+}
+
+function resetSong(prefix) {
+  ['SgSinger','SgContact','SgSongTitle','SgGiftAmount'].forEach(id => {
+    const el = document.getElementById(`${prefix}${id}`); if (el) el.value = '';
+  });
+}
+
+/* ════════════════════════════════════
+   축사 섹션 유틸
+════════════════════════════════════ */
+function collectSpeech(prefix) {
+  return {
+    speaker:    document.getElementById(`${prefix}SpSpeaker`)?.value.trim()               || '',
+    contact:    document.getElementById(`${prefix}SpContact`)?.value.trim()               || '',
+    giftAmount: (document.getElementById(`${prefix}SpGiftAmount`)?.value || '').replace(/,/g,''),
+  };
+}
+
+function resetSpeech(prefix) {
+  ['SpSpeaker','SpContact','SpGiftAmount'].forEach(id => {
+    const el = document.getElementById(`${prefix}${id}`); if (el) el.value = '';
+  });
+}
+
+/* ════════════════════════════════════
+   부케 섹션 유틸
+════════════════════════════════════ */
+function collectBouquet(prefix) {
+  return {
+    vendor:       document.getElementById(`${prefix}BqVendor`)?.value.trim()               || '',
+    contractDate: document.getElementById(`${prefix}BqContractDate`)?.value                || '',
+    contact:      document.getElementById(`${prefix}BqContact`)?.value.trim()              || '',
+    name:         document.getElementById(`${prefix}BqName`)?.value.trim()                 || '',
+    amount:       (document.getElementById(`${prefix}BqAmount`)?.value || '').replace(/,/g,''),
+    delivery:     document.getElementById(`${prefix}BqDelivery`)?.value.trim()             || '',
+  };
+}
+
+function resetBouquet(prefix) {
+  ['BqVendor','BqContractDate','BqContact','BqName','BqAmount','BqDelivery'].forEach(id => {
+    const el = document.getElementById(`${prefix}${id}`); if (el) el.value = '';
+  });
+}
+
+/* ════════════════════════════════════
+   DVD 섹션 유틸
+════════════════════════════════════ */
+function toggleDvdTab(prefix, type) {
+  const capMap = { main: 'Main', pre: 'Pre', during: 'During' };
+  const cap = capMap[type];
+  const btn = document.getElementById(`${prefix}DvdTab${cap}`);
+  const sec = document.getElementById(`${prefix}Dvd${cap}Section`);
+  if (!btn || !sec) return;
+  const active = !btn.classList.contains('active');
+  btn.classList.toggle('active', active);
+  sec.classList.toggle('show', active);
+}
+
+function calcDvdBalance(prefix) {
+  const total   = parseInt((document.getElementById(`${prefix}DvMainTotal`)?.value   || '').replace(/,/g,'')) || 0;
+  const deposit = parseInt((document.getElementById(`${prefix}DvMainDeposit`)?.value || '').replace(/,/g,'')) || 0;
+  const bal = total - deposit;
+  const el  = document.getElementById(`${prefix}DvMainBalance`);
+  if (!el) return;
+  if (!total && !deposit) { el.textContent = '—'; el.className = 'pl-balance-val'; return; }
+  el.textContent = formatWon(bal);
+  el.className   = 'pl-balance-val' + (bal < 0 ? ' over' : '');
+}
+
+function collectDvd(prefix) {
+  const getV   = id => document.getElementById(`${prefix}${id}`)?.value || '';
+  const getMon = id => (document.getElementById(`${prefix}${id}`)?.value || '').replace(/,/g,'');
+  const hasMain   = document.getElementById(`${prefix}DvdTabMain`)?.classList.contains('active')   || false;
+  const hasPre    = document.getElementById(`${prefix}DvdTabPre`)?.classList.contains('active')    || false;
+  const hasDuring = document.getElementById(`${prefix}DvdTabDuring`)?.classList.contains('active') || false;
+  return {
+    main: hasMain ? {
+      name:           getV  ('DvMainName'),
+      contractDate:   getV  ('DvMainContractDate'),
+      contractDetail: getV  ('DvMainContractDetail'),
+      contact:        getV  ('DvMainContact'),
+      total:          getMon('DvMainTotal'),
+      deposit:        getMon('DvMainDeposit'),
+    } : null,
+    pre: hasPre ? {
+      name:     getV  ('DvPreName'),
+      website:  getV  ('DvPreWebsite'),
+      amount:   getMon('DvPreAmount'),
+      duration: getV  ('DvPreDuration'),
+    } : null,
+    during: hasDuring ? {
+      name:     getV  ('DvDuringName'),
+      website:  getV  ('DvDuringWebsite'),
+      amount:   getMon('DvDuringAmount'),
+      duration: getV  ('DvDuringDuration'),
+    } : null,
+  };
+}
+
+function resetDvd(prefix) {
+  const tabMap = { Main: 'Main', Pre: 'Pre', During: 'During' };
+  Object.keys(tabMap).forEach(cap => {
+    const btn = document.getElementById(`${prefix}DvdTab${cap}`);
+    const sec = document.getElementById(`${prefix}Dvd${cap}Section`);
+    if (btn) btn.classList.remove('active');
+    if (sec) sec.classList.remove('show');
+  });
+  ['DvMainName','DvMainContractDate','DvMainContractDetail','DvMainContact','DvMainTotal','DvMainDeposit',
+   'DvPreName','DvPreWebsite','DvPreAmount','DvPreDuration',
+   'DvDuringName','DvDuringWebsite','DvDuringAmount','DvDuringDuration'].forEach(id => {
+    const el = document.getElementById(`${prefix}${id}`); if (el) el.value = '';
+  });
+  const bal = document.getElementById(`${prefix}DvMainBalance`);
+  if (bal) { bal.textContent = '—'; bal.className = 'pl-balance-val'; }
+}
+
+/* ════════════════════════════════════
+   한복 섹션 유틸
+════════════════════════════════════ */
+function onHbToggle(prefix, side) {
+  const id = `${prefix}Hb${side === 'groom' ? 'Groom' : 'Bride'}Toggle`;
+  const btn = document.getElementById(id);
+  if (!btn) return;
+  const active = !btn.classList.contains('active');
+  btn.classList.toggle('active', active);
+  btn.textContent = active ? '대여' : '미대여';
+}
+
+function resetHanbok(prefix) {
+  ['HbVendor','HbFee','HbRentTime','HbReturnTime'].forEach(id => {
+    const el = document.getElementById(`${prefix}${id}`);
+    if (el) el.value = '';
+  });
+  ['HbGroomToggle','HbBrideToggle'].forEach(id => {
+    const btn = document.getElementById(`${prefix}${id}`);
+    if (btn) { btn.classList.remove('active'); btn.textContent = '미대여'; }
+  });
+}
+
+function collectHanbok(prefix) {
+  return {
+    vendor:     document.getElementById(`${prefix}HbVendor`)?.value.trim()                      || '',
+    fee:        document.getElementById(`${prefix}HbFee`)?.value.replace(/,/g,'')               || '',
+    rentTime:   document.getElementById(`${prefix}HbRentTime`)?.value                           || '',
+    returnTime: document.getElementById(`${prefix}HbReturnTime`)?.value                         || '',
+    groom:      document.getElementById(`${prefix}HbGroomToggle`)?.classList.contains('active') || false,
+    bride:      document.getElementById(`${prefix}HbBrideToggle`)?.classList.contains('active') || false,
+  };
 }
 
 function resetHmSection(prefix) {
