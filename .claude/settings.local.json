@@ -3,7 +3,12 @@
     "allow": [
       "Bash(flutter create:*)",
       "Bash(curl:*)",
-      "Bash(unzip:*)"
+      "Bash(unzip:*)",
+      "Bash(done)",
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(node:*)",
+      "Bash(xxd:*)"
     ]
   }
 }

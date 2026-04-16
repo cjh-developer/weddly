@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 개인 정보 관리</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { align-items: flex-start; }
+
+    .phone-wrapper {
+      height: 844px;
+      min-height: unset;
+      position: relative;
+    }
+
+    .phone-screen {
+      padding: 0 0 80px;
+      min-height: unset;
+      height: calc(844px - 30px);
+      overflow-y: auto;
+      display: block;
+    }
+
+    .phone-screen::-webkit-scrollbar { width: 4px; }
+    .phone-screen::-webkit-scrollbar-track { background: transparent; }
+    .phone-screen::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #D4A96A, #C49050);
+      border-radius: 4px;
+    }
+
+    /* ── 헤더 ── */
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 14px;
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .main-logo {
+      font-size: 24px;
+      font-weight: 800;
+      font-style: italic;
+      color: #D4A96A;
+      letter-spacing: -0.5px;
+    }
+
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #f8f8f8;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      transition: background 0.15s, color 0.15s;
+      position: relative;
+    }
+    .icon-btn:hover { background: #f0e8d8; color: #D4A96A; }
+
+    /* ── 다크모드 토글 ── */
+    .dark-toggle-btn .icon-sun  { display: none; }
+    .dark-toggle-btn .icon-moon { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-moon { display: none; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-sun  { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn { background: #2e2616; color: #D4A96A; }
+    .phone-wrapper.dark .dark-toggle-btn:hover { background: #3a3020; }
+
+    /* ── 페이지 타이틀 배너 ── */
+    .page-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 20px 16px;
+      background: linear-gradient(160deg, #fffaf4 0%, #fff 100%);
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .page-banner-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 14px rgba(212,169,106,0.3);
+      flex-shrink: 0;
+    }
+
+    .page-banner-text { }
+    .page-banner-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #222;
+      letter-spacing: -0.3px;
+    }
+    .page-banner-sub {
+      font-size: 12px;
+      color: #bbb;
+      margin-top: 2px;
+    }
+
+    /* ── 섹션 ── */
+    .up-section { margin: 16px 20px 0; }
+
+    .up-section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #bbb;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      padding: 0 4px;
+    }
+
+    /* ── 정보 카드 ── */
+    .info-card {
+      background: #fff;
+      border: 1.5px solid #f0f0f0;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .field-row {
+      display: flex;
+      align-items: center;
+      padding: 13px 16px;
+      border-bottom: 1px solid #f8f8f8;
+      gap: 12px;
+    }
+    .field-row:last-child { border-bottom: none; }
+
+    .field-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      background: #fff8ef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .field-body { flex: 1; min-width: 0; }
+
+    .field-label {
+      font-size: 11px;
+      color: #bbb;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    /* 보기 모드 */
+    .field-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #222;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 편집 모드 */
+    .field-input {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1.5px solid #D4A96A;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #222;
+      background: #fffaf4;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(212,169,106,0.12);
+      font-family: inherit;
+      transition: border-color 0.2s;
+      display: none;
+    }
+    .field-input.active { display: block; }
+    .field-value.hidden { display: none; }
+
+    /* 수정 버튼 */
+    .edit-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: #f8f8f8;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #aaa;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    .edit-btn:hover { background: #fff0e0; color: #D4A96A; }
+    .edit-btn.saving {
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      color: #fff;
+    }
+
+    /* ── 계정 관리 (위험 액션) ── */
+    .action-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 16px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-bottom: 1px solid #f8f8f8;
+    }
+    .action-row:last-child { border-bottom: none; }
+    .action-row:hover  { background: #fdfaf5; }
+    .action-row:active { background: #faf5ec; }
+
+    .action-row.danger:hover  { background: #fff5f5; }
+    .action-row.danger:active { background: #ffe8e8; }
+
+    .action-row-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .action-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .action-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .action-row.danger .action-label { color: #e05555; }
+
+    .action-row-arrow { color: #ccc; }
+    .action-row.danger .action-row-arrow { color: #f0b0b0; }
+
+    /* ── 위험 구역 구분 ── */
+    .danger-divider {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 16px 20px 0;
+      color: #f0b0b0;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .danger-divider::before,
+    .danger-divider::after { content: ''; flex: 1; height: 1px; background: #fde8e8; }
+
+    /* ── 확인 모달 ── */
+    .confirm-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+      padding: 24px;
+    }
+    .confirm-overlay.active { display: flex; }
+
+    .confirm-sheet {
+      background: #fff;
+      border-radius: 22px;
+      width: 100%;
+      padding: 28px 22px 22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      animation: modalIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes modalIn {
+      from { transform: scale(0.88); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+    .confirm-handle { display: none; }
+
+    .confirm-icon-wrap {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .confirm-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #222;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .confirm-desc {
+      font-size: 13px;
+      color: #aaa;
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .confirm-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .confirm-cancel {
+      flex: 1;
+      padding: 13px;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #888;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .confirm-cancel:hover { background: #ebebeb; }
+
+    .confirm-ok {
+      flex: 1;
+      padding: 13px;
+      background: #f44336;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      box-shadow: 0 3px 10px rgba(244,67,54,0.3);
+    }
+    .confirm-ok:hover { opacity: 0.88; }
+
+    .confirm-ok.warn {
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      box-shadow: 0 3px 10px rgba(212,169,106,0.35);
+    }
+
+    /* ── 저장 완료 토스트 ── */
+    .toast {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #222;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 20px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 300;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ════════════════════════════════════════
+       다크모드
+    ════════════════════════════════════════ */
+    .phone-wrapper.dark {
+      background: #15120e;
+      box-shadow: 0 0 0 2px #2e2820, 0 20px 60px rgba(0,0,0,0.55);
+    }
+    .phone-wrapper.dark .phone-screen    { background: #15120e; }
+    .phone-wrapper.dark .main-header     { background: rgba(21,18,14,0.97); border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .icon-btn        { background: #26201a; color: #7a7068; }
+    .phone-wrapper.dark .icon-btn:hover  { background: #342c22; color: #D4A96A; }
+
+    .phone-wrapper.dark .page-banner     { background: linear-gradient(160deg, #1e1a14 0%, #15120e 100%); border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .page-banner-title { color: #ede8e0; }
+    .phone-wrapper.dark .page-banner-sub   { color: #484038; }
+
+    .phone-wrapper.dark .up-section-title { color: #484038; }
+
+    .phone-wrapper.dark .info-card     { background: #1e1a14; border-color: #2e2818; box-shadow: none; }
+    .phone-wrapper.dark .field-row     { border-bottom-color: #26201a; }
+    .phone-wrapper.dark .field-icon    { background: #26190a; }
+    .phone-wrapper.dark .field-label   { color: #484038; }
+    .phone-wrapper.dark .field-value   { color: #ede8e0; }
+    .phone-wrapper.dark .field-input   { background: #1e1408; border-color: #D4A96A; color: #ede8e0; box-shadow: 0 0 0 3px rgba(212,169,106,0.15); }
+    .phone-wrapper.dark .edit-btn      { background: #26201a; color: #584e42; }
+    .phone-wrapper.dark .edit-btn:hover { background: #2e1e0a; color: #D4A96A; }
+
+    .phone-wrapper.dark .action-row           { border-bottom-color: #26201a; }
+    .phone-wrapper.dark .action-row:hover     { background: #26201a; }
+    .phone-wrapper.dark .action-row.danger:hover { background: #2a1414; }
+    .phone-wrapper.dark .action-label         { color: #c8c0b0; }
+    .phone-wrapper.dark .action-row.danger .action-label  { color: #e06060; }
+    .phone-wrapper.dark .action-row-arrow     { color: #484038; }
+    .phone-wrapper.dark .action-row.danger .action-row-arrow { color: #5a2a2a; }
+
+    .phone-wrapper.dark .danger-divider       { color: #5a3030; }
+    .phone-wrapper.dark .danger-divider::before,
+    .phone-wrapper.dark .danger-divider::after { background: #3a2020; }
+
+    .phone-wrapper.dark .confirm-sheet  { background: #1e1a14; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+    .phone-wrapper.dark .confirm-title  { color: #ede8e0; }
+    .phone-wrapper.dark .confirm-desc   { color: #584e42; }
+    .phone-wrapper.dark .confirm-cancel { background: #26201a; color: #7a7068; }
+    .phone-wrapper.dark .confirm-cancel:hover { background: #342c22; }
+
+    .phone-wrapper.dark .toast { background: #ede8e0; color: #222; }
+  </style>
+</head>
+<body>
+  <div class="phone-wrapper">
+    <div class="phone-screen">
+
+      <!-- 헤더 -->
+      <div class="main-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button class="icon-btn" onclick="location.href='user.html'" aria-label="뒤로가기">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="main-logo">weddly</span>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn dark-toggle-btn" id="darkToggleBtn" aria-label="다크모드 전환">
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 페이지 배너 -->
+      <div class="page-banner">
+        <div class="page-banner-icon">🔒</div>
+        <div class="page-banner-text">
+          <div class="page-banner-title">개인 정보 관리</div>
+          <div class="page-banner-sub">내 정보를 안전하게 관리해요</div>
+        </div>
+      </div>
+
+      <!-- 개인 정보 수정 -->
+      <div class="up-section">
+        <div class="up-section-title">개인 정보 수정</div>
+        <div class="info-card">
+
+          <!-- 이름 -->
+          <div class="field-row" id="rowName">
+            <div class="field-icon">👤</div>
+            <div class="field-body">
+              <div class="field-label">이름</div>
+              <div class="field-value" id="valName">홍길동</div>
+              <input class="field-input" id="inpName" type="text" value="홍길동" placeholder="이름을 입력하세요" />
+            </div>
+            <button class="edit-btn" id="btnName" onclick="toggleEdit('Name')" aria-label="이름 수정">
+              <svg id="iconName" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+          </div>
+
+          <!-- 이메일 -->
+          <div class="field-row" id="rowEmail">
+            <div class="field-icon">✉️</div>
+            <div class="field-body">
+              <div class="field-label">이메일</div>
+              <div class="field-value" id="valEmail">hong@weddly.com</div>
+              <input class="field-input" id="inpEmail" type="email" value="hong@weddly.com" placeholder="이메일을 입력하세요" />
+            </div>
+            <button class="edit-btn" id="btnEmail" onclick="toggleEdit('Email')" aria-label="이메일 수정">
+              <svg id="iconEmail" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+          </div>
+
+          <!-- 연락처 -->
+          <div class="field-row" id="rowPhone">
+            <div class="field-icon">📱</div>
+            <div class="field-body">
+              <div class="field-label">연락처</div>
+              <div class="field-value" id="valPhone">010-1234-5678</div>
+              <input class="field-input" id="inpPhone" type="tel" value="010-1234-5678" placeholder="010-0000-0000" maxlength="13" />
+            </div>
+            <button class="edit-btn" id="btnPhone" onclick="toggleEdit('Phone')" aria-label="연락처 수정">
+              <svg id="iconPhone" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 앱 데이터 관리 -->
+      <div class="up-section">
+        <div class="up-section-title">앱 데이터</div>
+        <div class="info-card">
+          <div class="action-row" onclick="openConfirm('cache')">
+            <div class="action-row-left">
+              <div class="action-icon" style="background:#f0f8ff;">🗑️</div>
+              <span class="action-label">캐시 삭제</span>
+            </div>
+            <svg class="action-row-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="action-row" onclick="openConfirm('reset')">
+            <div class="action-row-left">
+              <div class="action-icon" style="background:#fff8ef;">🔄</div>
+              <span class="action-label">전체 초기화</span>
+            </div>
+            <svg class="action-row-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- 계정 관리 위험 구역 -->
+      <div class="danger-divider">계정 관리</div>
+
+      <div class="up-section" style="margin-top:8px;">
+        <div class="info-card">
+          <div class="action-row danger" onclick="openConfirm('dormant')">
+            <div class="action-row-left">
+              <div class="action-icon" style="background:#fff5e0;">😴</div>
+              <span class="action-label">계정 휴면 전환</span>
+            </div>
+            <svg class="action-row-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="action-row danger" onclick="openConfirm('withdraw')">
+            <div class="action-row-left">
+              <div class="action-icon" style="background:#fff5f5;">⚠️</div>
+              <span class="action-label">계정 탈퇴</span>
+            </div>
+            <svg class="action-row-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /phone-screen -->
+
+    <!-- 확인 모달들 -->
+
+    <!-- 캐시 삭제 -->
+    <div class="confirm-overlay" id="confirmCache">
+      <div class="confirm-sheet">
+        <div class="confirm-handle"></div>
+        <div class="confirm-icon-wrap">🗑️</div>
+        <div class="confirm-title">캐시를 삭제할까요?</div>
+        <div class="confirm-desc">임시 저장된 데이터가 삭제됩니다.<br/>앱 데이터에는 영향이 없어요.</div>
+        <div class="confirm-actions">
+          <button class="confirm-cancel" onclick="closeConfirm('cache')">취소</button>
+          <button class="confirm-ok warn" onclick="doCache()">삭제하기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 전체 초기화 -->
+    <div class="confirm-overlay" id="confirmReset">
+      <div class="confirm-sheet">
+        <div class="confirm-handle"></div>
+        <div class="confirm-icon-wrap">🔄</div>
+        <div class="confirm-title">전체 초기화할까요?</div>
+        <div class="confirm-desc">저장된 모든 데이터가 삭제되며<br/>되돌릴 수 없습니다.</div>
+        <div class="confirm-actions">
+          <button class="confirm-cancel" onclick="closeConfirm('reset')">취소</button>
+          <button class="confirm-ok" onclick="doReset()">초기화</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 계정 휴면 -->
+    <div class="confirm-overlay" id="confirmDormant">
+      <div class="confirm-sheet">
+        <div class="confirm-handle"></div>
+        <div class="confirm-icon-wrap">😴</div>
+        <div class="confirm-title">계정을 휴면 전환할까요?</div>
+        <div class="confirm-desc">90일 이상 로그인하지 않으면<br/>자동으로 휴면 상태가 됩니다.<br/>언제든 다시 로그인하여 해제할 수 있어요.</div>
+        <div class="confirm-actions">
+          <button class="confirm-cancel" onclick="closeConfirm('dormant')">취소</button>
+          <button class="confirm-ok warn" onclick="doDormant()">휴면 전환</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 계정 탈퇴 -->
+    <div class="confirm-overlay" id="confirmWithdraw">
+      <div class="confirm-sheet">
+        <div class="confirm-handle"></div>
+        <div class="confirm-icon-wrap">⚠️</div>
+        <div class="confirm-title">정말 탈퇴할까요?</div>
+        <div class="confirm-desc">계정과 모든 데이터가 영구 삭제되며<br/>복구할 수 없습니다.</div>
+        <div class="confirm-actions">
+          <button class="confirm-cancel" onclick="closeConfirm('withdraw')">취소</button>
+          <button class="confirm-ok" onclick="doWithdraw()">탈퇴하기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 토스트 -->
+    <div class="toast" id="toast"></div>
+
+  </div><!-- /phone-wrapper -->
+
+  <script src="style.js"></script>
+  <script>
+  // ══════════════════════════════════════════
+  // 개인 정보 관리 스크립트
+  // ══════════════════════════════════════════
+
+  var phoneWrapper = document.querySelector('.phone-wrapper');
+
+  // ── 다크모드 ──
+  if (localStorage.getItem('weddly-dark') === 'true') phoneWrapper.classList.add('dark');
+  document.getElementById('darkToggleBtn').addEventListener('click', function() {
+    localStorage.setItem('weddly-dark', phoneWrapper.classList.toggle('dark'));
+  });
+
+  // ── 필드 편집 토글 ──
+  var editState = {}; // 각 필드 편집 여부
+
+  // 저장 아이콘 (체크)
+  var CHECK_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  // 수정 아이콘 (연필)
+  var PENCIL_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+
+  function toggleEdit(key) {
+    if (editState[key]) {
+      // 저장
+      var inp = document.getElementById('inp' + key);
+      var val = inp.value.trim();
+      if (!val) { showToast('값을 입력해주세요.'); return; }
+      document.getElementById('val' + key).textContent = val;
+      document.getElementById('val' + key).classList.remove('hidden');
+      inp.classList.remove('active');
+      var btn = document.getElementById('btn' + key);
+      btn.classList.remove('saving');
+      btn.innerHTML = PENCIL_SVG;
+      editState[key] = false;
+      showToast('저장되었습니다.');
+    } else {
+      // 편집 모드 진입
+      document.getElementById('val' + key).classList.add('hidden');
+      var inp = document.getElementById('inp' + key);
+      inp.classList.add('active');
+      inp.focus();
+      var btn = document.getElementById('btn' + key);
+      btn.classList.add('saving');
+      btn.innerHTML = CHECK_SVG;
+      editState[key] = true;
+    }
+  }
+
+  // Enter 키로 저장
+  ['Name','Email','Phone'].forEach(function(key) {
+    document.getElementById('inp' + key).addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') toggleEdit(key);
+      if (e.key === 'Escape') cancelEdit(key);
+    });
+  });
+
+  function cancelEdit(key) {
+    if (!editState[key]) return;
+    var inp = document.getElementById('inp' + key);
+    inp.value = document.getElementById('val' + key).textContent;
+    document.getElementById('val' + key).classList.remove('hidden');
+    inp.classList.remove('active');
+    var btn = document.getElementById('btn' + key);
+    btn.classList.remove('saving');
+    btn.innerHTML = PENCIL_SVG;
+    editState[key] = false;
+  }
+
+  // ── 토스트 ──
+  var toastTimer;
+  function showToast(msg) {
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { el.classList.remove('show'); }, 2000);
+  }
+
+  // ── 확인 모달 ──
+  function openConfirm(type) {
+    var id = 'confirm' + type.charAt(0).toUpperCase() + type.slice(1);
+    document.getElementById(id).classList.add('active');
+  }
+
+  function closeConfirm(type) {
+    var id = 'confirm' + type.charAt(0).toUpperCase() + type.slice(1);
+    document.getElementById(id).classList.remove('active');
+  }
+
+  // 오버레이 클릭 시 닫기
+  document.querySelectorAll('.confirm-overlay').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      if (e.target === el) el.classList.remove('active');
+    });
+  });
+
+  // ── 실제 액션 ──
+  function doCache() {
+    closeConfirm('cache');
+    // localStorage에서 캐시성 키 삭제 (데모)
+    showToast('캐시가 삭제되었습니다.');
+  }
+
+  function doReset() {
+    closeConfirm('reset');
+    localStorage.clear();
+    showToast('초기화되었습니다. 재시작이 필요합니다.');
+    setTimeout(function() { location.href = 'login.html'; }, 1800);
+  }
+
+  function doDormant() {
+    closeConfirm('dormant');
+    showToast('계정이 휴면 전환되었습니다.');
+    setTimeout(function() { location.href = 'login.html'; }, 1800);
+  }
+
+  function doWithdraw() {
+    closeConfirm('withdraw');
+    localStorage.clear();
+    showToast('탈퇴가 완료되었습니다.');
+    setTimeout(function() { location.href = 'login.html'; }, 1800);
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 애플리케이션 정보</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { align-items: flex-start; }
+
+    .phone-wrapper {
+      height: 844px;
+      min-height: unset;
+      position: relative;
+    }
+
+    .phone-screen {
+      padding: 0 0 80px;
+      min-height: unset;
+      height: calc(844px - 30px);
+      overflow-y: auto;
+      display: block;
+    }
+
+    .phone-screen::-webkit-scrollbar { width: 4px; }
+    .phone-screen::-webkit-scrollbar-track { background: transparent; }
+    .phone-screen::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #D4A96A, #C49050);
+      border-radius: 4px;
+    }
+
+    /* ── 헤더 ── */
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 14px;
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .main-logo {
+      font-size: 24px;
+      font-weight: 800;
+      font-style: italic;
+      color: #D4A96A;
+      letter-spacing: -0.5px;
+    }
+
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #f8f8f8;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      transition: background 0.15s, color 0.15s;
+      position: relative;
+    }
+    .icon-btn:hover { background: #f0e8d8; color: #D4A96A; }
+
+    /* ── 다크모드 토글 ── */
+    .dark-toggle-btn .icon-sun  { display: none; }
+    .dark-toggle-btn .icon-moon { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-moon { display: none; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-sun  { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn { background: #2e2616; color: #D4A96A; }
+    .phone-wrapper.dark .dark-toggle-btn:hover { background: #3a3020; }
+
+    /* ── 앱 히어로 ── */
+    .app-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 20px 22px;
+      background: linear-gradient(160deg, #fffaf4 0%, #fff 100%);
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .app-logo-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      margin-bottom: 12px;
+      box-shadow: 0 6px 20px rgba(212,169,106,0.3);
+    }
+
+    .app-logo-name {
+      font-size: 22px;
+      font-weight: 900;
+      font-style: italic;
+      color: #D4A96A;
+      letter-spacing: -0.5px;
+    }
+
+    .app-logo-sub {
+      font-size: 12px;
+      color: #bbb;
+      margin-top: 4px;
+    }
+
+    /* ── 섹션 ── */
+    .up-section { margin: 16px 20px 0; }
+
+    .up-section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #bbb;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      padding: 0 4px;
+    }
+
+    /* ── 정보 카드 ── */
+    .info-card {
+      background: #fff;
+      border: 1.5px solid #f0f0f0;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid #f8f8f8;
+      gap: 12px;
+    }
+    .info-row:last-child { border-bottom: none; }
+
+    .info-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      background: #fff8ef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .info-body { flex: 1; min-width: 0; }
+
+    .info-label {
+      font-size: 11px;
+      color: #bbb;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .info-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #222;
+    }
+
+    .info-value-sub {
+      font-size: 11px;
+      color: #bbb;
+      margin-top: 2px;
+    }
+
+    /* 버전 최신 배지 */
+    .version-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: #edfaf0;
+      color: #4caf50;
+      border: 1px solid #c8eece;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── 디바이스 상세 카드 ── */
+    .device-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .device-tile {
+      background: #fff;
+      border: 1.5px solid #f0f0f0;
+      border-radius: 16px;
+      padding: 14px 14px 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .device-tile-icon {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .device-tile-label {
+      font-size: 10px;
+      color: #bbb;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .device-tile-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: #222;
+      word-break: break-all;
+    }
+
+    /* 전체 가로폭 타일 */
+    .device-tile.full {
+      grid-column: 1 / -1;
+    }
+
+    .device-tile-value.small {
+      font-size: 11px;
+      font-weight: 600;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    /* ── 저작권 ── */
+    .app-copyright {
+      text-align: center;
+      font-size: 11px;
+      color: #ccc;
+      padding: 20px 20px 8px;
+      line-height: 1.8;
+      letter-spacing: 0.2px;
+    }
+
+    /* ════════════════════════════════════════
+       다크모드
+    ════════════════════════════════════════ */
+    .phone-wrapper.dark {
+      background: #15120e;
+      box-shadow: 0 0 0 2px #2e2820, 0 20px 60px rgba(0,0,0,0.55);
+    }
+    .phone-wrapper.dark .phone-screen  { background: #15120e; }
+    .phone-wrapper.dark .main-header   { background: rgba(21,18,14,0.97); border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .icon-btn      { background: #26201a; color: #7a7068; }
+    .phone-wrapper.dark .icon-btn:hover { background: #342c22; color: #D4A96A; }
+
+    .phone-wrapper.dark .app-hero      { background: linear-gradient(160deg, #1e1a14 0%, #15120e 100%); border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .app-logo-sub  { color: #484038; }
+
+    .phone-wrapper.dark .up-section-title { color: #484038; }
+
+    .phone-wrapper.dark .info-card   { background: #1e1a14; border-color: #2e2818; box-shadow: none; }
+    .phone-wrapper.dark .info-row    { border-bottom-color: #26201a; }
+    .phone-wrapper.dark .info-icon   { background: #26190a; }
+    .phone-wrapper.dark .info-label  { color: #484038; }
+    .phone-wrapper.dark .info-value  { color: #ede8e0; }
+    .phone-wrapper.dark .info-value-sub { color: #484038; }
+    .phone-wrapper.dark .version-badge { background: #142014; border-color: #2a4030; color: #4caf50; }
+
+    .phone-wrapper.dark .device-tile       { background: #1e1a14; border-color: #2e2818; box-shadow: none; }
+    .phone-wrapper.dark .device-tile-label { color: #484038; }
+    .phone-wrapper.dark .device-tile-value { color: #ede8e0; }
+    .phone-wrapper.dark .device-tile-value.small { color: #9a9080; }
+
+    .phone-wrapper.dark .app-copyright { color: #3a3028; }
+  </style>
+</head>
+<body>
+  <div class="phone-wrapper">
+    <div class="phone-screen">
+
+      <!-- 헤더 -->
+      <div class="main-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button class="icon-btn" onclick="location.href='user.html'" aria-label="뒤로가기">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="main-logo">weddly</span>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn dark-toggle-btn" id="darkToggleBtn" aria-label="다크모드 전환">
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 앱 히어로 -->
+      <div class="app-hero">
+        <div class="app-logo-icon">💍</div>
+        <div class="app-logo-name">weddly</div>
+        <div class="app-logo-sub">당신의 특별한 날을 함께해요</div>
+      </div>
+
+      <!-- ① 버전 정보 -->
+      <div class="up-section">
+        <div class="up-section-title">버전 정보</div>
+        <div class="info-card">
+          <div class="info-row">
+            <div class="info-icon">📦</div>
+            <div class="info-body">
+              <div class="info-label">현재 버전</div>
+              <div class="info-value" id="appVersion">1.0.0</div>
+            </div>
+            <span class="version-badge" id="versionBadge">최신 버전</span>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">🔢</div>
+            <div class="info-body">
+              <div class="info-label">빌드 번호</div>
+              <div class="info-value">100</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② 업데이트 일자 -->
+      <div class="up-section">
+        <div class="up-section-title">업데이트 정보</div>
+        <div class="info-card">
+          <div class="info-row">
+            <div class="info-icon">📅</div>
+            <div class="info-body">
+              <div class="info-label">최근 업데이트</div>
+              <div class="info-value" id="lastUpdate">2026년 4월 16일</div>
+              <div class="info-value-sub">버전 1.0.0 릴리즈</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">🗓️</div>
+            <div class="info-body">
+              <div class="info-label">출시일</div>
+              <div class="info-value">2025년 11월 1일</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ 내 핸드폰 정보 -->
+      <div class="up-section">
+        <div class="up-section-title">내 핸드폰 정보</div>
+        <div class="device-grid">
+          <div class="device-tile">
+            <div class="device-tile-icon">📱</div>
+            <div class="device-tile-label">플랫폼</div>
+            <div class="device-tile-value" id="devPlatform">—</div>
+          </div>
+          <div class="device-tile">
+            <div class="device-tile-icon">🌐</div>
+            <div class="device-tile-label">브라우저</div>
+            <div class="device-tile-value" id="devBrowser">—</div>
+          </div>
+          <div class="device-tile">
+            <div class="device-tile-icon">🖥️</div>
+            <div class="device-tile-label">화면 해상도</div>
+            <div class="device-tile-value" id="devScreen">—</div>
+          </div>
+          <div class="device-tile">
+            <div class="device-tile-icon">🌏</div>
+            <div class="device-tile-label">언어</div>
+            <div class="device-tile-value" id="devLang">—</div>
+          </div>
+          <div class="device-tile full">
+            <div class="device-tile-icon">🔍</div>
+            <div class="device-tile-label">User Agent</div>
+            <div class="device-tile-value small" id="devUA">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 저작권 -->
+      <div class="app-copyright">
+        © 2025 Weddly Corp. All rights reserved.<br/>
+        당신의 특별한 날을 함께해요 💍
+      </div>
+
+    </div><!-- /phone-screen -->
+  </div><!-- /phone-wrapper -->
+
+  <script src="style.js"></script>
+  <script>
+  // ══════════════════════════════════════════
+  // 애플리케이션 정보 스크립트
+  // ══════════════════════════════════════════
+
+  var phoneWrapper = document.querySelector('.phone-wrapper');
+
+  // ── 다크모드 ──
+  if (localStorage.getItem('weddly-dark') === 'true') phoneWrapper.classList.add('dark');
+  document.getElementById('darkToggleBtn').addEventListener('click', function() {
+    localStorage.setItem('weddly-dark', phoneWrapper.classList.toggle('dark'));
+  });
+
+  // ── 디바이스 정보 수집 ──
+  (function() {
+    var ua = navigator.userAgent;
+
+    // 플랫폼
+    var platform = '알 수 없음';
+    if (/iPhone|iPad|iPod/.test(ua))         platform = 'iOS';
+    else if (/Android/.test(ua))             platform = 'Android';
+    else if (/Windows/.test(ua))             platform = 'Windows';
+    else if (/Mac/.test(ua))                 platform = 'macOS';
+    else if (/Linux/.test(ua))               platform = 'Linux';
+    document.getElementById('devPlatform').textContent = platform;
+
+    // 브라우저
+    var browser = '알 수 없음';
+    if (/Edg\//.test(ua))                    browser = 'Edge';
+    else if (/OPR\/|Opera/.test(ua))         browser = 'Opera';
+    else if (/Chrome\//.test(ua))            browser = 'Chrome';
+    else if (/Firefox\//.test(ua))           browser = 'Firefox';
+    else if (/Safari\//.test(ua))            browser = 'Safari';
+    document.getElementById('devBrowser').textContent = browser;
+
+    // 화면 해상도
+    document.getElementById('devScreen').textContent =
+      window.screen.width + ' × ' + window.screen.height;
+
+    // 언어
+    document.getElementById('devLang').textContent =
+      (navigator.language || navigator.userLanguage || '알 수 없음').toUpperCase();
+
+    // User Agent (최대 80자)
+    var uaShort = ua.length > 80 ? ua.slice(0, 80) + '…' : ua;
+    document.getElementById('devUA').textContent = uaShort;
+  })();
+  </script>
+</body>
+</html>

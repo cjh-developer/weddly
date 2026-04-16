@@ -14,7 +14,7 @@
       position: relative;
     }
     .phone-screen {
-      padding: 0 0 80px;
+      padding: 0 0 84px;
       min-height: unset;
       height: calc(844px - 30px);
       overflow-y: auto;
@@ -219,7 +219,7 @@
 
     /* ── FAB (글쓰기) ── */
     .fab-btn {
-      position: absolute; bottom: 20px; right: 20px;
+      position: absolute; bottom: 80px; right: 20px;
       height: 46px; border-radius: 23px; border: none;
       background: linear-gradient(135deg, #D4A96A, #c49050);
       color: #fff; cursor: pointer;
@@ -271,6 +271,78 @@
     .phone-wrapper.dark .badge-daily  { background: #0a1828; color: #7ab8e8; }
     .phone-wrapper.dark .cm-empty { color: #584e42; }
     .phone-wrapper.dark .main-copyright { color: #3a3028; }
+
+/* ── 하단 네비게이션 ── */
+.bottom-nav {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 64px;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  align-items: stretch;
+  z-index: 150;
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 0 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #c0b8b0;
+  transition: color 0.15s;
+  position: relative;
+}
+.nav-item:hover { color: #D4A96A; }
+.nav-item.active { color: #D4A96A; }
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 20px; height: 2.5px;
+  background: #D4A96A;
+  border-radius: 0 0 3px 3px;
+}
+
+.nav-icon {
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-label { font-size: 10px; font-weight: 600; letter-spacing: -0.2px; }
+
+/* 홈 버튼 */
+.nav-home-wrap {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #D4A96A, #C49050);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(212,169,106,0.4);
+  color: #fff;
+  transition: transform 0.15s, box-shadow 0.15s;
+  margin-bottom: -4px;
+}
+.nav-item.nav-home:hover .nav-home-wrap {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(212,169,106,0.5);
+}
+.nav-item.nav-home .nav-label { color: #D4A96A; font-weight: 700; }
+.nav-item.nav-home::after { display: none; }
+
+/* 다크모드 */
+.phone-wrapper.dark .bottom-nav { background: rgba(21,18,14,0.97); border-top-color: #2a2418; }
+.phone-wrapper.dark .nav-item { color: #484038; }
+.phone-wrapper.dark .nav-item:hover { color: #D4A96A; }
+.phone-wrapper.dark .nav-item.active { color: #D4A96A; }
+.phone-wrapper.dark .nav-item.nav-home .nav-label { color: #D4A96A; }
+
   </style>
 </head>
 <body>
@@ -344,6 +416,41 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       글쓰기
     </button>
+
+  
+    <!-- 하단 네비게이션 -->
+    <nav class="bottom-nav">
+      <button class="nav-item" onclick="location.href='roadmap.html'">
+        <div class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <span class="nav-label">웨딩</span>
+      </button>
+      <button class="nav-item" onclick="location.href='budget.html'">
+        <div class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <span class="nav-label">예산</span>
+      </button>
+      <button class="nav-item nav-home" onclick="location.href='main.html'">
+        <div class="nav-home-wrap">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <span class="nav-label">홈</span>
+      </button>
+      <button class="nav-item active" onclick="location.href='community.html'">
+        <div class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <span class="nav-label">커뮤니티</span>
+      </button>
+      <button class="nav-item" onclick="alert('설정 화면은 준비 중입니다.')">
+        <div class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </div>
+        <span class="nav-label">더보기</span>
+      </button>
+    </nav>
 
   </div><!-- /phone-wrapper -->
 
@@ -582,7 +689,7 @@
       localStorage.setItem('weddly-dark', isDark);
     });
     document.getElementById('notifBtn').addEventListener('click',   () => alert('알림 기능 연동 예정'));
-    document.getElementById('profileBtn').addEventListener('click', () => alert('프로필 페이지 연동 예정'));
+    document.getElementById('profileBtn').addEventListener('click', () => location.href = 'user.html');
   </script>
 </body>
 </html>
