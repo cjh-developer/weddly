@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "a7fcf5068a6bd882",
+        "id": "d8952fbf8a0310f8",
         "type": "tabs",
         "children": [
           {
-            "id": "1ad8a8ab08289929",
+            "id": "c26211ab0721974e",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "view_info.md",
+                "file": "seaman-screen-structure-analysis.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "view_info"
+              "title": "seaman-screen-structure-analysis"
             }
           }
         ]
@@ -183,10 +183,11 @@
       "bases:새 베이스 생성하기": false
     }
   },
-  "active": "1ad8a8ab08289929",
+  "active": "c26211ab0721974e",
   "lastOpenFiles": [
-    "flow.md",
+    "seaman-screen-structure-analysis.md",
     "view_info.md",
+    "flow.md",
     "framework.md",
     "schema.md",
     "2026-04-08.md",

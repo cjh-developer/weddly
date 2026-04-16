@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 커뮤니티</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { align-items: flex-start; }
+
+    .phone-wrapper {
+      height: 844px;
+      min-height: unset;
+      position: relative;
+    }
+    .phone-screen {
+      padding: 0 0 80px;
+      min-height: unset;
+      height: calc(844px - 30px);
+      overflow-y: auto;
+      display: block;
+    }
+    .phone-screen::-webkit-scrollbar { width: 4px; }
+    .phone-screen::-webkit-scrollbar-track { background: transparent; }
+    .phone-screen::-webkit-scrollbar-thumb { background: linear-gradient(180deg,#D4A96A,#C49050); border-radius: 4px; }
+
+    /* ── 헤더 ── */
+    .main-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px 14px;
+      position: sticky; top: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .main-logo { font-size: 24px; font-weight: 800; font-style: italic; color: #D4A96A; letter-spacing: -0.5px; }
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+    .icon-btn {
+      width: 38px; height: 38px; border-radius: 12px;
+      background: #f8f8f8; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #666; transition: background 0.15s, color 0.15s; position: relative;
+    }
+    .icon-btn:hover { background: #f0e8d8; color: #D4A96A; }
+    .notif-badge {
+      position: absolute; top: 7px; right: 7px;
+      width: 8px; height: 8px;
+      background: #f44336; border-radius: 50%; border: 1.5px solid #fff;
+    }
+    .dark-toggle-btn .icon-sun  { display: none; }
+    .dark-toggle-btn .icon-moon { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-moon { display: none; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-sun  { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn { background: #2e2616; color: #D4A96A; }
+
+    /* ── 저작권 ── */
+    .main-copyright {
+      text-align: center; font-size: 11px; color: #ccc;
+      padding: 20px 20px 12px; letter-spacing: 0.2px; line-height: 1.8;
+    }
+
+    /* ── 검색창 ── */
+    .cm-search-wrap {
+      padding: 14px 16px 0;
+    }
+    .cm-search-box {
+      display: flex; align-items: center; gap: 10px;
+      background: #f8f6f2; border: 1.5px solid #ede9e3;
+      border-radius: 14px; padding: 10px 14px;
+      transition: border-color 0.15s;
+    }
+    .cm-search-box:focus-within { border-color: #D4A96A; background: #fffdf9; }
+    .cm-search-icon { color: #bbb; flex-shrink: 0; }
+    .cm-search-input {
+      flex: 1; border: none; background: transparent;
+      font-size: 13px; color: #333; outline: none; font-family: inherit;
+    }
+    .cm-search-input::placeholder { color: #bbb; }
+    .cm-search-clear {
+      border: none; background: transparent; color: #bbb;
+      cursor: pointer; padding: 0; display: none; align-items: center;
+    }
+    .cm-search-clear.show { display: flex; }
+
+    /* ── 탭 영역 ── */
+    .cm-tabs-wrap {
+      position: sticky; top: 57px; z-index: 90;
+      background: rgba(255,255,255,0.96); backdrop-filter: blur(10px);
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    /* 메인 탭 */
+    .cm-main-tabs {
+      display: flex; gap: 0;
+      padding: 0 16px;
+      overflow-x: auto;
+    }
+    .cm-main-tabs::-webkit-scrollbar { display: none; }
+    .cm-main-tab {
+      flex-shrink: 0;
+      padding: 12px 14px 10px;
+      font-size: 13px; font-weight: 600; color: #aaa;
+      border: none; background: transparent; cursor: pointer;
+      border-bottom: 2.5px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .cm-main-tab.active { color: #D4A96A; border-bottom-color: #D4A96A; }
+
+    /* 서브 탭 (카테고리 칩) */
+    .cm-sub-tabs {
+      display: flex; gap: 6px;
+      padding: 8px 16px 10px;
+      overflow-x: auto;
+    }
+    .cm-sub-tabs::-webkit-scrollbar { display: none; }
+    .cm-sub-tab {
+      flex-shrink: 0;
+      padding: 5px 12px; border-radius: 20px;
+      font-size: 12px; font-weight: 600;
+      border: 1.5px solid #e8e0d8; background: #fff; color: #888;
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .cm-sub-tab.active { background: #D4A96A; border-color: #D4A96A; color: #fff; }
+    .cm-sub-tab:hover:not(.active) { border-color: #D4A96A; color: #D4A96A; }
+
+    /* ── 피드 리스트 ── */
+    .cm-feed { padding: 10px 16px 0; display: flex; flex-direction: column; gap: 10px; }
+
+    /* Thread 스타일 카드 */
+    .cm-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1.5px solid #f0ece6;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .cm-card:hover { box-shadow: 0 3px 14px rgba(212,169,106,0.12); border-color: #e8ddd0; }
+    .cm-card:active { background: #fdfaf5; }
+
+    .cm-card-header {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+    }
+    .cm-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .cm-author-wrap { flex: 1; min-width: 0; }
+    .cm-author { font-size: 12px; font-weight: 700; color: #333; }
+    .cm-date   { font-size: 11px; color: #bbb; }
+
+    .cm-badge {
+      font-size: 10px; font-weight: 700;
+      padding: 3px 8px; border-radius: 20px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .badge-review  { background: #fff8ef; color: #D4A96A; }
+    .badge-qa      { background: #f0f7ff; color: #5B9BD5; }
+    .badge-free    { background: #f5fff0; color: #6BBD6E; }
+    .badge-rec     { background: #fff0f5; color: #e87a9a; }
+    .badge-bad     { background: #fff0f0; color: #e55; }
+    .badge-worry   { background: #f5f0ff; color: #9b7fe8; }
+    .badge-daily   { background: #f0f9ff; color: #5B9BD5; }
+
+    .cm-card-title {
+      font-size: 14px; font-weight: 700; color: #1a1a1a;
+      margin-bottom: 5px; line-height: 1.4;
+    }
+    .cm-card-body {
+      font-size: 12px; color: #777; line-height: 1.6;
+      margin-bottom: 8px;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .cm-card-tags {
+      display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px;
+    }
+    .cm-hashtag {
+      font-size: 11px; color: #D4A96A; font-weight: 600;
+    }
+
+    /* 이미지 썸네일 */
+    .cm-card-img {
+      width: 100%; height: 160px; border-radius: 10px;
+      object-fit: cover; margin-bottom: 10px;
+      background: #f5f0ea;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px;
+    }
+
+    .cm-card-footer {
+      display: flex; align-items: center; gap: 14px;
+      padding-top: 8px; border-top: 1px solid #f5f0ea;
+    }
+    .cm-stat {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 12px; color: #bbb;
+    }
+    .cm-stat svg { flex-shrink: 0; }
+    .cm-stat.liked { color: #e87a9a; }
+    .cm-stat-spacer { flex: 1; }
+    .cm-more-btn {
+      border: none; background: transparent; color: #bbb;
+      cursor: pointer; padding: 2px; border-radius: 6px;
+      display: flex; align-items: center;
+      transition: color 0.15s, background 0.15s;
+    }
+    .cm-more-btn:hover { background: #f5f0ea; color: #888; }
+
+    /* 빈 상태 */
+    .cm-empty {
+      text-align: center; color: #ccc; font-size: 12px;
+      padding: 48px 0; line-height: 1.9;
+    }
+    .cm-empty-icon { font-size: 36px; margin-bottom: 8px; }
+
+    /* ── FAB (글쓰기) ── */
+    .fab-btn {
+      position: absolute; bottom: 20px; right: 20px;
+      height: 46px; border-radius: 23px; border: none;
+      background: linear-gradient(135deg, #D4A96A, #c49050);
+      color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      padding: 0 18px;
+      box-shadow: 0 4px 18px rgba(212,169,106,0.45);
+      z-index: 200; transition: transform 0.15s, box-shadow 0.15s;
+      font-size: 13px; font-weight: 700;
+    }
+    .fab-btn:hover { transform: scale(1.04); box-shadow: 0 6px 24px rgba(212,169,106,0.55); }
+
+    /* ── 다크모드 ── */
+    .phone-wrapper.dark { background: #15120e; box-shadow: 0 0 0 2px #2e2820, 0 20px 60px rgba(0,0,0,0.55); }
+    .phone-wrapper.dark .phone-screen { background: #15120e; }
+    .phone-wrapper.dark .main-header { background: rgba(21,18,14,0.97); border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .icon-btn { background: #26201a; color: #a09888; }
+    .phone-wrapper.dark .icon-btn:hover { background: #342c22; color: #D4A96A; }
+    .phone-wrapper.dark .notif-badge { border-color: #26201a; }
+    .phone-wrapper.dark .cm-search-box { background: #26201a; border-color: #2e2818; }
+    .phone-wrapper.dark .cm-search-box:focus-within { border-color: #D4A96A; background: #1e1a14; }
+    .phone-wrapper.dark .cm-search-input { color: #ede8e0; }
+    .phone-wrapper.dark .cm-search-input::placeholder { color: #584e42; }
+    .phone-wrapper.dark .cm-tabs-wrap { background: rgba(21,18,14,0.97); border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .cm-main-tab { color: #584e42; }
+    .phone-wrapper.dark .cm-main-tab.active { color: #D4A96A; border-bottom-color: #D4A96A; }
+    .phone-wrapper.dark .cm-sub-tab { background: #1e1a14; border-color: #2e2818; color: #a09888; }
+    .phone-wrapper.dark .cm-sub-tab.active { background: #D4A96A; border-color: #D4A96A; color: #fff; }
+    .phone-wrapper.dark .cm-sub-tab:hover:not(.active) { border-color: #D4A96A; color: #D4A96A; }
+    .phone-wrapper.dark .cm-card { background: #1e1a14; border-color: #2e2818; }
+    .phone-wrapper.dark .cm-card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.3); border-color: #3a3028; }
+    .phone-wrapper.dark .cm-card:active { background: #26201a; }
+    .phone-wrapper.dark .cm-author { color: #c8c0b0; }
+    .phone-wrapper.dark .cm-date { color: #584e42; }
+    .phone-wrapper.dark .cm-card-title { color: #ede8e0; }
+    .phone-wrapper.dark .cm-card-body { color: #a09888; }
+    .phone-wrapper.dark .cm-card-footer { border-top-color: #2a2418; }
+    .phone-wrapper.dark .cm-stat { color: #584e42; }
+    .phone-wrapper.dark .cm-stat.liked { color: #e87a9a; }
+    .phone-wrapper.dark .cm-more-btn { color: #584e42; }
+    .phone-wrapper.dark .cm-more-btn:hover { background: #2a2418; color: #a09888; }
+    .phone-wrapper.dark .cm-hashtag { color: #c49050; }
+    .phone-wrapper.dark .cm-card-img { background: #26201a; }
+    .phone-wrapper.dark .badge-review { background: #2a1e0a; color: #D4A96A; }
+    .phone-wrapper.dark .badge-qa     { background: #0a1a2a; color: #7ab8e8; }
+    .phone-wrapper.dark .badge-free   { background: #0a2010; color: #6BBD6E; }
+    .phone-wrapper.dark .badge-rec    { background: #2a0a14; color: #e87a9a; }
+    .phone-wrapper.dark .badge-bad    { background: #2a0a0a; color: #f08080; }
+    .phone-wrapper.dark .badge-worry  { background: #180a28; color: #b09ae8; }
+    .phone-wrapper.dark .badge-daily  { background: #0a1828; color: #7ab8e8; }
+    .phone-wrapper.dark .cm-empty { color: #584e42; }
+    .phone-wrapper.dark .main-copyright { color: #3a3028; }
+  </style>
+</head>
+<body>
+  <div class="phone-wrapper" id="phoneWrapper">
+
+    <!-- 화면 본체 -->
+    <div class="phone-screen">
+
+      <!-- 헤더 -->
+      <div class="main-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button class="icon-btn" onclick="location.href='main.html'" aria-label="뒤로가기">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="main-logo">weddly</span>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn dark-toggle-btn" id="darkToggleBtn" aria-label="다크모드">
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun"  width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+          <button class="icon-btn" id="notifBtn" aria-label="알림">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-badge"></span>
+          </button>
+          <button class="icon-btn" id="profileBtn" aria-label="프로필">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 검색창 -->
+      <div class="cm-search-wrap">
+        <div class="cm-search-box">
+          <span class="cm-search-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <input class="cm-search-input" id="searchInput" type="text"
+            placeholder="웨딩 정보, 후기, 질문 검색"
+            oninput="onSearchInput(this)" />
+          <button class="cm-search-clear" id="searchClear" onclick="clearSearch()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 탭 영역 -->
+      <div class="cm-tabs-wrap" id="tabsWrap">
+        <!-- 메인 탭 -->
+        <div class="cm-main-tabs" id="mainTabs">
+          <button class="cm-main-tab active" data-tab="review"  onclick="selectMainTab(this)">정보 후기</button>
+          <button class="cm-main-tab"        data-tab="qa"      onclick="selectMainTab(this)">질문 / 상담</button>
+          <button class="cm-main-tab"        data-tab="free"    onclick="selectMainTab(this)">자유게시판</button>
+        </div>
+        <!-- 서브 탭 -->
+        <div class="cm-sub-tabs" id="subTabs"></div>
+      </div>
+
+      <!-- 피드 -->
+      <div class="cm-feed" id="cmFeed"></div>
+
+      <!-- 저작권 -->
+      <div class="main-copyright">
+        &copy; 2025 Weddly. All rights reserved.<br/>당신의 특별한 날을 함께해요
+      </div>
+
+    </div><!-- /phone-screen -->
+
+    <!-- FAB -->
+    <button class="fab-btn" id="writeFab" onclick="location.href='community_write.html?tab='+activeMain">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      글쓰기
+    </button>
+
+  </div><!-- /phone-wrapper -->
+
+  <script>
+    /* ════════════════════════════════════
+       탭 설정
+    ════════════════════════════════════ */
+    const TAB_CONFIG = {
+      review: {
+        label: '정보 후기',
+        subs: [
+          { key:'all',      label:'전체'    },
+          { key:'hall',     label:'웨딩홀'  },
+          { key:'sdm',      label:'스/드/메' },
+          { key:'appliance',label:'가전'    },
+          { key:'furniture',label:'가구'    },
+          { key:'travel',   label:'여행'    },
+          { key:'vendor',   label:'업체'    },
+          { key:'etc',      label:'기타'    },
+        ],
+        writeCats:    ['웨딩홀','스/드/메','가전','가구','여행','업체','기타'],
+        writeSubCats: ['추천','후기','비추천'],
+        subBadgeMap: { '추천':'badge-rec','후기':'badge-review','비추천':'badge-bad' },
+      },
+      qa: {
+        label: '질문 / 상담',
+        subs: [
+          { key:'all',  label:'전체' },
+          { key:'q',    label:'질문' },
+          { key:'cons', label:'상담' },
+        ],
+        writeCats:    ['질문','상담'],
+        writeSubCats: [],
+        subBadgeMap: { '질문':'badge-qa','상담':'badge-qa' },
+      },
+      free: {
+        label: '자유게시판',
+        subs: [
+          { key:'all',   label:'전체' },
+          { key:'worry', label:'고민' },
+          { key:'daily', label:'일상' },
+        ],
+        writeCats:    ['고민','일상'],
+        writeSubCats: [],
+        subBadgeMap: { '고민':'badge-worry','일상':'badge-daily' },
+      },
+    };
+
+    /* ════════════════════════════════════
+       샘플 피드 데이터
+    ════════════════════════════════════ */
+    const FEED_DATA = [
+      /* 정보 후기 */
+      { id:1, tab:'review', sub:'hall',     subCat:'추천',   avatar:'💒', avatarBg:'#fff8ef',
+        author:'결혼준비중🌸', date:'3시간 전',
+        title:'강남 웨딩홀 투어 후기 — 세 곳 비교해봤어요',
+        body:'지난 주말에 ○○컨벤션, △△웨딩, □□홀 세 곳을 다녀왔어요. 가격대부터 식사 퀄리티, 주차 공간까지 꼼꼼히 비교해드릴게요!',
+        tags:['#웨딩홀투어','#강남웨딩'], likes:142, comments:38, hasImg:true },
+      { id:2, tab:'review', sub:'sdm',      subCat:'후기',   avatar:'👗', avatarBg:'#fff0f5',
+        author:'예비신부22',    date:'6시간 전',
+        title:'드레스 업체 솔직 후기 — 잘못 고른 이야기',
+        body:'계약금 돌려받는 게 얼마나 힘들었는지… 제 실수를 공유해서 여러분은 피하셨으면 해요.',
+        tags:['#드레스후기','#주의'], likes:287, comments:91, hasImg:false },
+      { id:3, tab:'review', sub:'sdm',      subCat:'추천',   avatar:'📸', avatarBg:'#f0f8ff',
+        author:'행복한예비부부',  date:'어제',
+        title:'스튜디오 예약 꿀팁 — 최적 시기는?',
+        body:'D-8개월 전 예약이 사실상 마지노선이에요. 인기 스튜디오는 이미 D-12개월부터 예약이 꽉 차더라고요.',
+        tags:['#스튜디오','#예약팁'], likes:231, comments:37, hasImg:false },
+      { id:4, tab:'review', sub:'appliance',subCat:'추천',   avatar:'🏠', avatarBg:'#f0fff6',
+        author:'신혼집꾸미기',    date:'이틀 전',
+        title:'삼성 vs LG 냉장고 실구매 비교기',
+        body:'6개월 써본 솔직한 후기입니다. 용량·소음·AS 모두 비교해봤어요.',
+        tags:['#냉장고','#가전비교'], likes:88, comments:24, hasImg:false },
+      { id:5, tab:'review', sub:'travel',   subCat:'추천',   avatar:'✈️', avatarBg:'#f0f8ff',
+        author:'신혼여행러버',    date:'3일 전',
+        title:'몰디브 신혼여행 총정리 — 예산부터 일정까지',
+        body:'800만 원으로 5박 7일 풀패키지 다녀왔어요. 숙소·항공·투어 모두 상세히 공유할게요!',
+        tags:['#몰디브','#신혼여행'], likes:354, comments:112, hasImg:true },
+
+      /* 질문 / 상담 */
+      { id:6, tab:'qa', sub:'q', subCat:'질문', avatar:'❓', avatarBg:'#f0f7ff',
+        author:'떨리는예비신랑',   date:'1시간 전',
+        title:'웨딩홀 계약금, 보통 얼마나 내나요?',
+        body:'계약금 비율이 업체마다 다른 것 같아서요. 경험 있으신 분들 알려주세요!',
+        tags:['#계약금','#웨딩홀'], likes:12, comments:18, hasImg:false },
+      { id:7, tab:'qa', sub:'cons', subCat:'상담', avatar:'💬', avatarBg:'#f5f0ff',
+        author:'고민많은예비신부',   date:'5시간 전',
+        title:'시댁과 하객 수 조율 문제, 어떻게 하셨어요?',
+        body:'저희 측 150명 / 시댁 측 300명인데 어떻게 줄여달라고 해야 할지 모르겠어요 ㅠ',
+        tags:['#하객수','#고민'], likes:45, comments:67, hasImg:false },
+      { id:8, tab:'qa', sub:'q', subCat:'질문', avatar:'📋', avatarBg:'#fff8ef',
+        author:'초보예비부부',      date:'어제',
+        title:'웨딩플래너 꼭 써야 할까요?',
+        body:'직접 하면 얼마나 힘든지 경험담 들려주실 분 계신가요? 비용 절감 가능한지도 궁금해요.',
+        tags:['#웨딩플래너','#셀프웨딩'], likes:76, comments:43, hasImg:false },
+
+      /* 자유게시판 */
+      { id:9, tab:'free', sub:'worry', subCat:'고민', avatar:'😔', avatarBg:'#f5f0ff',
+        author:'준비에지친사람',     date:'30분 전',
+        title:'결혼 준비 너무 지치네요…',
+        body:'양가 의견 충돌에 체력도 바닥이에요. 이 시기 어떻게 버티셨어요? 힘내라는 말 한마디만이라도…',
+        tags:['#힘들다','#공감'], likes:198, comments:145, hasImg:false },
+      { id:10, tab:'free', sub:'daily', subCat:'일상', avatar:'💐', avatarBg:'#f0fff6',
+        author:'드디어D-30',        date:'2시간 전',
+        title:'드디어 30일 남았어요!!! 🎉',
+        body:'1년 넘게 준비했는데 이제 한 달밖에 안 남았다니 실감이 안 나요. 다들 응원해주세요 ㅎㅎ',
+        tags:['#D-30','#설렘'], likes:312, comments:88, hasImg:false },
+    ];
+
+    /* ════════════════════════════════════
+       상태
+    ════════════════════════════════════ */
+    let activeMain = 'review';
+    let activeSub  = 'all';
+    let searchQuery = '';
+
+    /* ════════════════════════════════════
+       메인 탭 선택
+    ════════════════════════════════════ */
+    function selectMainTab(el) {
+      document.querySelectorAll('.cm-main-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      activeMain = el.dataset.tab;
+      activeSub  = 'all';
+      renderSubTabs();
+      renderFeed();
+    }
+
+    /* ════════════════════════════════════
+       서브 탭 렌더
+    ════════════════════════════════════ */
+    function renderSubTabs() {
+      const cfg  = TAB_CONFIG[activeMain];
+      const wrap = document.getElementById('subTabs');
+      wrap.innerHTML = '';
+      cfg.subs.forEach(s => {
+        const btn = document.createElement('button');
+        btn.className = 'cm-sub-tab' + (s.key === activeSub ? ' active' : '');
+        btn.textContent = s.label;
+        btn.onclick = () => { activeSub = s.key; renderSubTabs(); renderFeed(); };
+        wrap.appendChild(btn);
+      });
+    }
+
+    /* ════════════════════════════════════
+       배지 클래스
+    ════════════════════════════════════ */
+    function getBadgeClass(tab, subCat) {
+      return TAB_CONFIG[tab]?.subBadgeMap?.[subCat] || 'badge-review';
+    }
+
+    /* ════════════════════════════════════
+       피드 렌더
+    ════════════════════════════════════ */
+    function renderFeed() {
+      const feed = document.getElementById('cmFeed');
+      let items = FEED_DATA.filter(p => p.tab === activeMain);
+      if (activeSub !== 'all') items = items.filter(p => p.sub === activeSub);
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        items = items.filter(p =>
+          p.title.toLowerCase().includes(q) ||
+          p.body.toLowerCase().includes(q)  ||
+          p.tags.some(t => t.toLowerCase().includes(q))
+        );
+      }
+
+      feed.innerHTML = '';
+      if (items.length === 0) {
+        feed.innerHTML = `<div class="cm-empty"><div class="cm-empty-icon">🔍</div>게시글이 없습니다.<br>첫 번째 글을 작성해보세요!</div>`;
+        return;
+      }
+
+      items.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'cm-card';
+        card.innerHTML = `
+          <div class="cm-card-header">
+            <div class="cm-avatar" style="background:${p.avatarBg}">${p.avatar}</div>
+            <div class="cm-author-wrap">
+              <div class="cm-author">${p.author}</div>
+              <div class="cm-date">${p.date}</div>
+            </div>
+            <span class="cm-badge ${getBadgeClass(p.tab, p.subCat)}">${p.subCat}</span>
+          </div>
+          ${p.hasImg ? `<div class="cm-card-img" style="background:${p.avatarBg}">${p.avatar}</div>` : ''}
+          <div class="cm-card-title">${p.title}</div>
+          <div class="cm-card-body">${p.body}</div>
+          ${p.tags.length ? `<div class="cm-card-tags">${p.tags.map(t=>`<span class="cm-hashtag">${t}</span>`).join('')}</div>` : ''}
+          <div class="cm-card-footer">
+            <span class="cm-stat">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              ${p.likes}
+            </span>
+            <span class="cm-stat">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              ${p.comments}
+            </span>
+            <span class="cm-stat-spacer"></span>
+            <button class="cm-more-btn" onclick="event.stopPropagation()" aria-label="더보기">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+            </button>
+          </div>
+        `;
+        card.addEventListener('click', () => location.href = `community_detail.html?id=${p.id}`);
+        feed.appendChild(card);
+      });
+    }
+
+    /* ════════════════════════════════════
+       검색
+    ════════════════════════════════════ */
+    function onSearchInput(el) {
+      searchQuery = el.value;
+      document.getElementById('searchClear').classList.toggle('show', searchQuery.length > 0);
+      renderFeed();
+    }
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      searchQuery = '';
+      document.getElementById('searchClear').classList.remove('show');
+      renderFeed();
+    }
+
+    /* ════════════════════════════════════
+       초기화
+    ════════════════════════════════════ */
+    renderSubTabs();
+    renderFeed();
+
+    // 다크모드
+    const phoneWrapper = document.getElementById('phoneWrapper');
+    if (localStorage.getItem('weddly-dark') === 'true') phoneWrapper.classList.add('dark');
+    document.getElementById('darkToggleBtn').addEventListener('click', () => {
+      const isDark = phoneWrapper.classList.toggle('dark');
+      localStorage.setItem('weddly-dark', isDark);
+    });
+    document.getElementById('notifBtn').addEventListener('click',   () => alert('알림 기능 연동 예정'));
+    document.getElementById('profileBtn').addEventListener('click', () => alert('프로필 페이지 연동 예정'));
+  </script>
+</body>
+</html>

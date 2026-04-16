@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 게시글</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { align-items: flex-start; }
+
+    .phone-wrapper {
+      height: 844px; min-height: unset; position: relative;
+    }
+    .phone-screen {
+      padding: 0 0 72px;
+      min-height: unset;
+      height: calc(844px - 30px);
+      overflow-y: auto; display: block;
+    }
+    .phone-screen::-webkit-scrollbar { width: 4px; }
+    .phone-screen::-webkit-scrollbar-track { background: transparent; }
+    .phone-screen::-webkit-scrollbar-thumb { background: linear-gradient(180deg,#D4A96A,#C49050); border-radius: 4px; }
+
+    /* ── 헤더 ── */
+    .main-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px 14px;
+      position: sticky; top: 0;
+      background: #fff; z-index: 100;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .header-left { display: flex; align-items: center; gap: 10px; }
+    .header-title { font-size: 16px; font-weight: 800; color: #1a1a1a; }
+    .header-actions { display: flex; gap: 8px; align-items: center; position: relative; }
+
+    .icon-btn {
+      width: 38px; height: 38px; border-radius: 12px;
+      background: #f8f8f8; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #666; transition: background 0.15s, color 0.15s; position: relative;
+    }
+    .icon-btn:hover { background: #f0e8d8; color: #D4A96A; }
+    .dark-toggle-btn .icon-sun  { display: none; }
+    .dark-toggle-btn .icon-moon { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-moon { display: none; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-sun  { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn { background: #2e2616; color: #D4A96A; }
+
+    /* ── ⋮ 드롭다운 ── */
+    .more-menu {
+      position: absolute; top: 44px; right: 0;
+      background: #fff; border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      border: 1px solid #f0ece6;
+      overflow: hidden; z-index: 300;
+      min-width: 110px;
+      opacity: 0; pointer-events: none; transform: scale(0.92) translateY(-6px);
+      transition: opacity 0.15s, transform 0.15s;
+      transform-origin: top right;
+    }
+    .more-menu.open { opacity: 1; pointer-events: all; transform: scale(1) translateY(0); }
+    .more-menu-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; font-size: 13px; font-weight: 600;
+      border: none; background: transparent; width: 100%;
+      cursor: pointer; color: #333; transition: background 0.12s;
+      text-align: left;
+    }
+    .more-menu-item:hover { background: #faf8f4; }
+    .more-menu-item.danger { color: #e55; }
+    .more-menu-item.danger:hover { background: #fff4f4; }
+    .more-menu-sep { height: 1px; background: #f5f0ea; margin: 0; }
+
+    /* ── 게시글 본문 ── */
+    .post-wrap { padding: 20px 20px 0; }
+
+    .post-author-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+    }
+    .post-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .post-author-info { flex: 1; min-width: 0; }
+    .post-author-name { font-size: 14px; font-weight: 700; color: #1a1a1a; }
+    .post-author-meta { font-size: 12px; color: #bbb; margin-top: 2px; }
+    .post-badge {
+      font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 20px; flex-shrink: 0;
+    }
+    .badge-review  { background: #fff8ef; color: #D4A96A; }
+    .badge-qa      { background: #f0f7ff; color: #5B9BD5; }
+    .badge-free    { background: #f5fff0; color: #6BBD6E; }
+    .badge-rec     { background: #fff0f5; color: #e87a9a; }
+    .badge-bad     { background: #fff0f0; color: #e55; }
+    .badge-worry   { background: #f5f0ff; color: #9b7fe8; }
+    .badge-daily   { background: #f0f9ff; color: #5B9BD5; }
+
+    .post-title {
+      font-size: 20px; font-weight: 800; color: #1a1a1a;
+      line-height: 1.4; margin-bottom: 14px;
+    }
+    .post-img {
+      width: 100%; height: 200px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 60px; margin-bottom: 16px;
+    }
+    .post-body {
+      font-size: 14px; color: #444; line-height: 1.85;
+      margin-bottom: 16px; white-space: pre-wrap;
+    }
+    .post-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+    .post-hashtag { font-size: 12px; color: #D4A96A; font-weight: 600; }
+
+    /* 액션 바 */
+    .post-action-bar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 14px 0;
+      border-top: 1px solid #f5f0ea;
+      border-bottom: 1px solid #f5f0ea;
+      margin-bottom: 24px;
+    }
+    .action-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 20px; border: 1.5px solid #ede9e3;
+      background: #fafaf8; cursor: pointer; font-size: 13px; font-weight: 600;
+      color: #888; transition: all 0.15s; font-family: inherit;
+    }
+    .action-btn:hover { border-color: #D4A96A; color: #D4A96A; background: #fff8ef; }
+    .action-btn.liked { background: #fff0f5; border-color: #f0aabf; color: #e87a9a; }
+    .action-spacer { flex: 1; }
+    .action-share {
+      display: flex; align-items: center; gap: 5px;
+      border: none; background: transparent; cursor: pointer;
+      font-size: 12px; color: #bbb; font-family: inherit; font-weight: 600;
+      transition: color 0.15s; padding: 4px;
+    }
+    .action-share:hover { color: #D4A96A; }
+
+    /* ── 댓글 섹션 ── */
+    .comments-section { padding: 0 20px 0; }
+    .comments-header {
+      font-size: 14px; font-weight: 800; color: #1a1a1a;
+      margin-bottom: 16px;
+    }
+    .comments-header span { color: #D4A96A; }
+
+    .comment-item {
+      display: flex; gap: 10px; margin-bottom: 18px;
+    }
+    .comment-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0; background: #f5f0ea;
+    }
+    .comment-body-wrap { flex: 1; min-width: 0; }
+    .comment-header-row {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 5px;
+    }
+    .comment-author { font-size: 13px; font-weight: 700; color: #1a1a1a; }
+    .comment-date   { font-size: 11px; color: #bbb; }
+    .comment-text   { font-size: 13px; color: #555; line-height: 1.65; }
+    .comment-actions {
+      display: flex; gap: 12px; margin-top: 6px;
+    }
+    .comment-act-btn {
+      border: none; background: transparent; font-size: 11px; color: #bbb;
+      cursor: pointer; padding: 0; font-family: inherit; font-weight: 600;
+      transition: color 0.12s;
+    }
+    .comment-act-btn:hover { color: #D4A96A; }
+    .comment-act-btn.liked { color: #e87a9a; }
+
+    .comment-sep { border: none; border-top: 1px solid #f5f0ea; margin: 0 0 18px; }
+
+    /* ── 댓글 입력 (절대 고정) ── */
+    .comment-input-wrap {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: #fff;
+      border-top: 1px solid #f0ece6;
+      padding: 10px 16px 14px;
+      display: flex; align-items: flex-end; gap: 10px;
+    }
+    .comment-input-box {
+      flex: 1; display: flex; align-items: flex-end;
+      background: #f5f2ee; border-radius: 20px;
+      padding: 9px 14px; gap: 6px;
+    }
+    .comment-input {
+      flex: 1; border: none; background: transparent;
+      font-size: 13px; color: #333; outline: none; font-family: inherit;
+      resize: none; max-height: 80px; line-height: 1.5;
+    }
+    .comment-input::placeholder { color: #bbb; }
+    .comment-send-btn {
+      width: 36px; height: 36px; border-radius: 18px; border: none; flex-shrink: 0;
+      background: linear-gradient(135deg, #D4A96A, #c49050);
+      color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .comment-send-btn:hover { opacity: 0.85; }
+    .comment-send-btn:active { transform: scale(0.93); }
+
+    /* ── 다크모드 ── */
+    .phone-wrapper.dark { background: #15120e; box-shadow: 0 0 0 2px #2e2820, 0 20px 60px rgba(0,0,0,0.55); }
+    .phone-wrapper.dark .phone-screen { background: #15120e; }
+    .phone-wrapper.dark .main-header { background: #15120e; border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .header-title { color: #ede8e0; }
+    .phone-wrapper.dark .icon-btn { background: #26201a; color: #a09888; }
+    .phone-wrapper.dark .icon-btn:hover { background: #342c22; color: #D4A96A; }
+    .phone-wrapper.dark .more-menu { background: #26201a; border-color: #2e2818; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+    .phone-wrapper.dark .more-menu-item { color: #c8c0b0; }
+    .phone-wrapper.dark .more-menu-item:hover { background: #342c22; }
+    .phone-wrapper.dark .more-menu-item.danger { color: #f08080; }
+    .phone-wrapper.dark .more-menu-item.danger:hover { background: #2a1010; }
+    .phone-wrapper.dark .more-menu-sep { background: #2e2818; }
+    .phone-wrapper.dark .post-author-name { color: #ede8e0; }
+    .phone-wrapper.dark .post-author-meta { color: #584e42; }
+    .phone-wrapper.dark .post-title { color: #ede8e0; }
+    .phone-wrapper.dark .post-body { color: #a09888; }
+    .phone-wrapper.dark .post-hashtag { color: #c49050; }
+    .phone-wrapper.dark .post-action-bar { border-color: #2a2418; }
+    .phone-wrapper.dark .action-btn { background: #26201a; border-color: #2e2818; color: #a09888; }
+    .phone-wrapper.dark .action-btn:hover { border-color: #D4A96A; color: #D4A96A; background: #2a1e10; }
+    .phone-wrapper.dark .action-btn.liked { background: #2a0a14; border-color: #c08090; color: #e87a9a; }
+    .phone-wrapper.dark .action-share { color: #584e42; }
+    .phone-wrapper.dark .action-share:hover { color: #D4A96A; }
+    .phone-wrapper.dark .comments-header { color: #ede8e0; }
+    .phone-wrapper.dark .comment-avatar { background: #26201a; }
+    .phone-wrapper.dark .comment-author { color: #ede8e0; }
+    .phone-wrapper.dark .comment-date { color: #584e42; }
+    .phone-wrapper.dark .comment-text { color: #a09888; }
+    .phone-wrapper.dark .comment-act-btn { color: #584e42; }
+    .phone-wrapper.dark .comment-act-btn:hover { color: #D4A96A; }
+    .phone-wrapper.dark .comment-act-btn.liked { color: #e87a9a; }
+    .phone-wrapper.dark .comment-sep { border-top-color: #2a2418; }
+    .phone-wrapper.dark .badge-review { background: #2a1e0a; color: #D4A96A; }
+    .phone-wrapper.dark .badge-qa     { background: #0a1a2a; color: #7ab8e8; }
+    .phone-wrapper.dark .badge-free   { background: #0a2010; color: #6BBD6E; }
+    .phone-wrapper.dark .badge-rec    { background: #2a0a14; color: #e87a9a; }
+    .phone-wrapper.dark .badge-bad    { background: #2a0a0a; color: #f08080; }
+    .phone-wrapper.dark .badge-worry  { background: #180a28; color: #b09ae8; }
+    .phone-wrapper.dark .badge-daily  { background: #0a1828; color: #7ab8e8; }
+    .phone-wrapper.dark .comment-input-wrap { background: #15120e; border-top-color: #2a2418; }
+    .phone-wrapper.dark .comment-input-box { background: #26201a; }
+    .phone-wrapper.dark .comment-input { color: #ede8e0; }
+    .phone-wrapper.dark .comment-input::placeholder { color: #584e42; }
+  </style>
+</head>
+<body>
+  <div class="phone-wrapper" id="phoneWrapper">
+    <div class="phone-screen">
+
+      <!-- 헤더 -->
+      <div class="main-header">
+        <div class="header-left">
+          <button class="icon-btn" onclick="history.back()" aria-label="뒤로가기">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="header-title">게시글</span>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn dark-toggle-btn" id="darkToggleBtn" aria-label="다크모드">
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun"  width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+          <!-- ⋮ 메뉴 버튼 -->
+          <button class="icon-btn" id="moreBtn" onclick="toggleMenu(event)" aria-label="더보기">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="5" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="12" cy="19" r="1.2"/></svg>
+          </button>
+          <!-- 드롭다운 -->
+          <div class="more-menu" id="moreMenu">
+            <button class="more-menu-item" onclick="editPost()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              수정
+            </button>
+            <div class="more-menu-sep"></div>
+            <button class="more-menu-item danger" onclick="deletePost()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+              삭제
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 본문 -->
+      <div class="post-wrap" id="postWrap">
+        <!-- JS로 렌더 -->
+      </div>
+
+      <!-- 댓글 섹션 -->
+      <div class="comments-section" id="commentsSection">
+        <!-- JS로 렌더 -->
+      </div>
+
+    </div><!-- /phone-screen -->
+
+    <!-- 댓글 입력 (절대 고정) -->
+    <div class="comment-input-wrap">
+      <div class="comment-input-box">
+        <textarea class="comment-input" id="commentInput" rows="1"
+          placeholder="댓글을 입력하세요…"
+          oninput="autoResize(this)"></textarea>
+      </div>
+      <button class="comment-send-btn" onclick="sendComment()" aria-label="댓글 등록">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+
+  </div><!-- /phone-wrapper -->
+
+  <script>
+    /* ════════════════════════════════════
+       피드 데이터 (community.html 동일)
+    ════════════════════════════════════ */
+    const FEED_DATA = [
+      { id:1,  tab:'review', sub:'hall',      subCat:'추천',  avatar:'💒', avatarBg:'#fff8ef',
+        author:'결혼준비중🌸',   date:'3시간 전',
+        title:'강남 웨딩홀 투어 후기 — 세 곳 비교해봤어요',
+        body:'지난 주말에 ○○컨벤션, △△웨딩, □□홀 세 곳을 다녀왔어요.\n\n가격대부터 식사 퀄리티, 주차 공간까지 꼼꼼히 비교해봤는데 생각보다 차이가 많이 나더라고요.\n\n첫 번째로 방문한 ○○컨벤션은 수용 인원 대비 가격이 저렴하고 음식이 훌륭했지만, 주차 공간이 협소한 편이었어요.\n\n두 번째 △△웨딩은 인테리어가 매우 고급스럽고 직원 응대도 친절했지만 1인당 비용이 꽤 높았습니다.\n\n마지막 □□홀은 균형이 잘 잡혀 있어서 저희는 여기로 결정했어요! 궁금하신 분들은 댓글 달아주세요 😊',
+        tags:['#웨딩홀투어','#강남웨딩','#웨딩홀비교'], likes:142, comments:38, hasImg:true },
+      { id:2,  tab:'review', sub:'sdm',       subCat:'후기',  avatar:'👗', avatarBg:'#fff0f5',
+        author:'예비신부22',     date:'6시간 전',
+        title:'드레스 업체 솔직 후기 — 잘못 고른 이야기',
+        body:'계약금 돌려받는 게 얼마나 힘들었는지… 제 실수를 공유해서 여러분은 피하셨으면 해요.\n\n계약서를 꼼꼼히 읽지 않고 사인했다가 낭패를 봤어요. 특히 취소 수수료 조항이 숨어 있었는데 전혀 설명을 안 해주더라고요.\n\n드레스 자체는 예쁜데 업체 대응이 너무 아쉬웠습니다. 계약하시기 전에 꼭 꼼꼼히 읽어보세요!',
+        tags:['#드레스후기','#주의','#계약서'], likes:287, comments:91, hasImg:false },
+      { id:3,  tab:'review', sub:'sdm',       subCat:'추천',  avatar:'📸', avatarBg:'#f0f8ff',
+        author:'행복한예비부부',  date:'어제',
+        title:'스튜디오 예약 꿀팁 — 최적 시기는?',
+        body:'D-8개월 전 예약이 사실상 마지노선이에요.\n\n인기 스튜디오는 이미 D-12개월부터 예약이 꽉 차더라고요. 저희는 D-7개월에 겨우 원하는 날짜 잡았는데 정말 아슬아슬했어요.\n\n팁: 평일 오전 시간대가 상대적으로 잡기 쉽고 가격도 저렴한 경우가 많아요!',
+        tags:['#스튜디오','#예약팁','#웨딩스냅'], likes:231, comments:37, hasImg:false },
+      { id:4,  tab:'review', sub:'appliance', subCat:'추천',  avatar:'🏠', avatarBg:'#f0fff6',
+        author:'신혼집꾸미기',    date:'이틀 전',
+        title:'삼성 vs LG 냉장고 실구매 비교기',
+        body:'6개월 써본 솔직한 후기입니다. 용량·소음·AS 모두 비교해봤어요.\n\n삼성은 패밀리허브 기능이 신기하지만 실용성이 떨어지고, LG는 무소음에 가까운 정숙함이 인상적이었어요. AS 기간과 비용을 고려하면 LG가 약간 우위에 있는 것 같습니다.',
+        tags:['#냉장고','#가전비교','#신혼집'], likes:88, comments:24, hasImg:false },
+      { id:5,  tab:'review', sub:'travel',    subCat:'추천',  avatar:'✈️', avatarBg:'#f0f8ff',
+        author:'신혼여행러버',    date:'3일 전',
+        title:'몰디브 신혼여행 총정리 — 예산부터 일정까지',
+        body:'800만 원으로 5박 7일 풀패키지 다녀왔어요.\n\n숙소는 수상 방갈로보다 비치 방갈로가 성비비가 훨씬 좋았고, 스노클링 투어는 꼭 포함시키세요. 선셋 크루즈는 돈이 아깝지 않을 만큼 환상적이었습니다!\n\n상세 일정과 비용 내역은 댓글에 남겨드릴게요 😊',
+        tags:['#몰디브','#신혼여행','#여행후기'], likes:354, comments:112, hasImg:true },
+      { id:6,  tab:'qa',     sub:'q',         subCat:'질문',  avatar:'❓', avatarBg:'#f0f7ff',
+        author:'떨리는예비신랑',  date:'1시간 전',
+        title:'웨딩홀 계약금, 보통 얼마나 내나요?',
+        body:'계약금 비율이 업체마다 다른 것 같아서요. 경험 있으신 분들 알려주세요!\n\n저희가 알아본 곳은 전체 금액의 10%~20% 사이가 많던데, 환불 규정도 각각 달라서 헷갈려요.',
+        tags:['#계약금','#웨딩홀'], likes:12, comments:18, hasImg:false },
+      { id:7,  tab:'qa',     sub:'cons',      subCat:'상담',  avatar:'💬', avatarBg:'#f5f0ff',
+        author:'고민많은예비신부', date:'5시간 전',
+        title:'시댁과 하객 수 조율 문제, 어떻게 하셨어요?',
+        body:'저희 측 150명 / 시댁 측 300명인데 어떻게 줄여달라고 해야 할지 모르겠어요 ㅠ\n\n웨딩홀 수용 인원이 350명이라 초과는 안 되는데, 시어머니께서 명단을 계속 늘리시려 해서 어렵네요.',
+        tags:['#하객수','#고민'], likes:45, comments:67, hasImg:false },
+      { id:8,  tab:'qa',     sub:'q',         subCat:'질문',  avatar:'📋', avatarBg:'#fff8ef',
+        author:'초보예비부부',    date:'어제',
+        title:'웨딩플래너 꼭 써야 할까요?',
+        body:'직접 하면 얼마나 힘든지 경험담 들려주실 분 계신가요? 비용 절감 가능한지도 궁금해요.\n\n주변 친구는 플래너 없이 했다가 너무 힘들었다고 하던데, 실제로 어느 정도 도움이 되는지 궁금합니다.',
+        tags:['#웨딩플래너','#셀프웨딩'], likes:76, comments:43, hasImg:false },
+      { id:9,  tab:'free',   sub:'worry',     subCat:'고민',  avatar:'😔', avatarBg:'#f5f0ff',
+        author:'준비에지친사람',  date:'30분 전',
+        title:'결혼 준비 너무 지치네요…',
+        body:'양가 의견 충돌에 체력도 바닥이에요. 이 시기 어떻게 버티셨어요? 힘내라는 말 한마디만이라도…\n\n혼자 다 짊어지는 느낌이 들 때마다 정말 힘드네요. 결혼 자체가 두려워질 때도 있어요.',
+        tags:['#힘들다','#공감'], likes:198, comments:145, hasImg:false },
+      { id:10, tab:'free',   sub:'daily',     subCat:'일상',  avatar:'💐', avatarBg:'#f0fff6',
+        author:'드디어D-30',     date:'2시간 전',
+        title:'드디어 30일 남았어요!!! 🎉',
+        body:'1년 넘게 준비했는데 이제 한 달밖에 안 남았다니 실감이 안 나요. 다들 응원해주세요 ㅎㅎ\n\n긴 여정이었지만 드디어 끝이 보이네요. 준비하면서 힘들었던 분들 모두 파이팅입니다! 🌸',
+        tags:['#D-30','#설렘'], likes:312, comments:88, hasImg:false },
+    ];
+
+    /* ════════════════════════════════════
+       샘플 댓글
+    ════════════════════════════════════ */
+    const COMMENT_DATA = {
+      1: [
+        { id:1, avatar:'🌷', avatarBg:'#fff0f5', author:'행복한결혼준비', date:'2시간 전', text:'저도 세 군데 다 가봤는데 □□홀 정말 좋더라고요! 음식도 맛있고 스탭분들도 친절했어요 😊', likes:12, liked:false },
+        { id:2, avatar:'🎀', avatarBg:'#f5f0ff', author:'예비신부팅',    date:'1시간 전', text:'○○컨벤션 주차가 좀 문제더라고요 ㅠ 하객 중에 어르신들이 많으면 더 힘드실 것 같아요.', likes:7,  liked:false },
+        { id:3, avatar:'💍', avatarBg:'#fff8ef', author:'웨딩준비왕',    date:'45분 전',  text:'상세 후기 감사해요! △△웨딩 가격이 얼마나 되던가요? 예산 가늠을 못 하겠어서요.', likes:3,  liked:false },
+      ],
+      2: [
+        { id:1, avatar:'🌸', avatarBg:'#fff0f5', author:'드레스고민중',  date:'5시간 전', text:'저도 비슷한 경험을 했어요. 계약서 특약 사항 부분을 꼭 꼼꼼히 읽어야 해요!', likes:28, liked:false },
+        { id:2, avatar:'💝', avatarBg:'#f0f8ff', author:'신부클래스',    date:'3시간 전', text:'공유해주셔서 감사해요. 저도 이번 주에 방문 예정인데 꼭 챙겨볼게요.', likes:15, liked:false },
+      ],
+      default: [
+        { id:1, avatar:'🌼', avatarBg:'#fff8ef', author:'웨딩메이트',    date:'어제',    text:'좋은 정보 감사해요! 많은 도움이 됐습니다 😊', likes:8,  liked:false },
+        { id:2, avatar:'💌', avatarBg:'#f5f0ff', author:'예비신랑준비중', date:'5시간 전', text:'저도 궁금했는데 이 글 보고 많이 배워갑니다!', likes:4,  liked:false },
+        { id:3, avatar:'🎊', avatarBg:'#f0fff6', author:'결혼D-100',     date:'2시간 전', text:'응원합니다! 저도 비슷한 상황인데 힘 받고 가요 🙌', likes:11, liked:false },
+      ],
+    };
+
+    /* ════════════════════════════════════
+       배지 매핑
+    ════════════════════════════════════ */
+    const BADGE_MAP = {
+      review: { '추천':'badge-rec','후기':'badge-review','비추천':'badge-bad' },
+      qa:     { '질문':'badge-qa','상담':'badge-qa' },
+      free:   { '고민':'badge-worry','일상':'badge-daily' },
+    };
+    function getBadgeClass(tab, subCat) {
+      return BADGE_MAP[tab]?.[subCat] || 'badge-review';
+    }
+
+    /* ════════════════════════════════════
+       상태
+    ════════════════════════════════════ */
+    let post = null;
+    let liked = false;
+    let localLikes = 0;
+    let comments = [];
+
+    /* ════════════════════════════════════
+       초기 렌더
+    ════════════════════════════════════ */
+    function init() {
+      const id = parseInt(new URLSearchParams(location.search).get('id'));
+      post = FEED_DATA.find(p => p.id === id) || FEED_DATA[0];
+      liked = false;
+      localLikes = post.likes;
+      comments = JSON.parse(JSON.stringify(COMMENT_DATA[post.id] || COMMENT_DATA.default));
+      renderPost();
+      renderComments();
+    }
+
+    /* ════════════════════════════════════
+       게시글 렌더
+    ════════════════════════════════════ */
+    function renderPost() {
+      const el = document.getElementById('postWrap');
+      el.innerHTML = `
+        <div class="post-author-row">
+          <div class="post-avatar" style="background:${post.avatarBg}">${post.avatar}</div>
+          <div class="post-author-info">
+            <div class="post-author-name">${post.author}</div>
+            <div class="post-author-meta">${post.date} · ${TAB_LABEL[post.tab] || ''}</div>
+          </div>
+          <span class="post-badge ${getBadgeClass(post.tab, post.subCat)}">${post.subCat}</span>
+        </div>
+
+        <div class="post-title">${post.title}</div>
+
+        ${post.hasImg ? `<div class="post-img" style="background:${post.avatarBg}">${post.avatar}</div>` : ''}
+
+        <div class="post-body">${post.body}</div>
+
+        ${post.tags.length ? `
+          <div class="post-tags">
+            ${post.tags.map(t => `<span class="post-hashtag">${t}</span>`).join('')}
+          </div>` : ''}
+
+        <div class="post-action-bar">
+          <button class="action-btn${liked?' liked':''}" id="likeBtn" onclick="toggleLike()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="${liked?'#e87a9a':'none'}" stroke="${liked?'#e87a9a':'currentColor'}" stroke-width="2" stroke-linecap="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <span id="likeCount">${localLikes}</span>
+          </button>
+          <button class="action-btn" onclick="document.getElementById('commentInput').focus()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            ${comments.length}
+          </button>
+          <span class="action-spacer"></span>
+          <button class="action-share" onclick="sharePost()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            공유
+          </button>
+        </div>
+      `;
+    }
+
+    const TAB_LABEL = { review:'정보 후기', qa:'질문 / 상담', free:'자유게시판' };
+
+    /* ════════════════════════════════════
+       댓글 렌더
+    ════════════════════════════════════ */
+    function renderComments() {
+      const el = document.getElementById('commentsSection');
+      el.innerHTML = `
+        <div class="comments-header">댓글 <span>${comments.length}</span>개</div>
+        ${comments.map((c, i) => `
+          <div class="comment-item">
+            <div class="comment-avatar" style="background:${c.avatarBg}">${c.avatar}</div>
+            <div class="comment-body-wrap">
+              <div class="comment-header-row">
+                <span class="comment-author">${c.author}</span>
+                <span class="comment-date">${c.date}</span>
+              </div>
+              <div class="comment-text">${c.text}</div>
+              <div class="comment-actions">
+                <button class="comment-act-btn${c.liked?' liked':''}" onclick="likeComment(${i})">
+                  ${c.liked ? '♥' : '♡'} ${c.likes}
+                </button>
+                <button class="comment-act-btn" onclick="replyComment('${c.author}')">답글</button>
+              </div>
+            </div>
+          </div>
+          ${i < comments.length - 1 ? '<hr class="comment-sep" />' : ''}
+        `).join('')}
+      `;
+    }
+
+    /* ════════════════════════════════════
+       인터랙션
+    ════════════════════════════════════ */
+    function toggleLike() {
+      liked = !liked;
+      localLikes += liked ? 1 : -1;
+      renderPost();
+    }
+
+    function likeComment(idx) {
+      comments[idx].liked = !comments[idx].liked;
+      comments[idx].likes += comments[idx].liked ? 1 : -1;
+      renderComments();
+    }
+
+    function replyComment(author) {
+      const input = document.getElementById('commentInput');
+      input.value = `@${author} `;
+      input.focus();
+      autoResize(input);
+    }
+
+    function sendComment() {
+      const input = document.getElementById('commentInput');
+      const text = input.value.trim();
+      if (!text) return;
+      comments.push({
+        avatar:'🙋', avatarBg:'#fff8ef',
+        author:'나', date:'방금',
+        text, likes:0, liked:false,
+      });
+      input.value = '';
+      input.style.height = '';
+      renderComments();
+      // 댓글 영역으로 스크롤
+      document.getElementById('commentsSection').scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+
+    function sharePost() {
+      alert('공유 기능 연동 예정');
+    }
+
+    /* ════════════════════════════════════
+       ⋮ 메뉴
+    ════════════════════════════════════ */
+    function toggleMenu(e) {
+      e.stopPropagation();
+      document.getElementById('moreMenu').classList.toggle('open');
+    }
+    function closeMenu() {
+      document.getElementById('moreMenu').classList.remove('open');
+    }
+    document.addEventListener('click', closeMenu);
+
+    function editPost() {
+      closeMenu();
+      location.href = `community_write.html?tab=${post.tab}&edit=${post.id}`;
+    }
+    function deletePost() {
+      closeMenu();
+      if (confirm('게시글을 삭제하시겠습니까?')) {
+        alert('삭제되었습니다. (실제 연동 예정)');
+        history.back();
+      }
+    }
+
+    /* ════════════════════════════════════
+       textarea 자동 높이
+    ════════════════════════════════════ */
+    function autoResize(el) {
+      el.style.height = 'auto';
+      el.style.height = el.scrollHeight + 'px';
+    }
+
+    /* ════════════════════════════════════
+       초기화
+    ════════════════════════════════════ */
+    init();
+
+    // 다크모드
+    const phoneWrapper = document.getElementById('phoneWrapper');
+    if (localStorage.getItem('weddly-dark') === 'true') phoneWrapper.classList.add('dark');
+    document.getElementById('darkToggleBtn').addEventListener('click', () => {
+      const isDark = phoneWrapper.classList.toggle('dark');
+      localStorage.setItem('weddly-dark', isDark);
+    });
+  </script>
+</body>
+</html>

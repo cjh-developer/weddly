@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 식순관리</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { align-items: flex-start; }
+
+    .phone-wrapper {
+      height: 844px;
+      min-height: unset;
+      position: relative;
+    }
+
+    .phone-screen {
+      padding: 0 0 130px;
+      min-height: unset;
+      height: calc(844px - 30px);
+      overflow-y: auto;
+      display: block;
+    }
+
+    .phone-screen::-webkit-scrollbar { width: 4px; }
+    .phone-screen::-webkit-scrollbar-track { background: transparent; }
+    .phone-screen::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #D4A96A, #C49050); border-radius: 4px; }
+    .phone-screen::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #C49050, #b07840); }
+
+    /* ── 헤더 ── */
+    .main-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px 14px;
+      position: sticky; top: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .main-logo { font-size: 24px; font-weight: 800; font-style: italic; color: #D4A96A; letter-spacing: -0.5px; }
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+    .icon-btn {
+      width: 38px; height: 38px; border-radius: 12px;
+      background: #f8f8f8; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #666; transition: background 0.15s, color 0.15s; position: relative;
+    }
+    .icon-btn:hover { background: #f0e8d8; color: #D4A96A; }
+    .notif-badge {
+      position: absolute; top: 7px; right: 7px;
+      width: 8px; height: 8px;
+      background: #f44336; border-radius: 50%; border: 1.5px solid #fff;
+    }
+    .dark-toggle-btn .icon-sun  { display: none; }
+    .dark-toggle-btn .icon-moon { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-moon { display: none; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-sun  { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn { background: #2e2616; color: #D4A96A; }
+
+    /* ── 저작권 ── */
+    .main-copyright {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      text-align: center; font-size: 11px; color: #ccc;
+      padding: 8px 20px 10px; letter-spacing: 0.2px; line-height: 1.8;
+      background: rgba(255,255,255,0.96); backdrop-filter: blur(6px); z-index: 150;
+    }
+
+    /* ── 페이지 타이틀 ── */
+    .co-page-header { padding: 18px 20px 0; }
+    .co-page-title { font-size: 20px; font-weight: 800; color: #1a1a1a; letter-spacing: -0.4px; }
+    .co-page-subtitle { font-size: 12px; color: #aaa; margin-top: 3px; }
+
+    /* ── 주례 여부 카드 ── */
+    .co-officiant-card {
+      margin: 14px 16px 0;
+      background: #fff; border-radius: 16px;
+      border: 1.5px solid #f0e8d8;
+      padding: 14px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 1px 6px rgba(212,169,106,0.08);
+    }
+    .co-officiant-info { display: flex; flex-direction: column; gap: 3px; }
+    .co-officiant-label { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+    .co-officiant-sub { font-size: 11px; color: #aaa; }
+    .co-officiant-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 700; padding: 4px 10px;
+      border-radius: 20px; margin-top: 4px;
+    }
+    .co-officiant-badge.no  { background: #f0f7ff; color: #5B9BD5; }
+    .co-officiant-badge.yes { background: #fff8ef; color: #D4A96A; }
+
+    /* 토글 스위치 */
+    .co-toggle { position: relative; width: 52px; height: 28px; display: inline-block; flex-shrink: 0; }
+    .co-toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .co-toggle-track {
+      position: absolute; inset: 0;
+      background: #e0e0e0; border-radius: 14px;
+      cursor: pointer; transition: background 0.25s;
+    }
+    .co-toggle input:checked ~ .co-toggle-track { background: #D4A96A; }
+    .co-toggle-thumb {
+      position: absolute; top: 3px; left: 3px;
+      width: 22px; height: 22px;
+      background: #fff; border-radius: 50%;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      transition: transform 0.25s; pointer-events: none; z-index: 1;
+    }
+    .co-toggle input:checked ~ .co-toggle-thumb { transform: translateX(24px); }
+
+    /* ── 섹션 헤더 ── */
+    .co-section-wrap { margin: 16px 16px 0; }
+    .co-section-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+    }
+    .co-section-title { font-size: 13px; font-weight: 700; color: #888; }
+    .co-section-count {
+      font-size: 11px; background: #fff5e6; color: #D4A96A;
+      padding: 2px 9px; border-radius: 20px; font-weight: 700;
+    }
+
+    /* ── 식순 카드 ── */
+    .co-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .co-item {
+      background: #fff; border-radius: 14px;
+      border: 1.5px solid #f0ece6;
+      overflow: hidden;
+      transition: box-shadow 0.15s, opacity 0.2s, border-color 0.15s;
+      user-select: none;
+    }
+    .co-item:hover { box-shadow: 0 2px 12px rgba(212,169,106,0.12); }
+    .co-item.skipped { opacity: 0.4; }
+    .co-item.dragging { opacity: 0.35; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transform: scale(1.01); }
+    .co-item.drag-over { border-color: #D4A96A; box-shadow: 0 0 0 2px rgba(212,169,106,0.3); }
+
+    .co-item-accent { height: 3px; background: linear-gradient(90deg, #D4A96A 0%, #e8c888 100%); }
+    .co-item.skipped .co-item-accent { background: #e0e0e0; }
+
+    .co-item-header {
+      display: flex; align-items: center;
+      padding: 11px 12px; gap: 9px;
+    }
+
+    .co-drag-handle {
+      color: #ccc; cursor: grab; font-size: 15px;
+      flex-shrink: 0; padding: 2px;
+    }
+    .co-drag-handle:active { cursor: grabbing; }
+
+    .co-num {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #fff5e6; color: #D4A96A;
+      font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .co-item.skipped .co-num { background: #f0f0f0; color: #bbb; }
+
+    .co-emoji { font-size: 16px; flex-shrink: 0; }
+
+    .co-title-wrap { flex: 1; min-width: 0; }
+    .co-title {
+      font-size: 13px; font-weight: 600; color: #1a1a1a;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .co-item.skipped .co-title { text-decoration: line-through; color: #bbb; }
+
+    .co-custom-tag {
+      display: inline-block; font-size: 10px; color: #D4A96A;
+      background: #fff5e6; padding: 1px 5px; border-radius: 6px;
+      font-weight: 700; margin-left: 5px; vertical-align: middle;
+    }
+
+    /* skip 버튼 */
+    .co-skip-btn {
+      font-size: 11px; font-weight: 600;
+      padding: 4px 9px; border-radius: 20px;
+      border: 1.5px solid #e8e0d8; background: #fafafa;
+      color: #bbb; cursor: pointer; transition: all 0.15s;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .co-skip-btn.active { background: #fff0f0; border-color: #f5a0a0; color: #e55; }
+    .co-skip-btn:hover { border-color: #D4A96A; color: #D4A96A; }
+    .co-skip-btn.active:hover { border-color: #f44336; color: #f44336; }
+
+    /* 삭제 버튼 (커스텀 항목) */
+    .co-del-btn {
+      width: 28px; height: 28px; border-radius: 8px;
+      border: none; background: transparent; color: #ddd;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, color 0.15s; flex-shrink: 0;
+    }
+    .co-del-btn:hover { background: #fff0f0; color: #f44336; }
+
+    /* ── 추가 필드 ── */
+    .co-fields {
+      padding: 4px 12px 12px 12px;
+      display: flex; flex-direction: column; gap: 9px;
+      border-top: 1px dashed #f0ece6;
+      margin-top: 0;
+    }
+
+    .co-field { display: flex; flex-direction: column; gap: 4px; }
+    .co-field-label { font-size: 11px; color: #aaa; font-weight: 600; letter-spacing: 0.2px; }
+    .co-field-input {
+      background: #fafafa; border: 1.5px solid #ede9e3;
+      border-radius: 9px; padding: 7px 10px;
+      font-size: 12px; color: #333; outline: none;
+      transition: border-color 0.15s, background 0.15s;
+      font-family: inherit; width: 100%; box-sizing: border-box;
+    }
+    .co-field-input:focus { border-color: #D4A96A; background: #fffdf9; }
+
+    .co-field-row { display: flex; gap: 8px; }
+    .co-field-row .co-field { flex: 1; }
+
+    /* 체크박스 필드 */
+    .co-check-field {
+      display: flex; align-items: center; gap: 8px; padding: 4px 0;
+    }
+    .co-check-field input[type=checkbox] {
+      width: 16px; height: 16px; accent-color: #D4A96A; cursor: pointer; flex-shrink: 0;
+    }
+    .co-check-field label { font-size: 12px; color: #555; cursor: pointer; }
+
+    /* 커스텀 항목 내용 */
+    .co-custom-content {
+      font-size: 12px; color: #999; padding: 2px 0 6px;
+      white-space: pre-wrap; line-height: 1.5;
+    }
+
+    /* ── 저장 버튼 ── */
+    .co-save-bar {
+      margin: 16px 16px 0;
+      display: flex; gap: 8px;
+    }
+    .co-save-btn {
+      flex: 1; padding: 13px; border-radius: 12px; border: none;
+      background: linear-gradient(135deg, #D4A96A, #c49050);
+      color: #fff; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: opacity 0.15s;
+      box-shadow: 0 3px 12px rgba(212,169,106,0.35);
+    }
+    .co-save-btn:hover { opacity: 0.9; }
+
+    /* ── 빈 상태 ── */
+    .co-empty {
+      text-align: center; color: #ccc; font-size: 12px;
+      padding: 36px 0; line-height: 1.8;
+    }
+
+    /* ── FAB ── */
+    .fab-btn {
+      position: absolute; bottom: 54px; right: 20px;
+      width: 50px; height: 50px; border-radius: 50%; border: none;
+      background: linear-gradient(135deg, #D4A96A, #c49050);
+      color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 18px rgba(212,169,106,0.45);
+      z-index: 200; transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .fab-btn:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(212,169,106,0.55); }
+
+    /* ── 모달 ── */
+    .modal-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 500;
+      display: flex; align-items: flex-end;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+    .modal-box {
+      background: #fff; border-radius: 20px 20px 0 0;
+      padding: 20px 20px 30px; width: 100%;
+      max-height: 80%; overflow-y: auto;
+    }
+    .modal-box::-webkit-scrollbar { width: 3px; }
+    .modal-box::-webkit-scrollbar-thumb { background: #e0d8cc; border-radius: 3px; }
+
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;
+    }
+    .modal-title { font-size: 16px; font-weight: 700; color: #1a1a1a; }
+    .modal-close-x {
+      width: 32px; height: 32px; border-radius: 8px; border: none;
+      background: #f5f5f5; cursor: pointer; color: #888;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, color 0.15s;
+    }
+    .modal-close-x:hover { background: #f0e8d8; color: #D4A96A; }
+
+    .form-field { margin-bottom: 14px; }
+    .form-label { font-size: 12px; color: #888; font-weight: 600; margin-bottom: 6px; display: block; }
+    .form-select, .form-input {
+      width: 100%; padding: 9px 12px;
+      border: 1.5px solid #ede9e3; border-radius: 10px;
+      font-size: 13px; color: #333; outline: none;
+      background: #fafafa; font-family: inherit;
+      transition: border-color 0.15s;
+      box-sizing: border-box;
+    }
+    .form-select:focus, .form-input:focus { border-color: #D4A96A; background: #fffdf9; }
+    .form-textarea {
+      width: 100%; padding: 9px 12px;
+      border: 1.5px solid #ede9e3; border-radius: 10px;
+      font-size: 13px; color: #333; outline: none;
+      background: #fafafa; font-family: inherit;
+      resize: none; transition: border-color 0.15s;
+      box-sizing: border-box;
+    }
+    .form-textarea:focus { border-color: #D4A96A; background: #fffdf9; }
+
+    .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+    .btn-cancel {
+      flex: 1; padding: 11px; border-radius: 10px; border: none;
+      background: #f5f5f5; color: #888; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .btn-cancel:hover { background: #eee; }
+    .btn-confirm {
+      flex: 2; padding: 11px; border-radius: 10px; border: none;
+      background: linear-gradient(135deg, #D4A96A, #c49050);
+      color: #fff; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: opacity 0.15s;
+    }
+    .btn-confirm:hover { opacity: 0.9; }
+
+    /* ── 다크모드 ── */
+    /* ── 다크모드 (WCAG AA 대비 기준 적용) ──
+       배경: #15120e (screen), #1e1a14 (카드), #26201a (입력)
+       기본 텍스트  #ede8e0  대비 약 15:1 ✓
+       보조 텍스트  #b0a898  대비 약  7:1 ✓
+       레이블       #a09888  대비 약  6:1 ✓
+       힌트/서브    #887870  대비 약  4.6:1 ✓
+       장식(핸들)   #6a6258  대비 약  3.2:1 (장식 요소, UI 기준 3:1 충족) ✓
+    */
+    .phone-wrapper.dark { background: #15120e; box-shadow: 0 0 0 2px #2e2820, 0 20px 60px rgba(0,0,0,0.55); }
+    .phone-wrapper.dark .phone-screen { background: #15120e; }
+    .phone-wrapper.dark .main-header { background: rgba(21,18,14,0.97); border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .icon-btn { background: #26201a; color: #a09888; }
+    .phone-wrapper.dark .icon-btn:hover { background: #342c22; color: #D4A96A; }
+    .phone-wrapper.dark .notif-badge { border-color: #26201a; }
+    .phone-wrapper.dark .co-page-title { color: #ede8e0; }
+    .phone-wrapper.dark .co-page-subtitle { color: #887870; }           /* 힌트 4.6:1 */
+    .phone-wrapper.dark .co-officiant-card { background: #1e1a14; border-color: #2e2818; box-shadow: none; }
+    .phone-wrapper.dark .co-officiant-label { color: #ede8e0; }
+    .phone-wrapper.dark .co-officiant-sub { color: #887870; }           /* 힌트 4.6:1 */
+    .phone-wrapper.dark .co-toggle-track { background: #3a3028; }
+    .phone-wrapper.dark .co-toggle input:checked ~ .co-toggle-track { background: #D4A96A; }
+    .phone-wrapper.dark .co-section-title { color: #b0a898; }           /* 보조 7:1 */
+    .phone-wrapper.dark .co-section-count { background: #2a1e10; color: #D4A96A; }
+    .phone-wrapper.dark .co-item { background: #1e1a14; border-color: #2e2818; }
+    .phone-wrapper.dark .co-item:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+    .phone-wrapper.dark .co-item.drag-over { border-color: #D4A96A; }
+    .phone-wrapper.dark .co-title { color: #ede8e0; }
+    .phone-wrapper.dark .co-num { background: #2a1e10; color: #D4A96A; }
+    .phone-wrapper.dark .co-item.skipped .co-num { background: #1e1a14; color: #6a6258; }   /* 장식 3.2:1 */
+    .phone-wrapper.dark .co-drag-handle { color: #6a6258; }             /* 장식 3.2:1 */
+    .phone-wrapper.dark .co-fields { border-color: #2a2418; }
+    .phone-wrapper.dark .co-field-label { color: #a09888; }             /* 레이블 6:1 */
+    .phone-wrapper.dark .co-field-input { background: #26201a; border-color: #2e2818; color: #ede8e0; }
+    .phone-wrapper.dark .co-field-input:focus { border-color: #D4A96A; background: #1e1a14; }
+    .phone-wrapper.dark .co-check-field label { color: #a09888; }       /* 레이블 6:1 */
+    .phone-wrapper.dark .co-skip-btn { background: #26201a; border-color: #3a3028; color: #a09888; }  /* 6:1 */
+    .phone-wrapper.dark .co-skip-btn.active { background: #2a0a0a; border-color: #a04040; color: #f08080; }
+    .phone-wrapper.dark .co-del-btn { color: #6a6258; }                 /* 장식 3.2:1 */
+    .phone-wrapper.dark .co-del-btn:hover { background: #2a0a0a; color: #f08080; }
+    .phone-wrapper.dark .co-custom-content { color: #a09888; }          /* 레이블 6:1 */
+    .phone-wrapper.dark .modal-box { background: #1e1a14; }
+    .phone-wrapper.dark .modal-box::-webkit-scrollbar-thumb { background: #3a3028; }
+    .phone-wrapper.dark .modal-title { color: #ede8e0; }
+    .phone-wrapper.dark .modal-close-x { background: #26201a; color: #a09888; }   /* 6:1 */
+    .phone-wrapper.dark .form-label { color: #a09888; }                 /* 레이블 6:1 */
+    .phone-wrapper.dark .form-select,
+    .phone-wrapper.dark .form-input,
+    .phone-wrapper.dark .form-textarea { background: #26201a; border-color: #2e2818; color: #ede8e0; }
+    .phone-wrapper.dark .form-select:focus,
+    .phone-wrapper.dark .form-input:focus,
+    .phone-wrapper.dark .form-textarea:focus { border-color: #D4A96A; background: #1e1a14; }
+    .phone-wrapper.dark .btn-cancel { background: #26201a; color: #a09888; }      /* 6:1 */
+    .phone-wrapper.dark .main-copyright { color: #887870; background: rgba(21,18,14,0.97); } /* 힌트 4.6:1 */
+  </style>
+</head>
+<body>
+  <div class="phone-wrapper" id="phoneWrapper">
+
+    <!-- 식순 추가 모달 -->
+    <div class="modal-overlay" id="addModal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title">식순 추가</span>
+          <button class="modal-close-x" onclick="closeAddModal()" aria-label="닫기">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">적용 대상</label>
+          <select class="form-select" id="addModalScenario">
+            <option value="no">주례 없음 ❌</option>
+            <option value="yes">주례 있음 ✅</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">제목 *</label>
+          <input type="text" class="form-input" id="addModalTitle"
+            placeholder="식순 제목을 입력하세요" maxlength="20" />
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">내용 (선택)</label>
+          <textarea class="form-textarea" id="addModalContent"
+            placeholder="세부 내용을 입력하세요" rows="3"></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeAddModal()">취소</button>
+          <button class="btn-confirm" onclick="addCustomItem()">추가</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 화면 본체 -->
+    <div class="phone-screen">
+
+      <!-- 헤더 -->
+      <div class="main-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button class="icon-btn" onclick="location.href='main.html'" aria-label="뒤로가기">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="main-logo">weddly</span>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn dark-toggle-btn" id="darkToggleBtn" aria-label="다크모드 전환">
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+          <button class="icon-btn" id="notifBtn" aria-label="알림">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-badge"></span>
+          </button>
+          <button class="icon-btn" id="profileBtn" aria-label="프로필">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 페이지 타이틀 -->
+      <div class="co-page-header">
+        <div class="co-page-title">📋 식순 관리</div>
+        <div class="co-page-subtitle">드래그로 순서를 변경하고 저장하세요</div>
+      </div>
+
+      <!-- 주례 여부 -->
+      <div class="co-officiant-card">
+        <div class="co-officiant-info">
+          <span class="co-officiant-label">주례 여부</span>
+          <span class="co-officiant-sub">토글로 주례 유무를 선택하세요</span>
+          <span class="co-officiant-badge no" id="officiantBadge">❌ 주례 없음</span>
+        </div>
+        <label class="co-toggle">
+          <input type="checkbox" id="officiantToggle" onchange="onOfficiantChange()" />
+          <span class="co-toggle-track"></span>
+          <span class="co-toggle-thumb"></span>
+        </label>
+      </div>
+
+      <!-- 식순 목록 -->
+      <div class="co-section-wrap">
+        <div class="co-section-header">
+          <span class="co-section-title" id="sectionTitle">식순 목록</span>
+          <span class="co-section-count" id="sectionCount">0개</span>
+        </div>
+        <div class="co-list" id="coList"></div>
+      </div>
+
+      <!-- 저장 버튼 -->
+      <div class="co-save-bar">
+        <button class="co-save-btn" id="saveBtn" onclick="saveState()">💾 저장하기</button>
+      </div>
+
+      <!-- 저작권 -->
+      <div class="main-copyright">
+        &copy; 2025 Weddly. All rights reserved.<br/>
+        당신의 특별한 날을 함께해요
+      </div>
+    </div>
+
+    <!-- FAB -->
+    <button class="fab-btn" onclick="openAddModal()" aria-label="식순 추가">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+
+  </div><!-- /phone-wrapper -->
+
+  <script>
+    /* ════════════════════════════════
+       상수 & 타입
+    ════════════════════════════════ */
+    const STORAGE_KEY = 'weddly-ceremony-order';
+
+    const T = {
+      SIMPLE        : 'simple',
+      VIDEO         : 'video',
+      GROOM_ENT_NO  : 'groom_ent_no',   // 주례 없음 – 신랑 입장
+      BRIDE_ENT_NO  : 'bride_ent_no',   // 주례 없음 – 신부 입장
+      GROOM_ENT_YES : 'groom_ent_yes',  // 주례 있음 – 신랑 입장
+      BRIDE_ENT_YES : 'bride_ent_yes',  // 주례 있음 – 신부 입장
+      OFFICIANT_MSG : 'officiant_msg',  // 주례사
+      CUSTOM        : 'custom',
+    };
+
+    /* ════════════════════════════════
+       기본 데이터
+    ════════════════════════════════ */
+    function makeDefaultNo() {
+      return [
+        { id:'no_pre_video',    emoji:'🎬', title:'식전 영상',          type:T.VIDEO,         skipped:false, fields:{} },
+        { id:'no_parents_in',   emoji:'👨‍👩‍👧', title:'부모님 입장',        type:T.SIMPLE,        skipped:false },
+        { id:'no_candle',       emoji:'🕯️', title:'화촉점화',            type:T.SIMPLE,        skipped:false },
+        { id:'no_groom_in',     emoji:'🤵', title:'신랑 입장',           type:T.GROOM_ENT_NO,  skipped:false, fields:{} },
+        { id:'no_bride_in',     emoji:'👰', title:'신부 입장',           type:T.BRIDE_ENT_NO,  skipped:false, fields:{} },
+        { id:'no_bow',          emoji:'🙏', title:'신랑 신부 맞절',      type:T.SIMPLE,        skipped:false },
+        { id:'no_rings',        emoji:'💍', title:'예물 교환',            type:T.SIMPLE,        skipped:false },
+        { id:'no_vow',          emoji:'📜', title:'혼인 서약',            type:T.SIMPLE,        skipped:false },
+        { id:'no_declaration',  emoji:'✨', title:'성혼 선언',            type:T.SIMPLE,        skipped:false },
+        { id:'no_parents_wish', emoji:'💝', title:'부모님 덕담',          type:T.SIMPLE,        skipped:false },
+        { id:'no_mid_video',    emoji:'🎬', title:'식중 영상',            type:T.VIDEO,         skipped:false, fields:{} },
+        { id:'no_speech',       emoji:'🎤', title:'축사',                type:T.SIMPLE,        skipped:false },
+        { id:'no_song',         emoji:'🎵', title:'축가',                type:T.SIMPLE,        skipped:false },
+        { id:'no_greet',        emoji:'👋', title:'부모님 및 하객 인사', type:T.SIMPLE,        skipped:false },
+        { id:'no_march',        emoji:'🚶', title:'행진',                type:T.SIMPLE,        skipped:false },
+      ];
+    }
+
+    function makeDefaultYes() {
+      return [
+        { id:'yes_pre_video',   emoji:'🎬', title:'식전 영상',          type:T.VIDEO,          skipped:false, fields:{} },
+        { id:'yes_parents_in',  emoji:'👨‍👩‍👧', title:'부모님 입장',        type:T.SIMPLE,         skipped:false },
+        { id:'yes_groom_in',    emoji:'🤵', title:'신랑 입장',           type:T.GROOM_ENT_YES,  skipped:false, fields:{} },
+        { id:'yes_bride_in',    emoji:'👰', title:'신부 입장',           type:T.BRIDE_ENT_YES,  skipped:false, fields:{} },
+        { id:'yes_bow',         emoji:'🙏', title:'신랑 신부 맞절',      type:T.SIMPLE,         skipped:false },
+        { id:'yes_vow',         emoji:'📜', title:'혼인 서약',            type:T.SIMPLE,         skipped:false },
+        { id:'yes_declaration', emoji:'✨', title:'성혼 선언',            type:T.SIMPLE,         skipped:false },
+        { id:'yes_officiant',   emoji:'📖', title:'주례사',              type:T.OFFICIANT_MSG,  skipped:false, fields:{} },
+        { id:'yes_song',        emoji:'🎵', title:'축가',                type:T.SIMPLE,         skipped:false },
+        { id:'yes_greet',       emoji:'👋', title:'부모님 및 하객 인사', type:T.SIMPLE,         skipped:false },
+        { id:'yes_march',       emoji:'🚶', title:'행진',                type:T.SIMPLE,         skipped:false },
+      ];
+    }
+
+    /* ════════════════════════════════
+       상태
+    ════════════════════════════════ */
+    let state = {
+      hasOfficiant: false,
+      noItems:  makeDefaultNo(),
+      yesItems: makeDefaultYes(),
+    };
+
+    /* ════════════════════════════════
+       localStorage 로드
+    ════════════════════════════════ */
+    (function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return;
+        const p = JSON.parse(saved);
+        if (p.hasOfficiant !== undefined) state.hasOfficiant = p.hasOfficiant;
+        if (Array.isArray(p.noItems)  && p.noItems.length)  state.noItems  = p.noItems;
+        if (Array.isArray(p.yesItems) && p.yesItems.length) state.yesItems = p.yesItems;
+      } catch(e) {}
+    })();
+
+    /* ════════════════════════════════
+       저장
+    ════════════════════════════════ */
+    function saveState() {
+      collectFields();
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      const btn = document.getElementById('saveBtn');
+      const orig = btn.textContent;
+      btn.textContent = '✅ 저장됨';
+      btn.style.background = 'linear-gradient(135deg,#6BBD6E,#4a9d4d)';
+      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 1500);
+    }
+
+    /* ════════════════════════════════
+       주례 토글
+    ════════════════════════════════ */
+    function onOfficiantChange() {
+      collectFields();
+      state.hasOfficiant = document.getElementById('officiantToggle').checked;
+      updateBadge();
+      renderList();
+    }
+
+    function updateBadge() {
+      const badge = document.getElementById('officiantBadge');
+      if (state.hasOfficiant) {
+        badge.textContent = '✅ 주례 있음';
+        badge.className = 'co-officiant-badge yes';
+      } else {
+        badge.textContent = '❌ 주례 없음';
+        badge.className = 'co-officiant-badge no';
+      }
+    }
+
+    /* ════════════════════════════════
+       현재 목록
+    ════════════════════════════════ */
+    function currentItems() {
+      return state.hasOfficiant ? state.yesItems : state.noItems;
+    }
+
+    /* ════════════════════════════════
+       필드 값 수집 (렌더 전 보존)
+    ════════════════════════════════ */
+    function collectFields() {
+      currentItems().forEach(item => {
+        if (!item.fields) return;
+        const p = 'f_' + item.id + '_';
+        switch (item.type) {
+          case T.VIDEO:
+            item.fields.videoTitle  = document.getElementById(p+'vtitle')?.value  ?? item.fields.videoTitle  ?? '';
+            item.fields.videoLength = document.getElementById(p+'vlength')?.value ?? item.fields.videoLength ?? '';
+            break;
+          case T.GROOM_ENT_NO:
+            item.fields.music    = document.getElementById(p+'music')?.value ?? item.fields.music    ?? '';
+            item.fields.playTime = document.getElementById(p+'time')?.value  ?? item.fields.playTime ?? '';
+            break;
+          case T.BRIDE_ENT_NO:
+            item.fields.fatherTogether = document.getElementById(p+'father')?.checked ?? item.fields.fatherTogether ?? false;
+            item.fields.music          = document.getElementById(p+'music')?.value    ?? item.fields.music          ?? '';
+            item.fields.playTime       = document.getElementById(p+'time')?.value     ?? item.fields.playTime       ?? '';
+            break;
+          case T.GROOM_ENT_YES:
+            item.fields.music    = document.getElementById(p+'music')?.value ?? item.fields.music    ?? '';
+            item.fields.playTime = document.getElementById(p+'time')?.value  ?? item.fields.playTime ?? '';
+            break;
+          case T.BRIDE_ENT_YES:
+            item.fields.fatherTogether = document.getElementById(p+'father')?.checked ?? item.fields.fatherTogether ?? false;
+            item.fields.music          = document.getElementById(p+'music')?.value    ?? item.fields.music          ?? '';
+            item.fields.playTime       = document.getElementById(p+'time')?.value     ?? item.fields.playTime       ?? '';
+            break;
+          case T.OFFICIANT_MSG:
+            item.fields.officiant = document.getElementById(p+'officiant')?.value ?? item.fields.officiant ?? '';
+            break;
+          case T.CUSTOM:
+            item.fields.content = document.getElementById(p+'content')?.value ?? item.fields.content ?? '';
+            break;
+        }
+      });
+    }
+
+    /* ════════════════════════════════
+       추가 필드 HTML
+    ════════════════════════════════ */
+    function buildFieldsHTML(item) {
+      const p = 'f_' + item.id + '_';
+      const f = item.fields || {};
+      switch (item.type) {
+        case T.VIDEO:
+          return `
+            <div class="co-field-row">
+              <div class="co-field">
+                <label class="co-field-label">영상 제목</label>
+                <input class="co-field-input" id="${p}vtitle" type="text" placeholder="영상 제목" value="${esc(f.videoTitle||'')}" />
+              </div>
+              <div class="co-field">
+                <label class="co-field-label">영상 길이</label>
+                <input class="co-field-input" id="${p}vlength" type="text" placeholder="예: 3분 20초" value="${esc(f.videoLength||'')}" style="width:100%" />
+              </div>
+            </div>`;
+
+        case T.GROOM_ENT_NO:
+          return `
+            <div class="co-field-row">
+              <div class="co-field">
+                <label class="co-field-label">음원</label>
+                <input class="co-field-input" id="${p}music" type="text" placeholder="음원명" value="${esc(f.music||'')}" />
+              </div>
+              <div class="co-field">
+                <label class="co-field-label">재생 시간</label>
+                <input class="co-field-input" id="${p}time" type="text" placeholder="예: 2분 30초" value="${esc(f.playTime||'')}" />
+              </div>
+            </div>`;
+
+        case T.BRIDE_ENT_NO:
+          return `
+            <div class="co-check-field">
+              <input type="checkbox" id="${p}father" ${f.fatherTogether ? 'checked' : ''} />
+              <label for="${p}father">아버지 동시 입장</label>
+            </div>
+            <div class="co-field-row">
+              <div class="co-field">
+                <label class="co-field-label">음원</label>
+                <input class="co-field-input" id="${p}music" type="text" placeholder="음원명" value="${esc(f.music||'')}" />
+              </div>
+              <div class="co-field">
+                <label class="co-field-label">재생 시간</label>
+                <input class="co-field-input" id="${p}time" type="text" placeholder="예: 2분 30초" value="${esc(f.playTime||'')}" />
+              </div>
+            </div>`;
+
+        case T.GROOM_ENT_YES:
+          return `
+            <div class="co-field-row">
+              <div class="co-field">
+                <label class="co-field-label">음원</label>
+                <input class="co-field-input" id="${p}music" type="text" placeholder="음원명" value="${esc(f.music||'')}" />
+              </div>
+              <div class="co-field">
+                <label class="co-field-label">재생 시간</label>
+                <input class="co-field-input" id="${p}time" type="text" placeholder="예: 2분 30초" value="${esc(f.playTime||'')}" />
+              </div>
+            </div>`;
+
+        case T.BRIDE_ENT_YES:
+          return `
+            <div class="co-check-field">
+              <input type="checkbox" id="${p}father" ${f.fatherTogether ? 'checked' : ''} />
+              <label for="${p}father">아버지 동시 입장</label>
+            </div>
+            <div class="co-field-row">
+              <div class="co-field">
+                <label class="co-field-label">음원</label>
+                <input class="co-field-input" id="${p}music" type="text" placeholder="음원명" value="${esc(f.music||'')}" />
+              </div>
+              <div class="co-field">
+                <label class="co-field-label">재생 시간</label>
+                <input class="co-field-input" id="${p}time" type="text" placeholder="예: 2분 30초" value="${esc(f.playTime||'')}" />
+              </div>
+            </div>`;
+
+        case T.OFFICIANT_MSG:
+          return `
+            <div class="co-field">
+              <label class="co-field-label">주례자</label>
+              <input class="co-field-input" id="${p}officiant" type="text" placeholder="주례자 성함" value="${esc(f.officiant||'')}" />
+            </div>`;
+
+        case T.CUSTOM:
+          if (!f.content) return '';
+          return `
+            <div class="co-field">
+              <label class="co-field-label">내용</label>
+              <input class="co-field-input" id="${p}content" type="text" placeholder="세부 내용" value="${esc(f.content||'')}" />
+            </div>`;
+
+        default:
+          return '';
+      }
+    }
+
+    function esc(str) {
+      return String(str).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    /* ════════════════════════════════
+       skip 토글
+    ════════════════════════════════ */
+    function toggleSkip(id) {
+      collectFields();
+      const item = currentItems().find(it => it.id === id);
+      if (item) { item.skipped = !item.skipped; renderList(); }
+    }
+
+    /* ════════════════════════════════
+       드래그 앤 드롭
+    ════════════════════════════════ */
+    let dragSrcId = null;
+
+    function onDragStart(e, id) {
+      dragSrcId = id;
+      e.dataTransfer.effectAllowed = 'move';
+      setTimeout(() => { document.querySelector(`[data-id="${id}"]`)?.classList.add('dragging'); }, 0);
+    }
+    function onDragEnd() {
+      document.querySelectorAll('.co-item').forEach(el => el.classList.remove('dragging', 'drag-over'));
+      dragSrcId = null;
+    }
+    function onDragOver(e, id) {
+      e.preventDefault();
+      document.querySelectorAll('.co-item').forEach(el => el.classList.remove('drag-over'));
+      if (dragSrcId && id !== dragSrcId) {
+        document.querySelector(`[data-id="${id}"]`)?.classList.add('drag-over');
+      }
+    }
+    function onDrop(e, targetId) {
+      e.preventDefault();
+      if (!dragSrcId || dragSrcId === targetId) return;
+      const items = currentItems();
+      const si = items.findIndex(it => it.id === dragSrcId);
+      const ti = items.findIndex(it => it.id === targetId);
+      if (si < 0 || ti < 0) return;
+      const [moved] = items.splice(si, 1);
+      items.splice(ti, 0, moved);
+      renderList();
+    }
+
+    /* ════════════════════════════════
+       항목 삭제 (커스텀만)
+    ════════════════════════════════ */
+    function deleteItem(id) {
+      if (!confirm('이 식순 항목을 삭제할까요?')) return;
+      collectFields();
+      if (state.hasOfficiant) state.yesItems = state.yesItems.filter(it => it.id !== id);
+      else                    state.noItems  = state.noItems.filter(it => it.id !== id);
+      renderList();
+    }
+
+    /* ════════════════════════════════
+       렌더
+    ════════════════════════════════ */
+    function renderList() {
+      const items = currentItems();
+      const list  = document.getElementById('coList');
+      list.innerHTML = '';
+
+      document.getElementById('sectionCount').textContent = items.length + '개';
+      document.getElementById('sectionTitle').textContent = state.hasOfficiant ? '🕊️ 주례 있음 식순' : '✨ 주례 없음 식순';
+
+      if (items.length === 0) {
+        list.innerHTML = '<div class="co-empty">식순이 없습니다.<br>+ 버튼으로 추가해보세요.</div>';
+        return;
+      }
+
+      items.forEach((item, idx) => {
+        const isCustom   = item.type === T.CUSTOM;
+        const hasFields  = !!item.fields && item.type !== T.SIMPLE;
+        const showFields = hasFields && !item.skipped;
+
+        const card = document.createElement('div');
+        card.className = 'co-item' + (item.skipped ? ' skipped' : '');
+        card.dataset.id = item.id;
+        card.draggable  = true;
+
+        card.addEventListener('dragstart', e => onDragStart(e, item.id));
+        card.addEventListener('dragend',       onDragEnd);
+        card.addEventListener('dragover',  e => onDragOver(e, item.id));
+        card.addEventListener('drop',      e => onDrop(e, item.id));
+
+        card.innerHTML = `
+          <div class="co-item-accent"></div>
+          <div class="co-item-header">
+            <span class="co-drag-handle" title="드래그하여 순서 변경">⠿</span>
+            <span class="co-num">${idx + 1}</span>
+            <span class="co-emoji">${item.emoji}</span>
+            <div class="co-title-wrap">
+              <span class="co-title">${esc(item.title)}${isCustom ? '<span class="co-custom-tag">추가</span>' : ''}</span>
+            </div>
+            ${isCustom ? `<button class="co-del-btn" onclick="deleteItem('${item.id}')" title="삭제">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </button>` : ''}
+            <button class="co-skip-btn${item.skipped ? ' active' : ''}"
+              onclick="toggleSkip('${item.id}')">
+              ${item.skipped ? '생략됨' : '생략'}
+            </button>
+          </div>
+        `;
+
+        if (showFields) {
+          const fieldsDiv = document.createElement('div');
+          fieldsDiv.className = 'co-fields';
+          fieldsDiv.innerHTML = buildFieldsHTML(item);
+          card.appendChild(fieldsDiv);
+        }
+
+        list.appendChild(card);
+      });
+    }
+
+    /* ════════════════════════════════
+       식순 추가 모달
+    ════════════════════════════════ */
+    function openAddModal() {
+      document.getElementById('addModalScenario').value = state.hasOfficiant ? 'yes' : 'no';
+      document.getElementById('addModalTitle').value   = '';
+      document.getElementById('addModalContent').value = '';
+      document.getElementById('addModal').classList.add('active');
+      setTimeout(() => document.getElementById('addModalTitle').focus(), 80);
+    }
+
+    function closeAddModal() {
+      document.getElementById('addModal').classList.remove('active');
+    }
+
+    function addCustomItem() {
+      const scenario = document.getElementById('addModalScenario').value;
+      const title    = document.getElementById('addModalTitle').value.trim();
+      const content  = document.getElementById('addModalContent').value.trim();
+      if (!title) { alert('제목을 입력해주세요.'); return; }
+
+      collectFields();
+
+      const newItem = {
+        id     : 'custom_' + Date.now(),
+        emoji  : '📌',
+        title,
+        type   : T.CUSTOM,
+        skipped: false,
+        fields : { content },
+      };
+
+      if (scenario === 'yes') state.yesItems.push(newItem);
+      else                    state.noItems.push(newItem);
+
+      // 추가한 시나리오로 전환
+      if ((scenario === 'yes') !== state.hasOfficiant) {
+        state.hasOfficiant = (scenario === 'yes');
+        document.getElementById('officiantToggle').checked = state.hasOfficiant;
+        updateBadge();
+      }
+
+      closeAddModal();
+      renderList();
+    }
+
+    /* ════════════════════════════════
+       초기화
+    ════════════════════════════════ */
+    document.getElementById('officiantToggle').checked = state.hasOfficiant;
+    updateBadge();
+    renderList();
+
+    // 키보드 ESC
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeAddModal();
+    });
+    document.getElementById('addModal').addEventListener('click', e => {
+      if (e.target === document.getElementById('addModal')) closeAddModal();
+    });
+
+    // 다크모드
+    const phoneWrapper = document.getElementById('phoneWrapper');
+    if (localStorage.getItem('weddly-dark') === 'true') phoneWrapper.classList.add('dark');
+    document.getElementById('darkToggleBtn').addEventListener('click', () => {
+      const isDark = phoneWrapper.classList.toggle('dark');
+      localStorage.setItem('weddly-dark', isDark);
+    });
+    document.getElementById('notifBtn').addEventListener('click',   () => alert('알림 기능 연동 예정'));
+    document.getElementById('profileBtn').addEventListener('click', () => alert('프로필 페이지 연동 예정'));
+  </script>
+</body>
+</html>

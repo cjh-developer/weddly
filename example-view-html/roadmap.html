@@ -2824,6 +2824,188 @@
           </div>
         </div>
 
+        <!-- 본식 정보 (본식 카테고리 선택 시) -->
+        <div class="tl-field" id="tlCeremonySection" style="display:none">
+          <div class="tl-field-label">본식 정보</div>
+          <div class="pl-section">
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="tlCrmTabPrep" onclick="toggleCeremonyTab('tl','prep')">
+                <span class="st-tab-check"></span>준비물
+              </button>
+              <button class="st-tab-btn" id="tlCrmTabSched" onclick="toggleCeremonyTab('tl','sched')">
+                <span class="st-tab-check"></span>당일 일정
+              </button>
+            </div>
+            <!-- 준비물 서브섹션 -->
+            <div class="st-sub-section" id="tlCrmPrepSection">
+              <div class="st-sub-title">📦 준비물</div>
+              <div class="hm-sched-list" id="tlCrmPrepList"></div>
+              <button class="btn-add-sched" onclick="addCrmPrep('tl')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                준비물 추가
+              </button>
+              <div style="margin-top:12px">
+                <div class="st-sub-title" style="margin-bottom:6px">📋 일정</div>
+                <div class="hm-sched-list" id="tlCrmTodoList"></div>
+                <button class="btn-add-sched" onclick="addCrmTodo('tl')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  할일 추가
+                </button>
+              </div>
+            </div>
+            <!-- 당일 일정 서브섹션 -->
+            <div class="st-sub-section" id="tlCrmSchedSection">
+              <div class="st-sub-title">📅 당일 일정</div>
+              <div class="hm-sched-list" id="tlCrmSchedList"></div>
+              <button class="btn-add-sched" onclick="addCrmSched('tl')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                일정 추가
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 신랑 예복 정보 (신랑 예복 카테고리 선택 시) -->
+        <div class="tl-field" id="tlGroomSuitSection" style="display:none">
+          <div class="tl-field-label">신랑 예복 정보</div>
+          <div class="pl-section">
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="tlGsTabCustom" onclick="toggleGroomSuitTab('tl','custom')">
+                <span class="st-tab-check"></span>맞춤
+              </button>
+              <button class="st-tab-btn" id="tlGsTabReady" onclick="toggleGroomSuitTab('tl','ready')">
+                <span class="st-tab-check"></span>기성복
+              </button>
+            </div>
+            <!-- 맞춤 서브섹션 -->
+            <div class="st-sub-section" id="tlGsCustomSection">
+              <div class="st-sub-title">🧵 맞춤 예복</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlGsCustomVendor" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">위치</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlGsCustomLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlGsCustomTotal" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcGsBalance('tl')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약금</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlGsCustomDeposit" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcGsBalance('tl')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div class="pl-balance-card">
+                <div>
+                  <div class="pl-balance-label">잔금 (자동 계산)</div>
+                  <div class="pl-balance-val" id="tlGsCustomBalance">—</div>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">중간 확인 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlGsCustomMidDate" type="date"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">최종 확인 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlGsCustomFinalDate" type="date"/>
+                </div>
+              </div>
+            </div>
+            <!-- 기성복 서브섹션 -->
+            <div class="st-sub-section" id="tlGsReadySection">
+              <div class="st-sub-title">🤵 기성복</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlGsReadyVendor" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlGsReadyAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 청첩장 정보 (청첩장 카테고리 선택 시) -->
+        <div class="tl-field" id="tlInvitationSection" style="display:none">
+          <div class="tl-field-label">청첩장 정보</div>
+          <div class="pl-section">
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="tlInvTabMake" onclick="toggleInvTab('tl','make')">
+                <span class="st-tab-check"></span>청첩장 제작
+              </button>
+              <button class="st-tab-btn" id="tlInvTabMeet" onclick="toggleInvTab('tl','meet')">
+                <span class="st-tab-check"></span>청첩장 모임
+              </button>
+            </div>
+            <!-- 청첩장 제작 서브섹션 -->
+            <div class="st-sub-section" id="tlInvMakeSection">
+              <div class="st-sub-title">💌 청첩장 제작</div>
+              <div>
+                <div class="pl-field-label">업체 명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlInvMakeVendor" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">주문 수량</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlInvMakeQty" type="number" placeholder="0" min="0" style="text-align:right"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="tlInvMakeAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">주문 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="tlInvMakeOrderDate" type="date"/>
+                </div>
+              </div>
+            </div>
+            <!-- 청첩장 모임 서브섹션 -->
+            <div class="st-sub-section" id="tlInvMeetSection">
+              <div class="st-sub-title">🤝 청첩장 모임</div>
+              <div class="hm-sched-list" id="tlInvMeetingList"></div>
+              <button class="btn-add-sched" onclick="addInvMeeting('tl')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                모임 추가
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- 내용 -->
         <div class="tl-field">
           <div class="tl-field-label">내용</div>
@@ -4267,6 +4449,188 @@
           </div>
         </div>
 
+        <!-- 본식 정보 (본식 카테고리 전용) -->
+        <div class="tl-field" id="editCeremonySection" style="display:none">
+          <div class="tl-field-label">본식 정보</div>
+          <div class="pl-section">
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="editCrmTabPrep" onclick="toggleCeremonyTab('edit','prep')">
+                <span class="st-tab-check"></span>준비물
+              </button>
+              <button class="st-tab-btn" id="editCrmTabSched" onclick="toggleCeremonyTab('edit','sched')">
+                <span class="st-tab-check"></span>당일 일정
+              </button>
+            </div>
+            <!-- 준비물 서브섹션 -->
+            <div class="st-sub-section" id="editCrmPrepSection">
+              <div class="st-sub-title">📦 준비물</div>
+              <div class="hm-sched-list" id="editCrmPrepList"></div>
+              <button class="btn-add-sched" onclick="addCrmPrep('edit')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                준비물 추가
+              </button>
+              <div style="margin-top:12px">
+                <div class="st-sub-title" style="margin-bottom:6px">📋 일정</div>
+                <div class="hm-sched-list" id="editCrmTodoList"></div>
+                <button class="btn-add-sched" onclick="addCrmTodo('edit')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  할일 추가
+                </button>
+              </div>
+            </div>
+            <!-- 당일 일정 서브섹션 -->
+            <div class="st-sub-section" id="editCrmSchedSection">
+              <div class="st-sub-title">📅 당일 일정</div>
+              <div class="hm-sched-list" id="editCrmSchedList"></div>
+              <button class="btn-add-sched" onclick="addCrmSched('edit')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                일정 추가
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 신랑 예복 정보 (신랑 예복 카테고리 전용) -->
+        <div class="tl-field" id="editGroomSuitSection" style="display:none">
+          <div class="tl-field-label">신랑 예복 정보</div>
+          <div class="pl-section">
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="editGsTabCustom" onclick="toggleGroomSuitTab('edit','custom')">
+                <span class="st-tab-check"></span>맞춤
+              </button>
+              <button class="st-tab-btn" id="editGsTabReady" onclick="toggleGroomSuitTab('edit','ready')">
+                <span class="st-tab-check"></span>기성복
+              </button>
+            </div>
+            <!-- 맞춤 서브섹션 -->
+            <div class="st-sub-section" id="editGsCustomSection">
+              <div class="st-sub-title">🧵 맞춤 예복</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editGsCustomVendor" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">위치</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editGsCustomLocation" type="text" placeholder="주소 또는 지역" maxlength="60" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editGsCustomTotal" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcGsBalance('edit')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">계약금</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editGsCustomDeposit" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this);calcGsBalance('edit')" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div class="pl-balance-card">
+                <div>
+                  <div class="pl-balance-label">잔금 (자동 계산)</div>
+                  <div class="pl-balance-val" id="editGsCustomBalance">—</div>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">중간 확인 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editGsCustomMidDate" type="date"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">최종 확인 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editGsCustomFinalDate" type="date"/>
+                </div>
+              </div>
+            </div>
+            <!-- 기성복 서브섹션 -->
+            <div class="st-sub-section" id="editGsReadySection">
+              <div class="st-sub-title">🤵 기성복</div>
+              <div>
+                <div class="pl-field-label">업체명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editGsReadyVendor" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editGsReadyAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 청첩장 정보 (청첩장 카테고리 전용) -->
+        <div class="tl-field" id="editInvitationSection" style="display:none">
+          <div class="tl-field-label">청첩장 정보</div>
+          <div class="pl-section">
+            <div class="st-tab-row">
+              <button class="st-tab-btn" id="editInvTabMake" onclick="toggleInvTab('edit','make')">
+                <span class="st-tab-check"></span>청첩장 제작
+              </button>
+              <button class="st-tab-btn" id="editInvTabMeet" onclick="toggleInvTab('edit','meet')">
+                <span class="st-tab-check"></span>청첩장 모임
+              </button>
+            </div>
+            <!-- 청첩장 제작 서브섹션 -->
+            <div class="st-sub-section" id="editInvMakeSection">
+              <div class="st-sub-title">💌 청첩장 제작</div>
+              <div>
+                <div class="pl-field-label">업체 명</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editInvMakeVendor" type="text" placeholder="업체명을 입력하세요" maxlength="40" autocomplete="off"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">주문 수량</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editInvMakeQty" type="number" placeholder="0" min="0" style="text-align:right"/>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">금액</div>
+                <div class="tl-budget-input-row">
+                  <span class="tl-budget-symbol">₩</span>
+                  <input class="tl-input" id="editInvMakeAmount" type="text" inputmode="numeric" placeholder="0"
+                         oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"/>
+                  <span class="tl-budget-unit">원</span>
+                </div>
+              </div>
+              <div>
+                <div class="pl-field-label">주문 일자</div>
+                <div class="tl-input-wrap">
+                  <input class="tl-input" id="editInvMakeOrderDate" type="date"/>
+                </div>
+              </div>
+            </div>
+            <!-- 청첩장 모임 서브섹션 -->
+            <div class="st-sub-section" id="editInvMeetSection">
+              <div class="st-sub-title">🤝 청첩장 모임</div>
+              <div class="hm-sched-list" id="editInvMeetingList"></div>
+              <button class="btn-add-sched" onclick="addInvMeeting('edit')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                모임 추가
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="tl-field">
           <div class="tl-field-label">내용</div>
           <textarea class="tl-textarea" id="editContent" rows="3" placeholder="메모나 상세 내용을 입력하세요"></textarea>
@@ -4346,8 +4710,7 @@ const CATEGORIES = [
   { value: '상견례',        label: '상견례',        emoji: '🥂' },
   { value: '신혼집',        label: '신혼집',        emoji: '🏡' },
   { value: 'DVD',           label: 'DVD',           emoji: '🎥' },
-  { value: '사진',          label: '사진',          emoji: '🖼️' },
-  { value: '스냅',          label: '스냅',          emoji: '📷' },
+  { value: '사진',          label: '사진',          emoji: '📷' },
   { value: '축사',          label: '축사',          emoji: '🎤' },
   { value: '축가',          label: '축가',          emoji: '🎵' },
   { value: '한복',          label: '한복',          emoji: '👘' },
@@ -4458,6 +4821,32 @@ const state = {
   editTodoCount: 0,
   editVenueCount: 0,
 };
+
+/* ════════════════════════════════════
+   localStorage 저장/로드
+════════════════════════════════════ */
+const WEDDLY_ROADMAP_KEY = 'weddly-roadmap';
+
+function saveToStorage() {
+  try {
+    localStorage.setItem(WEDDLY_ROADMAP_KEY, JSON.stringify(state.tabs));
+  } catch(e) { /* 무시 */ }
+}
+
+(function loadFromStorage() {
+  try {
+    const saved = localStorage.getItem(WEDDLY_ROADMAP_KEY);
+    if (!saved) return;
+    const tabs = JSON.parse(saved);
+    if (!Array.isArray(tabs) || tabs.length === 0) return;
+    state.tabs = tabs;
+    // default 탭이 없으면 첫 번째를 default로
+    if (!state.tabs.find(t => t.id === 'default')) {
+      state.tabs[0].id = 'default';
+      state.tabs[0].isDefault = true;
+    }
+  } catch(e) { /* 파싱 실패 시 기본값 유지 */ }
+})();
 
 /* ════════════════════════════════════
    커스텀 SELECT 엔진
@@ -5229,6 +5618,105 @@ function openEditModal(stageId) {
     resetBouquet('edit');
   }
 
+  // 본식 섹션 처리
+  const editCeremonySection = document.getElementById('editCeremonySection');
+  if (s.category === '본식') {
+    editCeremonySection.style.display = '';
+    const crm = s.ceremony || {};
+    // 준비물 탭
+    const prepList = document.getElementById('editCrmPrepList');
+    const todoList = document.getElementById('editCrmTodoList');
+    if (prepList) prepList.innerHTML = '';
+    if (todoList) todoList.innerHTML = '';
+    crmPrepCount['edit'] = 0;
+    crmTodoCount['edit'] = 0;
+    if ((crm.preps || []).length > 0 || (crm.todos || []).length > 0) {
+      document.getElementById('editCrmTabPrep')?.classList.add('active');
+      document.getElementById('editCrmPrepSection')?.classList.add('show');
+      (crm.preps || []).forEach(p => {
+        crmPrepCount['edit']++;
+        prepList.appendChild(makeCrmPrepEl('edit', crmPrepCount['edit'], p));
+      });
+      (crm.todos || []).forEach(t => {
+        crmTodoCount['edit']++;
+        todoList.appendChild(makeCrmTodoEl('edit', crmTodoCount['edit'], t));
+      });
+    }
+    // 당일 일정 탭
+    const schedList = document.getElementById('editCrmSchedList');
+    if (schedList) schedList.innerHTML = '';
+    crmSchedCount['edit'] = 0;
+    if ((crm.scheds || []).length > 0) {
+      document.getElementById('editCrmTabSched')?.classList.add('active');
+      document.getElementById('editCrmSchedSection')?.classList.add('show');
+      (crm.scheds || []).forEach(sc => {
+        crmSchedCount['edit']++;
+        schedList.appendChild(makeCrmSchedEl('edit', crmSchedCount['edit'], sc));
+      });
+    }
+  } else {
+    editCeremonySection.style.display = 'none';
+    resetCeremony('edit');
+  }
+
+  // 신랑 예복 섹션 처리
+  const editGroomSuitSection = document.getElementById('editGroomSuitSection');
+  if (s.category === '신랑 예복') {
+    editGroomSuitSection.style.display = '';
+    const gs = s.groomSuit || {};
+    if (gs.custom) {
+      document.getElementById('editGsTabCustom')?.classList.add('active');
+      document.getElementById('editGsCustomSection')?.classList.add('show');
+      document.getElementById('editGsCustomVendor').value    = gs.custom.vendor    || '';
+      document.getElementById('editGsCustomLocation').value  = gs.custom.location  || '';
+      document.getElementById('editGsCustomTotal').value     = gs.custom.total    ? Number(String(gs.custom.total).replace(/[^0-9]/g,'')).toLocaleString('ko-KR') : '';
+      document.getElementById('editGsCustomDeposit').value   = gs.custom.deposit  ? Number(String(gs.custom.deposit).replace(/[^0-9]/g,'')).toLocaleString('ko-KR') : '';
+      document.getElementById('editGsCustomMidDate').value   = gs.custom.midDate   || '';
+      document.getElementById('editGsCustomFinalDate').value = gs.custom.finalDate || '';
+      calcGsBalance('edit');
+    }
+    if (gs.ready) {
+      document.getElementById('editGsTabReady')?.classList.add('active');
+      document.getElementById('editGsReadySection')?.classList.add('show');
+      document.getElementById('editGsReadyVendor').value = gs.ready.vendor || '';
+      document.getElementById('editGsReadyAmount').value = gs.ready.amount ? Number(String(gs.ready.amount).replace(/[^0-9]/g,'')).toLocaleString('ko-KR') : '';
+    }
+  } else {
+    editGroomSuitSection.style.display = 'none';
+    resetGroomSuit('edit');
+  }
+
+  // 청첩장 섹션 처리
+  const editInvitationSection = document.getElementById('editInvitationSection');
+  if (s.category === '청첩장') {
+    editInvitationSection.style.display = '';
+    const inv = s.invitation || {};
+    // 제작 탭 복원
+    if (inv.make) {
+      document.getElementById('editInvTabMake')?.classList.add('active');
+      document.getElementById('editInvMakeSection')?.classList.add('show');
+      document.getElementById('editInvMakeVendor').value    = inv.make.vendor    || '';
+      document.getElementById('editInvMakeQty').value       = inv.make.qty       || '';
+      document.getElementById('editInvMakeAmount').value    = inv.make.amount ? Number(String(inv.make.amount).replace(/[^0-9]/g,'')).toLocaleString('ko-KR') : '';
+      document.getElementById('editInvMakeOrderDate').value = inv.make.orderDate || '';
+    }
+    // 모임 탭 복원
+    const meetList = document.getElementById('editInvMeetingList');
+    if (meetList) meetList.innerHTML = '';
+    invMeetingCount['edit'] = 0;
+    if (inv.meetings && inv.meetings.length > 0) {
+      document.getElementById('editInvTabMeet')?.classList.add('active');
+      document.getElementById('editInvMeetSection')?.classList.add('show');
+      inv.meetings.forEach(m => {
+        invMeetingCount['edit']++;
+        meetList.appendChild(makeInvMeetingEl('edit', invMeetingCount['edit'], m));
+      });
+    }
+  } else {
+    editInvitationSection.style.display = 'none';
+    resetInvitation('edit');
+  }
+
   // DVD 섹션 처리
   const editDvdSection = document.getElementById('editDvdSection');
   if (s.category === 'DVD') {
@@ -5486,6 +5974,15 @@ function saveEdit() {
   if (s.category === '축가') {
     s.song = collectSong('edit');
   }
+  if (s.category === '청첩장') {
+    s.invitation = collectInvitation('edit');
+  }
+  if (s.category === '신랑 예복') {
+    s.groomSuit = collectGroomSuit('edit');
+  }
+  if (s.category === '본식') {
+    s.ceremony = collectCeremony('edit');
+  }
 
   // 할 일 목록 수집
   s.todos = [];
@@ -5503,6 +6000,7 @@ function saveEdit() {
   // 수정 모달의 커스텀 셀렉트 정리
   Object.keys(csRegistry).filter(k => k.startsWith('etodo_')).forEach(k => destroyCS(k));
 
+  saveToStorage();
   closeEditModal();
   renderTimeline();
 }
@@ -5513,6 +6011,7 @@ function deleteStage() {
   if (!tab) return;
   tab.stages = tab.stages.filter(s => s.id !== state.editingStageId);
   updateProgress(tab);
+  saveToStorage();
   closeEditModal();
   renderTimeline();
 }
@@ -5559,6 +6058,7 @@ function deleteTab(tabId, e) {
     if (def) selectTab(def);
   }
   if (!state.tabs.some(t => !t.isDefault)) exitDeleteMode();
+  saveToStorage();
 }
 
 /* ════════════════════════════════════
@@ -5598,6 +6098,7 @@ function addRoadmapTab() {
   closeTabModal();
   selectTab(el);
   enterDeleteMode();
+  saveToStorage();
 }
 
 /* ════════════════════════════════════
@@ -6676,6 +7177,18 @@ function openTlModal() {
   document.getElementById('tlSangyeonSection').style.display = 'none';
   resetSangyeon('tl');
 
+  // 본식 섹션 초기화
+  document.getElementById('tlCeremonySection').style.display = 'none';
+  resetCeremony('tl');
+
+  // 신랑 예복 섹션 초기화
+  document.getElementById('tlGroomSuitSection').style.display = 'none';
+  resetGroomSuit('tl');
+
+  // 청첩장 섹션 초기화
+  document.getElementById('tlInvitationSection').style.display = 'none';
+  resetInvitation('tl');
+
   // 카테고리 커스텀 셀렉트 생성
   const triggerEl = document.getElementById('tlCategoryTrigger');
   const valEl     = document.getElementById('tlCategoryValue');
@@ -6831,6 +7344,30 @@ function onCategoryChange(cat) {
     if (!showSg) resetSangyeon('tl');
   }
 
+  // 본식 카테고리 선택 시 본식 정보 섹션 토글
+  const ceremonySection = document.getElementById('tlCeremonySection');
+  if (ceremonySection) {
+    const showCrm = cat === '본식';
+    ceremonySection.style.display = showCrm ? '' : 'none';
+    if (!showCrm) resetCeremony('tl');
+  }
+
+  // 신랑 예복 카테고리 선택 시 신랑 예복 정보 섹션 토글
+  const groomSuitSection = document.getElementById('tlGroomSuitSection');
+  if (groomSuitSection) {
+    const showGs = cat === '신랑 예복';
+    groomSuitSection.style.display = showGs ? '' : 'none';
+    if (!showGs) resetGroomSuit('tl');
+  }
+
+  // 청첩장 카테고리 선택 시 청첩장 정보 섹션 토글
+  const invitationSection = document.getElementById('tlInvitationSection');
+  if (invitationSection) {
+    const showInv = cat === '청첩장';
+    invitationSection.style.display = showInv ? '' : 'none';
+    if (!showInv) resetInvitation('tl');
+  }
+
   // 이미 있는 할 일 아이템의 서브카테고리 옵션 갱신
   document.querySelectorAll('[data-todo-cs]').forEach(triggerEl => {
     const todoId = triggerEl.dataset.todoCsId;
@@ -6984,14 +7521,18 @@ function saveTlItem() {
       sangyeon:  category === '상견례'  ? collectSangyeon('tl')  : null,
       photo:     category === '사진'    ? collectPhoto('tl')     : null,
       dvd:       category === 'DVD'     ? collectDvd('tl')       : null,
-      bouquet:   category === '부케'    ? collectBouquet('tl')   : null,
-      speech:    category === '축사'    ? collectSpeech('tl')    : null,
-      song:      category === '축가'    ? collectSong('tl')      : null,
+      bouquet:    category === '부케'    ? collectBouquet('tl')    : null,
+      speech:     category === '축사'    ? collectSpeech('tl')     : null,
+      song:       category === '축가'    ? collectSong('tl')       : null,
+      invitation: category === '청첩장'   ? collectInvitation('tl') : null,
+      groomSuit:  category === '신랑 예복' ? collectGroomSuit('tl')  : null,
+      ceremony:   category === '본식'     ? collectCeremony('tl')   : null,
     };
     if (lastIdx >= 0) tab.stages.splice(lastIdx + 1, 0, newStage);
     else              tab.stages.push(newStage);
 
     updateProgress(tab);
+    saveToStorage();
     renderTimeline();
   }
   closeTlModal();
@@ -7282,7 +7823,23 @@ document.getElementById('darkToggle').addEventListener('click', () => {
 });
 
 /* 초기화 */
-updateProgress(state.tabs[0]);
+// localStorage가 비어있으면 기본 로드맵을 저장 (main.html에서 읽을 수 있도록)
+if (!localStorage.getItem(WEDDLY_ROADMAP_KEY)) saveToStorage();
+
+// localStorage에서 로드된 커스텀 탭들을 UI에 추가
+(function initTabs() {
+  const tabList = document.getElementById('tabList');
+  state.tabs.filter(t => !t.isDefault).forEach(t => {
+    const el = document.createElement('button');
+    el.className = 'rm-tab custom-tab';
+    el.dataset.tab = t.id;
+    el.onclick = function() { selectTab(this); };
+    el.innerHTML = `${t.label}<button class="tab-del-btn" onclick="deleteTab('${t.id}',event)" aria-label="삭제">${svgClose(8)}</button>`;
+    tabList.appendChild(el);
+  });
+  const activeTab = state.tabs.find(t => t.id === state.activeTabId) || state.tabs[0];
+  updateProgress(activeTab);
+})();
 renderTimeline('default');
 initVtpScrollListeners();
 
@@ -8045,6 +8602,384 @@ function resetHmSection(prefix) {
     const el = document.getElementById(`${prefix}${id}`);
     if (el) el.textContent = '';
   });
+}
+
+/* ════════════════════════════════════
+   청첩장 섹션 유틸
+════════════════════════════════════ */
+const invMeetingCount = { tl: 0, edit: 0 };
+
+function toggleInvTab(prefix, type) {
+  const cap = type === 'make' ? 'Make' : 'Meet';
+  const btn = document.getElementById(`${prefix}InvTab${cap}`);
+  const sec = document.getElementById(`${prefix}Inv${cap}Section`);
+  if (!btn || !sec) return;
+  const active = !btn.classList.contains('active');
+  btn.classList.toggle('active', active);
+  sec.classList.toggle('show', active);
+}
+
+function makeInvMeetingEl(prefix, n, data) {
+  const svgX = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  const div = document.createElement('div');
+  div.className = 'hm-sched-item';
+  div.id = `${prefix}invmeet_${n}`;
+  div.innerHTML = `
+    <div class="hm-sched-header">
+      <span class="hm-sched-num">모임 ${n}</span>
+      <button class="hm-sched-del" onclick="removeInvMeeting('${prefix}',${n})" aria-label="삭제">${svgX}</button>
+    </div>
+    <div class="hm-sched-body">
+      <div>
+        <div class="hm-field-label">일자</div>
+        <div class="tl-input-wrap">
+          <input class="tl-input" id="${prefix}invmdate_${n}" type="date" value="${data?.date||''}"/>
+        </div>
+      </div>
+      <div>
+        <div class="hm-field-label">모임 인원</div>
+        <div class="tl-input-wrap">
+          <input class="tl-input" id="${prefix}invmpeople_${n}" type="number" placeholder="0" min="1" style="text-align:right" value="${data?.people||''}"/>
+        </div>
+      </div>
+      <div>
+        <div class="hm-field-label">모임 인원 상세</div>
+        <div class="tl-input-wrap">
+          <input class="tl-input" id="${prefix}invmdetail_${n}" type="text" placeholder="예: 친구 5명, 직장동료 3명" maxlength="80" autocomplete="off" value="${(data?.detail||'').replace(/"/g,'&quot;')}"/>
+        </div>
+      </div>
+      <div>
+        <div class="hm-field-label">모임 장소</div>
+        <div class="tl-input-wrap">
+          <input class="tl-input" id="${prefix}invmplace_${n}" type="text" placeholder="장소를 입력하세요" maxlength="60" autocomplete="off" value="${(data?.place||'').replace(/"/g,'&quot;')}"/>
+        </div>
+      </div>
+      <div>
+        <div class="hm-field-label">사용 금액</div>
+        <div class="tl-budget-input-row">
+          <span class="tl-budget-symbol">₩</span>
+          <input class="tl-input" id="${prefix}invmamt_${n}" type="text" inputmode="numeric" placeholder="0"
+                 oninput="onPlMoneyInput(this)" style="padding-left:4px;border:none;background:transparent;"
+                 value="${data?.amount ? Number(data.amount).toLocaleString('ko-KR') : ''}"/>
+          <span class="tl-budget-unit">원</span>
+        </div>
+      </div>
+    </div>`;
+  return div;
+}
+
+function addInvMeeting(prefix) {
+  invMeetingCount[prefix]++;
+  const n    = invMeetingCount[prefix];
+  const list = document.getElementById(`${prefix}InvMeetingList`);
+  if (!list) return;
+  const el = makeInvMeetingEl(prefix, n, null);
+  list.appendChild(el);
+  requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+}
+
+function removeInvMeeting(prefix, n) {
+  document.getElementById(`${prefix}invmeet_${n}`)?.remove();
+  document.querySelectorAll(`#${prefix}InvMeetingList .hm-sched-item`).forEach((el, i) => {
+    el.querySelector('.hm-sched-num').textContent = `모임 ${i + 1}`;
+  });
+}
+
+function resetInvitation(prefix) {
+  // 탭 비활성화
+  ['Make','Meet'].forEach(cap => {
+    document.getElementById(`${prefix}InvTab${cap}`)?.classList.remove('active');
+    document.getElementById(`${prefix}Inv${cap}Section`)?.classList.remove('show');
+  });
+  // 제작 필드 초기화
+  ['InvMakeVendor','InvMakeQty','InvMakeAmount','InvMakeOrderDate'].forEach(id => {
+    const el = document.getElementById(`${prefix}${id}`);
+    if (el) el.value = '';
+  });
+  // 모임 카드 초기화
+  const list = document.getElementById(`${prefix}InvMeetingList`);
+  if (list) list.innerHTML = '';
+  invMeetingCount[prefix] = 0;
+}
+
+/* ════════════════════════════════════
+   본식 섹션 유틸
+════════════════════════════════════ */
+const crmPrepCount  = { tl: 0, edit: 0 };
+const crmTodoCount  = { tl: 0, edit: 0 };
+const crmSchedCount = { tl: 0, edit: 0 };
+
+function toggleCeremonyTab(prefix, type) {
+  const cap = type === 'prep' ? 'Prep' : 'Sched';
+  const btn = document.getElementById(`${prefix}CrmTab${cap}`);
+  const sec = document.getElementById(`${prefix}Crm${cap}Section`);
+  if (!btn || !sec) return;
+  const active = !btn.classList.contains('active');
+  btn.classList.toggle('active', active);
+  sec.classList.toggle('show', active);
+}
+
+/* 준비물 카드 */
+function makeCrmPrepEl(prefix, n, data) {
+  const svgX = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  const div = document.createElement('div');
+  div.className = 'hm-sched-item';
+  div.id = `${prefix}crmprep_${n}`;
+  div.innerHTML = `
+    <div class="hm-sched-header">
+      <span class="hm-sched-num">준비물 ${n}</span>
+      <button class="hm-sched-del" onclick="removeCrmPrep('${prefix}',${n})" aria-label="삭제">${svgX}</button>
+    </div>
+    <div class="hm-sched-body">
+      <div>
+        <div class="hm-field-label">준비물명</div>
+        <div class="tl-input-wrap">
+          <input class="tl-input" id="${prefix}crmprep_name_${n}" type="text" placeholder="준비물명을 입력하세요" maxlength="40" autocomplete="off"
+                 value="${(data?.name||'').replace(/"/g,'&quot;')}"/>
+        </div>
+      </div>
+      <div>
+        <div class="hm-field-label">수량</div>
+        <div class="tl-input-wrap">
+          <input class="tl-input" id="${prefix}crmprep_qty_${n}" type="number" placeholder="0" min="0" style="text-align:right"
+                 value="${data?.qty||''}"/>
+        </div>
+      </div>
+    </div>`;
+  return div;
+}
+
+function addCrmPrep(prefix) {
+  crmPrepCount[prefix]++;
+  const n    = crmPrepCount[prefix];
+  const list = document.getElementById(`${prefix}CrmPrepList`);
+  if (!list) return;
+  const el = makeCrmPrepEl(prefix, n, null);
+  list.appendChild(el);
+  requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+}
+
+function removeCrmPrep(prefix, n) {
+  document.getElementById(`${prefix}crmprep_${n}`)?.remove();
+  document.querySelectorAll(`#${prefix}CrmPrepList .hm-sched-item`).forEach((el, i) => {
+    el.querySelector('.hm-sched-num').textContent = `준비물 ${i + 1}`;
+  });
+}
+
+/* 할일 카드 */
+function makeCrmTodoEl(prefix, n, data) {
+  const svgX = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  const div = document.createElement('div');
+  div.className = 'hm-sched-item';
+  div.id = `${prefix}crmtodo_${n}`;
+  div.innerHTML = `
+    <div class="hm-sched-header">
+      <span class="hm-sched-num">할일 ${n}</span>
+      <button class="hm-sched-del" onclick="removeCrmTodo('${prefix}',${n})" aria-label="삭제">${svgX}</button>
+    </div>
+    <div class="hm-sched-body">
+      <div>
+        <div class="hm-field-label">내용</div>
+        <div class="tl-input-wrap">
+          <input class="tl-input" id="${prefix}crmtodo_txt_${n}" type="text" placeholder="할일 내용을 입력하세요" maxlength="80" autocomplete="off"
+                 value="${(data?.text||'').replace(/"/g,'&quot;')}"/>
+        </div>
+      </div>
+    </div>`;
+  return div;
+}
+
+function addCrmTodo(prefix) {
+  crmTodoCount[prefix]++;
+  const n    = crmTodoCount[prefix];
+  const list = document.getElementById(`${prefix}CrmTodoList`);
+  if (!list) return;
+  const el = makeCrmTodoEl(prefix, n, null);
+  list.appendChild(el);
+  requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+}
+
+function removeCrmTodo(prefix, n) {
+  document.getElementById(`${prefix}crmtodo_${n}`)?.remove();
+  document.querySelectorAll(`#${prefix}CrmTodoList .hm-sched-item`).forEach((el, i) => {
+    el.querySelector('.hm-sched-num').textContent = `할일 ${i + 1}`;
+  });
+}
+
+/* 당일 일정 카드 */
+function makeCrmSchedEl(prefix, n, data) {
+  const svgX = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  const div = document.createElement('div');
+  div.className = 'hm-sched-item';
+  div.id = `${prefix}crmsched_${n}`;
+  div.innerHTML = `
+    <div class="hm-sched-header">
+      <span class="hm-sched-num">일정 ${n}</span>
+      <button class="hm-sched-del" onclick="removeCrmSched('${prefix}',${n})" aria-label="삭제">${svgX}</button>
+    </div>
+    <div class="hm-sched-body">
+      <div>
+        <div class="hm-field-label">시간</div>
+        <div class="tl-input-wrap">
+          <input class="tl-input" id="${prefix}crmsched_time_${n}" type="time" value="${data?.time||''}"/>
+        </div>
+      </div>
+      <div>
+        <div class="hm-field-label">내용</div>
+        <div class="tl-input-wrap">
+          <input class="tl-input" id="${prefix}crmsched_txt_${n}" type="text" placeholder="일정 내용을 입력하세요" maxlength="80" autocomplete="off"
+                 value="${(data?.text||'').replace(/"/g,'&quot;')}"/>
+        </div>
+      </div>
+    </div>`;
+  return div;
+}
+
+function addCrmSched(prefix) {
+  crmSchedCount[prefix]++;
+  const n    = crmSchedCount[prefix];
+  const list = document.getElementById(`${prefix}CrmSchedList`);
+  if (!list) return;
+  const el = makeCrmSchedEl(prefix, n, null);
+  list.appendChild(el);
+  requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+}
+
+function removeCrmSched(prefix, n) {
+  document.getElementById(`${prefix}crmsched_${n}`)?.remove();
+  document.querySelectorAll(`#${prefix}CrmSchedList .hm-sched-item`).forEach((el, i) => {
+    el.querySelector('.hm-sched-num').textContent = `일정 ${i + 1}`;
+  });
+}
+
+function resetCeremony(prefix) {
+  ['Prep','Sched'].forEach(cap => {
+    document.getElementById(`${prefix}CrmTab${cap}`)?.classList.remove('active');
+    document.getElementById(`${prefix}Crm${cap}Section`)?.classList.remove('show');
+  });
+  const prepList  = document.getElementById(`${prefix}CrmPrepList`);
+  const todoList  = document.getElementById(`${prefix}CrmTodoList`);
+  const schedList = document.getElementById(`${prefix}CrmSchedList`);
+  if (prepList)  prepList.innerHTML  = '';
+  if (todoList)  todoList.innerHTML  = '';
+  if (schedList) schedList.innerHTML = '';
+  crmPrepCount[prefix]  = 0;
+  crmTodoCount[prefix]  = 0;
+  crmSchedCount[prefix] = 0;
+}
+
+function collectCeremony(prefix) {
+  const hasPrep  = document.getElementById(`${prefix}CrmTabPrep`)?.classList.contains('active')  || false;
+  const hasSched = document.getElementById(`${prefix}CrmTabSched`)?.classList.contains('active') || false;
+  const preps = [];
+  const todos = [];
+  const scheds = [];
+  if (hasPrep) {
+    document.querySelectorAll(`#${prefix}CrmPrepList .hm-sched-item`).forEach(el => {
+      const n = el.id.replace(`${prefix}crmprep_`, '');
+      preps.push({
+        name: document.getElementById(`${prefix}crmprep_name_${n}`)?.value.trim() || '',
+        qty:  document.getElementById(`${prefix}crmprep_qty_${n}`)?.value         || '',
+      });
+    });
+    document.querySelectorAll(`#${prefix}CrmTodoList .hm-sched-item`).forEach(el => {
+      const n = el.id.replace(`${prefix}crmtodo_`, '');
+      todos.push({ text: document.getElementById(`${prefix}crmtodo_txt_${n}`)?.value.trim() || '' });
+    });
+  }
+  if (hasSched) {
+    document.querySelectorAll(`#${prefix}CrmSchedList .hm-sched-item`).forEach(el => {
+      const n = el.id.replace(`${prefix}crmsched_`, '');
+      scheds.push({
+        time: document.getElementById(`${prefix}crmsched_time_${n}`)?.value       || '',
+        text: document.getElementById(`${prefix}crmsched_txt_${n}`)?.value.trim() || '',
+      });
+    });
+  }
+  return { preps, todos, scheds };
+}
+
+/* ════════════════════════════════════
+   신랑 예복 섹션 유틸
+════════════════════════════════════ */
+function toggleGroomSuitTab(prefix, type) {
+  const cap = type === 'custom' ? 'Custom' : 'Ready';
+  const btn = document.getElementById(`${prefix}GsTab${cap}`);
+  const sec = document.getElementById(`${prefix}Gs${cap}Section`);
+  if (!btn || !sec) return;
+  const active = !btn.classList.contains('active');
+  btn.classList.toggle('active', active);
+  sec.classList.toggle('show', active);
+}
+
+function calcGsBalance(prefix) {
+  const total   = parseInt((document.getElementById(`${prefix}GsCustomTotal`)?.value   || '').replace(/,/g,'')) || 0;
+  const deposit = parseInt((document.getElementById(`${prefix}GsCustomDeposit`)?.value || '').replace(/,/g,'')) || 0;
+  const bal = total - deposit;
+  const el  = document.getElementById(`${prefix}GsCustomBalance`);
+  if (!el) return;
+  if (!total && !deposit) { el.textContent = '—'; el.className = 'pl-balance-val'; return; }
+  el.textContent = formatWon(bal);
+  el.className   = 'pl-balance-val' + (bal < 0 ? ' negative' : '');
+}
+
+function resetGroomSuit(prefix) {
+  ['Custom','Ready'].forEach(cap => {
+    document.getElementById(`${prefix}GsTab${cap}`)?.classList.remove('active');
+    document.getElementById(`${prefix}Gs${cap}Section`)?.classList.remove('show');
+  });
+  ['GsCustomVendor','GsCustomLocation','GsCustomTotal','GsCustomDeposit','GsCustomMidDate','GsCustomFinalDate',
+   'GsReadyVendor','GsReadyAmount'].forEach(id => {
+    const el = document.getElementById(`${prefix}${id}`);
+    if (el) el.value = '';
+  });
+  const bal = document.getElementById(`${prefix}GsCustomBalance`);
+  if (bal) { bal.textContent = '—'; bal.className = 'pl-balance-val'; }
+}
+
+function collectGroomSuit(prefix) {
+  const hasCustom = document.getElementById(`${prefix}GsTabCustom`)?.classList.contains('active') || false;
+  const hasReady  = document.getElementById(`${prefix}GsTabReady`)?.classList.contains('active')  || false;
+  const getV = id => document.getElementById(`${prefix}${id}`)?.value || '';
+  const custom = hasCustom ? {
+    vendor:    getV('GsCustomVendor').trim(),
+    location:  getV('GsCustomLocation').trim(),
+    total:     getV('GsCustomTotal').replace(/,/g, ''),
+    deposit:   getV('GsCustomDeposit').replace(/,/g, ''),
+    midDate:   getV('GsCustomMidDate'),
+    finalDate: getV('GsCustomFinalDate'),
+  } : null;
+  const ready = hasReady ? {
+    vendor: getV('GsReadyVendor').trim(),
+    amount: getV('GsReadyAmount').replace(/,/g, ''),
+  } : null;
+  return { custom, ready };
+}
+
+function collectInvitation(prefix) {
+  const hasMake = document.getElementById(`${prefix}InvTabMake`)?.classList.contains('active') || false;
+  const hasMeet = document.getElementById(`${prefix}InvTabMeet`)?.classList.contains('active') || false;
+  const getV = id => document.getElementById(`${prefix}${id}`)?.value || '';
+  const make = hasMake ? {
+    vendor:    getV('InvMakeVendor').trim(),
+    qty:       getV('InvMakeQty'),
+    amount:    getV('InvMakeAmount').replace(/,/g, ''),
+    orderDate: getV('InvMakeOrderDate'),
+  } : null;
+  const meetings = [];
+  if (hasMeet) {
+    document.querySelectorAll(`#${prefix}InvMeetingList .hm-sched-item`).forEach(el => {
+      const n = el.id.replace(`${prefix}invmeet_`, '');
+      meetings.push({
+        date:   document.getElementById(`${prefix}invmdate_${n}`)?.value    || '',
+        people: document.getElementById(`${prefix}invmpeople_${n}`)?.value  || '',
+        detail: document.getElementById(`${prefix}invmdetail_${n}`)?.value.trim() || '',
+        place:  document.getElementById(`${prefix}invmplace_${n}`)?.value.trim()  || '',
+        amount: document.getElementById(`${prefix}invmamt_${n}`)?.value.replace(/,/g, '') || '',
+      });
+    });
+  }
+  return { make, meetings };
 }
 
 </script>
