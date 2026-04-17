@@ -1,0 +1,2311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 관리자</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { align-items: flex-start; }
+
+    .phone-wrapper {
+      height: 844px; min-height: unset; position: relative;
+    }
+    .phone-screen {
+      padding: 0 0 0; min-height: unset;
+      height: calc(844px - 30px);
+      overflow-y: auto; display: block;
+    }
+    .phone-screen::-webkit-scrollbar { width: 4px; }
+    .phone-screen::-webkit-scrollbar-track { background: transparent; }
+    .phone-screen::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #D4A96A, #C49050); border-radius: 4px;
+    }
+
+    /* ════ 관리자 헤더 ════ */
+    .admin-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px 12px;
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .admin-header-left { display: flex; align-items: center; gap: 8px; }
+    .admin-logo {
+      font-size: 20px; font-weight: 800; font-style: italic;
+      color: #D4A96A; letter-spacing: -0.5px;
+    }
+    .admin-badge {
+      font-size: 10px; font-weight: 800; letter-spacing: 0.4px;
+      background: linear-gradient(135deg,#D4A96A,#C49050);
+      color: #fff; border-radius: 6px; padding: 2px 7px;
+    }
+    .admin-header-right { display: flex; align-items: center; gap: 6px; }
+    .icon-btn {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: #f8f8f8; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #666; transition: background 0.15s, color 0.15s;
+    }
+    .icon-btn:hover { background: #f0e8d8; color: #D4A96A; }
+    .dark-toggle-btn .icon-sun  { display: none; }
+    .dark-toggle-btn .icon-moon { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-moon { display: none; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-sun  { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn { background: #2e2616; color: #D4A96A; }
+
+    /* ════ 관리자 탭 네비 ════ */
+    .admin-tab-nav {
+      display: flex; overflow-x: auto; scrollbar-width: none;
+      background: #fff; border-bottom: 1px solid #f0f0f0;
+      position: sticky; top: 53px; z-index: 99;
+    }
+    .admin-tab-nav::-webkit-scrollbar { display: none; }
+    .admin-tab {
+      flex-shrink: 0; padding: 11px 14px;
+      font-size: 12px; font-weight: 700; color: #aaa;
+      border: none; background: none; cursor: pointer;
+      border-bottom: 2.5px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      display: flex; align-items: center; gap: 5px; white-space: nowrap;
+    }
+    .admin-tab.active { color: #D4A96A; border-bottom-color: #D4A96A; }
+    .admin-tab:hover  { color: #C49050; }
+    .tab-badge {
+      font-size: 10px; font-weight: 800;
+      background: #f44336; color: #fff;
+      border-radius: 20px; padding: 1px 5px; line-height: 1.4;
+    }
+
+    /* ════ 패널 공통 ════ */
+    .admin-panel { display: none; padding: 14px 16px 24px; }
+    .admin-panel.active { display: block; }
+
+    .panel-section { margin-bottom: 20px; }
+    .panel-section-title {
+      font-size: 11px; font-weight: 800; color: #C49050;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      margin-bottom: 8px; padding-left: 2px;
+    }
+
+    /* ════ 통계 그리드 ════ */
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .stat-card {
+      background: #fff; border: 1.5px solid #f0f0f0;
+      border-radius: 12px; padding: 10px 12px;
+      display: flex; flex-direction: row; align-items: center; gap: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .stat-card-icon {
+      width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+    }
+    .stat-card-body  { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .stat-card-label { font-size: 10px; color: #bbb; font-weight: 600; }
+    .stat-card-row   { display: flex; align-items: baseline; gap: 5px; flex-wrap: wrap; }
+    .stat-card-num   { font-size: 17px; font-weight: 800; color: #222; line-height: 1.2; }
+    .stat-card-diff  { font-size: 10px; font-weight: 700; }
+    .stat-card-diff.up   { color: #5BAD7A; }
+    .stat-card-diff.down { color: #f44336; }
+
+    /* ════ 파레토 차트 탭 ════ */
+    .chart-tab-row { display: flex; gap: 4px; margin-bottom: 8px; }
+    .chart-tab {
+      padding: 5px 14px; border-radius: 20px;
+      border: 1.5px solid #e8e8e8; background: #f8f8f8;
+      font-size: 11px; font-weight: 700; color: #aaa;
+      cursor: pointer; font-family: inherit; transition: all 0.15s;
+    }
+    .chart-tab.active { background: linear-gradient(135deg,#D4A96A,#C49050); border-color: transparent; color: #fff; }
+    .chart-tab:hover:not(.active) { border-color: #D4A96A; color: #C49050; }
+    .phone-wrapper.dark .chart-tab        { background: #26201a; border-color: #3a3028; color: #5a5040; }
+    .phone-wrapper.dark .chart-tab.active { background: linear-gradient(135deg,#D4A96A,#C49050); border-color: transparent; color: #fff; }
+
+    /* ════ 리스트 카드 ════ */
+    .list-card {
+      background: #fff; border: 1.5px solid #f0f0f0;
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .list-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 14px; border-bottom: 1px solid #f8f8f8;
+      transition: background 0.12s;
+    }
+    .list-item:last-child { border-bottom: none; }
+    .list-item:hover { background: #fdfaf5; }
+    .list-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: #fff8ef; border: 1.5px solid #f0e8d8;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .list-info { flex: 1; min-width: 0; }
+    .list-name  { font-size: 13px; font-weight: 700; color: #222; }
+    .list-sub   { font-size: 11px; color: #bbb; margin-top: 1px; }
+    .list-meta  { font-size: 11px; color: #ccc; flex-shrink: 0; text-align: right; }
+    .status-chip {
+      font-size: 10px; font-weight: 700; border-radius: 20px;
+      padding: 2px 8px; flex-shrink: 0;
+    }
+    .status-chip.active    { background: #eafaf1; color: #27ae60; }
+    .status-chip.inactive  { background: #f5f5f5; color: #aaa; }
+    .status-chip.blocked   { background: #fdecea; color: #e05555; }
+    .status-chip.reported  { background: #fff3e0; color: #f39c12; }
+    .status-chip.pending   { background: #fff8ef; color: #C49050; }
+    .status-chip.approved  { background: #eafaf1; color: #27ae60; }
+    .status-chip.rejected  { background: #fdecea; color: #e05555; }
+
+    /* ════ 사용자 검색 ════ */
+    .search-wrap {
+      display: flex; align-items: center; gap: 8px;
+      background: #f8f8f8; border: 1.5px solid #e8e8e8;
+      border-radius: 12px; padding: 0 12px; margin-bottom: 10px;
+      transition: border-color 0.2s;
+    }
+    .search-wrap:focus-within { border-color: #D4A96A; background: #fff; }
+    .search-wrap input {
+      flex: 1; border: none; background: transparent; padding: 10px 0;
+      font-size: 13px; color: #222; outline: none; font-family: inherit;
+    }
+    .search-wrap input::placeholder { color: #ccc; }
+
+    /* ════ 액션 버튼 ════ */
+    .action-btn {
+      padding: 4px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: all 0.15s; border: 1.5px solid;
+    }
+    .action-btn.block {
+      border-color: #f0c8a0; color: #C49050; background: #fff8ef;
+    }
+    .action-btn.block:hover { background: #D4A96A; color: #fff; border-color: transparent; }
+    .action-btn.delete {
+      border-color: #f0c0c0; color: #e05555; background: #fff5f5;
+    }
+    .action-btn.delete:hover { background: #e05555; color: #fff; border-color: transparent; }
+    .action-btn.restore {
+      border-color: #b0dfc0; color: #27ae60; background: #eafaf1;
+    }
+    .action-btn.restore:hover { background: #27ae60; color: #fff; border-color: transparent; }
+    .action-btn.hide {
+      border-color: #d0d0d0; color: #888; background: #f5f5f5;
+    }
+    .action-btn.hide:hover { background: #888; color: #fff; border-color: transparent; }
+
+    /* ════ 콘텐츠 탭 ════ */
+    .sub-tab-row { display: flex; gap: 6px; margin-bottom: 10px; }
+    .sub-tab {
+      flex: 1; padding: 8px 0;
+      border: 1.5px solid #e8e8e8; border-radius: 10px;
+      background: #f8f8f8; color: #aaa;
+      font-size: 12px; font-weight: 700; font-family: inherit;
+      cursor: pointer; text-align: center; transition: all 0.15s;
+    }
+    .sub-tab.active { background: #fff8ef; border-color: #D4A96A; color: #C49050; }
+    .sub-tab:hover  { border-color: #D4A96A; color: #C49050; }
+
+    /* ════ 공용 셀렉트박스 ════ */
+    .admin-select {
+      width: 100%; padding: 10px 36px 10px 14px;
+      border: 1.5px solid #e8e8e8; border-radius: 12px;
+      background: #f8f8f8 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 12px center;
+      background-size: auto, 14px;
+      color: #444; font-size: 13px; font-weight: 600; font-family: inherit;
+      cursor: pointer; appearance: none; -webkit-appearance: none;
+      margin-bottom: 12px; transition: border-color 0.15s;
+    }
+    .admin-select:focus { outline: none; border-color: #D4A96A; }
+
+    /* ════ 화면 구성 편집기 ════ */
+
+    /* 드래그 섹션 목록 */
+    .section-list { display: flex; flex-direction: column; gap: 6px; }
+    .section-item {
+      display: flex; align-items: center; gap: 10px;
+      background: #fff; border: 1.5px solid #f0f0f0;
+      border-radius: 12px; padding: 11px 12px;
+      cursor: grab; user-select: none;
+      transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;
+    }
+    .section-item:active { cursor: grabbing; }
+    .section-item.drag-over {
+      border-color: #D4A96A;
+      box-shadow: 0 0 0 3px rgba(212,169,106,0.18);
+    }
+    .section-item.dragging {
+      opacity: 0.4;
+    }
+    .drag-handle {
+      color: #ddd; font-size: 16px; line-height: 1;
+      flex-shrink: 0; cursor: grab; padding: 0 2px;
+    }
+    .section-item-icon {
+      width: 30px; height: 30px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .section-item-info { flex: 1; min-width: 0; }
+    .section-item-name  { font-size: 13px; font-weight: 700; color: #222; }
+    .section-item-desc  { font-size: 11px; color: #bbb; margin-top: 1px; }
+
+    /* 작은 토글 */
+    .switch-sm { position: relative; width: 38px; height: 22px; flex-shrink: 0; }
+    .switch-sm input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .switch-sm-slider {
+      position: absolute; cursor: pointer;
+      top:0; left:0; right:0; bottom:0;
+      background: #e0e0e0; border-radius: 22px; transition: background 0.2s;
+    }
+    .switch-sm-slider::before {
+      position: absolute; content: '';
+      height: 16px; width: 16px; left: 3px; bottom: 3px;
+      background: #fff; border-radius: 50%; transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .switch-sm input:checked + .switch-sm-slider { background: #D4A96A; }
+    .switch-sm input:checked + .switch-sm-slider::before { transform: translateX(16px); }
+    .section-item.hidden-section .section-item-name { color: #bbb; text-decoration: line-through; }
+
+    .save-bar {
+      position: sticky; bottom: 0;
+      background: rgba(255,255,255,0.96); backdrop-filter: blur(8px);
+      padding: 10px 0 4px; margin-top: 14px;
+    }
+    .btn-save {
+      width: 100%; padding: 13px;
+      background: linear-gradient(135deg,#D4A96A,#C49050);
+      color: #fff; font-size: 14px; font-weight: 800;
+      border: none; border-radius: 12px; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(212,169,106,0.4);
+      transition: opacity 0.15s; font-family: inherit;
+    }
+    .btn-save:hover { opacity: 0.9; }
+
+    /* ════ 앱 설정 패널 ════ */
+    .settings-card {
+      background: #fff; border: 1.5px solid #f0f0f0;
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 12px;
+    }
+    .settings-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 14px; border-bottom: 1px solid #f8f8f8;
+    }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-row-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .settings-row-icon {
+      width: 34px; height: 34px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .settings-row-label { font-size: 13px; font-weight: 700; color: #222; }
+    .settings-row-desc  { font-size: 11px; color: #bbb; margin-top: 1px; }
+
+    .switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+    .switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .switch-slider {
+      position: absolute; cursor: pointer;
+      top:0; left:0; right:0; bottom:0;
+      background: #e0e0e0; border-radius: 24px; transition: background 0.2s;
+    }
+    .switch-slider::before {
+      position: absolute; content: '';
+      height: 18px; width: 18px; left: 3px; bottom: 3px;
+      background: #fff; border-radius: 50%; transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+    }
+    .switch input:checked + .switch-slider { background: #D4A96A; }
+    .switch input:checked + .switch-slider::before { transform: translateX(20px); }
+
+    .maintenance-alert {
+      background: #fff8ef; border: 1.5px solid #f0e8d8;
+      border-radius: 10px; padding: 10px 12px;
+      font-size: 12px; color: #C49050; font-weight: 600;
+      display: none; margin-top: 8px; line-height: 1.5;
+    }
+    .maintenance-alert.show { display: block; }
+
+    /* 공지사항 텍스트 에어리어 */
+    .notice-textarea {
+      width: 100%; border: none; outline: none; resize: none;
+      font-size: 13px; color: #333; line-height: 1.6;
+      font-family: inherit; background: transparent; box-sizing: border-box;
+      padding: 10px 14px; min-height: 72px;
+    }
+    .notice-textarea::placeholder { color: #ccc; }
+
+    /* 푸시 알림 발송 */
+    .push-input {
+      width: 100%; border: none; outline: none;
+      font-size: 13px; color: #333; font-family: inherit;
+      background: transparent; box-sizing: border-box;
+      padding: 10px 14px;
+    }
+    .push-input::placeholder { color: #ccc; }
+    .push-send-btn {
+      width: calc(100% - 28px); margin: 0 14px 12px;
+      padding: 11px; background: linear-gradient(135deg,#D4A96A,#C49050);
+      color: #fff; font-size: 13px; font-weight: 700; font-family: inherit;
+      border: none; border-radius: 10px; cursor: pointer; transition: opacity 0.15s;
+    }
+    .push-send-btn:hover { opacity: 0.9; }
+
+    /* ════ 로그 테이블 ════ */
+    .log-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .log-table th {
+      text-align: left; padding: 8px 10px;
+      font-size: 10px; font-weight: 800; color: #C49050;
+      letter-spacing: 0.4px; text-transform: uppercase;
+      border-bottom: 1.5px solid #f0e8d8; background: #fffaf4;
+    }
+    .log-table td {
+      padding: 9px 10px; border-bottom: 1px solid #f8f8f8;
+      color: #444; vertical-align: middle;
+    }
+    .log-table tr:last-child td { border-bottom: none; }
+    .log-table tr:hover td { background: #fdfaf5; }
+    .log-result { display: inline-block; font-size: 10px; font-weight: 700; border-radius: 4px; padding: 1px 6px; }
+    .log-result.success { background: #eafaf1; color: #27ae60; }
+    .log-result.fail    { background: #fdecea; color: #e05555; }
+    .log-result.warn    { background: #fff3e0; color: #f39c12; }
+    .log-action { font-size: 10px; font-weight: 700; border-radius: 4px; padding: 1px 6px; background: #f0f4ff; color: #5b7fd4; }
+
+    /* ════ 정책 폼 ════ */
+    .policy-card {
+      background: #fff; border: 1.5px solid #f0f0f0;
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 12px;
+    }
+    .policy-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px; border-bottom: 1px solid #f0f0f0;
+      cursor: pointer; user-select: none;
+    }
+    .policy-card-title {
+      font-size: 13px; font-weight: 800; color: #222;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .policy-body { display: block; padding: 4px 14px 12px; }
+    /* 공통 행 레이아웃 */
+    .policy-field, .policy-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 0; border-bottom: 1px solid #f5f5f5;
+      gap: 10px; margin: 0;
+    }
+    .policy-field:last-of-type, .policy-row:last-of-type { border-bottom: none; }
+    .policy-field-label, .policy-row-label {
+      font-size: 12px; font-weight: 700; color: #333; flex: 1;
+      margin: 0; display: block;
+    }
+    .policy-row-desc  { font-size: 10px; color: #bbb; margin-top: 2px; font-weight: 400; }
+    /* 인라인 입력 */
+    .policy-input-sm {
+      width: 76px; border: 1.5px solid #e8e8e8; border-radius: 8px;
+      padding: 6px 8px; font-size: 12px; color: #222; font-family: inherit;
+      outline: none; background: #fafafa; text-align: center; flex-shrink: 0;
+      transition: border-color 0.2s;
+    }
+    .policy-input-sm:focus { border-color: #D4A96A; background: #fff; }
+    /* 인라인 셀렉트 */
+    .policy-select-sm {
+      border: 1.5px solid #e8e8e8; border-radius: 8px;
+      padding: 6px 22px 6px 8px; font-size: 11px; font-weight: 600;
+      color: #333; font-family: inherit; outline: none; background: #fafafa;
+      flex-shrink: 0; appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 6px center; background-size: 10px;
+      transition: border-color 0.2s;
+    }
+    .policy-select-sm:focus { border-color: #D4A96A; outline: none; }
+    /* 예전 full-width input은 금칙어 등에서만 사용 */
+    .policy-input {
+      width: 100%; border: 1.5px solid #e8e8e8; border-radius: 10px;
+      padding: 9px 12px; font-size: 13px; color: #222; font-family: inherit;
+      outline: none; background: #fafafa; box-sizing: border-box; transition: border-color 0.2s;
+    }
+    .policy-input:focus { border-color: #D4A96A; background: #fff; }
+    /* 다크모드 */
+    .phone-wrapper.dark .policy-field,
+    .phone-wrapper.dark .policy-row       { border-bottom-color: #261e16; }
+    .phone-wrapper.dark .policy-field-label,
+    .phone-wrapper.dark .policy-row-label { color: #c8b898; }
+    .phone-wrapper.dark .policy-input-sm  { background: #26201a; border-color: #3a3028; color: #ede8e0; }
+    .phone-wrapper.dark .policy-select-sm { background-color: #26201a; border-color: #3a3028; color: #ede8e0; }
+    .policy-save-btn {
+      width: 100%; padding: 11px; margin-top: 12px;
+      background: linear-gradient(135deg,#D4A96A,#C49050); color: #fff;
+      font-size: 13px; font-weight: 700; font-family: inherit;
+      border: none; border-radius: 10px; cursor: pointer; transition: opacity 0.15s;
+    }
+    .policy-save-btn:hover { opacity: 0.9; }
+
+    /* ════ 금칙어 정책 ════ */
+    .banned-add-row { display: flex; gap: 6px; margin-bottom: 10px; }
+    .banned-add-row .policy-input { flex: 1; margin: 0; }
+    .banned-add-btn {
+      padding: 9px 14px; border-radius: 10px;
+      background: linear-gradient(135deg,#D4A96A,#C49050);
+      color: #fff; border: none; font-size: 12px; font-weight: 700;
+      font-family: inherit; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    }
+    .banned-chip-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .banned-chip {
+      display: flex; align-items: center; gap: 5px;
+      background: #fff3f0; border: 1.5px solid #f5c4b8;
+      border-radius: 20px; padding: 4px 10px 4px 12px;
+      font-size: 12px; font-weight: 700; color: #c0402a;
+    }
+    .banned-chip-del {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #f5c4b8; border: none; color: #c0402a;
+      font-size: 10px; font-weight: 900; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0; line-height: 1; flex-shrink: 0;
+    }
+    .banned-empty { font-size: 12px; color: #ccc; text-align: center; padding: 10px 0; }
+
+    .phone-wrapper.dark .banned-chip      { background: #2e1a16; border-color: #5a2e22; color: #e07060; }
+    .phone-wrapper.dark .banned-chip-del  { background: #5a2e22; color: #e07060; }
+    .phone-wrapper.dark .banned-add-btn   { opacity: 0.9; }
+
+    /* ════ 메뉴 관리 ════ */
+    .menu-item {
+      display: flex; align-items: center; gap: 10px;
+      background: #fff; border: 1.5px solid #f0f0f0;
+      border-radius: 12px; padding: 10px 12px; margin-bottom: 6px;
+      cursor: grab; user-select: none;
+      transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;
+    }
+    .menu-item:active { cursor: grabbing; }
+    .menu-item.drag-over  { border-color: #D4A96A; box-shadow: 0 0 0 3px rgba(212,169,106,0.18); }
+    .menu-item.dragging   { opacity: 0.4; }
+    .menu-item-icon { width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .menu-item-name { flex: 1; font-size: 13px; font-weight: 700; color: #222; }
+    .menu-item.hidden-menu .menu-item-name { color: #bbb; text-decoration: line-through; }
+    .menu-item-path { font-size: 10px; color: #ccc; margin-top: 1px; }
+
+    /* ════ 화면 구성 업체 섹션 ════ */
+    .vendor-sub-section { margin-top: 10px; }
+    .vendor-sub-title {
+      font-size: 11px; font-weight: 800; color: #888;
+      letter-spacing: 0.4px; margin-bottom: 6px; padding-left: 2px;
+    }
+
+    /* 다크모드 */
+    .phone-wrapper.dark .log-table th  { background: #221e14; border-bottom-color: #3a2e18; }
+    .phone-wrapper.dark .log-table td  { color: #c8c0b0; border-bottom-color: #26201a; }
+    .phone-wrapper.dark .log-table tr:hover td { background: #26201a; }
+    .phone-wrapper.dark .policy-card   { background: #1e1a12; border-color: #2e2818; box-shadow: none; }
+    .phone-wrapper.dark .policy-card-header { border-bottom-color: #2e2818; }
+    .phone-wrapper.dark .policy-card-title  { color: #ede8e0; }
+    .phone-wrapper.dark .policy-body   { }
+    .phone-wrapper.dark .policy-field-label { color: #6a6050; }
+    .phone-wrapper.dark .policy-input  { background: #221e14; border-color: #3a3028; color: #ede8e0; }
+    .phone-wrapper.dark .policy-input:focus { border-color: #D4A96A; background: #1e1a12; }
+    .phone-wrapper.dark .policy-row-label { color: #c8c0b0; }
+    .phone-wrapper.dark .policy-row-desc  { color: #484038; }
+    .phone-wrapper.dark .menu-item     { background: #1e1a12; border-color: #2e2818; }
+    .phone-wrapper.dark .menu-item.drag-over { border-color: #D4A96A; }
+    .phone-wrapper.dark .menu-item-name { color: #ede8e0; }
+    .phone-wrapper.dark .menu-item.hidden-menu .menu-item-name { color: #484038; }
+    .phone-wrapper.dark .menu-item-path { color: #484038; }
+    .phone-wrapper.dark .vendor-sub-title { color: #6a5a40; }
+
+    /* ════ 토스트 ════ */
+    .toast {
+      position: absolute; bottom: 20px; left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      background: #222; color: #fff;
+      font-size: 12px; font-weight: 600;
+      padding: 9px 16px; border-radius: 20px;
+      white-space: nowrap; z-index: 300;
+      opacity: 0; transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ════ 확인 모달 ════ */
+    .modal-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 200;
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+
+    /* 게시글 상세 모달 */
+    .post-detail-box {
+      width: 100%; max-height: 80vh;
+      background: #fff; border-radius: 20px;
+      display: flex; flex-direction: column;
+      animation: boxIn 0.2s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .pd-header {
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid #f0f0f0; flex-shrink: 0;
+    }
+    .pd-badges { display: flex; gap: 5px; margin-bottom: 7px; flex-wrap: wrap; }
+    .pd-badge-report { font-size: 10px; background:#fff3e0; color:#f39c12; border-radius:4px; padding:2px 7px; font-weight:700; }
+    .pd-badge-hidden { font-size: 10px; background:#f5f5f5; color:#aaa; border-radius:4px; padding:2px 7px; font-weight:700; }
+    .pd-title { font-size: 14px; font-weight: 800; color: #222; line-height: 1.4; margin-bottom: 5px; }
+    .pd-meta  { font-size: 11px; color: #aaa; }
+    .pd-body-wrap { flex: 1; overflow-y: auto; padding: 14px 16px; }
+    .pd-body { font-size: 13px; color: #444; line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
+    .pd-comments-title { font-size: 11px; font-weight: 800; color: #888; margin: 14px 0 8px; display: flex; align-items: center; gap: 5px; }
+    .pd-comment-item { background: #fafafa; border-radius: 10px; padding: 8px 10px; margin-bottom: 6px; }
+    .pd-comment-user { font-size: 11px; font-weight: 700; color: #555; margin-bottom: 3px; }
+    .pd-comment-text { font-size: 12px; color: #666; line-height: 1.5; }
+    .pd-comment-date { font-size: 10px; color: #bbb; margin-top: 3px; }
+    .pd-footer {
+      padding: 10px 16px 14px;
+      border-top: 1px solid #f0f0f0; flex-shrink: 0;
+      display: flex; gap: 6px;
+    }
+    .pd-footer .btn-cancel { flex: 1; padding: 10px; font-size: 12px; }
+    .pd-footer .action-btn { flex: 1; padding: 10px 0; font-size: 12px; }
+
+    /* ════ 감사 로그 상세 모달 ════ */
+    .audit-detail-box {
+      width: 100%; background: #fff; border-radius: 20px;
+      animation: boxIn 0.2s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .audit-detail-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px 12px; border-bottom: 1px solid #f0f0f0;
+    }
+    .audit-detail-title {
+      font-size: 14px; font-weight: 800; color: #222;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .audit-close-btn {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: #f5f5f5; border: none; cursor: pointer;
+      font-size: 12px; color: #888; display: flex; align-items: center; justify-content: center;
+    }
+    .audit-detail-body { padding: 14px 16px; }
+    .audit-desc-box {
+      background: #fafafa; border-radius: 10px; padding: 10px 12px;
+      font-size: 12px; color: #555; line-height: 1.65; margin-bottom: 12px;
+    }
+    .audit-row {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 7px 0; border-bottom: 1px solid #f8f8f8;
+    }
+    .audit-row:last-child { border-bottom: none; }
+    .audit-key {
+      font-size: 11px; font-weight: 700; color: #bbb;
+      width: 56px; flex-shrink: 0; padding-top: 1px;
+    }
+    .audit-val { font-size: 12px; color: #333; font-weight: 600; flex: 1; line-height: 1.5; }
+    .audit-status-chip {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      border-radius: 20px; padding: 2px 8px;
+    }
+    .audit-status-chip.success { background: #eafaf1; color: #27ae60; }
+    .audit-status-chip.fail    { background: #fdecea; color: #e05555; }
+    .audit-detail-footer { padding: 10px 16px 14px; }
+    .audit-detail-footer .btn-cancel { width: 100%; padding: 11px; }
+
+    .phone-wrapper.dark .audit-detail-box    { background: #1e1a12; }
+    .phone-wrapper.dark .audit-detail-header { border-bottom-color: #2e2818; }
+    .phone-wrapper.dark .audit-detail-title  { color: #ede8e0; }
+    .phone-wrapper.dark .audit-close-btn     { background: #2e2818; color: #6a5a48; }
+    .phone-wrapper.dark .audit-desc-box      { background: #26201a; color: #a09080; }
+    .phone-wrapper.dark .audit-row           { border-bottom-color: #261e16; }
+    .phone-wrapper.dark .audit-val           { color: #c8b898; }
+    .phone-wrapper.dark .audit-detail-footer { border-top: 1px solid #2e2818; }
+
+    /* 다크모드 */
+    .phone-wrapper.dark .post-detail-box { background: #1e1a12; }
+    .phone-wrapper.dark .pd-header       { border-bottom-color: #2e2818; }
+    .phone-wrapper.dark .pd-title        { color: #ede8e0; }
+    .phone-wrapper.dark .pd-body         { color: #a09080; }
+    .phone-wrapper.dark .pd-comment-item { background: #26201a; }
+    .phone-wrapper.dark .pd-comment-user { color: #c0a878; }
+    .phone-wrapper.dark .pd-comment-text { color: #806858; }
+    .phone-wrapper.dark .pd-footer       { border-top-color: #2e2818; }
+    .confirm-box {
+      width: 100%; background: #fff; border-radius: 20px;
+      padding: 26px 22px 22px;
+      animation: boxIn 0.2s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    @keyframes boxIn {
+      from { opacity: 0; transform: scale(0.94) translateY(6px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .confirm-icon  {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; margin: 0 auto 12px;
+    }
+    .confirm-title { font-size: 16px; font-weight: 800; color: #222; text-align: center; margin-bottom: 6px; }
+    .confirm-desc  { font-size: 12px; color: #888; text-align: center; line-height: 1.6; margin-bottom: 18px; }
+    .confirm-btn-row { display: flex; gap: 8px; }
+    .btn-cancel {
+      flex: 1; padding: 12px;
+      border: 1.5px solid #e8e8e8; border-radius: 12px;
+      background: #f8f8f8; color: #666;
+      font-size: 13px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .btn-cancel:hover { background: #f0f0f0; }
+    .btn-danger {
+      flex: 1; padding: 12px; border: none; border-radius: 12px;
+      background: #e05555; color: #fff;
+      font-size: 13px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: opacity 0.15s;
+    }
+    .btn-danger:hover { opacity: 0.88; }
+    .btn-primary {
+      flex: 1; padding: 12px; border: none; border-radius: 12px;
+      background: linear-gradient(135deg,#D4A96A,#C49050); color: #fff;
+      font-size: 13px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+
+    /* ════ 다크모드 ════ */
+    .phone-wrapper.dark {
+      background: #15120e;
+      box-shadow: 0 0 0 2px #2e2820, 0 20px 60px rgba(0,0,0,0.55);
+    }
+    .phone-wrapper.dark .phone-screen    { background: #15120e; }
+    .phone-wrapper.dark .admin-header    { background: rgba(21,18,14,0.97); border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .admin-tab-nav   { background: #1a1610; border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .admin-tab       { color: #484038; }
+    .phone-wrapper.dark .admin-tab.active{ color: #D4A96A; border-bottom-color: #D4A96A; }
+    .phone-wrapper.dark .icon-btn        { background: #26201a; color: #7a7068; }
+    .phone-wrapper.dark .icon-btn:hover  { background: #342c22; color: #D4A96A; }
+    .phone-wrapper.dark .panel-section-title { color: #7a6040; }
+    .phone-wrapper.dark .stat-card       { background: #1e1a12; border-color: #2e2818; box-shadow: none; }
+    .phone-wrapper.dark .stat-card-num   { color: #ede8e0; }
+    .phone-wrapper.dark .stat-card-label { color: #484038; }
+    .phone-wrapper.dark .list-card       { background: #1e1a12; border-color: #2e2818; box-shadow: none; }
+    .phone-wrapper.dark .list-item       { border-bottom-color: #26201a; }
+    .phone-wrapper.dark .list-item:hover { background: #26201a; }
+    .phone-wrapper.dark .list-avatar     { background: #261e10; border-color: #3a2e18; }
+    .phone-wrapper.dark .list-name       { color: #ede8e0; }
+    .phone-wrapper.dark .list-sub        { color: #484038; }
+    .phone-wrapper.dark .list-meta       { color: #484038; }
+    .phone-wrapper.dark .search-wrap     { background: #221e16; border-color: #3a3028; }
+    .phone-wrapper.dark .search-wrap:focus-within { background: #1e1a12; border-color: #D4A96A; }
+    .phone-wrapper.dark .search-wrap input { color: #ede8e0; }
+    .phone-wrapper.dark .search-wrap input::placeholder { color: #484038; }
+    .phone-wrapper.dark .sub-tab         { background: #26201a; border-color: #3a3028; color: #5a5040; }
+    .phone-wrapper.dark .sub-tab.active  { background: #2e2010; border-color: #D4A96A; color: #C49050; }
+    .phone-wrapper.dark .admin-select    { background-color: #26201a; border-color: #3a3028; color: #ede8e0; }
+    .phone-wrapper.dark .section-item    { background: #1e1a12; border-color: #2e2818; }
+    .phone-wrapper.dark .section-item.drag-over { border-color: #D4A96A; }
+    .phone-wrapper.dark .drag-handle     { color: #3a3028; }
+    .phone-wrapper.dark .section-item-name { color: #ede8e0; }
+    .phone-wrapper.dark .section-item.hidden-section .section-item-name { color: #484038; }
+    .phone-wrapper.dark .section-item-desc { color: #484038; }
+    .phone-wrapper.dark .switch-sm-slider    { background: #3a3028; }
+    .phone-wrapper.dark .switch-sm input:checked + .switch-sm-slider { background: #D4A96A; }
+    .phone-wrapper.dark .save-bar        { background: rgba(21,18,14,0.96); }
+    .phone-wrapper.dark .settings-card   { background: #1e1a12; border-color: #2e2818; box-shadow: none; }
+    .phone-wrapper.dark .settings-row    { border-bottom-color: #26201a; }
+    .phone-wrapper.dark .settings-row-label { color: #ede8e0; }
+    .phone-wrapper.dark .settings-row-desc  { color: #484038; }
+    .phone-wrapper.dark .switch-slider   { background: #3a3028; }
+    .phone-wrapper.dark .switch input:checked + .switch-slider { background: #D4A96A; }
+    .phone-wrapper.dark .maintenance-alert { background: #2e2010; border-color: #4a3818; }
+    .phone-wrapper.dark .notice-textarea { color: #c8c0b0; }
+    .phone-wrapper.dark .notice-textarea::placeholder { color: #484038; }
+    .phone-wrapper.dark .push-input      { color: #c8c0b0; }
+    .phone-wrapper.dark .push-input::placeholder { color: #484038; }
+    .phone-wrapper.dark .confirm-box     { background: #1e1a12; }
+    .phone-wrapper.dark .confirm-title   { color: #ede8e0; }
+    .phone-wrapper.dark .confirm-desc    { color: #6a6050; }
+    .phone-wrapper.dark .btn-cancel      { background: #2a2418; border-color: #3a3028; color: #9e9890; }
+    .phone-wrapper.dark .btn-cancel:hover{ background: #322c20; }
+  </style>
+</head>
+<body>
+<div class="phone-wrapper" id="phoneWrapper">
+  <div class="phone-screen">
+
+    <!-- ── 관리자 헤더 ── -->
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <span class="admin-logo">weddly</span>
+        <span class="admin-badge">ADMIN</span>
+      </div>
+      <div class="admin-header-right">
+        <button class="icon-btn dark-toggle-btn" id="darkToggleBtn" aria-label="다크모드">
+          <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun"  width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <button class="icon-btn" onclick="showLogoutConfirm()" aria-label="로그아웃">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── 관리자 탭 네비 ── -->
+    <nav class="admin-tab-nav" id="adminTabNav">
+      <button class="admin-tab active" onclick="switchTab('dashboard', this)">📊 대시보드</button>
+      <button class="admin-tab" onclick="switchTab('users', this)">👥 사용자</button>
+      <button class="admin-tab" onclick="switchTab('content', this)">📋 콘텐츠 <span class="tab-badge" id="reportBadge">3</span></button>
+      <button class="admin-tab" onclick="switchTab('history', this)">📜 이력 관리</button>
+      <button class="admin-tab" onclick="switchTab('policy', this)">🛡️ 정책</button>
+      <button class="admin-tab" onclick="switchTab('menumanage', this)">🗂️ 메뉴 관리</button>
+      <button class="admin-tab" onclick="switchTab('layout', this)">🎨 화면 구성</button>
+      <button class="admin-tab" onclick="switchTab('vendor', this)">🏢 업체 요청</button>
+      <button class="admin-tab" onclick="switchTab('appsettings', this)">⚙️ 앱 설정</button>
+    </nav>
+
+    <!-- ══════════════════════════════
+         ① 대시보드 패널
+    ══════════════════════════════ -->
+    <div class="admin-panel active" id="panel-dashboard">
+
+      <div class="panel-section">
+        <div class="panel-section-title">오늘의 현황</div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-card-icon" style="background:#fff8ef;">👥</div>
+            <div class="stat-card-body">
+              <div class="stat-card-label">전체 사용자</div>
+              <div class="stat-card-row">
+                <div class="stat-card-num">1,284</div>
+                <div class="stat-card-diff up">▲ 12 오늘</div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon" style="background:#fff0f8;">💑</div>
+            <div class="stat-card-body">
+              <div class="stat-card-label">연결된 커플</div>
+              <div class="stat-card-row">
+                <div class="stat-card-num">638</div>
+                <div class="stat-card-diff up">▲ 5 이번 주</div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon" style="background:#f0f8ff;">💬</div>
+            <div class="stat-card-body">
+              <div class="stat-card-label">전체 게시글</div>
+              <div class="stat-card-row">
+                <div class="stat-card-num">4,571</div>
+                <div class="stat-card-diff up">▲ 28 오늘</div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon" style="background:#fff5f5;">🚨</div>
+            <div class="stat-card-body">
+              <div class="stat-card-label">미처리 신고</div>
+              <div class="stat-card-row">
+                <div class="stat-card-num">3</div>
+                <div class="stat-card-diff down">▼ 처리 필요</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div class="panel-section-title" style="margin:0;">신규 가입 추이</div>
+          <div class="chart-tab-row" id="joinTabRow" style="margin:0;">
+            <button class="chart-tab active" onclick="switchChartTab('weekly',this)">주간</button>
+            <button class="chart-tab"        onclick="switchChartTab('monthly',this)">월간</button>
+            <button class="chart-tab"        onclick="switchChartTab('yearly',this)">연간</button>
+          </div>
+        </div>
+        <div class="list-card" style="padding:12px 10px 8px;">
+          <div id="paretoChart"></div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div class="panel-section-title" style="margin:0;">토큰 발행 횟수</div>
+          <div class="chart-tab-row" id="tokenTabRow" style="margin:0;">
+            <button class="chart-tab active" onclick="switchTokenTab('weekly',this)">주간</button>
+            <button class="chart-tab"        onclick="switchTokenTab('monthly',this)">월간</button>
+            <button class="chart-tab"        onclick="switchTokenTab('yearly',this)">연간</button>
+          </div>
+        </div>
+        <div class="list-card" style="padding:12px 10px 8px;">
+          <div id="tokenChart"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════
+         ② 사용자 관리 패널
+    ══════════════════════════════ -->
+    <div class="admin-panel" id="panel-users">
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="이름 또는 이메일 검색" id="userSearch" oninput="filterUsers()" />
+      </div>
+
+      <select class="admin-select" onchange="filterUserStatus(this.value)">
+        <option value="all">전체</option>
+        <option value="active">활성</option>
+        <option value="blocked">정지</option>
+        <option value="withdrawn">탈퇴</option>
+      </select>
+
+      <div class="list-card" id="userList"></div>
+    </div>
+
+    <!-- ══════════════════════════════
+         ③ 콘텐츠 관리 패널
+    ══════════════════════════════ -->
+    <div class="admin-panel" id="panel-content">
+      <div class="sub-tab-row">
+        <button class="sub-tab active" onclick="filterContent('all', this)">전체 게시글</button>
+        <button class="sub-tab" onclick="filterContent('reported', this)">
+          신고됨 <span class="tab-badge">3</span>
+        </button>
+      </div>
+      <div class="list-card" id="contentList"></div>
+    </div>
+
+    <!-- ══════════════════════════════
+         ④ 화면 구성 패널
+    ══════════════════════════════ -->
+    <div class="admin-panel" id="panel-layout">
+      <select class="admin-select" id="screenSelector" onchange="selectScreen(this.value)"></select>
+
+      <div class="panel-section-title" style="margin-top:4px;">섹션 구성 <span style="font-size:10px;color:#bbb;font-weight:400;text-transform:none;">드래그로 순서 변경</span></div>
+      <div class="section-list" id="sectionList"></div>
+
+      <div class="save-bar">
+        <button class="btn-save" onclick="saveLayout()">💾 화면 구성 저장</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         ⑤-1 업체 등록 요청 패널
+    ══════════════════════════════ -->
+    <div class="admin-panel" id="panel-vendor">
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="업체명 또는 대표자 검색" id="vendorSearch" oninput="renderVendorList()" />
+      </div>
+      <select class="admin-select" id="vendorStatusFilter" onchange="renderVendorList()">
+        <option value="all">전체</option>
+        <option value="pending">대기중</option>
+        <option value="approved">승인</option>
+        <option value="rejected">반려</option>
+      </select>
+      <div id="vendorList"></div>
+    </div>
+
+    <!-- ══════════════════════════════
+         ⑤ 앱 설정 패널
+    ══════════════════════════════ -->
+    <div class="admin-panel" id="panel-appsettings">
+
+      <div class="panel-section">
+        <div class="panel-section-title">서비스 상태</div>
+        <div class="settings-card">
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-icon" style="background:#fff5f5;">🔧</div>
+              <div>
+                <div class="settings-row-label">점검 모드</div>
+                <div class="settings-row-desc">ON 시 사용자에게 점검 화면 표시</div>
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="maintenanceToggle" onchange="onMaintenanceToggle()" />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <div class="maintenance-alert" id="maintenanceAlert">
+            ⚠️ 점검 모드가 활성화되면 모든 사용자의<br>앱 접근이 차단됩니다.
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-icon" style="background:#fff8ef;">🆕</div>
+              <div>
+                <div class="settings-row-label">강제 업데이트 알림</div>
+                <div class="settings-row-desc">앱 업데이트를 강제로 안내해요</div>
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="forceUpdateToggle" />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-icon" style="background:#f0f8ff;">🔒</div>
+              <div>
+                <div class="settings-row-label">신규 가입 제한</div>
+                <div class="settings-row-desc">ON 시 신규 회원가입이 불가해요</div>
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="signupLockToggle" />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section-title">공지사항 배너</div>
+        <div class="settings-card">
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-icon" style="background:#f5fff5;">📢</div>
+              <div>
+                <div class="settings-row-label">배너 표시</div>
+                <div class="settings-row-desc">메인 화면 상단에 공지를 노출해요</div>
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="bannerToggle" checked />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <div style="border-top:1px solid #f8f8f8;">
+            <textarea class="notice-textarea" id="noticeText"
+              placeholder="공지사항 내용을 입력하세요">🎉 Weddly v1.1 업데이트! 새로운 기능을 확인해보세요.</textarea>
+          </div>
+          <div style="padding:0 14px 12px;">
+            <button class="push-send-btn" style="width:100%;margin:0;" onclick="saveNotice()">공지 저장</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section-title">전체 푸시 알림 발송</div>
+        <div class="settings-card">
+          <input class="push-input" type="text" id="pushTitle" placeholder="알림 제목" />
+          <div style="height:1px;background:#f8f8f8;margin:0 14px;"></div>
+          <textarea class="notice-textarea" id="pushBody" style="min-height:60px;"
+            placeholder="알림 내용을 입력하세요"></textarea>
+          <div style="padding:0 14px 12px;">
+            <button class="push-send-btn" style="width:100%;margin:0;" onclick="sendPush()">📲 전체 발송</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section-title">앱 정보</div>
+        <div class="settings-card">
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-icon" style="background:#f5fff8;">📱</div>
+              <div><div class="settings-row-label">현재 앱 버전</div></div>
+            </div>
+            <span style="font-size:12px;font-weight:700;color:#C49050;">v1.0.0</span>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-icon" style="background:#fff8f0;">👤</div>
+              <div><div class="settings-row-label">관리자 계정</div></div>
+            </div>
+            <span style="font-size:12px;color:#bbb;">admin@weddly.kr</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════
+         ⑥ 이력 관리 패널
+    ══════════════════════════════ -->
+    <div class="admin-panel" id="panel-history">
+      <select class="admin-select" onchange="switchHistoryTab(this.value)">
+        <option value="login">🔐 로그인</option>
+        <option value="pwreset">🔑 비밀번호 초기화</option>
+        <option value="account">👤 계정 변경</option>
+        <option value="audit">📋 감사 로그</option>
+      </select>
+
+      <!-- 로그인 이력 -->
+      <div id="history-login" class="history-sub">
+        <div class="list-card" style="overflow-x:auto;">
+          <table class="log-table">
+            <thead><tr><th>사용자</th><th>일시</th><th>IP</th><th>결과</th></tr></thead>
+            <tbody id="loginLogBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 비밀번호 초기화 이력 -->
+      <div id="history-pwreset" class="history-sub" style="display:none;">
+        <div class="list-card" style="overflow-x:auto;">
+          <table class="log-table">
+            <thead><tr><th>사용자</th><th>요청일시</th><th>처리</th><th>결과</th></tr></thead>
+            <tbody id="pwresetLogBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 계정 생성/수정/삭제 로그 -->
+      <div id="history-account" class="history-sub" style="display:none;">
+        <div class="list-card" style="overflow-x:auto;">
+          <table class="log-table">
+            <thead><tr><th>대상</th><th>액션</th><th>처리자</th><th>일시</th></tr></thead>
+            <tbody id="accountLogBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 감사 로그 -->
+      <div id="history-audit" class="history-sub" style="display:none;">
+        <div class="list-card" style="overflow-x:auto;">
+          <table class="log-table">
+            <thead><tr><th>사용자</th><th>액션</th><th>대상</th><th>일시</th></tr></thead>
+            <tbody id="auditLogBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         ⑦ 정책 패널
+    ══════════════════════════════ -->
+    <div class="admin-panel" id="panel-policy">
+
+      <select class="admin-select" onchange="switchPolicy(this.value)">
+        <option value="pb-id">🪪 아이디 정책</option>
+        <option value="pb-pw">🔑 비밀번호 정책</option>
+        <option value="pb-login">🔐 로그인 정책</option>
+        <option value="pb-token">🎫 토큰 정책</option>
+        <option value="pb-banned">🚫 금칙어 정책</option>
+      </select>
+
+      <!-- 아이디 정책 -->
+      <div class="policy-card open" id="pb-id">
+        <div class="policy-body">
+          <div class="policy-field">
+            <span class="policy-field-label">최소 길이</span>
+            <input class="policy-input-sm" type="number" value="4" min="2" max="20" />
+          </div>
+          <div class="policy-field">
+            <span class="policy-field-label">최대 길이</span>
+            <input class="policy-input-sm" type="number" value="20" min="5" max="50" />
+          </div>
+          <div class="policy-row">
+            <span class="policy-row-label">영문 소문자만 허용</span>
+            <label class="switch"><input type="checkbox" checked /><span class="switch-slider"></span></label>
+          </div>
+          <div class="policy-row">
+            <span class="policy-row-label">숫자 포함 허용</span>
+            <label class="switch"><input type="checkbox" checked /><span class="switch-slider"></span></label>
+          </div>
+          <div class="policy-row">
+            <span class="policy-row-label">특수문자 허용 (_-.)</span>
+            <label class="switch"><input type="checkbox" /><span class="switch-slider"></span></label>
+          </div>
+          <button class="policy-save-btn" onclick="savePolicy('아이디')">저장</button>
+        </div>
+      </div>
+
+      <!-- 비밀번호 정책 -->
+      <div class="policy-card" id="pb-pw" style="display:none">
+        <div class="policy-body">
+          <div class="policy-field">
+            <span class="policy-field-label">최소 길이</span>
+            <input class="policy-input-sm" type="number" value="8" min="6" max="30" />
+          </div>
+          <div class="policy-field">
+            <span class="policy-field-label">최대 길이</span>
+            <input class="policy-input-sm" type="number" value="20" min="10" max="50" />
+          </div>
+          <div class="policy-field">
+            <span class="policy-field-label">만료 (일, 0=무제한)</span>
+            <input class="policy-input-sm" type="number" value="90" min="0" />
+          </div>
+          <div class="policy-field">
+            <span class="policy-field-label">이전 비밀번호 사용 불가 개수</span>
+            <input class="policy-input-sm" type="number" value="3" min="0" max="10" />
+          </div>
+          <div class="policy-row">
+            <span class="policy-row-label">대문자 포함 필수</span>
+            <label class="switch"><input type="checkbox" checked /><span class="switch-slider"></span></label>
+          </div>
+          <div class="policy-row">
+            <span class="policy-row-label">숫자 포함 필수</span>
+            <label class="switch"><input type="checkbox" checked /><span class="switch-slider"></span></label>
+          </div>
+          <div class="policy-row">
+            <span class="policy-row-label">특수문자 포함 필수</span>
+            <label class="switch"><input type="checkbox" checked /><span class="switch-slider"></span></label>
+          </div>
+          <div class="policy-row">
+            <span class="policy-row-label">비밀번호 SALT 사용</span>
+            <label class="switch">
+              <input type="checkbox" id="saltToggle" onchange="toggleSalt(this.checked)" />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <div class="policy-field" id="saltSelectRow" style="opacity:0.4;pointer-events:none;">
+            <span class="policy-field-label">비밀번호 SALT</span>
+            <select class="policy-select-sm" id="saltSelect">
+              <option>사용자 ID</option>
+              <option>이름</option>
+              <option>이메일</option>
+              <option>핸드폰 번호</option>
+            </select>
+          </div>
+          <div class="policy-field">
+            <span class="policy-field-label">암호화 방식</span>
+            <select class="policy-select-sm">
+              <option>SHA256</option>
+              <option>SHA512</option>
+            </select>
+          </div>
+          <div class="policy-field">
+            <span class="policy-field-label">인코딩 방식</span>
+            <select class="policy-select-sm">
+              <option>HEX</option>
+              <option>BASE64</option>
+            </select>
+          </div>
+          <button class="policy-save-btn" onclick="savePolicy('비밀번호')">저장</button>
+        </div>
+      </div>
+
+      <!-- 로그인 정책 -->
+      <div class="policy-card" id="pb-login" style="display:none">
+        <div class="policy-body">
+          <div class="policy-field">
+            <span class="policy-field-label">최대 로그인 실패 횟수</span>
+            <input class="policy-input-sm" type="number" value="5" min="1" max="20" />
+          </div>
+          <div class="policy-field">
+            <span class="policy-field-label">계정 잠금 시간 (분)</span>
+            <input class="policy-input-sm" type="number" value="30" min="1" />
+          </div>
+          <div class="policy-field">
+            <span class="policy-field-label">세션 타임아웃 (분, 0=유지)</span>
+            <input class="policy-input-sm" type="number" value="60" min="0" />
+          </div>
+          <div class="policy-row">
+            <div>
+              <span class="policy-row-label">중복 로그인 허용</span>
+              <div class="policy-row-desc">같은 계정 동시 접속 허용</div>
+            </div>
+            <label class="switch"><input type="checkbox" /><span class="switch-slider"></span></label>
+          </div>
+          <div class="policy-row">
+            <span class="policy-row-label">자동 로그인 허용</span>
+            <label class="switch"><input type="checkbox" checked /><span class="switch-slider"></span></label>
+          </div>
+          <button class="policy-save-btn" onclick="savePolicy('로그인')">저장</button>
+        </div>
+      </div>
+
+      <!-- 토큰 정책 -->
+      <div class="policy-card" id="pb-token" style="display:none">
+        <div class="policy-body">
+          <div class="policy-field">
+            <span class="policy-field-label">Access Token 만료 (분)</span>
+            <input class="policy-input-sm" type="number" value="30" min="5" />
+          </div>
+          <div class="policy-field">
+            <span class="policy-field-label">Refresh Token 만료 (일)</span>
+            <input class="policy-input-sm" type="number" value="14" min="1" />
+          </div>
+          <div class="policy-row">
+            <div>
+              <span class="policy-row-label">Refresh Token 자동 갱신</span>
+              <div class="policy-row-desc">만료 전 자동으로 재발급</div>
+            </div>
+            <label class="switch"><input type="checkbox" checked /><span class="switch-slider"></span></label>
+          </div>
+          <div class="policy-row">
+            <div>
+              <span class="policy-row-label">토큰 블랙리스트 사용</span>
+              <div class="policy-row-desc">로그아웃 시 토큰 무효화</div>
+            </div>
+            <label class="switch"><input type="checkbox" checked /><span class="switch-slider"></span></label>
+          </div>
+          <button class="policy-save-btn" onclick="savePolicy('토큰')">저장</button>
+        </div>
+      </div>
+
+      <!-- 금칙어 정책 -->
+      <div class="policy-card" id="pb-banned" style="display:none">
+        <div class="policy-body">
+          <div class="policy-field-label" style="margin-bottom:10px;">
+            커뮤니티 게시글 · 댓글에서 사용 불가 문구를 등록하세요.
+            사용자가 해당 문구 입력 시 경고 메시지가 표시됩니다.
+          </div>
+          <div class="banned-add-row">
+            <input class="policy-input" id="bannedWordInput" type="text"
+              placeholder="금칙어 입력 후 추가" maxlength="30"
+              onkeydown="if(event.key==='Enter') addBannedWord()" />
+            <button class="banned-add-btn" onclick="addBannedWord()">추가</button>
+          </div>
+          <div class="banned-chip-wrap" id="bannedChipWrap"></div>
+          <div class="banned-empty" id="bannedEmpty">등록된 금칙어가 없어요</div>
+          <button class="policy-save-btn" onclick="saveBannedWords()">저장</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════
+         ⑧ 메뉴 관리 패널
+    ══════════════════════════════ -->
+    <div class="admin-panel" id="panel-menumanage">
+      <div class="panel-section-title">사용자 화면 메뉴 <span style="font-size:10px;color:#bbb;font-weight:400;text-transform:none;">드래그로 순서 변경</span></div>
+      <div id="menuItemList"></div>
+      <div class="save-bar">
+        <button class="btn-save" onclick="saveMenuLayout()">💾 메뉴 구성 저장</button>
+      </div>
+    </div>
+
+  </div><!-- /phone-screen -->
+
+  <!-- ── 업체 등록 요청 상세 모달 ── -->
+  <div class="modal-overlay" id="vendorDetailModal">
+    <div class="post-detail-box">
+      <div class="pd-header">
+        <div class="pd-badges" id="vdBadge"></div>
+        <div class="pd-title" id="vdName"></div>
+        <div class="pd-meta"  id="vdMeta"></div>
+      </div>
+      <div class="pd-body-wrap">
+        <div class="audit-desc-box" id="vdDesc"></div>
+        <div class="audit-row"><span class="audit-key">대표자</span><span class="audit-val" id="vdOwner"></span></div>
+        <div class="audit-row"><span class="audit-key">연락처</span><span class="audit-val" id="vdPhone"></span></div>
+        <div class="audit-row"><span class="audit-key">이메일</span><span class="audit-val" id="vdEmail"></span></div>
+        <div class="audit-row"><span class="audit-key">사업자번호</span><span class="audit-val" id="vdBizNo"></span></div>
+        <div class="audit-row"><span class="audit-key">주소</span><span class="audit-val" id="vdAddress"></span></div>
+        <div class="audit-row"><span class="audit-key">카테고리</span><span class="audit-val" id="vdCategory"></span></div>
+        <div class="audit-row" id="vdImgRow">
+          <span class="audit-key">첨부 이미지</span>
+          <span class="audit-val" id="vdImages"></span>
+        </div>
+      </div>
+      <div class="pd-footer" id="vdFooter"></div>
+    </div>
+  </div>
+
+  <!-- ── 감사 로그 상세 모달 ── -->
+  <div class="modal-overlay" id="auditDetailModal">
+    <div class="audit-detail-box">
+      <div class="audit-detail-header">
+        <div class="audit-detail-title">📋 감사 로그 상세</div>
+        <button class="audit-close-btn" onclick="closeModal('auditDetailModal')">✕</button>
+      </div>
+      <div class="audit-detail-body">
+        <div class="audit-desc-box" id="adDesc"></div>
+        <div class="audit-row"><span class="audit-key">사용자</span><span class="audit-val" id="adUser"></span></div>
+        <div class="audit-row"><span class="audit-key">액션</span><span class="audit-val" id="adAction"></span></div>
+        <div class="audit-row"><span class="audit-key">대상</span><span class="audit-val" id="adTarget"></span></div>
+        <div class="audit-row"><span class="audit-key">일시</span><span class="audit-val" id="adTime"></span></div>
+        <div class="audit-row"><span class="audit-key">IP</span><span class="audit-val" id="adIp"></span></div>
+        <div class="audit-row"><span class="audit-key">기기</span><span class="audit-val" id="adDevice"></span></div>
+        <div class="audit-row"><span class="audit-key">브라우저</span><span class="audit-val" id="adBrowser"></span></div>
+        <div class="audit-row"><span class="audit-key">처리 결과</span><span class="audit-val" id="adStatus"></span></div>
+      </div>
+      <div class="audit-detail-footer">
+        <button class="btn-cancel" onclick="closeModal('auditDetailModal')">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 게시글 상세 모달 ── -->
+  <div class="modal-overlay" id="postDetailModal">
+    <div class="post-detail-box">
+      <div class="pd-header">
+        <div class="pd-badges" id="pdBadges"></div>
+        <div class="pd-title" id="pdTitle"></div>
+        <div class="pd-meta" id="pdMeta"></div>
+      </div>
+      <div class="pd-body-wrap">
+        <div class="pd-body" id="pdBody"></div>
+        <div id="pdCommentsSection"></div>
+      </div>
+      <div class="pd-footer">
+        <button class="action-btn hide" id="pdHideBtn" onclick="pdToggleHide()"></button>
+        <button class="action-btn delete" onclick="pdDelete()">삭제</button>
+        <button class="btn-cancel" onclick="closeModal('postDetailModal')">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 로그아웃 확인 모달 ── -->
+  <div class="modal-overlay" id="logoutModal">
+    <div class="confirm-box">
+      <div class="confirm-icon" style="background:#fff8ef;border:2px solid #f0e8d8;">🚪</div>
+      <div class="confirm-title">관리자 로그아웃</div>
+      <div class="confirm-desc">관리자 모드에서 로그아웃할까요?</div>
+      <div class="confirm-btn-row">
+        <button class="btn-cancel" onclick="closeModal('logoutModal')">취소</button>
+        <button class="btn-primary" onclick="doLogout()">로그아웃</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 사용자 액션 확인 모달 ── -->
+  <div class="modal-overlay" id="userActionModal">
+    <div class="confirm-box">
+      <div class="confirm-icon" id="uaIcon" style="background:#fff5f5;border:2px solid #fdd;">⛔</div>
+      <div class="confirm-title" id="uaTitle">계정을 정지할까요?</div>
+      <div class="confirm-desc"  id="uaDesc">해당 사용자의 앱 접근이 차단됩니다.</div>
+      <div class="confirm-btn-row">
+        <button class="btn-cancel" onclick="closeModal('userActionModal')">취소</button>
+        <button class="btn-danger" id="uaConfirmBtn" onclick="confirmUserAction()">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 토스트 ── -->
+  <div class="toast" id="toast"></div>
+
+</div><!-- /phone-wrapper -->
+<script>
+/* ══════════════════════════════════
+   다크모드
+══════════════════════════════════ */
+const phoneWrapper = document.getElementById('phoneWrapper');
+if (localStorage.getItem('weddly-dark') === '1') phoneWrapper.classList.add('dark');
+
+document.getElementById('darkToggleBtn').addEventListener('click', () => {
+  const isDark = phoneWrapper.classList.toggle('dark');
+  localStorage.setItem('weddly-dark', isDark ? '1' : '0');
+  renderParetoChart(currentChartTab);
+  renderLineChart(TOKEN_DATA[currentTokenTab], 'tokenChart');
+});
+
+/* ══════════════════════════════════
+   탭 전환
+══════════════════════════════════ */
+function switchTab(name, btn) {
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ══════════════════════════════════
+   샘플 데이터
+══════════════════════════════════ */
+const USERS = [
+  { id:1, name:'홍길동', email:'hong@example.com', avatar:'🤵', joined:'2026-03-12', status:'active',  partner:'김영희' },
+  { id:2, name:'김영희', email:'kim@example.com',  avatar:'👰', joined:'2026-03-12', status:'active',  partner:'홍길동' },
+  { id:3, name:'이민준', email:'lee@example.com',  avatar:'🧑', joined:'2026-03-28', status:'active',  partner:null },
+  { id:4, name:'박수진', email:'park@example.com', avatar:'👩', joined:'2026-04-01', status:'blocked', partner:null },
+  { id:5, name:'최현우', email:'choi@example.com', avatar:'🧔', joined:'2026-04-05', status:'active',  partner:'정다은' },
+  { id:6, name:'정다은', email:'jung@example.com', avatar:'💁', joined:'2026-04-05', status:'active',  partner:'최현우' },
+  { id:7, name:'강지훈', email:'kang@example.com', avatar:'🧑', joined:'2026-04-10', status:'active',  partner:null },
+  { id:8, name:'윤서연', email:'yoon@example.com', avatar:'👧', joined:'2026-04-14', status:'active',  partner:null },
+  { id:9,  name:'오태현', email:'oh@example.com',    avatar:'🧑', joined:'2026-02-10', status:'withdrawn', withdrawnAt:'2026-04-01', partner:null },
+  { id:10, name:'임소연', email:'lim@example.com',   avatar:'👩', joined:'2026-01-22', status:'withdrawn', withdrawnAt:'2026-03-28', partner:null },
+];
+
+const POSTS = [
+  { id:1, title:'강남 웨딩홀 추천해주세요', author:'이민준', date:'2026-04-14', reported:false, hidden:false,
+    body:'안녕하세요! 5월 중순 결혼 예정인데 강남 쪽 웨딩홀 추천 부탁드려요. 예산은 200~300만 원 정도이고 하객 200명 정도 예상합니다. 뷔페보다 코스 요리를 선호하는데 혹시 가보신 분 있으면 후기 공유해 주세요 😊',
+    comments:[{user:'김나리', text:'그랜드 힐튼 추천해요! 음식이 정말 맛있어요.', date:'2026-04-14'},{user:'박현우', text:'저는 파크하얏트 갔는데 분위기 최고였어요.', date:'2026-04-14'}] },
+  { id:2, title:'드레스 피팅 후기 공유해요!', author:'윤서연', date:'2026-04-14', reported:false, hidden:false,
+    body:'저번 주에 드레스 피팅 다녀왔어요. 총 3벌 입어봤는데 A라인이 제일 잘 어울리더라고요. 보정속옷은 꼭 챙겨가세요! 피팅 시간은 약 2시간 정도 걸렸어요. 샵마다 분위기가 달라서 2~3곳 다녀보시는 걸 추천드려요.',
+    comments:[{user:'최유리', text:'저도 A라인 입었어요! 정말 예쁘죠 ㅎㅎ', date:'2026-04-14'},{user:'이하늘', text:'보정속옷 꿀팁 감사해요!', date:'2026-04-15'}] },
+  { id:3, title:'스팸 광고입니다',            author:'탈퇴계정', date:'2026-04-13', reported:true,  hidden:false,
+    body:'지금 당장 클릭! 웨딩 드레스 80% 할인 이벤트 진행 중. 링크 → http://spam-site.example.com 선착순 100명 특가!!',
+    comments:[] },
+  { id:4, title:'플래너 비용이 얼마나 드나요?', author:'강지훈', date:'2026-04-13', reported:false, hidden:false,
+    body:'웨딩 플래너를 쓰려고 하는데 실제로 비용이 얼마 정도 드는지 궁금해요. 패키지마다 차이가 있을 것 같은데 보통 어느 정도인가요? 플래너 쓰고 나서 좋았던 점, 아쉬웠던 점도 같이 알려주시면 감사하겠습니다!',
+    comments:[{user:'송미래', text:'저는 150만 원짜리 패키지 썼어요. 스케줄 관리가 너무 편했어요.', date:'2026-04-13'}] },
+  { id:5, title:'부적절한 게시물',             author:'박수진', date:'2026-04-12', reported:true,  hidden:false,
+    body:'(부적절한 내용이 포함되어 신고된 게시물입니다.)',
+    comments:[] },
+  { id:6, title:'웨딩 촬영 스팟 공유',         author:'홍길동', date:'2026-04-12', reported:false, hidden:false,
+    body:'서울 웨딩 촬영 스팟 추천 리스트 공유해요!\n1. 경복궁 근처 북촌 한옥마을\n2. 선유도공원 야외 정원\n3. 남산 서울타워 전망대\n4. 청계천 야경 (일몰 후 추천)\n5. 성수동 카페 거리\n각 장소별 시간대 팁도 나눠요!',
+    comments:[{user:'이수아', text:'북촌 강추예요!! 아침 일찍 가면 사람이 없어요', date:'2026-04-12'},{user:'김재원', text:'선유도 공원 진짜 이쁘죠 ㅠㅠ 저도 거기서 찍었어요', date:'2026-04-13'}] },
+  { id:7, title:'욕설 포함 댓글 신고',         author:'익명',    date:'2026-04-11', reported:true,  hidden:false,
+    body:'특정 업체 관련 게시물에 욕설과 비방이 담긴 댓글이 달렸습니다. 해당 댓글 삭제 및 작성자 제재 요청드립니다.',
+    comments:[] },
+];
+
+const CHART_DATA = {
+  weekly:  [
+    {label:'월',val:8},{label:'화',val:14},{label:'수',val:11},{label:'목',val:18},
+    {label:'금',val:22},{label:'토',val:31},{label:'일',val:12}
+  ],
+  monthly: [
+    {label:'1주',val:42},{label:'2주',val:65},{label:'3주',val:58},{label:'4주',val:89}
+  ],
+  yearly:  [
+    {label:'1월',val:98},{label:'2월',val:112},{label:'3월',val:145},{label:'4월',val:178},
+    {label:'5월',val:203},{label:'6월',val:187},{label:'7월',val:165},{label:'8월',val:142},
+    {label:'9월',val:198},{label:'10월',val:215},{label:'11월',val:189},{label:'12월',val:156}
+  ],
+};
+
+let currentChartTab = 'weekly';
+
+function renderParetoChart(tab) {
+  currentChartTab = tab;
+  renderLineChart(CHART_DATA[tab], 'paretoChart');
+}
+
+function switchChartTab(tab, btn) {
+  currentChartTab = tab;
+  document.querySelectorAll('#joinTabRow .chart-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderParetoChart(tab);
+}
+
+/* ══════════════════════════════════
+   대시보드 렌더
+══════════════════════════════════ */
+const TOKEN_DATA = {
+  weekly:  [
+    {label:'월',val:142},{label:'화',val:187},{label:'수',val:163},{label:'목',val:215},
+    {label:'금',val:298},{label:'토',val:334},{label:'일',val:176}
+  ],
+  monthly: [
+    {label:'1주',val:821},{label:'2주',val:1043},{label:'3주',val:968},{label:'4주',val:1287}
+  ],
+  yearly:  [
+    {label:'1월',val:2840},{label:'2월',val:3120},{label:'3월',val:3780},{label:'4월',val:4210},
+    {label:'5월',val:5030},{label:'6월',val:4650},{label:'7월',val:4180},{label:'8월',val:3920},
+    {label:'9월',val:4870},{label:'10월',val:5340},{label:'11월',val:4990},{label:'12월',val:4120}
+  ],
+};
+
+let currentTokenTab = 'weekly';
+
+function renderLineChart(data, targetId) {
+  const n      = data.length;
+  const maxVal = Math.max(...data.map(d => d.val));
+  const isDark = phoneWrapper.classList.contains('dark');
+
+  const W = 280, H = 148;
+  const pT = 20, pB = 22, pL = 14, pR = 10;
+  const cL = pL, cR = W - pR, cW = cR - cL;
+  const cT = pT, cB = H - pB, cH = cB - cT;
+
+  const gridC = isDark ? '#2e2818' : '#efefef';
+  const lblC  = isDark ? '#5a5040' : '#aaa';
+  const valC  = isDark ? '#c0a070' : '#C49050';
+  const lineC = '#D4A96A';
+  const dotBg = isDark ? '#1e1a12' : '#fff';
+
+  const xOf = i => cL + (n === 1 ? cW / 2 : (i / (n - 1)) * cW);
+  const yOf = v => cB - (v / maxVal) * cH;
+
+  const grids = [0, .25, .5, .75, 1].map(p => {
+    const y = (cB - p * cH).toFixed(1);
+    return `<line x1="${cL}" y1="${y}" x2="${cR}" y2="${y}"
+      stroke="${gridC}" stroke-width="0.7" ${p > 0 ? 'stroke-dasharray="3 2"' : ''}/>`;
+  }).join('');
+
+  const pts = data.map((d, i) => ({
+    x: xOf(i).toFixed(1),
+    y: yOf(d.val).toFixed(1),
+    val: d.val, label: d.label,
+  }));
+
+  const areaD = `M${pts[0].x},${cB} ` +
+    pts.map(p => `L${p.x},${p.y}`).join(' ') +
+    ` L${pts[n-1].x},${cB} Z`;
+  const lineD = `M${pts.map(p => `${p.x},${p.y}`).join(' L')}`;
+
+  const fs = n > 8 ? 6 : 7.5;
+  const gradId = 'areaGrad_' + targetId;
+  const elements = pts.map((p, i) => {
+    const showVal = n <= 8 || i % 2 === 0;
+    const vy = (parseFloat(p.y) - 5).toFixed(1);
+    return `
+      ${showVal ? `<text x="${p.x}" y="${vy}" text-anchor="middle" font-size="${fs}" font-weight="700" fill="${valC}">${p.val}</text>` : ''}
+      <circle cx="${p.x}" cy="${p.y}" r="3" fill="${dotBg}" stroke="${lineC}" stroke-width="2"/>
+      <text x="${p.x}" y="${(H - pB + 12).toFixed(1)}" text-anchor="middle" font-size="${fs}" fill="${lblC}">${p.label}</text>`;
+  }).join('');
+
+  document.getElementById(targetId).innerHTML = `
+    <svg width="100%" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+      <defs>
+        <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="${lineC}" stop-opacity="${isDark ? '0.28' : '0.2'}"/>
+          <stop offset="100%" stop-color="${lineC}" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      ${grids}
+      <path d="${areaD}" fill="url(#${gradId})"/>
+      <path d="${lineD}" fill="none" stroke="${lineC}" stroke-width="2.2"
+            stroke-linejoin="round" stroke-linecap="round"/>
+      ${elements}
+    </svg>`;
+}
+
+function switchTokenTab(tab, btn) {
+  currentTokenTab = tab;
+  document.querySelectorAll('#tokenTabRow .chart-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderLineChart(TOKEN_DATA[tab], 'tokenChart');
+}
+
+(function renderDashboard() {
+  renderParetoChart('weekly');
+  renderLineChart(TOKEN_DATA['weekly'], 'tokenChart');
+})();
+
+/* ══════════════════════════════════
+   사용자 관리
+══════════════════════════════════ */
+let currentUserFilter = 'all';
+
+function renderUsers() {
+  const query  = (document.getElementById('userSearch').value || '').toLowerCase();
+  const filtered = USERS.filter(u => {
+    const matchStatus = currentUserFilter === 'all'
+      ? u.status !== 'withdrawn'
+      : u.status === currentUserFilter;
+    const matchQuery  = !query || u.name.includes(query) || u.email.includes(query);
+    return matchStatus && matchQuery;
+  });
+
+  document.getElementById('userList').innerHTML = filtered.length
+    ? filtered.map(u => {
+        if (u.status === 'withdrawn') {
+          return `
+            <div class="list-item" style="opacity:0.6;">
+              <div class="list-avatar" style="filter:grayscale(1);">${u.avatar}</div>
+              <div class="list-info">
+                <div class="list-name" style="text-decoration:line-through;color:#aaa;">${u.name}</div>
+                <div class="list-sub">${u.email} · 탈퇴일 ${u.withdrawnAt}</div>
+              </div>
+              <span class="status-chip" style="background:#f5f5f5;color:#bbb;">탈퇴</span>
+            </div>`;
+        }
+        return `
+          <div class="list-item">
+            <div class="list-avatar">${u.avatar}</div>
+            <div class="list-info">
+              <div class="list-name">${u.name} ${u.partner ? '<span style="font-size:10px;color:#D4A96A;">💑 '+u.partner+'</span>' : ''}</div>
+              <div class="list-sub">${u.email} · ${u.joined}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+              <span class="status-chip ${u.status}">${u.status==='active'?'활성':'정지'}</span>
+              <div style="display:flex;gap:4px;">
+                ${u.status==='active'
+                  ? `<button class="action-btn block" onclick="askUserAction(${u.id},'block')">정지</button>`
+                  : `<button class="action-btn restore" onclick="askUserAction(${u.id},'restore')">해제</button>`}
+                <button class="action-btn delete" onclick="askUserAction(${u.id},'delete')">삭제</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('')
+    : '<div style="padding:24px;text-align:center;font-size:13px;color:#ccc;">검색 결과가 없어요</div>';
+}
+
+function filterUsers() { renderUsers(); }
+function filterUserStatus(status) {
+  currentUserFilter = status;
+  renderUsers();
+}
+
+renderUsers();
+
+/* ── 사용자 액션 모달 ── */
+let pendingUserAction = null;
+const UA_CONFIG = {
+  block:   { icon:'⛔', iconBg:'#fff5f5', iconBorder:'#fdd', title:'계정을 정지할까요?',   desc:'해당 사용자의 앱 접근이 차단됩니다.',        btnText:'정지', btnClass:'btn-danger' },
+  restore: { icon:'✅', iconBg:'#f0fff4', iconBorder:'#b0e0c0', title:'정지를 해제할까요?', desc:'사용자가 다시 앱을 이용할 수 있게 됩니다.', btnText:'해제', btnClass:'btn-primary' },
+  delete:  { icon:'🗑️', iconBg:'#fff5f5', iconBorder:'#fdd', title:'계정을 삭제할까요?',   desc:'삭제된 계정은 복구할 수 없습니다.',           btnText:'삭제', btnClass:'btn-danger' },
+};
+
+function askUserAction(userId, action) {
+  pendingUserAction = { userId, action };
+  const cfg = UA_CONFIG[action];
+  const icon = document.getElementById('uaIcon');
+  icon.textContent = cfg.icon;
+  icon.style.background = cfg.iconBg;
+  icon.style.border = '2px solid ' + cfg.iconBorder;
+  document.getElementById('uaTitle').textContent = cfg.title;
+  document.getElementById('uaDesc').textContent  = cfg.desc;
+  const btn = document.getElementById('uaConfirmBtn');
+  btn.textContent  = cfg.btnText;
+  btn.className    = cfg.btnClass;
+  document.getElementById('userActionModal').classList.add('active');
+}
+
+function confirmUserAction() {
+  if (!pendingUserAction) return;
+  const { userId, action } = pendingUserAction;
+  const u = USERS.find(x => x.id === userId);
+  if (!u) return;
+  if (action === 'block')   u.status = 'blocked';
+  if (action === 'restore') u.status = 'active';
+  if (action === 'delete')  USERS.splice(USERS.indexOf(u), 1);
+  closeModal('userActionModal');
+  renderUsers();
+  showToast(action === 'block' ? '계정을 정지했어요' : action === 'restore' ? '정지를 해제했어요' : '계정을 삭제했어요');
+  pendingUserAction = null;
+}
+
+/* ══════════════════════════════════
+   콘텐츠 관리
+══════════════════════════════════ */
+let currentContentFilter = 'all';
+
+function renderContent() {
+  const filtered = POSTS.filter(p =>
+    currentContentFilter === 'all' || (currentContentFilter === 'reported' && p.reported)
+  );
+
+  document.getElementById('contentList').innerHTML = filtered.length
+    ? filtered.map(p => `
+      <div class="list-item" id="post_${p.id}" style="${p.hidden ? 'opacity:0.5;' : ''}">
+        <div class="list-info" style="cursor:pointer;" onclick="viewPost(${p.id})">
+          <div class="list-name" style="display:flex;align-items:center;gap:6px;">
+            ${p.reported ? '<span style="font-size:10px;background:#fff3e0;color:#f39c12;border-radius:4px;padding:1px 5px;font-weight:700;">신고</span>' : ''}
+            ${p.hidden ? '<span style="font-size:10px;background:#f5f5f5;color:#aaa;border-radius:4px;padding:1px 5px;font-weight:700;">숨김</span>' : ''}
+            ${p.title}
+          </div>
+          <div class="list-sub">${p.author} · ${p.date}</div>
+        </div>
+        <div style="display:flex;gap:4px;flex-shrink:0;">
+          <button class="action-btn hide" onclick="toggleHidePost(${p.id})">${p.hidden ? '복원' : '숨김'}</button>
+          <button class="action-btn delete" onclick="deletePost(${p.id})">삭제</button>
+        </div>
+      </div>`).join('')
+    : '<div style="padding:24px;text-align:center;font-size:13px;color:#ccc;">게시글이 없어요</div>';
+}
+
+function filterContent(type, btn) {
+  currentContentFilter = type;
+  document.querySelectorAll('#panel-content .sub-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderContent();
+}
+
+function toggleHidePost(id) {
+  const p = POSTS.find(x => x.id === id);
+  if (p) { p.hidden = !p.hidden; renderContent(); showToast(p.hidden ? '게시글을 숨겼어요' : '게시글을 복원했어요'); }
+}
+function deletePost(id) {
+  POSTS.splice(POSTS.findIndex(x => x.id === id), 1);
+  const reported = POSTS.filter(p => p.reported).length;
+  document.getElementById('reportBadge').textContent = reported;
+  renderContent();
+  showToast('게시글을 삭제했어요');
+}
+
+/* ── 게시글 상세 모달 ── */
+let currentPostId = null;
+
+function viewPost(id) {
+  const p = POSTS.find(x => x.id === id);
+  if (!p) return;
+  currentPostId = id;
+
+  // 뱃지
+  const badges = [];
+  if (p.reported) badges.push('<span class="pd-badge-report">신고</span>');
+  if (p.hidden)   badges.push('<span class="pd-badge-hidden">숨김</span>');
+  document.getElementById('pdBadges').innerHTML = badges.join('');
+
+  document.getElementById('pdTitle').textContent = p.title;
+  document.getElementById('pdMeta').textContent  = `${p.author} · ${p.date}`;
+  document.getElementById('pdBody').textContent  = p.body || '(내용 없음)';
+
+  // 댓글
+  const cs = p.comments || [];
+  document.getElementById('pdCommentsSection').innerHTML = cs.length
+    ? `<div class="pd-comments-title">💬 댓글 ${cs.length}개</div>` +
+      cs.map(c => `
+        <div class="pd-comment-item">
+          <div class="pd-comment-user">${c.user}</div>
+          <div class="pd-comment-text">${c.text}</div>
+          <div class="pd-comment-date">${c.date}</div>
+        </div>`).join('')
+    : '<div class="pd-comments-title" style="color:#ccc;">댓글 없음</div>';
+
+  // 숨김/복원 버튼
+  document.getElementById('pdHideBtn').textContent = p.hidden ? '복원' : '숨김';
+
+  document.getElementById('postDetailModal').classList.add('active');
+}
+
+function pdToggleHide() {
+  const p = POSTS.find(x => x.id === currentPostId);
+  if (!p) return;
+  p.hidden = !p.hidden;
+  document.getElementById('pdHideBtn').textContent = p.hidden ? '복원' : '숨김';
+  renderContent();
+  showToast(p.hidden ? '게시글을 숨겼어요' : '게시글을 복원했어요');
+}
+
+function pdDelete() {
+  deletePost(currentPostId);
+  closeModal('postDetailModal');
+}
+
+renderContent();
+
+/* ══════════════════════════════════
+   화면 구성 편집기
+══════════════════════════════════ */
+const SCREENS = {
+  '홈': [
+    { id:'hero',      name:'히어로 카드',      icon:'💍', desc:'D-DAY 및 커플 정보 카드', visible:true },
+    { id:'stats',     name:'현황 카드',         icon:'📊', desc:'진행률·예산 링 요약',      visible:true },
+    { id:'timeline',  name:'웨딩 타임라인',     icon:'📋', desc:'로드맵 미리보기',          visible:true },
+    { id:'menu',      name:'메뉴 바로가기',     icon:'🗂️', desc:'6개 메뉴 그리드',         visible:true },
+    { id:'vendor',    name:'업체 둘러보기',     icon:'🏢', desc:'업체 카테고리 카드',       visible:true },
+    { id:'community', name:'커뮤니티 인기글',   icon:'💬', desc:'인기글 TOP 5',            visible:true },
+  ],
+  '로드맵': [
+    { id:'rm_progress', name:'진행률 카드',  icon:'📈', desc:'전체 완료율 요약',       visible:true },
+    { id:'rm_timeline', name:'타임라인 목록',icon:'📋', desc:'월별 카드 목록',         visible:true },
+  ],
+  '예산': [
+    { id:'bg_summary', name:'예산 요약 카드', icon:'💰', desc:'총 예산·사용 현황',     visible:true },
+    { id:'bg_list',    name:'카테고리 예산',  icon:'📂', desc:'카테고리별 상세 목록',  visible:true },
+  ],
+  '일정': [
+    { id:'sc_calendar', name:'캘린더 뷰', icon:'📅', desc:'월/주/일 달력',          visible:true },
+    { id:'sc_list',     name:'일정 목록', icon:'📝', desc:'선택된 날 이벤트 목록',  visible:true },
+  ],
+  '커뮤니티': [
+    { id:'cm_banner',  name:'배너/공지', icon:'📢', desc:'공지사항 배너',           visible:true },
+    { id:'cm_popular', name:'인기글',   icon:'🔥', desc:'인기 게시글 목록',        visible:true },
+    { id:'cm_latest',  name:'최신글',   icon:'🆕', desc:'최신 게시글 피드',        visible:true },
+    { id:'cm_filter',  name:'카테고리 필터', icon:'🗂️', desc:'주제별 필터 탭',    visible:true },
+  ],
+  '하객관리': [
+    { id:'gs_summary', name:'하객 현황', icon:'👥', desc:'초대·확정·미확정 요약', visible:true },
+    { id:'gs_list',    name:'하객 목록', icon:'📋', desc:'하객 이름·연락처 목록', visible:true },
+    { id:'gs_group',   name:'그룹 분류', icon:'🗂️', desc:'가족/친구/직장 그룹',  visible:true },
+    { id:'gs_gift',    name:'축의금 관리', icon:'💰', desc:'축의금 금액·메모',     visible:true },
+  ],
+  '업체둘러보기': [
+    { id:'vd_header',  name:'검색 바', icon:'🔍', desc:'업체 검색 입력', visible:true },
+    { id:'vd_category_ceremony', name:'예식장', icon:'💒', desc:'예식장 카테고리 카드', visible:true },
+    { id:'vd_category_studio',   name:'스튜디오', icon:'📷', desc:'스튜디오 카테고리', visible:true },
+    { id:'vd_category_dress',    name:'드레스', icon:'👗', desc:'드레스 카테고리',   visible:true },
+    { id:'vd_category_makeup',   name:'메이크업', icon:'💄', desc:'메이크업 카테고리', visible:true },
+    { id:'vd_category_dvd',      name:'DVD', icon:'🎬', desc:'DVD·영상 카테고리',  visible:true },
+    { id:'vd_category_planner',  name:'플래너', icon:'📋', desc:'플래너 카테고리',  visible:true },
+  ],
+  '식순': [
+    { id:'ce_header',   name:'식순 헤더', icon:'💒', desc:'예식 제목·날짜 표시',  visible:true },
+    { id:'ce_timeline', name:'식순 타임라인', icon:'📋', desc:'전체 식순 순서',    visible:true },
+    { id:'ce_music',    name:'음악 설정', icon:'🎵', desc:'입장곡·축가 설정',     visible:true },
+    { id:'ce_host',     name:'진행자/주례', icon:'🎤', desc:'진행자·주례자 정보', visible:true },
+    { id:'ce_note',     name:'특이사항 메모', icon:'📝', desc:'기타 메모 영역',   visible:true },
+  ],
+};
+
+// localStorage 복원
+let layoutData = {};
+try {
+  const saved = localStorage.getItem('weddly-admin-layout');
+  if (saved) layoutData = JSON.parse(saved);
+} catch(e) {}
+
+// 저장된 순서/가시성 적용
+Object.keys(SCREENS).forEach(screen => {
+  if (layoutData[screen]) {
+    const saved = layoutData[screen];
+    SCREENS[screen].sort((a,b) => {
+      const ia = saved.findIndex(s => s.id === a.id);
+      const ib = saved.findIndex(s => s.id === b.id);
+      return (ia<0?999:ia) - (ib<0?999:ib);
+    });
+    SCREENS[screen].forEach(item => {
+      const s = saved.find(s => s.id === item.id);
+      if (s) item.visible = s.visible;
+    });
+  }
+});
+
+let currentScreen = '홈';
+
+// 화면 선택 셀렉트 렌더
+document.getElementById('screenSelector').innerHTML = Object.keys(SCREENS).map(s =>
+  `<option value="${s}" ${s === currentScreen ? 'selected' : ''}>${s}</option>`
+).join('');
+
+function selectScreen(name) {
+  currentScreen = name;
+  renderSectionList();
+}
+
+function renderSectionList() {
+  const items = SCREENS[currentScreen];
+  document.getElementById('sectionList').innerHTML = items.map((item, idx) => `
+    <div class="section-item ${item.visible ? '' : 'hidden-section'}"
+         draggable="true"
+         data-idx="${idx}"
+         ondragstart="onDragStart(event,${idx})"
+         ondragover="onDragOver(event)"
+         ondrop="onDrop(event,${idx})"
+         ondragleave="onDragLeave(event)"
+         ondragend="onDragEnd(event)">
+      <span class="drag-handle">⠿</span>
+      <div class="section-item-icon" style="background:${item.visible?'#fff8ef':'#f5f5f5'};">${item.icon}</div>
+      <div class="section-item-info">
+        <div class="section-item-name">${item.name}</div>
+        <div class="section-item-desc">${item.desc}</div>
+      </div>
+      <label class="switch-sm" onclick="event.stopPropagation()">
+        <input type="checkbox" ${item.visible ? 'checked' : ''}
+               onchange="toggleSection(${idx}, this.checked)" />
+        <span class="switch-sm-slider"></span>
+      </label>
+    </div>`).join('');
+}
+
+renderSectionList();
+
+function toggleSection(idx, visible) {
+  SCREENS[currentScreen][idx].visible = visible;
+  const el = document.querySelector(`[data-idx="${idx}"]`);
+  if (el) el.classList.toggle('hidden-section', !visible);
+}
+
+// 드래그 앤 드롭
+let dragSrcIdx = null;
+
+function onDragStart(e, idx) {
+  dragSrcIdx = idx;
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onDragOver(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('drag-over');
+  e.dataTransfer.dropEffect = 'move';
+}
+function onDragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+function onDrop(e, targetIdx) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
+  const arr = SCREENS[currentScreen];
+  const [moved] = arr.splice(dragSrcIdx, 1);
+  arr.splice(targetIdx, 0, moved);
+  renderSectionList();
+}
+function onDragEnd(e) {
+  e.currentTarget.classList.remove('dragging');
+  document.querySelectorAll('.section-item').forEach(el => el.classList.remove('drag-over'));
+  dragSrcIdx = null;
+}
+
+function saveLayout() {
+  Object.keys(SCREENS).forEach(screen => {
+    layoutData[screen] = SCREENS[screen].map(({ id, visible }) => ({ id, visible }));
+  });
+  localStorage.setItem('weddly-admin-layout', JSON.stringify(layoutData));
+  showToast('화면 구성이 저장됐어요 💾');
+}
+
+/* ══════════════════════════════════
+   이력 관리
+══════════════════════════════════ */
+const LOGIN_LOGS = [
+  { user:'홍길동', time:'2026-04-17 09:12', ip:'192.168.1.10', result:'success' },
+  { user:'이민준', time:'2026-04-17 08:55', ip:'10.0.0.5',     result:'success' },
+  { user:'박수진', time:'2026-04-17 08:30', ip:'172.16.0.8',   result:'fail'    },
+  { user:'박수진', time:'2026-04-17 08:30', ip:'172.16.0.8',   result:'fail'    },
+  { user:'김영희', time:'2026-04-16 22:40', ip:'192.168.1.11', result:'success' },
+  { user:'최현우', time:'2026-04-16 21:10', ip:'10.0.0.9',     result:'success' },
+];
+const PWRESET_LOGS = [
+  { user:'이민준', time:'2026-04-15 14:22', handled:'이메일 발송', result:'success' },
+  { user:'강지훈', time:'2026-04-14 09:01', handled:'관리자 처리', result:'success' },
+  { user:'윤서연', time:'2026-04-10 17:35', handled:'이메일 발송', result:'fail'    },
+];
+const ACCOUNT_LOGS = [
+  { target:'박수진', action:'정지', by:'admin', time:'2026-04-17 10:00' },
+  { target:'오태현', action:'탈퇴', by:'본인',  time:'2026-04-01 15:30' },
+  { target:'임소연', action:'탈퇴', by:'본인',  time:'2026-03-28 11:22' },
+  { target:'강지훈', action:'가입', by:'본인',  time:'2026-04-10 08:12' },
+  { target:'윤서연', action:'가입', by:'본인',  time:'2026-04-14 13:00' },
+];
+const AUDIT_LOGS = [
+  { user:'홍길동', action:'로드맵 수정',   target:'기본 로드맵',      time:'2026-04-17 09:30',
+    ip:'192.168.1.10', device:'iPhone 15', browser:'Safari 17', status:'success',
+    desc:'로드맵 항목 "스드메 예약"의 날짜를 5월 3일로 수정하였습니다.' },
+  { user:'김영희', action:'예산 등록',     target:'예식비 800만원',   time:'2026-04-17 09:28',
+    ip:'210.94.32.77',  device:'Galaxy S24', browser:'Chrome 123', status:'success',
+    desc:'예산 항목 "예식비"를 8,000,000원으로 신규 등록하였습니다.' },
+  { user:'최현우', action:'하객 추가',     target:'김철수',           time:'2026-04-17 08:58',
+    ip:'192.168.0.55',  device:'iPad Pro', browser:'Safari 17', status:'success',
+    desc:'하객 "김철수 (신랑측 직장동료)" 를 하객 목록에 추가하였습니다.' },
+  { user:'이민준', action:'커뮤니티 작성', target:'강남 웨딩홀 추천', time:'2026-04-17 08:45',
+    ip:'172.16.5.22',   device:'Windows 11', browser:'Edge 123', status:'success',
+    desc:'자유게시판에 "강남 웨딩홀 추천해주세요" 게시글을 작성하였습니다.' },
+  { user:'강지훈', action:'일정 등록',     target:'드레스 피팅',      time:'2026-04-16 22:10',
+    ip:'10.0.0.34',     device:'iPhone 14', browser:'Safari 16', status:'success',
+    desc:'2026년 5월 10일 오후 2시 "드레스 피팅" 일정을 등록하였습니다.' },
+  { user:'박수진', action:'비밀번호 변경', target:'본인 계정',         time:'2026-04-16 21:05',
+    ip:'61.78.44.101',  device:'MacBook Air', browser:'Chrome 123', status:'fail',
+    desc:'비밀번호 변경 시도 중 인증 실패로 처리되었습니다. (3회 시도)' },
+  { user:'오태현', action:'로그아웃',      target:'—',               time:'2026-04-16 18:30',
+    ip:'192.168.1.44',  device:'Galaxy Tab S9', browser:'Samsung Internet', status:'success',
+    desc:'사용자가 수동으로 로그아웃하였습니다.' },
+];
+
+(function renderHistoryLogs() {
+  document.getElementById('loginLogBody').innerHTML = LOGIN_LOGS.map(l => `
+    <tr>
+      <td>${l.user}</td><td style="white-space:nowrap;">${l.time}</td><td>${l.ip}</td>
+      <td><span class="log-result ${l.result}">${l.result==='success'?'성공':'실패'}</span></td>
+    </tr>`).join('');
+
+  document.getElementById('pwresetLogBody').innerHTML = PWRESET_LOGS.map(l => `
+    <tr>
+      <td>${l.user}</td><td style="white-space:nowrap;">${l.time}</td><td>${l.handled}</td>
+      <td><span class="log-result ${l.result}">${l.result==='success'?'완료':'실패'}</span></td>
+    </tr>`).join('');
+
+  document.getElementById('accountLogBody').innerHTML = ACCOUNT_LOGS.map(l => `
+    <tr>
+      <td>${l.target}</td>
+      <td><span class="log-action">${l.action}</span></td>
+      <td>${l.by}</td><td style="white-space:nowrap;">${l.time}</td>
+    </tr>`).join('');
+
+  document.getElementById('auditLogBody').innerHTML = AUDIT_LOGS.map((l, i) => `
+    <tr style="cursor:pointer;" onclick="viewAuditLog(${i})">
+      <td>${l.user}</td>
+      <td><span class="log-action">${l.action}</span></td>
+      <td style="max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${l.target}</td>
+      <td style="white-space:nowrap;">${l.time}</td>
+    </tr>`).join('');
+})();
+
+function viewAuditLog(idx) {
+  const l = AUDIT_LOGS[idx];
+  if (!l) return;
+  document.getElementById('adDesc').textContent    = l.desc;
+  document.getElementById('adUser').textContent    = l.user;
+  document.getElementById('adAction').textContent  = l.action;
+  document.getElementById('adTarget').textContent  = l.target;
+  document.getElementById('adTime').textContent    = l.time;
+  document.getElementById('adIp').textContent      = l.ip;
+  document.getElementById('adDevice').textContent  = l.device;
+  document.getElementById('adBrowser').textContent = l.browser;
+  document.getElementById('adStatus').innerHTML =
+    `<span class="audit-status-chip ${l.status}">${l.status === 'success' ? '성공' : '실패'}</span>`;
+  document.getElementById('auditDetailModal').classList.add('active');
+}
+
+/* ══════════════════════════════════
+   업체 등록 요청
+══════════════════════════════════ */
+const VENDOR_REQUESTS = [
+  { id:1, name:'더블유 웨딩홀', category:'웨딩홀', owner:'김대표', phone:'010-1234-5678',
+    email:'contact@wwedding.com', address:'서울시 강남구 역삼동 123', bizNo:'123-45-67890',
+    status:'pending', date:'2026-04-15',
+    desc:'강남 중심가 위치, 최대 300명 수용 가능한 웨딩홀입니다. 전용 주차장 100대 완비.',
+    images:['홀 전경', '연회장', '대기실'] },
+  { id:2, name:'블로썸 스튜디오', category:'웨딩스튜디오', owner:'박스튜디', phone:'010-9876-5432',
+    email:'blossom@studio.com', address:'서울시 마포구 홍대입구 45', bizNo:'234-56-78901',
+    status:'pending', date:'2026-04-16',
+    desc:'홍대 감성 웨딩 스튜디오. 야외 촬영 포함 패키지 전문. 드레스 협력 업체 보유.',
+    images:['스튜디오 내부', '야외 공간'] },
+  { id:3, name:'로즈 드레스샵', category:'드레스', owner:'이사장', phone:'010-5555-6666',
+    email:'rose@dress.com', address:'서울시 서초구 잠원동 88', bizNo:'345-67-89012',
+    status:'approved', date:'2026-04-10',
+    desc:'200여 가지 드레스 보유. 국내외 최신 컬렉션 구비. 피팅 예약제 운영.',
+    images:['매장 전경', '드레스 진열'] },
+  { id:4, name:'썬라이트 촬영팀', category:'스냅사진', owner:'정기사', phone:'010-7777-8888',
+    email:'sun@snap.com', address:'서울시 용산구 이태원 22', bizNo:'456-78-90123',
+    status:'rejected', date:'2026-04-12',
+    desc:'웨딩 스냅 전문 팀. 야외/실내 모두 가능. 2인 작가 동시 촬영.',
+    images:['포트폴리오 샘플'] },
+  { id:5, name:'미라클 플로리스트', category:'꽃장식', owner:'홍꽃집', phone:'010-3333-4444',
+    email:'miracle@flower.com', address:'서울시 종로구 인사동 55', bizNo:'567-89-01234',
+    status:'pending', date:'2026-04-17',
+    desc:'웨딩 부케 및 장식 전문. 당일 배송 가능. 시즌별 특가 패키지 운영.',
+    images:['부케 샘플', '테이블 장식', '아치 장식'] },
+];
+
+const STATUS_LABEL = { pending:'대기중', approved:'승인', rejected:'반려' };
+
+function renderVendorList() {
+  const keyword = (document.getElementById('vendorSearch').value || '').toLowerCase();
+  const filter  = document.getElementById('vendorStatusFilter').value;
+  const list    = VENDOR_REQUESTS.filter(v =>
+    (filter === 'all' || v.status === filter) &&
+    (v.name.toLowerCase().includes(keyword) || v.owner.includes(keyword))
+  );
+
+  document.getElementById('vendorList').innerHTML = list.length ? list.map(v => `
+    <div class="list-card" style="margin-bottom:8px;">
+      <div class="list-item" style="flex-wrap:wrap;gap:6px;">
+        <div class="list-info" style="min-width:0;flex:1;">
+          <div class="list-name" style="display:flex;align-items:center;gap:6px;">
+            ${v.name}
+            <span class="status-chip ${v.status}" style="font-size:10px;">${STATUS_LABEL[v.status]}</span>
+          </div>
+          <div class="list-sub">${v.category} · ${v.owner} · ${v.date}</div>
+        </div>
+        <div style="display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap;">
+          <button class="action-btn hide" onclick="viewVendor(${v.id})">상세 조회</button>
+          ${v.status === 'pending' ? `
+            <button class="action-btn" style="background:#eafaf1;color:#27ae60;border-color:#b7e4c7;" onclick="updateVendorStatus(${v.id},'approved')">승인</button>
+            <button class="action-btn delete" onclick="updateVendorStatus(${v.id},'rejected')">반려</button>
+          ` : ''}
+        </div>
+      </div>
+    </div>`).join('')
+  : '<div style="padding:32px;text-align:center;font-size:13px;color:#ccc;">요청 내역이 없어요</div>';
+}
+
+function viewVendor(id) {
+  const v = VENDOR_REQUESTS.find(x => x.id === id);
+  if (!v) return;
+
+  const statusColors = { pending:'#fff8ef;color:#C49050', approved:'#eafaf1;color:#27ae60', rejected:'#fdecea;color:#e05555' };
+  document.getElementById('vdBadge').innerHTML =
+    `<span class="pd-badge-report" style="background:${statusColors[v.status].split(';')[0].split(':')[1]};color:${statusColors[v.status].split('color:')[1]};">${STATUS_LABEL[v.status]}</span>`;
+  document.getElementById('vdName').textContent    = v.name;
+  document.getElementById('vdMeta').textContent    = `${v.category} · 신청일 ${v.date}`;
+  document.getElementById('vdDesc').textContent    = v.desc;
+  document.getElementById('vdOwner').textContent   = v.owner;
+  document.getElementById('vdPhone').textContent   = v.phone;
+  document.getElementById('vdEmail').textContent   = v.email;
+  document.getElementById('vdBizNo').textContent   = v.bizNo;
+  document.getElementById('vdAddress').textContent = v.address;
+  document.getElementById('vdCategory').textContent= v.category;
+  document.getElementById('vdImages').innerHTML    = v.images.map(img =>
+    `<span style="display:inline-block;background:#f5f5f5;border-radius:6px;padding:2px 7px;font-size:10px;margin:2px;">${img}</span>`
+  ).join('');
+
+  const footer = document.getElementById('vdFooter');
+  footer.innerHTML = v.status === 'pending'
+    ? `<button class="action-btn" style="flex:1;padding:10px;background:#eafaf1;color:#27ae60;border-color:#b7e4c7;font-size:12px;" onclick="updateVendorStatus(${v.id},'approved');closeModal('vendorDetailModal')">승인</button>
+       <button class="action-btn delete" style="flex:1;padding:10px;font-size:12px;" onclick="updateVendorStatus(${v.id},'rejected');closeModal('vendorDetailModal')">반려</button>
+       <button class="btn-cancel" style="flex:1;padding:10px;" onclick="closeModal('vendorDetailModal')">닫기</button>`
+    : `<button class="btn-cancel" style="width:100%;padding:11px;" onclick="closeModal('vendorDetailModal')">닫기</button>`;
+
+  document.getElementById('vendorDetailModal').classList.add('active');
+}
+
+function updateVendorStatus(id, status) {
+  const v = VENDOR_REQUESTS.find(x => x.id === id);
+  if (!v) return;
+  v.status = status;
+  renderVendorList();
+  showToast(status === 'approved' ? `${v.name} 승인 완료 ✅` : `${v.name} 반려 처리됐어요`);
+}
+
+renderVendorList();
+
+function switchHistoryTab(tab) {
+  document.querySelectorAll('#panel-history .history-sub').forEach(el => el.style.display = 'none');
+  document.getElementById('history-' + tab).style.display = 'block';
+}
+
+/* ══════════════════════════════════
+   정책 패널
+══════════════════════════════════ */
+function switchPolicy(val) {
+  document.querySelectorAll('#panel-policy .policy-card').forEach(el => el.style.display = 'none');
+  document.getElementById(val).style.display = 'block';
+}
+
+function savePolicy(name) {
+  showToast(name + ' 정책이 저장됐어요 ✅');
+}
+
+function toggleSalt(enabled) {
+  const row = document.getElementById('saltSelectRow');
+  row.style.opacity       = enabled ? '1'    : '0.4';
+  row.style.pointerEvents = enabled ? 'auto' : 'none';
+}
+
+/* ══════════════════════════════════
+   금칙어 정책
+══════════════════════════════════ */
+let BANNED_WORDS = [];
+try {
+  const saved = localStorage.getItem('weddly-banned-words');
+  if (saved) BANNED_WORDS = JSON.parse(saved);
+} catch(e) {}
+
+function renderBannedChips() {
+  const wrap  = document.getElementById('bannedChipWrap');
+  const empty = document.getElementById('bannedEmpty');
+  if (!BANNED_WORDS.length) {
+    wrap.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  wrap.innerHTML = BANNED_WORDS.map((w, i) => `
+    <div class="banned-chip">
+      ${w}
+      <button class="banned-chip-del" onclick="removeBannedWord(${i})">✕</button>
+    </div>`).join('');
+}
+
+function addBannedWord() {
+  const input = document.getElementById('bannedWordInput');
+  const word  = input.value.trim();
+  if (!word) return;
+  if (BANNED_WORDS.includes(word)) { showToast('이미 등록된 문구예요'); return; }
+  BANNED_WORDS.push(word);
+  input.value = '';
+  renderBannedChips();
+}
+
+function removeBannedWord(idx) {
+  BANNED_WORDS.splice(idx, 1);
+  renderBannedChips();
+}
+
+function saveBannedWords() {
+  try { localStorage.setItem('weddly-banned-words', JSON.stringify(BANNED_WORDS)); } catch(e) {}
+  showToast('금칙어 목록이 저장됐어요 ✅');
+}
+
+renderBannedChips();
+
+/* ══════════════════════════════════
+   메뉴 관리
+══════════════════════════════════ */
+let MENUS = [
+  { id:'m_roadmap',   name:'로드맵',     icon:'💍', path:'roadmap.html',    visible:true },
+  { id:'m_budget',    name:'예산 관리',  icon:'💰', path:'budget.html',     visible:true },
+  { id:'m_schedule',  name:'일정',       icon:'📅', path:'schedule.html',   visible:true },
+  { id:'m_guest',     name:'하객 관리',  icon:'👥', path:'guest.html',      visible:true },
+  { id:'m_vendor',    name:'업체 둘러보기', icon:'🏢', path:'vendor.html',  visible:true },
+  { id:'m_ceremony',  name:'식순',       icon:'💒', path:'ceremony_order.html', visible:true },
+  { id:'m_memo',      name:'메모',       icon:'📝', path:'memo.html',       visible:true },
+  { id:'m_community', name:'커뮤니티',   icon:'💬', path:'community.html',  visible:true },
+];
+
+try {
+  const savedMenus = localStorage.getItem('weddly-admin-menus');
+  if (savedMenus) {
+    const parsed = JSON.parse(savedMenus);
+    MENUS.sort((a,b) => {
+      const ia = parsed.findIndex(m => m.id === a.id);
+      const ib = parsed.findIndex(m => m.id === b.id);
+      return (ia<0?999:ia) - (ib<0?999:ib);
+    });
+    MENUS.forEach(m => {
+      const s = parsed.find(p => p.id === m.id);
+      if (s) m.visible = s.visible;
+    });
+  }
+} catch(e) {}
+
+function renderMenuList() {
+  document.getElementById('menuItemList').innerHTML = MENUS.map((m, idx) => `
+    <div class="menu-item ${m.visible ? '' : 'hidden-menu'}"
+         draggable="true" data-midx="${idx}"
+         ondragstart="onMenuDragStart(event,${idx})"
+         ondragover="onMenuDragOver(event)"
+         ondrop="onMenuDrop(event,${idx})"
+         ondragleave="onMenuDragLeave(event)"
+         ondragend="onMenuDragEnd(event)">
+      <span class="drag-handle">⠿</span>
+      <div class="menu-item-icon" style="background:${m.visible?'#fff8ef':'#f5f5f5'};">${m.icon}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="menu-item-name">${m.name}</div>
+        <div class="menu-item-path">${m.path}</div>
+      </div>
+      <label class="switch-sm" onclick="event.stopPropagation()">
+        <input type="checkbox" ${m.visible ? 'checked' : ''}
+               onchange="toggleMenu(${idx}, this.checked)" />
+        <span class="switch-sm-slider"></span>
+      </label>
+    </div>`).join('');
+}
+
+renderMenuList();
+
+function toggleMenu(idx, visible) {
+  MENUS[idx].visible = visible;
+  const el = document.querySelector(`[data-midx="${idx}"]`);
+  if (el) el.classList.toggle('hidden-menu', !visible);
+}
+
+let menuDragSrc = null;
+function onMenuDragStart(e, idx) { menuDragSrc = idx; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+function onMenuDragOver(e)       { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function onMenuDragLeave(e)      { e.currentTarget.classList.remove('drag-over'); }
+function onMenuDrop(e, targetIdx) {
+  e.preventDefault(); e.currentTarget.classList.remove('drag-over');
+  if (menuDragSrc === null || menuDragSrc === targetIdx) return;
+  const [moved] = MENUS.splice(menuDragSrc, 1);
+  MENUS.splice(targetIdx, 0, moved);
+  renderMenuList();
+}
+function onMenuDragEnd(e) {
+  e.currentTarget.classList.remove('dragging');
+  document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('drag-over'));
+  menuDragSrc = null;
+}
+
+function saveMenuLayout() {
+  localStorage.setItem('weddly-admin-menus', JSON.stringify(MENUS.map(({id, visible}) => ({id, visible}))));
+  showToast('메뉴 구성이 저장됐어요 💾');
+}
+
+/* ══════════════════════════════════
+   앱 설정
+══════════════════════════════════ */
+function onMaintenanceToggle() {
+  const on = document.getElementById('maintenanceToggle').checked;
+  document.getElementById('maintenanceAlert').classList.toggle('show', on);
+  showToast(on ? '⚠️ 점검 모드가 활성화됐어요' : '점검 모드가 해제됐어요');
+}
+
+function saveNotice() {
+  const text = document.getElementById('noticeText').value.trim();
+  if (!text) { showToast('공지 내용을 입력해주세요'); return; }
+  localStorage.setItem('weddly-notice', text);
+  showToast('공지사항이 저장됐어요 📢');
+}
+
+function sendPush() {
+  const title = document.getElementById('pushTitle').value.trim();
+  const body  = document.getElementById('pushBody').value.trim();
+  if (!title || !body) { showToast('제목과 내용을 모두 입력해주세요'); return; }
+  showToast('전체 푸시 알림을 발송했어요 📲');
+  document.getElementById('pushTitle').value = '';
+  document.getElementById('pushBody').value  = '';
+}
+
+/* ══════════════════════════════════
+   공통
+══════════════════════════════════ */
+function showLogoutConfirm() { document.getElementById('logoutModal').classList.add('active'); }
+function closeModal(id)      { document.getElementById(id).classList.remove('active'); }
+function doLogout()          { closeModal('logoutModal'); location.href = 'login.html'; }
+
+document.querySelectorAll('.modal-overlay').forEach(overlay =>
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('active'); })
+);
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// 저장된 공지 복원
+const savedNotice = localStorage.getItem('weddly-notice');
+if (savedNotice) document.getElementById('noticeText').value = savedNotice;
+</script>
+</body>
+</html>

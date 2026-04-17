@@ -524,6 +524,13 @@
       const input = document.getElementById('commentInput');
       const text = input.value.trim();
       if (!text) return;
+
+      try {
+        const banned = JSON.parse(localStorage.getItem('weddly-banned-words') || '[]');
+        const found  = banned.find(w => w && text.toLowerCase().includes(w.toLowerCase()));
+        if (found) { alert('부적절한 문구를 사용하였습니다.'); return; }
+      } catch(e) {}
+
       comments.push({
         avatar:'🙋', avatarBg:'#fff8ef',
         author:'나', date:'방금',

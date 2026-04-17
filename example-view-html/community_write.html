@@ -405,6 +405,13 @@
     /* ════════════════════════════════════
        게시하기
     ════════════════════════════════════ */
+    function checkBannedWords(text) {
+      try {
+        const list = JSON.parse(localStorage.getItem('weddly-banned-words') || '[]');
+        return list.find(w => w && text.toLowerCase().includes(w.toLowerCase())) || null;
+      } catch(e) { return null; }
+    }
+
     function submitWrite() {
       const cfg   = TAB_CONFIG[activeBoard];
       const title = document.getElementById('wfTitle').value.trim();
@@ -414,6 +421,11 @@
       if (cfg.writeSubCats.length > 0 && !activeSubCat) { alert('세부 유형을 선택해주세요.'); return; }
       if (!title) { alert('제목을 입력해주세요.'); return; }
       if (!body)  { alert('내용을 입력해주세요.'); return; }
+
+      if (checkBannedWords(title + ' ' + body)) {
+        alert('부적절한 문구를 사용하였습니다.');
+        return;
+      }
 
       alert(`"${title}" 게시글이 등록되었습니다!\n(실제 연동 예정)`);
       location.href = 'community.html?tab=' + activeBoard;

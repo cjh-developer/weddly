@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weddly - 설정</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { align-items: flex-start; }
+
+    .phone-wrapper {
+      height: 844px;
+      min-height: unset;
+      position: relative;
+    }
+
+    .phone-screen {
+      padding: 0 0 84px;
+      min-height: unset;
+      height: calc(844px - 30px);
+      overflow-y: auto;
+      display: block;
+    }
+
+    .phone-screen::-webkit-scrollbar { width: 4px; }
+    .phone-screen::-webkit-scrollbar-track { background: transparent; }
+    .phone-screen::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #D4A96A, #C49050);
+      border-radius: 4px;
+    }
+
+    /* ════════════ 헤더 ════════════ */
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 14px;
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .main-logo {
+      font-size: 24px;
+      font-weight: 800;
+      font-style: italic;
+      color: #D4A96A;
+      letter-spacing: -0.5px;
+    }
+
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    .icon-btn {
+      width: 38px; height: 38px; border-radius: 12px;
+      background: #f8f8f8; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #666; transition: background 0.15s, color 0.15s; position: relative;
+    }
+    .icon-btn:hover { background: #f0e8d8; color: #D4A96A; }
+
+    .dark-toggle-btn .icon-sun  { display: none; }
+    .dark-toggle-btn .icon-moon { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-moon { display: none; }
+    .phone-wrapper.dark .dark-toggle-btn .icon-sun  { display: block; }
+    .phone-wrapper.dark .dark-toggle-btn { background: #2e2616; color: #D4A96A; }
+    .phone-wrapper.dark .dark-toggle-btn:hover { background: #3a3020; }
+
+    /* ════════════ 콘텐츠 래퍼 ════════════ */
+    .settings-content { padding: 0 20px; }
+
+    /* ════════════ 프로필 요약 카드 ════════════ */
+    .profile-summary-card {
+      margin: 16px 0 0;
+      background: linear-gradient(130deg, #18110a 0%, #33210a 50%, #a8721e 100%);
+      border-radius: 20px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .profile-summary-card::before {
+      content: '';
+      position: absolute; top: -30px; right: -20px;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: rgba(212,169,106,0.12);
+    }
+    .profile-summary-card:hover { opacity: 0.92; }
+
+    .ps-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(212,169,106,0.18);
+      border: 2px solid rgba(212,169,106,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0; position: relative; z-index: 1;
+    }
+    .ps-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
+    .ps-name { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 3px; }
+    .ps-sub { font-size: 12px; color: rgba(255,255,255,0.5); }
+    .ps-dday {
+      font-size: 20px; font-weight: 800; color: #D4A96A;
+      position: relative; z-index: 1; flex-shrink: 0;
+    }
+    .ps-dday-label { font-size: 10px; color: rgba(255,255,255,0.4); text-align: right; margin-bottom: 2px; }
+
+    /* ════════════ 섹션 공통 ════════════ */
+    .st-section { margin-top: 24px; }
+    .st-section-title {
+      font-size: 11px; font-weight: 800; color: #C49050;
+      letter-spacing: 0.6px; text-transform: uppercase;
+      margin-bottom: 8px; padding-left: 2px;
+    }
+    .st-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1.5px solid #f0f0f0;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    /* ════════════ 토글 행 ════════════ */
+    .toggle-row {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid #f8f8f8;
+    }
+    .toggle-row:last-child { border-bottom: none; }
+
+    .toggle-row-left {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .toggle-icon {
+      width: 36px; height: 36px; border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .toggle-label  { font-size: 14px; font-weight: 700; color: #222; }
+    .toggle-desc   { font-size: 11px; color: #bbb; margin-top: 2px; }
+
+    /* 토글 스위치 */
+    .switch { position: relative; width: 46px; height: 26px; flex-shrink: 0; }
+    .switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .switch-slider {
+      position: absolute; cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #e0e0e0; border-radius: 26px; transition: background 0.2s;
+    }
+    .switch-slider::before {
+      position: absolute; content: '';
+      height: 20px; width: 20px;
+      left: 3px; bottom: 3px;
+      background: #fff; border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+    .switch input:checked + .switch-slider { background: #D4A96A; }
+    .switch input:checked + .switch-slider::before { transform: translateX(20px); }
+
+    /* ════════════ 알림 세부 설정 (접힘/펼침) ════════════ */
+    .notif-sub-wrap {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.3s ease, opacity 0.25s ease;
+      opacity: 0;
+    }
+    .notif-sub-wrap.open {
+      max-height: 400px;
+      opacity: 1;
+    }
+
+    .notif-sub-item {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 11px 16px 11px 56px;
+      border-top: 1px solid #f8f8f8;
+    }
+    .notif-sub-label { font-size: 13px; font-weight: 600; color: #555; }
+    .notif-sub-desc  { font-size: 11px; color: #ccc; margin-top: 1px; }
+
+    /* ════════════ 액션 행 ════════════ */
+    .action-row {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-bottom: 1px solid #f8f8f8;
+    }
+    .action-row:last-child { border-bottom: none; }
+    .action-row:hover  { background: #fdfaf5; }
+    .action-row:active { background: #faf5ec; }
+
+    .action-row-left { display: flex; align-items: center; gap: 12px; }
+    .action-row-label { font-size: 14px; font-weight: 600; color: #333; }
+    .action-row-arrow { color: #ccc; }
+    .action-row-badge {
+      font-size: 11px; font-weight: 700;
+      background: #f0e8d8; color: #C49050;
+      border-radius: 20px; padding: 2px 8px;
+    }
+
+    /* ════════════ 위험 영역 ════════════ */
+    .action-row.danger .action-row-label { color: #e05555; }
+    .action-row.danger .toggle-icon { background: #fff5f5; }
+    .action-row.danger .action-row-arrow { color: #e05555; opacity: 0.4; }
+    .action-row.danger:hover { background: #fff8f8; }
+
+    /* ════════════ 테마 컬러 선택 ════════════ */
+    .theme-color-row {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid #f8f8f8;
+    }
+    .theme-color-dots { display: flex; gap: 8px; }
+    .theme-dot {
+      width: 24px; height: 24px; border-radius: 50%;
+      cursor: pointer; border: 2px solid transparent;
+      transition: transform 0.15s, border-color 0.15s;
+      position: relative;
+    }
+    .theme-dot.active { border-color: #444; transform: scale(1.12); }
+    .theme-dot.active::after {
+      content: '';
+      position: absolute; inset: 4px;
+      background: rgba(255,255,255,0.45);
+      border-radius: 50%;
+    }
+
+    /* ════════════ 앱 버전 푸터 ════════════ */
+    .settings-footer {
+      text-align: center;
+      padding: 24px 0 8px;
+      font-size: 12px; font-weight: 600;
+      color: #ccc;
+    }
+    .settings-footer .footer-logo {
+      font-size: 18px; font-weight: 800; font-style: italic;
+      color: #D4A96A; letter-spacing: -0.5px;
+      display: block; margin-bottom: 4px;
+    }
+
+    /* ════════════ 확인 모달 ════════════ */
+    .modal-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 200;
+      display: none; align-items: flex-end; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-overlay.center { align-items: center; padding: 24px; }
+
+    .confirm-sheet {
+      width: 100%;
+      background: #fff;
+      border-radius: 20px 20px 0 0;
+      padding: 24px 20px 32px;
+      animation: sheetIn 0.22s ease;
+    }
+    @keyframes sheetIn {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
+
+    .confirm-box {
+      width: 100%;
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px 24px 24px;
+      animation: boxIn 0.2s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    @keyframes boxIn {
+      from { opacity: 0; transform: scale(0.94) translateY(6px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .confirm-icon {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: #fff5f5; border: 2px solid #fdd;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin: 0 auto 14px;
+    }
+    .confirm-title { font-size: 17px; font-weight: 800; color: #222; text-align: center; margin-bottom: 6px; }
+    .confirm-desc  { font-size: 13px; color: #888; text-align: center; line-height: 1.6; margin-bottom: 20px; }
+
+    .confirm-btn-row { display: flex; gap: 8px; }
+    .btn-cancel {
+      flex: 1; padding: 14px;
+      border: 1.5px solid #e8e8e8; border-radius: 12px;
+      background: #f8f8f8; color: #666;
+      font-size: 14px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .btn-cancel:hover { background: #f0f0f0; }
+    .btn-danger {
+      flex: 1; padding: 14px;
+      border: none; border-radius: 12px;
+      background: #e05555; color: #fff;
+      font-size: 14px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: opacity 0.15s;
+    }
+    .btn-danger:hover { opacity: 0.88; }
+
+    /* ════════════ 의견 보내기 모달 ════════════ */
+    .feedback-box {
+      width: 100%;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      animation: boxIn 0.2s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+
+    .feedback-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .feedback-header-title {
+      font-size: 16px; font-weight: 800; color: #222;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .feedback-close-btn {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: #f5f5f5; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #999; transition: background 0.15s, color 0.15s;
+    }
+    .feedback-close-btn:hover { background: #eee; color: #555; }
+
+    /* 카테고리 칩 */
+    .feedback-cat-row {
+      display: flex; gap: 7px;
+      padding: 14px 16px 0;
+    }
+    .feedback-cat-chip {
+      flex: 1; padding: 8px 0;
+      border: 1.5px solid #e8e8e8; border-radius: 20px;
+      background: #f8f8f8; color: #999;
+      font-size: 12px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: all 0.15s; text-align: center;
+    }
+    .feedback-cat-chip:hover { border-color: #D4A96A; color: #C49050; background: #fff8ef; }
+    .feedback-cat-chip.active {
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      border-color: transparent; color: #fff;
+    }
+
+    /* 제목 + 내용 통합 입력 영역 */
+    .feedback-body-wrap {
+      margin: 14px 16px 0;
+      border: 1.5px solid #e8e8e8; border-radius: 14px;
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .feedback-body-wrap:focus-within {
+      border-color: #D4A96A;
+      box-shadow: 0 0 0 3px rgba(212,169,106,0.13);
+    }
+    .feedback-title-input {
+      width: 100%; border: none; outline: none;
+      padding: 13px 14px 11px;
+      font-size: 14px; font-weight: 700; color: #222;
+      font-family: inherit; background: transparent;
+      box-sizing: border-box;
+    }
+    .feedback-title-input::placeholder { color: #ccc; font-weight: 500; }
+    .feedback-divider { height: 1px; background: #f0f0f0; margin: 0 14px; }
+    .feedback-content-input {
+      width: 100%; border: none; outline: none;
+      padding: 11px 14px 13px;
+      font-size: 13px; color: #444; line-height: 1.6;
+      font-family: inherit; background: transparent;
+      resize: none; box-sizing: border-box;
+      min-height: 100px;
+    }
+    .feedback-content-input::placeholder { color: #ccc; }
+
+    .feedback-char-hint {
+      text-align: right; font-size: 11px; color: #ccc;
+      padding: 4px 16px 0;
+    }
+
+    /* 하단 버튼 */
+    .feedback-footer {
+      display: flex; gap: 8px;
+      padding: 14px 16px 18px;
+    }
+    .btn-feedback-cancel {
+      flex: 1; padding: 13px;
+      border: 1.5px solid #e8e8e8; border-radius: 12px;
+      background: #f8f8f8; color: #888;
+      font-size: 14px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .btn-feedback-cancel:hover { background: #f0f0f0; }
+    .btn-feedback-send {
+      flex: 2; padding: 13px;
+      border: none; border-radius: 12px;
+      background: linear-gradient(135deg, #D4A96A, #C49050);
+      color: #fff; font-size: 14px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: opacity 0.15s;
+      box-shadow: 0 4px 14px rgba(212,169,106,0.35);
+    }
+    .btn-feedback-send:hover   { opacity: 0.9; }
+    .btn-feedback-send:disabled {
+      background: #e0e0e0; box-shadow: none; cursor: not-allowed; opacity: 1;
+    }
+
+    /* 다크모드 */
+    .phone-wrapper.dark .feedback-box        { background: #1e1a12; }
+    .phone-wrapper.dark .feedback-header     { border-bottom-color: #2e2818; }
+    .phone-wrapper.dark .feedback-header-title { color: #ede8e0; }
+    .phone-wrapper.dark .feedback-close-btn  { background: #2a2418; color: #6a6050; }
+    .phone-wrapper.dark .feedback-close-btn:hover { background: #342c20; color: #ede8e0; }
+    .phone-wrapper.dark .feedback-cat-chip   { background: #2a2418; border-color: #3a3028; color: #6a6050; }
+    .phone-wrapper.dark .feedback-cat-chip:hover { border-color: #D4A96A; color: #C49050; background: #2e2010; }
+    .phone-wrapper.dark .feedback-cat-chip.active { background: linear-gradient(135deg,#D4A96A,#C49050); color:#fff; border-color:transparent; }
+    .phone-wrapper.dark .feedback-body-wrap  { border-color: #3a3028; }
+    .phone-wrapper.dark .feedback-body-wrap:focus-within { border-color: #D4A96A; }
+    .phone-wrapper.dark .feedback-title-input   { color: #ede8e0; }
+    .phone-wrapper.dark .feedback-title-input::placeholder { color: #484038; }
+    .phone-wrapper.dark .feedback-divider    { background: #2e2818; }
+    .phone-wrapper.dark .feedback-content-input { color: #c8c0b0; }
+    .phone-wrapper.dark .feedback-content-input::placeholder { color: #484038; }
+    .phone-wrapper.dark .feedback-char-hint  { color: #484038; }
+    .phone-wrapper.dark .feedback-footer     { border-top-color: #2e2818; }
+    .phone-wrapper.dark .btn-feedback-cancel { background: #2a2418; border-color: #3a3028; color: #9e9890; }
+    .phone-wrapper.dark .btn-feedback-cancel:hover { background: #322c20; }
+
+    /* ════════════ 토스트 ════════════ */
+    .toast {
+      position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(10px);
+      background: #222; color: #fff;
+      font-size: 13px; font-weight: 600;
+      padding: 10px 18px; border-radius: 20px;
+      white-space: nowrap; z-index: 300;
+      opacity: 0; transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ════════════ 하단 네비게이션 ════════════ */
+    .bottom-nav {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 64px;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid #f0f0f0;
+      display: flex; align-items: stretch; z-index: 150;
+    }
+    .nav-item {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 0; background: none; border: none;
+      cursor: pointer; color: #c0b8b0;
+      transition: color 0.15s; position: relative;
+    }
+    .nav-item:hover { color: #D4A96A; }
+    .nav-item.active { color: #D4A96A; }
+    .nav-item.active::after {
+      content: ''; position: absolute; top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 20px; height: 2.5px;
+      background: #D4A96A; border-radius: 0 0 3px 3px;
+    }
+    .nav-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; }
+    .nav-item.nav-home::after { display: none; }
+
+    /* ════════════ 다크모드 ════════════ */
+    /* ── 다크모드 전체 ── */
+    .phone-wrapper.dark {
+      background: #15120e;
+      box-shadow: 0 0 0 2px #2e2820, 0 20px 60px rgba(0,0,0,0.55);
+    }
+    .phone-wrapper.dark .phone-screen    { background: #15120e; }
+    .phone-wrapper.dark .main-header     { background: rgba(21,18,14,0.97); border-bottom-color: #2a2418; }
+    .phone-wrapper.dark .icon-btn        { background: #26201a; color: #7a7068; }
+    .phone-wrapper.dark .icon-btn:hover  { background: #342c22; color: #D4A96A; }
+
+    .phone-wrapper.dark .st-section-title { color: #6a5a40; }
+    .phone-wrapper.dark .st-card          { background: #1e1a12; border-color: #2e2818; box-shadow: none; }
+
+    .phone-wrapper.dark .profile-summary-card { opacity: 0.92; }
+
+    .phone-wrapper.dark .toggle-row       { border-bottom-color: #26201a; }
+    .phone-wrapper.dark .toggle-icon      { background: #26201a !important; }
+    .phone-wrapper.dark .toggle-label     { color: #ede8e0; }
+    .phone-wrapper.dark .toggle-desc      { color: #484038; }
+    .phone-wrapper.dark .switch-slider    { background: #3a3028; }
+    .phone-wrapper.dark .switch input:checked + .switch-slider { background: #D4A96A; }
+
+    .phone-wrapper.dark .notif-sub-item  { border-top-color: #26201a; }
+    .phone-wrapper.dark .notif-sub-label { color: #9e9890; }
+    .phone-wrapper.dark .notif-sub-desc  { color: #484038; }
+
+    .phone-wrapper.dark .action-row        { border-bottom-color: #26201a; }
+    .phone-wrapper.dark .action-row:hover  { background: #26201a; }
+    .phone-wrapper.dark .action-row:active { background: #2e2618; }
+    .phone-wrapper.dark .action-row-label  { color: #c8c0b0; }
+    .phone-wrapper.dark .action-row-arrow  { color: #484038; }
+    .phone-wrapper.dark .action-row-badge  { background: #2e2418; color: #C49050; }
+    .phone-wrapper.dark .action-row.danger .action-row-label { color: #f08080; }
+    .phone-wrapper.dark .action-row.danger:hover { background: #2e1a1a; }
+
+    .phone-wrapper.dark .theme-color-row  { border-bottom-color: #26201a; }
+    .phone-wrapper.dark .theme-dot.active { border-color: #ede8e0; }
+
+    .phone-wrapper.dark .settings-footer            { color: #484038; }
+    .phone-wrapper.dark .settings-footer .footer-logo { color: #D4A96A; }
+
+    .phone-wrapper.dark .confirm-sheet,
+    .phone-wrapper.dark .confirm-box   { background: #1e1a12; }
+    .phone-wrapper.dark .confirm-icon  { background: #2a1a1a; border-color: #3e2020; }
+    .phone-wrapper.dark .confirm-title { color: #ede8e0; }
+    .phone-wrapper.dark .confirm-desc  { color: #6a6050; }
+    .phone-wrapper.dark .btn-cancel    { background: #2a2418; border-color: #3a3028; color: #9e9890; }
+    .phone-wrapper.dark .btn-cancel:hover { background: #322c20; }
+
+    .phone-wrapper.dark .bottom-nav        { background: rgba(21,18,14,0.97); border-top-color: #2a2418; }
+    .phone-wrapper.dark .nav-item          { color: #484038; }
+    .phone-wrapper.dark .nav-item:hover    { color: #D4A96A; }
+    .phone-wrapper.dark .nav-item.active   { color: #D4A96A; }
+  </style>
+</head>
+<body>
+<div class="phone-wrapper" id="phoneWrapper">
+  <div class="phone-screen" id="phoneScreen">
+
+    <!-- ── 헤더 ── -->
+    <header class="main-header">
+      <span class="main-logo">weddly</span>
+      <div class="header-actions">
+        <button class="icon-btn dark-toggle-btn" id="darkToggleBtn" aria-label="다크모드 전환">
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun"  width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── 콘텐츠 ── -->
+    <div class="settings-content">
+
+      <!-- ① 프로필 요약 카드 -->
+      <div class="profile-summary-card" onclick="location.href='user.html'" role="button">
+        <div class="ps-avatar">💑</div>
+        <div class="ps-info">
+          <div class="ps-name">홍길동 · 김영희</div>
+          <div class="ps-sub">내 프로필 보기</div>
+        </div>
+        <div>
+          <div class="ps-dday-label">D-DAY</div>
+          <div class="ps-dday" id="headerDday">D-120</div>
+        </div>
+      </div>
+
+      <!-- ② 웨딩 정보 -->
+      <div class="st-section">
+        <div class="st-section-title">웨딩 정보</div>
+        <div class="st-card">
+          <div class="action-row" onclick="location.href='wedding_date.html'">
+            <div class="action-row-left">
+              <div class="toggle-icon" style="background:#fff8ef;">💍</div>
+              <div>
+                <div class="action-row-label">결혼 예정일</div>
+                <div class="toggle-desc" id="weddingDateTxt">2026년 8월 15일 (토)</div>
+              </div>
+            </div>
+            <svg class="action-row-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="action-row" onclick="location.href='user.html'">
+            <div class="action-row-left">
+              <div class="toggle-icon" style="background:#fff0f8;">💑</div>
+              <div>
+                <div class="action-row-label">파트너 연결</div>
+                <div class="toggle-desc" id="partnerStatusTxt">연결됨 · 김영희</div>
+              </div>
+            </div>
+            <svg class="action-row-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ 화면 설정 -->
+      <div class="st-section">
+        <div class="st-section-title">화면</div>
+        <div class="st-card">
+          <!-- 다크모드 -->
+          <div class="toggle-row">
+            <div class="toggle-row-left">
+              <div class="toggle-icon" style="background:#f5f0ff;">🌙</div>
+              <div>
+                <div class="toggle-label">다크모드</div>
+                <div class="toggle-desc">어두운 화면으로 전환해요</div>
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="darkModeToggle" />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <!-- 테마 컬러 -->
+          <div class="theme-color-row">
+            <div class="toggle-row-left">
+              <div class="toggle-icon" style="background:#fffaf0;">🎨</div>
+              <div>
+                <div class="toggle-label">테마 컬러</div>
+                <div class="toggle-desc">앱 포인트 색상을 선택해요</div>
+              </div>
+            </div>
+            <div class="theme-color-dots">
+              <div class="theme-dot active" style="background:linear-gradient(135deg,#D4A96A,#C49050);" title="골드" onclick="selectTheme(this)"></div>
+              <div class="theme-dot" style="background:linear-gradient(135deg,#E8A0B0,#D07080);" title="로즈" onclick="selectTheme(this)"></div>
+              <div class="theme-dot" style="background:linear-gradient(135deg,#7BAED4,#5080B0);" title="블루" onclick="selectTheme(this)"></div>
+              <div class="theme-dot" style="background:linear-gradient(135deg,#88BB88,#5a9060);" title="그린" onclick="selectTheme(this)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ④ 알림 설정 -->
+      <div class="st-section">
+        <div class="st-section-title">알림</div>
+        <div class="st-card">
+          <!-- 마스터 알림 토글 -->
+          <div class="toggle-row">
+            <div class="toggle-row-left">
+              <div class="toggle-icon" style="background:#fff0f5;">🔔</div>
+              <div>
+                <div class="toggle-label">알림</div>
+                <div class="toggle-desc">일정·예산·로드맵 알림을 받아요</div>
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="notifMaster" checked onchange="toggleNotifSub()" />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <!-- 세부 알림 (펼침) -->
+          <div class="notif-sub-wrap open" id="notifSubWrap">
+            <div class="notif-sub-item">
+              <div>
+                <div class="notif-sub-label">D-30 미리 알림</div>
+                <div class="notif-sub-desc">결혼 30일 전에 알려드려요</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+            <div class="notif-sub-item">
+              <div>
+                <div class="notif-sub-label">D-7 미리 알림</div>
+                <div class="notif-sub-desc">결혼 7일 전에 알려드려요</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+            <div class="notif-sub-item">
+              <div>
+                <div class="notif-sub-label">D-1 미리 알림</div>
+                <div class="notif-sub-desc">결혼 전날 알려드려요</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+            <div class="notif-sub-item">
+              <div>
+                <div class="notif-sub-label">로드맵 미완료 알림</div>
+                <div class="notif-sub-desc">기한이 지난 항목을 알려드려요</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+            <div class="notif-sub-item">
+              <div>
+                <div class="notif-sub-label">예산 초과 알림</div>
+                <div class="notif-sub-desc">설정 예산 90% 이상 시 알려요</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+            <div class="notif-sub-item">
+              <div>
+                <div class="notif-sub-label">커뮤니티 댓글 알림</div>
+                <div class="notif-sub-desc">내 게시물에 댓글이 달리면 알려요</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑤ 데이터 -->
+      <div class="st-section">
+        <div class="st-section-title">데이터</div>
+        <div class="st-card">
+          <!-- 캘린더 동기화 -->
+          <div class="toggle-row">
+            <div class="toggle-row-left">
+              <div class="toggle-icon" style="background:#f0f8ff;">📅</div>
+              <div>
+                <div class="toggle-label">캘린더 동기화</div>
+                <div class="toggle-desc">기기 캘린더와 일정을 연동해요</div>
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="calToggle" />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <!-- 자동 저장 -->
+          <div class="toggle-row">
+            <div class="toggle-row-left">
+              <div class="toggle-icon" style="background:#f0fff4;">💾</div>
+              <div>
+                <div class="toggle-label">자동 저장</div>
+                <div class="toggle-desc">변경 사항을 자동으로 저장해요</div>
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" checked />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <!-- 데이터 내보내기 -->
+          <div class="action-row" onclick="exportData()">
+            <div class="action-row-left">
+              <div class="toggle-icon" style="background:#f0f8f0;">📤</div>
+              <div>
+                <div class="action-row-label">데이터 내보내기</div>
+                <div class="toggle-desc">일정·예산·로드맵을 JSON으로 저장</div>
+              </div>
+            </div>
+            <svg class="action-row-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <!-- 데이터 초기화 -->
+          <div class="action-row danger" onclick="showResetConfirm()">
+            <div class="action-row-left">
+              <div class="toggle-icon" style="background:#fff5f5;">🗑️</div>
+              <div>
+                <div class="action-row-label">전체 데이터 초기화</div>
+                <div class="toggle-desc">모든 데이터가 삭제되고 복구 불가</div>
+              </div>
+            </div>
+            <svg class="action-row-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑥ 앱 정보 -->
+      <div class="st-section">
+        <div class="st-section-title">앱 정보</div>
+        <div class="st-card">
+          <div class="action-row">
+            <div class="action-row-left">
+              <div class="toggle-icon" style="background:#f5fff8;">📱</div>
+              <span class="action-row-label">버전 정보</span>
+            </div>
+            <span class="action-row-badge">v1.0.0</span>
+          </div>
+          <div class="action-row" onclick="location.href='privacy.html'">
+            <div class="action-row-left">
+              <div class="toggle-icon" style="background:#f5f0ff;">🔒</div>
+              <span class="action-row-label">개인정보 처리방침</span>
+            </div>
+            <svg class="action-row-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="action-row" onclick="showToast('이용약관 페이지 연동 예정')">
+            <div class="action-row-left">
+              <div class="toggle-icon" style="background:#f8f8ff;">📄</div>
+              <span class="action-row-label">이용약관</span>
+            </div>
+            <svg class="action-row-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="action-row" onclick="showFeedbackModal()">
+            <div class="action-row-left">
+              <div class="toggle-icon" style="background:#fff8f0;">💌</div>
+              <span class="action-row-label">의견 보내기</span>
+            </div>
+            <svg class="action-row-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑦ 계정 -->
+      <div class="st-section">
+        <div class="st-section-title">계정</div>
+        <div class="st-card">
+          <div class="action-row" onclick="showLogoutConfirm()">
+            <div class="action-row-left">
+              <div class="toggle-icon" style="background:#f8f8f8;">🚪</div>
+              <span class="action-row-label">로그아웃</span>
+            </div>
+            <svg class="action-row-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="action-row danger" onclick="showDeleteAccountConfirm()">
+            <div class="action-row-left">
+              <div class="toggle-icon">💔</div>
+              <div>
+                <div class="action-row-label">회원 탈퇴</div>
+                <div class="toggle-desc">계정과 모든 데이터가 삭제돼요</div>
+              </div>
+            </div>
+            <svg class="action-row-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- 푸터 -->
+      <div class="settings-footer">
+        <span class="footer-logo">weddly</span>
+        v1.0.0 · 소중한 순간을 함께해요 💍
+      </div>
+
+    </div><!-- /settings-content -->
+  </div><!-- /phone-screen -->
+
+  <!-- ── 하단 네비게이션 ── -->
+  <nav class="bottom-nav">
+    <button class="nav-item" onclick="location.href='roadmap.html'">
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+    </button>
+    <button class="nav-item" onclick="location.href='budget.html'">
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      </div>
+    </button>
+    <button class="nav-item nav-home" onclick="location.href='main.html'">
+      <div class="nav-icon">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+    </button>
+    <button class="nav-item" onclick="location.href='community.html'">
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+    </button>
+    <button class="nav-item active">
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </div>
+    </button>
+  </nav>
+
+  <!-- ── 모달: 데이터 초기화 확인 ── -->
+  <div class="modal-overlay center" id="resetModal">
+    <div class="confirm-box">
+      <div class="confirm-icon">🗑️</div>
+      <div class="confirm-title">전체 데이터를 초기화할까요?</div>
+      <div class="confirm-desc">로드맵, 예산, 일정 등 모든 데이터가<br>삭제되며 복구할 수 없어요.</div>
+      <div class="confirm-btn-row">
+        <button class="btn-cancel" onclick="closeModal('resetModal')">취소</button>
+        <button class="btn-danger" onclick="doReset()">초기화</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 모달: 로그아웃 확인 ── -->
+  <div class="modal-overlay" id="logoutModal">
+    <div class="confirm-sheet">
+      <div class="confirm-icon">🚪</div>
+      <div class="confirm-title">로그아웃할까요?</div>
+      <div class="confirm-desc">다시 로그인하면 데이터를 이어서<br>사용할 수 있어요.</div>
+      <div class="confirm-btn-row">
+        <button class="btn-cancel" onclick="closeModal('logoutModal')">취소</button>
+        <button class="btn-danger" onclick="doLogout()">로그아웃</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 모달: 회원 탈퇴 확인 ── -->
+  <div class="modal-overlay" id="deleteAccountModal">
+    <div class="confirm-sheet">
+      <div class="confirm-icon">💔</div>
+      <div class="confirm-title">정말 떠나실 건가요?</div>
+      <div class="confirm-desc">계정과 모든 데이터가 영구적으로<br>삭제되며 복구할 수 없어요.</div>
+      <div class="confirm-btn-row">
+        <button class="btn-cancel" onclick="closeModal('deleteAccountModal')">취소</button>
+        <button class="btn-danger" onclick="showToast('회원 탈퇴 기능 연동 예정'); closeModal('deleteAccountModal')">탈퇴</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 모달: 의견 보내기 ── -->
+  <div class="modal-overlay center" id="feedbackModal">
+    <div class="feedback-box">
+      <div class="feedback-header">
+        <div class="feedback-header-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4A96A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          의견 보내기
+        </div>
+        <button class="feedback-close-btn" onclick="closeModal('feedbackModal')" aria-label="닫기">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- 카테고리 -->
+      <div class="feedback-cat-row">
+        <button class="feedback-cat-chip active" data-cat="의견" onclick="selectFeedbackCat(this)">💬 의견</button>
+        <button class="feedback-cat-chip" data-cat="불만" onclick="selectFeedbackCat(this)">😤 불만</button>
+        <button class="feedback-cat-chip" data-cat="장애" onclick="selectFeedbackCat(this)">🐛 장애</button>
+      </div>
+
+      <!-- 제목 + 내용 통합 영역 -->
+      <div class="feedback-body-wrap">
+        <input  class="feedback-title-input"   id="feedbackTitle"
+                type="text" placeholder="제목을 입력해주세요" maxlength="50"
+                oninput="updateFeedbackSend()" />
+        <div class="feedback-divider"></div>
+        <textarea class="feedback-content-input" id="feedbackContent"
+                  placeholder="불편한 점이나 개선 아이디어를 자유롭게 적어주세요 :)" maxlength="500"
+                  oninput="updateFeedbackSend(); updateFeedbackChar()"></textarea>
+      </div>
+      <div class="feedback-char-hint"><span id="feedbackCharCount">0</span> / 500</div>
+
+      <!-- 버튼 -->
+      <div class="feedback-footer">
+        <button class="btn-feedback-cancel" onclick="closeModal('feedbackModal')">취소</button>
+        <button class="btn-feedback-send" id="feedbackSendBtn" disabled onclick="submitFeedback()">전달하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 토스트 ── -->
+  <div class="toast" id="toast"></div>
+
+</div><!-- /phone-wrapper -->
+<script>
+/* ── D-DAY 계산 ── */
+(function() {
+  const saved = localStorage.getItem('weddly-wedding-date') || '2026-08-15';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const target = new Date(saved); target.setHours(0,0,0,0);
+  const diff = Math.round((target - today) / 86400000);
+  const el = document.getElementById('headerDday');
+  if (el) {
+    if (diff > 0)      el.textContent = 'D-' + diff;
+    else if (diff < 0) el.textContent = 'D+' + Math.abs(diff);
+    else               el.textContent = 'D-Day';
+  }
+  const dateTxt = document.getElementById('weddingDateTxt');
+  if (dateTxt) {
+    const days = ['일','월','화','수','목','금','토'];
+    dateTxt.textContent =
+      target.getFullYear() + '년 ' +
+      (target.getMonth()+1) + '월 ' +
+      target.getDate() + '일 (' + days[target.getDay()] + ')';
+  }
+})();
+
+/* ── 다크모드 ── */
+const phoneWrapper = document.getElementById('phoneWrapper');
+const darkToggleBtn = document.getElementById('darkToggleBtn');
+const darkModeCheckbox = document.getElementById('darkModeToggle');
+
+function applyDark(isDark) {
+  phoneWrapper.classList.toggle('dark', isDark);
+  darkModeCheckbox.checked = isDark;
+  localStorage.setItem('weddly-dark', isDark ? '1' : '0');
+}
+
+// 저장된 설정 적용
+if (localStorage.getItem('weddly-dark') === '1') applyDark(true);
+
+darkToggleBtn.addEventListener('click', () => applyDark(!phoneWrapper.classList.contains('dark')));
+darkModeCheckbox.addEventListener('change', () => applyDark(darkModeCheckbox.checked));
+
+/* ── 테마 컬러 선택 ── */
+function selectTheme(dot) {
+  document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('active'));
+  dot.classList.add('active');
+  showToast('테마 컬러가 변경됐어요');
+}
+
+/* ── 알림 세부 토글 ── */
+function toggleNotifSub() {
+  const wrap = document.getElementById('notifSubWrap');
+  const on = document.getElementById('notifMaster').checked;
+  wrap.classList.toggle('open', on);
+  // 세부 항목 토글 비활성화
+  wrap.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.disabled = !on;
+    cb.closest('.switch-slider') && (cb.closest('.switch-slider').style.opacity = on ? '' : '0.4');
+  });
+}
+
+/* ── 데이터 내보내기 ── */
+function exportData() {
+  const now  = new Date();
+  const pad  = n => String(n).padStart(2, '0');
+  const dateStr =
+    now.getFullYear() + '년 ' + (now.getMonth()+1) + '월 ' + now.getDate() + '일 ' +
+    ['일','월','화','수','목','금','토'][now.getDay()] + '요일 ' +
+    pad(now.getHours()) + ':' + pad(now.getMinutes());
+
+  const fmt  = n => Number(n).toLocaleString('ko-KR');
+  const line = '─'.repeat(44);
+  const dline= '═'.repeat(44);
+  const lines = [];
+
+  lines.push(dline);
+  lines.push('  weddly  데이터 내보내기');
+  lines.push('  ' + dateStr);
+  lines.push(dline);
+  lines.push('');
+
+  /* ────────── 로드맵 ────────── */
+  lines.push('■ 웨딩 로드맵');
+  lines.push(line);
+  try {
+    const raw = localStorage.getItem('weddly-roadmap');
+    if (raw) {
+      const tabs = JSON.parse(raw);
+      tabs.forEach(tab => {
+        lines.push('[ ' + tab.label + ' ]');
+        const stages = tab.stages || [];
+        if (!stages.length) {
+          lines.push('  (등록된 항목 없음)');
+        } else {
+          // 월 그룹핑
+          const groups = {};
+          const order  = [];
+          stages.forEach(s => {
+            if (!groups[s.monthLabel]) { groups[s.monthLabel] = []; order.push(s.monthLabel); }
+            groups[s.monthLabel].push(s);
+          });
+          order.forEach(m => {
+            lines.push('');
+            lines.push('  ▸ ' + m);
+            groups[m].forEach(s => {
+              const chk  = s.done ? '[완료]' : '[미완]';
+              const date = s.date ? ' (' + s.date + ')' : '';
+              const cat  = s.category ? ' · ' + s.emoji + ' ' + s.category : '';
+              lines.push('    ' + chk + ' ' + s.title + date + cat);
+            });
+          });
+        }
+        lines.push('');
+      });
+    } else {
+      lines.push('  (저장된 데이터 없음)');
+      lines.push('');
+    }
+  } catch(e) {
+    lines.push('  (데이터 파싱 오류)');
+    lines.push('');
+  }
+
+  /* ────────── 예산 ────────── */
+  lines.push('');
+  lines.push('■ 예산 관리');
+  lines.push(line);
+  try {
+    const raw = localStorage.getItem('weddly-budget');
+    if (raw) {
+      const saved = JSON.parse(raw);
+      const total  = saved.totalBudget || 0;
+      const budgets = saved.budgets || [];
+      const used = budgets.reduce((s, b) => s + (b.amount||0), 0);
+      lines.push('  총 예산   : ' + fmt(total) + '원');
+      lines.push('  사용 합계 : ' + fmt(used) + '원');
+      const remain = total - used;
+      lines.push('  잔여 예산 : ' + fmt(remain) + '원' + (remain < 0 ? '  ※ 초과' : ''));
+      lines.push('');
+      budgets.forEach(b => {
+        lines.push('  [' + b.catIcon + ' ' + b.catLabel + ']  ' + fmt(b.amount) + '원');
+        (b.subItems || []).forEach(s => {
+          const note = s.note ? '  (' + s.note + ')' : '';
+          lines.push('    - ' + s.name + ' : ' + fmt(s.amount) + '원' + note);
+        });
+        lines.push('');
+      });
+    } else {
+      lines.push('  (저장된 데이터 없음)');
+      lines.push('');
+    }
+  } catch(e) {
+    lines.push('  (데이터 파싱 오류)');
+    lines.push('');
+  }
+
+  /* ────────── 일정 ────────── */
+  lines.push('');
+  lines.push('■ 일정');
+  lines.push(line);
+  try {
+    const raw = localStorage.getItem('weddly-schedule');
+    if (raw) {
+      const evts = JSON.parse(raw);
+      if (!evts.length) {
+        lines.push('  (등록된 일정 없음)');
+      } else {
+        // 날짜순 정렬
+        evts.sort((a, b) => (a.date > b.date ? 1 : -1));
+        const DAYS = ['일','월','화','수','목','금','토'];
+        let lastMonth = '';
+        evts.forEach(ev => {
+          const d = new Date(ev.date);
+          const month = (d.getMonth()+1) + '월';
+          if (month !== lastMonth) {
+            lines.push('');
+            lines.push('  ▸ ' + month);
+            lastMonth = month;
+          }
+          const dayLabel = d.getDate() + '일 (' + DAYS[d.getDay()] + ')';
+          const time = (ev.startTime || '') + (ev.endTime ? '~' + ev.endTime : '');
+          lines.push('    ' + d.getMonth()+1 + '/' + d.getDate() + ' ' + dayLabel +
+                     '  ' + ev.title + (time ? '  ' + time : ''));
+          if (ev.memo) lines.push('         메모: ' + ev.memo);
+        });
+      }
+      lines.push('');
+    } else {
+      lines.push('  (저장된 데이터 없음)');
+      lines.push('');
+    }
+  } catch(e) {
+    lines.push('  (데이터 파싱 오류)');
+    lines.push('');
+  }
+
+  /* ────────── 푸터 ────────── */
+  lines.push('');
+  lines.push(dline);
+  lines.push('  powered by weddly  ·  소중한 순간을 함께해요 💍');
+  lines.push(dline);
+
+  const text = lines.join('\r\n');
+  const blob = new Blob(['\uFEFF' + text], { type: 'text/plain;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const fileName = 'weddly_' + now.getFullYear() +
+    pad(now.getMonth()+1) + pad(now.getDate()) + '.txt';
+  a.href = url; a.download = fileName; a.click();
+  URL.revokeObjectURL(url);
+  showToast('데이터를 내보냈어요 📤');
+}
+
+/* ── 의견 보내기 모달 ── */
+function showFeedbackModal() {
+  document.getElementById('feedbackTitle').value   = '';
+  document.getElementById('feedbackContent').value = '';
+  document.getElementById('feedbackCharCount').textContent = '0';
+  document.getElementById('feedbackSendBtn').disabled = true;
+  document.querySelectorAll('.feedback-cat-chip').forEach((c, i) => c.classList.toggle('active', i === 0));
+  document.getElementById('feedbackModal').classList.add('active');
+}
+
+function selectFeedbackCat(el) {
+  document.querySelectorAll('.feedback-cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function updateFeedbackChar() {
+  const len = document.getElementById('feedbackContent').value.length;
+  document.getElementById('feedbackCharCount').textContent = len;
+}
+
+function updateFeedbackSend() {
+  const hasTitle   = document.getElementById('feedbackTitle').value.trim().length > 0;
+  const hasContent = document.getElementById('feedbackContent').value.trim().length > 0;
+  document.getElementById('feedbackSendBtn').disabled = !(hasTitle && hasContent);
+}
+
+function submitFeedback() {
+  const cat     = document.querySelector('.feedback-cat-chip.active')?.dataset.cat || '의견';
+  const title   = document.getElementById('feedbackTitle').value.trim();
+  const content = document.getElementById('feedbackContent').value.trim();
+  console.log('[피드백]', { cat, title, content }); // 실제 연동 시 API 호출
+  closeModal('feedbackModal');
+  showToast('소중한 의견 감사해요 💌');
+}
+
+/* ── 모달 ── */
+function showResetConfirm()         { document.getElementById('resetModal').classList.add('active'); }
+function showLogoutConfirm()        { document.getElementById('logoutModal').classList.add('active'); }
+function showDeleteAccountConfirm() { document.getElementById('deleteAccountModal').classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+// 오버레이 클릭으로 닫기
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('active');
+  });
+});
+
+function doReset() {
+  ['weddly-roadmap','weddly-budget','weddly-schedule',
+   'weddly-dark','weddly-wedding-date'].forEach(k => localStorage.removeItem(k));
+  closeModal('resetModal');
+  showToast('모든 데이터가 초기화됐어요');
+}
+
+function doLogout() {
+  closeModal('logoutModal');
+  showToast('로그아웃 기능 연동 예정');
+}
+
+/* ── 토스트 ── */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+</script>
+</body>
+</html>

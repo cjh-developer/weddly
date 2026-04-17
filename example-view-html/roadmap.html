@@ -141,6 +141,7 @@
     .tl-month-div {
       display: flex; align-items: center; gap: 10px;
       padding: 14px 0 10px;
+      cursor: pointer; user-select: none;
     }
     .tl-month-line { flex: 1; height: 1px; background: #f0e8d8; }
     /* 왼쪽 정렬 시 왼쪽 선 없음 */
@@ -149,6 +150,24 @@
       white-space: nowrap; letter-spacing: 0.4px;
       background: #fff9f2; border: 1px solid #f0e8d8;
       padding: 3px 10px; border-radius: 20px;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .tl-month-text .month-toggle-icon {
+      transition: transform 0.22s ease;
+      flex-shrink: 0;
+    }
+    .tl-month-group.collapsed .month-toggle-icon { transform: rotate(-90deg); }
+
+    /* 월 카드 접힘 */
+    .tl-month-cards {
+      overflow: hidden;
+      transition: max-height 0.28s ease, opacity 0.2s ease;
+      max-height: 2000px;
+      opacity: 1;
+    }
+    .tl-month-group.collapsed .tl-month-cards {
+      max-height: 0;
+      opacity: 0;
     }
 
     /* ── 신혼여행 카드 상세 ── */
@@ -454,6 +473,7 @@
     /* ── 다크 타임라인 ── */
     .phone-wrapper.dark .tl-month-text { background: #221e14; border-color: #3a2e1a; color: #C49050; }
     .phone-wrapper.dark .tl-month-line { background: #3a2e1a; }
+    .phone-wrapper.dark .tl-month-text .month-toggle-icon { color: #C49050; }
     .phone-wrapper.dark .tl-card { background: #221e14; border-color: #3a2e1a; }
     .phone-wrapper.dark .tl-card:hover { border-color: #5a3e20; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
     .phone-wrapper.dark .tl-card.done .tl-card-title { color: #555; }
@@ -1343,8 +1363,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 6px 0 10px;
+  padding: 0;
   background: none;
   border: none;
   cursor: pointer;
@@ -1368,24 +1387,7 @@
   width: 22px; height: 22px;
   display: flex; align-items: center; justify-content: center;
 }
-.nav-label { font-size: 10px; font-weight: 600; letter-spacing: -0.2px; }
 
-/* 홈 버튼 */
-.nav-home-wrap {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #D4A96A, #C49050);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 14px rgba(212,169,106,0.4);
-  color: #fff;
-  transition: transform 0.15s, box-shadow 0.15s;
-  margin-bottom: -4px;
-}
-.nav-item.nav-home:hover .nav-home-wrap {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(212,169,106,0.5);
-}
-.nav-item.nav-home .nav-label { color: #D4A96A; font-weight: 700; }
 .nav-item.nav-home::after { display: none; }
 
 /* 다크모드 */
@@ -1393,7 +1395,6 @@
 .phone-wrapper.dark .nav-item { color: #484038; }
 .phone-wrapper.dark .nav-item:hover { color: #D4A96A; }
 .phone-wrapper.dark .nav-item.active { color: #D4A96A; }
-.phone-wrapper.dark .nav-item.nav-home .nav-label { color: #D4A96A; }
 
   </style>
 </head>
@@ -4765,31 +4766,26 @@
         <div class="nav-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </div>
-        <span class="nav-label">웨딩</span>
       </button>
       <button class="nav-item" onclick="location.href='budget.html'">
         <div class="nav-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
         </div>
-        <span class="nav-label">예산</span>
       </button>
       <button class="nav-item nav-home" onclick="location.href='main.html'">
-        <div class="nav-home-wrap">
+        <div class="nav-icon">
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </div>
-        <span class="nav-label">홈</span>
       </button>
       <button class="nav-item" onclick="location.href='community.html'">
         <div class="nav-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         </div>
-        <span class="nav-label">커뮤니티</span>
       </button>
-      <button class="nav-item" onclick="alert('설정 화면은 준비 중입니다.')">
+      <button class="nav-item" onclick="location.href='settings.html'">
         <div class="nav-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </div>
-        <span class="nav-label">더보기</span>
       </button>
     </nav>
 
@@ -4927,6 +4923,7 @@ const state = {
   editingColor: '#D4A96A',
   editTodoCount: 0,
   editVenueCount: 0,
+  collapsedMonths: new Set(),
 };
 
 /* ════════════════════════════════════
@@ -5100,13 +5097,35 @@ function renderTimeline(tabId) {
     groupMap[s.monthLabel].push(s);
   });
 
-  container.innerHTML = groups.map(g => `
-    <div class="tl-month-div">
-      <span class="tl-month-text">${g.label}</span>
-      <span class="tl-month-line"></span>
-    </div>
-    ${g.items.map(s => renderCard(s)).join('')}
-  `).join('');
+  container.innerHTML = groups.map((g, idx) => {
+    const gid = 'mg_' + idx;
+    const collapsed = state.collapsedMonths.has(g.label);
+    return `
+    <div class="tl-month-group${collapsed ? ' collapsed' : ''}" id="${gid}">
+      <div class="tl-month-div" onclick="toggleMonthGroup('${g.label.replace(/'/g, "\\'")}', '${gid}')">
+        <span class="tl-month-text">
+          ${g.label}
+          <svg class="month-toggle-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+        <span class="tl-month-line"></span>
+      </div>
+      <div class="tl-month-cards">
+        ${g.items.map(s => renderCard(s)).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleMonthGroup(label, gid) {
+  const el = document.getElementById(gid);
+  if (!el) return;
+  if (state.collapsedMonths.has(label)) {
+    state.collapsedMonths.delete(label);
+    el.classList.remove('collapsed');
+  } else {
+    state.collapsedMonths.add(label);
+    el.classList.add('collapsed');
+  }
 }
 
 function renderCard(s) {
