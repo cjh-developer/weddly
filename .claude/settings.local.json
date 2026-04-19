@@ -9,7 +9,8 @@
       "Bash(python3:*)",
       "Bash(node:*)",
       "Bash(xxd:*)",
-      "Bash(py:*)"
+      "Bash(py:*)",
+      "Bash(flutter pub:*)"
     ]
   }
 }
