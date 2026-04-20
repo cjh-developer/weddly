@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/weddly_colors.dart';
 import '../../../core/widgets/auth_input_field.dart';
 import '../../../core/widgets/gradient_button.dart';
 import '../../../core/widgets/weddly_app_bar.dart';
@@ -127,10 +128,10 @@ class _ResetPwScreenState extends State<ResetPwScreen> {
               size: 32, color: AppColors.primary),
         ),
         const SizedBox(height: 16),
-        const Text(
+        Text(
           '비밀번호를 잊으셨나요?',
           style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.textDark),
+              fontSize: 18, fontWeight: FontWeight.w800, color: context.wTextPrimary),
         ),
         const SizedBox(height: 8),
         Text(
@@ -138,7 +139,7 @@ class _ResetPwScreenState extends State<ResetPwScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 13,
-              color: AppColors.textLight,
+              color: context.wTextLight,
               height: 1.6,
               fontWeight: FontWeight.w500),
         ),
@@ -206,8 +207,8 @@ class _ResetPwScreenState extends State<ResetPwScreen> {
           width: double.infinity,
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: AppColors.backgroundAlt,
-            border: Border.all(color: const Color(0xFFF0E8D8), width: 1.5),
+            color: context.wSurfaceAlt,
+            border: Border.all(color: context.wPartnerBorder, width: 1.5),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -223,11 +224,11 @@ class _ResetPwScreenState extends State<ResetPwScreen> {
                     size: 26, color: AppColors.primary),
               ),
               const SizedBox(height: 14),
-              const Text('임시 비밀번호 발송 완료',
+              Text('임시 비밀번호 발송 완료',
                   style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.textDark)),
+                      color: context.wTextPrimary)),
               const SizedBox(height: 8),
               Text(_sentEmail,
                   style: const TextStyle(
@@ -240,7 +241,7 @@ class _ResetPwScreenState extends State<ResetPwScreen> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.textLight,
+                    color: context.wTextLight,
                     height: 1.6,
                     fontWeight: FontWeight.w500),
               ),
@@ -273,9 +274,9 @@ class _ResetPwScreenState extends State<ResetPwScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Text(text,
-          style: const TextStyle(
+          style: TextStyle(
               fontSize: 13,
-              color: AppColors.textLight,
+              color: context.wTextLight,
               fontWeight: FontWeight.w500)),
     );
   }
@@ -283,7 +284,7 @@ class _ResetPwScreenState extends State<ResetPwScreen> {
   Widget _divider() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Text('|', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+      child: Text('|', style: TextStyle(color: context.wTextMuted, fontSize: 12)),
     );
   }
 }

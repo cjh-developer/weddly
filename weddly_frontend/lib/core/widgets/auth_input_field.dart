@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../theme/app_colors.dart';
+import '../theme/weddly_colors.dart';
 
 enum FieldStatus { none, success, error, info }
 
@@ -36,14 +37,14 @@ class AuthInputField extends StatelessWidget {
     super.key,
   });
 
-  Color get _activeBorderColor {
+  Color _activeBorderColor(BuildContext context) {
     switch (fieldStatus) {
       case FieldStatus.error:
         return AppColors.error;
       case FieldStatus.success:
         return AppColors.success;
       default:
-        return AppColors.border;
+        return context.wBorder;
     }
   }
 
@@ -63,12 +64,12 @@ class AuthInputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // ── 라벨
+        // -- Label
         RichText(
           text: TextSpan(
             text: label,
-            style: const TextStyle(
-              color: AppColors.textMedium,
+            style: TextStyle(
+              color: context.wTextSecondary,
               fontSize: 13,
               fontWeight: FontWeight.w600,
             ),
@@ -83,7 +84,7 @@ class AuthInputField extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        // ── 입력창
+        // -- Input
         TextField(
           controller: controller,
           obscureText: obscureText,
@@ -91,22 +92,22 @@ class AuthInputField extends StatelessWidget {
           inputFormatters: inputFormatters,
           maxLength: maxLength,
           onChanged: onChanged,
-          style: const TextStyle(
-            color: AppColors.textDark,
+          style: TextStyle(
+            color: context.wTextPrimary,
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: prefixIcon != null
-                ? Icon(prefixIcon, color: AppColors.textPlaceholder, size: 20)
+                ? Icon(prefixIcon, color: context.wTextHint, size: 20)
                 : null,
             suffixIcon: suffixIcon,
             counterText: '',
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide:
-                  BorderSide(color: _activeBorderColor, width: 1.5),
+                  BorderSide(color: _activeBorderColor(context), width: 1.5),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -121,7 +122,7 @@ class AuthInputField extends StatelessWidget {
             ),
           ),
         ),
-        // ── 필드 메시지
+        // -- Field message
         SizedBox(
           height: 18,
           child: Padding(
@@ -141,7 +142,7 @@ class AuthInputField extends StatelessWidget {
   }
 }
 
-/// 전화번호 자동 하이픈 포매터 (010-xxxx-xxxx)
+/// Phone number auto-hyphen formatter (010-xxxx-xxxx)
 class PhoneInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(

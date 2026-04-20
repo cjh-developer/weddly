@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/weddly_colors.dart';
 import '../../../core/widgets/gradient_button.dart';
 import '../../../core/widgets/weddly_footer.dart';
 import 'find_id_screen.dart';
 import 'reset_pw_screen.dart';
 import 'signup_screen.dart';
 
-// ── 소셜 로고 SVG 상수
+// -- Social logo SVG constants
 const _googleSvg = '''
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
   <path fill="#EA4335" d="M24 9.5c3.1 0 5.8 1.1 8 2.9l6-6C34.3 3 29.4 1 24 1 14.8 1 7 6.7 3.7 14.6l7 5.4C12.5 13.8 17.8 9.5 24 9.5z"/>
@@ -93,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // ── 로고 (중앙 정렬)
+  // -- Logo
   Widget _buildLogoSection() {
     return Padding(
       padding: const EdgeInsets.only(top: 56, bottom: 36),
@@ -115,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
             '당신의 특별한 날을 함께해요',
             style: TextStyle(
               fontSize: 13,
-              color: AppColors.textLight,
+              color: context.wTextLight,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -124,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // ── 폼
+  // -- Form
   Widget _buildForm() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
           suffix: IconButton(
             icon: Icon(
               _pwVisible ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-              color: AppColors.textPlaceholder,
+              color: context.wTextHint,
               size: 20,
             ),
             onPressed: () => setState(() => _pwVisible = !_pwVisible),
@@ -166,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(width: 6),
                   Text(
                     '로그인 유지',
-                    style: TextStyle(fontSize: 13, color: AppColors.textMedium, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 13, color: context.wTextSecondary, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -176,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 _buildTextLink('아이디 찾기',
                     () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FindIdScreen()))),
-                Text('  |  ', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                Text('  |  ', style: TextStyle(color: context.wTextMuted, fontSize: 12)),
                 _buildTextLink('비밀번호 초기화',
                     () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ResetPwScreen()))),
               ],
@@ -190,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: RichText(
             text: TextSpan(
               text: '아직 계정이 없으신가요?  ',
-              style: TextStyle(fontSize: 13, color: AppColors.textLight),
+              style: TextStyle(fontSize: 13, color: context.wTextLight),
               children: [
                 WidgetSpan(
                   child: GestureDetector(
@@ -215,33 +216,33 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // ── 구분선
+  // -- Divider
   Widget _buildDivider() {
     return Row(
       children: [
-        Expanded(child: Container(height: 1, color: AppColors.borderLight)),
+        Expanded(child: Container(height: 1, color: context.wBorderLight)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14),
           child: Text(
             '또는 소셜 계정으로 로그인',
-            style: TextStyle(fontSize: 12, color: AppColors.textMuted, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 12, color: context.wTextMuted, fontWeight: FontWeight.w500),
           ),
         ),
-        Expanded(child: Container(height: 1, color: AppColors.borderLight)),
+        Expanded(child: Container(height: 1, color: context.wBorderLight)),
       ],
     );
   }
 
-  // ── 소셜 로그인
+  // -- Social login
   Widget _buildSocialSection() {
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 8),
       child: Column(
         children: [
           _buildSocialButton(
-            bgColor: AppColors.white,
-            borderColor: const Color(0xFFE0E0E0),
-            textColor: const Color(0xFF444444),
+            bgColor: context.wGoogleBg,
+            borderColor: context.wGoogleBorder,
+            textColor: context.wGoogleText,
             label: 'Google로 로그인',
             badge: SvgPicture.string(_googleSvg, width: 20, height: 20),
             onTap: () => _showSnack('Google 로그인 연동 예정'),
@@ -269,7 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // ── 헬퍼 위젯들
+  // -- Helper widgets
 
   Widget _buildInputGroup({
     required String label,
@@ -284,17 +285,17 @@ class _LoginScreenState extends State<LoginScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label,
-            style: const TextStyle(
-                fontSize: 13, color: AppColors.textMedium, fontWeight: FontWeight.w600)),
+            style: TextStyle(
+                fontSize: 13, color: context.wTextSecondary, fontWeight: FontWeight.w600)),
         const SizedBox(height: 6),
         TextField(
           controller: controller,
           obscureText: obscure,
           onSubmitted: onSubmit,
-          style: const TextStyle(fontSize: 14, color: AppColors.textDark, fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 14, color: context.wTextPrimary, fontWeight: FontWeight.w500),
           decoration: InputDecoration(
             hintText: hint,
-            prefixIcon: Icon(icon, color: AppColors.textPlaceholder, size: 20),
+            prefixIcon: Icon(icon, color: context.wTextHint, size: 20),
             suffixIcon: suffix,
           ),
         ),
@@ -307,9 +308,9 @@ class _LoginScreenState extends State<LoginScreen> {
       width: 20,
       height: 20,
       decoration: BoxDecoration(
-        color: value ? AppColors.primary : AppColors.white,
+        color: value ? AppColors.primary : context.wSurface,
         border: Border.all(
-          color: value ? AppColors.primary : const Color(0xFFDDDDDD),
+          color: value ? AppColors.primary : context.wBorder,
           width: 2,
         ),
         borderRadius: BorderRadius.circular(5),

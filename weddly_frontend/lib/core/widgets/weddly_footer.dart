@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
+import '../theme/weddly_colors.dart';
 
 class WeddlyFooter extends StatelessWidget {
   const WeddlyFooter({super.key});
@@ -10,8 +10,8 @@ class WeddlyFooter extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Center(
         child: Text(
-          '© 2025 Weddly. All rights reserved.',
-          style: TextStyle(fontSize: 11, color: AppColors.textMuted),
+          '(C) 2025 Weddly. All rights reserved.',
+          style: TextStyle(fontSize: 11, color: context.wTextHint),
         ),
       ),
     );

@@ -10,7 +10,8 @@
       "Bash(node:*)",
       "Bash(xxd:*)",
       "Bash(py:*)",
-      "Bash(flutter pub:*)"
+      "Bash(flutter pub:*)",
+      "Bash(flutter analyze:*)"
     ]
   }
 }

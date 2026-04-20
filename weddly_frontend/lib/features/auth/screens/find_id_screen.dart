@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/weddly_colors.dart';
 import '../../../core/widgets/auth_input_field.dart';
 import '../../../core/widgets/gradient_button.dart';
 import '../../../core/widgets/weddly_app_bar.dart';
@@ -115,10 +116,10 @@ class _FindIdScreenState extends State<FindIdScreen> {
               size: 32, color: AppColors.primary),
         ),
         const SizedBox(height: 16),
-        const Text(
+        Text(
           '아이디를 잊으셨나요?',
           style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.textDark),
+              fontSize: 18, fontWeight: FontWeight.w800, color: context.wTextPrimary),
         ),
         const SizedBox(height: 8),
         Text(
@@ -126,7 +127,7 @@ class _FindIdScreenState extends State<FindIdScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 13,
-              color: AppColors.textLight,
+              color: context.wTextLight,
               height: 1.6,
               fontWeight: FontWeight.w500),
         ),
@@ -178,8 +179,8 @@ class _FindIdScreenState extends State<FindIdScreen> {
           width: double.infinity,
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: AppColors.backgroundAlt,
-            border: Border.all(color: const Color(0xFFF0E8D8), width: 1.5),
+            color: context.wSurfaceAlt,
+            border: Border.all(color: context.wPartnerBorder, width: 1.5),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -195,19 +196,19 @@ class _FindIdScreenState extends State<FindIdScreen> {
                     size: 28, color: AppColors.success),
               ),
               const SizedBox(height: 14),
-              const Text('회원님의 아이디',
+              Text('회원님의 아이디',
                   style: TextStyle(
-                      fontSize: 13, color: AppColors.textLight, fontWeight: FontWeight.w500)),
+                      fontSize: 13, color: context.wTextLight, fontWeight: FontWeight.w500)),
               const SizedBox(height: 6),
               Text(_resultId,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w900,
-                      color: AppColors.textDark,
+                      color: context.wTextPrimary,
                       letterSpacing: 1)),
               const SizedBox(height: 6),
               Text(_resultDate,
-                  style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
+                  style: TextStyle(fontSize: 12, color: context.wTextMuted)),
             ],
           ),
         ),
@@ -223,10 +224,10 @@ class _FindIdScreenState extends State<FindIdScreen> {
           child: Text('비밀번호 초기화',
               style: TextStyle(
                   fontSize: 13,
-                  color: AppColors.textLight,
+                  color: context.wTextLight,
                   fontWeight: FontWeight.w600,
                   decoration: TextDecoration.underline,
-                  decorationColor: AppColors.textLight)),
+                  decorationColor: context.wTextLight)),
         ),
       ],
     );
@@ -247,9 +248,9 @@ class _FindIdScreenState extends State<FindIdScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Text(text,
-          style: const TextStyle(
+          style: TextStyle(
               fontSize: 13,
-              color: AppColors.textLight,
+              color: context.wTextLight,
               fontWeight: FontWeight.w500)),
     );
   }
@@ -257,7 +258,7 @@ class _FindIdScreenState extends State<FindIdScreen> {
   Widget _divider() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Text('|', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+      child: Text('|', style: TextStyle(color: context.wTextMuted, fontSize: 12)),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/weddly_colors.dart';
 import '../../../core/widgets/auth_input_field.dart';
 import '../../../core/widgets/gradient_button.dart';
 import '../../../core/widgets/weddly_app_bar.dart';
@@ -17,7 +18,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  // ── Controllers
+  // -- Controllers
   final _idCtrl    = TextEditingController();
   final _nameCtrl  = TextEditingController();
   final _pwCtrl    = TextEditingController();
@@ -25,7 +26,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final _emailCtrl = TextEditingController();
   final _phoneCtrl = TextEditingController();
 
-  // ── State
+  // -- State
   bool _pwVisible  = false;
   bool _pw2Visible = false;
   bool _idChecked  = false;
@@ -38,7 +39,7 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _agreePrivacy   = false;
   bool _agreeMarketing = false;
 
-  // ── 필드 메시지
+  // -- Field messages
   String _idMsg    = '';
   String _nameMsg  = '';
   String _pwMsg    = '';
@@ -65,7 +66,6 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  // ── 중복 확인
   void _checkId() {
     final id = _idCtrl.text.trim();
     if (id.isEmpty) {
@@ -84,7 +84,6 @@ class _SignupScreenState extends State<SignupScreen> {
       });
       return;
     }
-    // 시뮬레이션: 사용 가능
     setState(() {
       _idMsg = '사용 가능한 아이디입니다.';
       _idStatus = FieldStatus.success;
@@ -92,7 +91,6 @@ class _SignupScreenState extends State<SignupScreen> {
     });
   }
 
-  // ── 비밀번호 강도 계산
   _PwStrength _calcStrength(String pw) {
     if (pw.isEmpty) return _PwStrength.none;
     int score = 0;
@@ -119,7 +117,6 @@ class _SignupScreenState extends State<SignupScreen> {
         _pwMsg = '';
         _pwStatus = FieldStatus.success;
       }
-      // 비밀번호 확인도 재검증
       if (_pw2Ctrl.text.isNotEmpty) _checkPwMatch();
     });
   }
@@ -138,7 +135,6 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() => _checkPwMatch());
   }
 
-  // ── 전체 동의 토글
   void _toggleAgreeAll(bool? value) {
     final v = value ?? false;
     setState(() {
@@ -153,46 +149,43 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() => _agreeAll = _agreeService && _agreePrivacy && _agreeMarketing);
   }
 
-  // ── 약관 모달
   void _showTermsModal(BuildContext context, String title, String content, String agreeKey) {
     showDialog(
       context: context,
       builder: (ctx) => Dialog(
+        backgroundColor: ctx.wModalBg,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         insetPadding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 헤더
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 12, 12),
               child: Row(
                 children: [
                   Expanded(
                     child: Text(title,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textDark)),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w800, color: ctx.wTextPrimary)),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(ctx),
-                    icon: const Icon(Icons.close, size: 20, color: AppColors.textLight),
+                    icon: Icon(Icons.close, size: 20, color: ctx.wTextLight),
                   ),
                 ],
               ),
             ),
-            const Divider(height: 1, color: AppColors.borderLight),
-            // 본문
+            Divider(height: 1, color: ctx.wBorderLight),
             ConstrainedBox(
               constraints: const BoxConstraints(maxHeight: 360),
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
                 child: Text(content,
-                    style: const TextStyle(
-                        fontSize: 13, color: AppColors.textMedium, height: 1.7)),
+                    style: TextStyle(
+                        fontSize: 13, color: ctx.wTextSecondary, height: 1.7)),
               ),
             ),
-            const Divider(height: 1, color: AppColors.borderLight),
-            // 푸터
+            Divider(height: 1, color: ctx.wBorderLight),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
               child: Row(
@@ -201,13 +194,13 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: OutlinedButton(
                       onPressed: () => Navigator.pop(ctx),
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: AppColors.border),
+                        side: BorderSide(color: ctx.wBorder),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: const Text('닫기',
-                          style: TextStyle(color: AppColors.textLight, fontWeight: FontWeight.w600)),
+                      child: Text('닫기',
+                          style: TextStyle(color: ctx.wTextLight, fontWeight: FontWeight.w600)),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -234,7 +227,6 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  // ── 폼 제출
   void _submit() {
     bool valid = true;
     setState(() {
@@ -328,7 +320,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _pw2Visible ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: AppColors.textPlaceholder,
+                        color: context.wTextHint,
                         size: 20,
                       ),
                       onPressed: () => setState(() => _pw2Visible = !_pw2Visible),
@@ -374,7 +366,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: RichText(
                       text: TextSpan(
                         text: '이미 계정이 있으신가요?  ',
-                        style: const TextStyle(fontSize: 13, color: AppColors.textLight),
+                        style: TextStyle(fontSize: 13, color: context.wTextLight),
                         children: [
                           WidgetSpan(
                             child: GestureDetector(
@@ -400,7 +392,6 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  // ── 스텝 바
   Widget _buildStepBar() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -414,17 +405,16 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  // ── 아이디 필드 (중복확인 버튼 포함)
   Widget _buildIdField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         RichText(
-          text: const TextSpan(
+          text: TextSpan(
             text: '아이디',
             style: TextStyle(
-                color: AppColors.textMedium, fontSize: 13, fontWeight: FontWeight.w600),
-            children: [
+                color: context.wTextSecondary, fontSize: 13, fontWeight: FontWeight.w600),
+            children: const [
               TextSpan(text: ' *', style: TextStyle(color: AppColors.primary)),
             ],
           ),
@@ -437,12 +427,12 @@ class _SignupScreenState extends State<SignupScreen> {
               child: TextField(
                 controller: _idCtrl,
                 maxLength: 20,
-                style: const TextStyle(
-                    fontSize: 14, color: AppColors.textDark, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontSize: 14, color: context.wTextPrimary, fontWeight: FontWeight.w500),
                 decoration: InputDecoration(
                   hintText: '아이디 입력 (영문/숫자)',
-                  prefixIcon: const Icon(Icons.person_outline,
-                      color: AppColors.textPlaceholder, size: 20),
+                  prefixIcon: Icon(Icons.person_outline,
+                      color: context.wTextHint, size: 20),
                   counterText: '',
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -451,7 +441,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           ? AppColors.error
                           : _idStatus == FieldStatus.success
                               ? AppColors.success
-                              : AppColors.border,
+                              : context.wBorder,
                       width: 1.5,
                     ),
                   ),
@@ -481,8 +471,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     width: 1.5,
                   ),
                   backgroundColor: _idChecked
-                      ? const Color(0xFFE8F5E9)
-                      : AppColors.white,
+                      ? (context.isDark ? const Color(0xFF1A2A1A) : const Color(0xFFE8F5E9))
+                      : context.wSurface,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -517,13 +507,12 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  // ── 비밀번호 필드 (강도 바 포함)
   Widget _buildPasswordField() {
     final strengthLabel = {
       _PwStrength.none:   '',
-      _PwStrength.weak:   '약함 · 8자 이상, 영문+숫자+특수문자를 포함해주세요',
-      _PwStrength.medium: '보통 · 특수문자를 추가하면 더 안전합니다',
-      _PwStrength.strong: '강함 · 안전한 비밀번호입니다',
+      _PwStrength.weak:   '약함 \u00B7 8자 이상, 영문+숫자+특수문자를 포함해주세요',
+      _PwStrength.medium: '보통 \u00B7 특수문자를 추가하면 더 안전합니다',
+      _PwStrength.strong: '강함 \u00B7 안전한 비밀번호입니다',
     };
     final strengthColor = {
       _PwStrength.none:   Colors.transparent,
@@ -538,19 +527,17 @@ class _SignupScreenState extends State<SignupScreen> {
       _PwStrength.strong: 1.0,
     };
 
-    // 테두리 색상
     final borderColor = _pwStatus == FieldStatus.error
         ? AppColors.error
         : _pwStatus == FieldStatus.success
             ? AppColors.success
-            : AppColors.border;
+            : context.wBorder;
     final focusBorderColor = _pwStatus == FieldStatus.error
         ? AppColors.error
         : _pwStatus == FieldStatus.success
             ? AppColors.success
             : AppColors.primary;
 
-    // 표시 메시지: 타이핑 중 → 강도 레이블 / 제출 에러(빈 필드) → _pwMsg
     final displayMsg = _strength != _PwStrength.none
         ? strengthLabel[_strength]!
         : _pwMsg;
@@ -561,35 +548,33 @@ class _SignupScreenState extends State<SignupScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 라벨
         RichText(
-          text: const TextSpan(
+          text: TextSpan(
             text: '비밀번호',
             style: TextStyle(
-                color: AppColors.textMedium, fontSize: 13, fontWeight: FontWeight.w600),
-            children: [
+                color: context.wTextSecondary, fontSize: 13, fontWeight: FontWeight.w600),
+            children: const [
               TextSpan(text: ' *', style: TextStyle(color: AppColors.primary)),
             ],
           ),
         ),
         const SizedBox(height: 6),
-        // 입력창 (AuthInputField 대신 직접 구성 → 고정 메시지 슬롯 제거)
         TextField(
           controller: _pwCtrl,
           obscureText: !_pwVisible,
           maxLength: 30,
           onChanged: _onPwChanged,
-          style: const TextStyle(
-              color: AppColors.textDark, fontSize: 14, fontWeight: FontWeight.w500),
+          style: TextStyle(
+              color: context.wTextPrimary, fontSize: 14, fontWeight: FontWeight.w500),
           decoration: InputDecoration(
             hintText: '8자 이상, 영문+숫자+특수문자',
-            prefixIcon: const Icon(Icons.lock_outline,
-                color: AppColors.textPlaceholder, size: 20),
+            prefixIcon: Icon(Icons.lock_outline,
+                color: context.wTextHint, size: 20),
             counterText: '',
             suffixIcon: IconButton(
               icon: Icon(
                 _pwVisible ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                color: AppColors.textPlaceholder,
+                color: context.wTextHint,
                 size: 20,
               ),
               onPressed: () => setState(() => _pwVisible = !_pwVisible),
@@ -605,7 +590,6 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
         const SizedBox(height: 6),
-        // 강도 레이블: 입력 시 사이에 슬라이드인 (AnimatedSize)
         AnimatedSize(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
@@ -623,7 +607,6 @@ class _SignupScreenState extends State<SignupScreen> {
                 )
               : const SizedBox.shrink(),
         ),
-        // 강도 바 (항상 표시, 텍스트 없을 때는 입력창에 바로 붙음)
         ClipRRect(
           borderRadius: BorderRadius.circular(2),
           child: TweenAnimationBuilder<double>(
@@ -632,7 +615,7 @@ class _SignupScreenState extends State<SignupScreen> {
             builder: (_, v, __) => LinearProgressIndicator(
               value: v,
               minHeight: 4,
-              backgroundColor: const Color(0xFFEEEEEE),
+              backgroundColor: context.wBorderLight,
               valueColor: AlwaysStoppedAnimation<Color>(strengthColor[_strength]!),
             ),
           ),
@@ -642,17 +625,16 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  // ── 역할 선택 카드
   Widget _buildRoleSelector() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         RichText(
-          text: const TextSpan(
+          text: TextSpan(
             text: '구분',
             style: TextStyle(
-                color: AppColors.textMedium, fontSize: 13, fontWeight: FontWeight.w600),
-            children: [
+                color: context.wTextSecondary, fontSize: 13, fontWeight: FontWeight.w600),
+            children: const [
               TextSpan(text: ' *', style: TextStyle(color: AppColors.primary)),
             ],
           ),
@@ -661,7 +643,7 @@ class _SignupScreenState extends State<SignupScreen> {
         Row(
           children: [
             Expanded(child: _RoleCard(
-              emoji: '🤵',
+              emoji: '\u{1F935}',
               name: '신랑',
               sub: 'Groom',
               selected: _role == _Role.groom,
@@ -669,7 +651,7 @@ class _SignupScreenState extends State<SignupScreen> {
             )),
             const SizedBox(width: 12),
             Expanded(child: _RoleCard(
-              emoji: '👰',
+              emoji: '\u{1F470}',
               name: '신부',
               sub: 'Bride',
               selected: _role == _Role.bride,
@@ -687,26 +669,23 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  // ── 약관 섹션
   Widget _buildTermsSection() {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.backgroundAlt,
+        color: context.wSurfaceAlt,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.borderLight),
+        border: Border.all(color: context.wBorderLight),
       ),
       child: Column(
         children: [
-          // 전체 동의
           _TermsRow(
             checked: _agreeAll,
             label: '전체 동의',
             isAll: true,
             onChanged: _toggleAgreeAll,
           ),
-          Container(height: 1, color: AppColors.borderLight, margin: const EdgeInsets.symmetric(vertical: 10)),
-          // 필수 서비스
+          Container(height: 1, color: context.wBorderLight, margin: const EdgeInsets.symmetric(vertical: 10)),
           _TermsRow(
             checked: _agreeService,
             label: '[필수] 서비스 이용약관 동의',
@@ -721,7 +700,6 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          // 필수 개인정보
           _TermsRow(
             checked: _agreePrivacy,
             label: '[필수] 개인정보 처리방침 동의',
@@ -736,7 +714,6 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          // 선택 마케팅
           _TermsRow(
             checked: _agreeMarketing,
             label: '[선택] 마케팅 정보 수신 동의',
@@ -753,7 +730,7 @@ class _SignupScreenState extends State<SignupScreen> {
       '제1조 (목적)\n본 약관은 Weddly(이하 "회사")가 제공하는 웨딩 플래닝 서비스의 이용과 관련하여 회사와 회원 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.\n\n'
       '제2조 (정의)\n"회원"이란 회사의 서비스에 접속하여 본 약관에 동의하고 회사와 이용 계약을 체결한 자를 말합니다.\n\n'
       '제3조 (약관의 효력 및 변경)\n본 약관은 서비스 화면에 게시하거나 기타 방법으로 공지함으로써 효력이 발생합니다.\n\n'
-      '제4조 (서비스의 제공)\n회사는 웨딩 일정·예산·업체 정보 제공, 신랑·신부 간 정보 공유 서비스 등을 제공합니다.';
+      '제4조 (서비스의 제공)\n회사는 웨딩 일정\u00B7예산\u00B7업체 정보 제공, 신랑\u00B7신부 간 정보 공유 서비스 등을 제공합니다.';
 
   static const String _privacyContent =
       '1. 수집하는 개인정보 항목\n필수 항목: 아이디, 이름, 비밀번호, 이메일, 전화번호, 신랑/신부 구분\n자동 수집: 서비스 이용 기록, 접속 로그, 기기 정보\n\n'
@@ -762,9 +739,7 @@ class _SignupScreenState extends State<SignupScreen> {
       '4. 개인정보의 제3자 제공\n원칙적으로 외부에 제공하지 않으며, 법령 규정 또는 동의 시 예외입니다.';
 }
 
-// ──────────────────────────────────────────
-// 스텝 점
-// ──────────────────────────────────────────
+// -- Step dot
 class _StepDot extends StatelessWidget {
   final int number;
   final String label;
@@ -782,7 +757,7 @@ class _StepDot extends StatelessWidget {
           height: 28,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: isActive ? AppColors.primary : const Color(0xFFEEEEEE),
+            color: isActive ? AppColors.primary : context.wBorderLight,
           ),
           alignment: Alignment.center,
           child: Text(
@@ -790,7 +765,7 @@ class _StepDot extends StatelessWidget {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w700,
-              color: isActive ? AppColors.white : AppColors.textMuted,
+              color: isActive ? AppColors.white : context.wTextMuted,
             ),
           ),
         ),
@@ -800,7 +775,7 @@ class _StepDot extends StatelessWidget {
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w600,
-            color: isActive ? AppColors.primary : AppColors.textMuted,
+            color: isActive ? AppColors.primary : context.wTextMuted,
           ),
         ),
       ],
@@ -808,7 +783,7 @@ class _StepDot extends StatelessWidget {
   }
 }
 
-// ── 스텝 연결선
+// -- Step line
 class _StepLine extends StatelessWidget {
   final bool isActive;
   const _StepLine({required this.isActive});
@@ -819,14 +794,12 @@ class _StepLine extends StatelessWidget {
       width: 44,
       height: 2,
       margin: const EdgeInsets.only(bottom: 16),
-      color: isActive ? AppColors.primary : const Color(0xFFEEEEEE),
+      color: isActive ? AppColors.primary : context.wBorderLight,
     );
   }
 }
 
-// ──────────────────────────────────────────
-// 역할 카드
-// ──────────────────────────────────────────
+// -- Role card
 class _RoleCard extends StatelessWidget {
   final String emoji;
   final String name;
@@ -857,9 +830,9 @@ class _RoleCard extends StatelessWidget {
                   end: Alignment.bottomRight,
                 )
               : null,
-          color: selected ? null : AppColors.backgroundAlt,
+          color: selected ? null : context.wSurfaceAlt,
           border: Border.all(
-            color: selected ? AppColors.primary : const Color(0xFFEEEEEE),
+            color: selected ? AppColors.primary : context.wBorderLight,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -881,12 +854,12 @@ class _RoleCard extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: selected ? AppColors.white : AppColors.textDark)),
+                    color: selected ? AppColors.white : context.wTextPrimary)),
             Text(sub,
                 style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
-                    color: selected ? AppColors.white.withOpacity(0.8) : AppColors.textMuted)),
+                    color: selected ? AppColors.white.withOpacity(0.8) : context.wTextMuted)),
           ],
         ),
       ),
@@ -894,9 +867,7 @@ class _RoleCard extends StatelessWidget {
   }
 }
 
-// ──────────────────────────────────────────
-// 약관 행
-// ──────────────────────────────────────────
+// -- Terms row
 class _TermsRow extends StatelessWidget {
   final bool checked;
   final String label;
@@ -932,7 +903,7 @@ class _TermsRow extends StatelessWidget {
             style: TextStyle(
               fontSize: 13,
               fontWeight: isAll ? FontWeight.w700 : FontWeight.w500,
-              color: isAll ? AppColors.textDark : AppColors.textMedium,
+              color: isAll ? context.wTextPrimary : context.wTextSecondary,
             ),
           ),
         ),

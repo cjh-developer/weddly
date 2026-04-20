@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../theme/weddly_colors.dart';
 
-/// 인증 화면 공통 AppBar: weddly 로고(상) + 화면 타이틀(하)
+/// Auth screen common AppBar: weddly logo (top) + screen title (bottom)
 class WeddlyAuthAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
@@ -35,8 +36,8 @@ class WeddlyAuthAppBar extends StatelessWidget implements PreferredSizeWidget {
           const SizedBox(height: 2),
           Text(
             title,
-            style: const TextStyle(
-              color: AppColors.textDark,
+            style: TextStyle(
+              color: context.wTextPrimary,
               fontWeight: FontWeight.w700,
               fontSize: 16,
             ),
@@ -46,7 +47,7 @@ class WeddlyAuthAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
-        child: Container(color: AppColors.borderLight, height: 1),
+        child: Container(color: context.wBorderLight, height: 1),
       ),
     );
   }
