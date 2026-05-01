@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_notifier.dart';
 import '../../../core/theme/weddly_colors.dart';
+import '../../schedule/screens/schedule_screen.dart';
+import '../../budget/screens/budget_screen.dart';
 
 // -- Timeline type
 enum _TlType { done, urgent, todo, dday }
@@ -827,6 +829,17 @@ class _MainScreenState extends State<MainScreen> {
             itemBuilder: (ctx, i) => _MenuCell(
               icon: menus[i]['icon'] as IconData,
               label: menus[i]['label'] as String,
+              onTap: i == 0
+                  ? () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const ScheduleScreen()))
+                  : i == 1
+                  ? () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const BudgetScreen()))
+                  : null,
             ),
           ),
         ],
@@ -1456,11 +1469,14 @@ class _TlItemWidget extends StatelessWidget {
 class _MenuCell extends StatelessWidget {
   final IconData icon;
   final String label;
-  const _MenuCell({required this.icon, required this.label});
+  final VoidCallback? onTap;
+  const _MenuCell({required this.icon, required this.label, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
@@ -1488,6 +1504,7 @@ class _MenuCell extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: context.wMenuLabel)),
       ],
+      ),
     );
   }
 }
