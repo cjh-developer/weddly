@@ -6,6 +6,8 @@ import '../../../core/theme/theme_notifier.dart';
 import '../../../core/theme/weddly_colors.dart';
 import '../../schedule/screens/schedule_screen.dart';
 import '../../budget/screens/budget_screen.dart';
+import '../../guest/screens/guest_screen.dart';
+import '../../memo/screens/memo_screen.dart';
 
 // -- Timeline type
 enum _TlType { done, urgent, todo, dday }
@@ -839,6 +841,16 @@ class _MainScreenState extends State<MainScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (_) => const BudgetScreen()))
+                  : i == 3
+                  ? () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const GuestScreen()))
+                  : i == 4
+                  ? () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const MemoScreen()))
                   : null,
             ),
           ),

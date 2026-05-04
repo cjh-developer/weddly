@@ -4,6 +4,8 @@ import 'core/theme/app_theme.dart';
 import 'core/theme/theme_notifier.dart';
 import 'features/auth/screens/login_screen.dart';
 import 'features/home/screens/main_screen.dart';
+import 'features/guest/screens/guest_screen.dart';
+import 'features/memo/screens/memo_screen.dart';
 
 void main() {
   runApp(const WeddlyApp());
@@ -36,6 +38,8 @@ class WeddlyApp extends StatelessWidget {
         routes: {
           '/login': (ctx) => const LoginScreen(),
           '/main': (ctx) => const MainScreen(),
+          '/guest': (ctx) => const GuestScreen(),
+          '/memo':  (ctx) => const MemoScreen(),
         },
       ),
     );
