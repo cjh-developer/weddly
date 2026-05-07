@@ -8,6 +8,8 @@ import '../../schedule/screens/schedule_screen.dart';
 import '../../budget/screens/budget_screen.dart';
 import '../../guest/screens/guest_screen.dart';
 import '../../memo/screens/memo_screen.dart';
+import '../../ceremony/screens/ceremony_order_screen.dart';
+import '../../wedding/screens/roadmap_screen.dart';
 
 // -- Timeline type
 enum _TlType { done, urgent, todo, dday }
@@ -841,6 +843,11 @@ class _MainScreenState extends State<MainScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (_) => const BudgetScreen()))
+                  : i == 2
+                  ? () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const RoadmapScreen()))
                   : i == 3
                   ? () => Navigator.push(
                       context,
@@ -851,6 +858,11 @@ class _MainScreenState extends State<MainScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (_) => const MemoScreen()))
+                  : i == 5
+                  ? () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const CeremonyOrderScreen()))
                   : null,
             ),
           ),

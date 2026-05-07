@@ -6,6 +6,8 @@ import 'features/auth/screens/login_screen.dart';
 import 'features/home/screens/main_screen.dart';
 import 'features/guest/screens/guest_screen.dart';
 import 'features/memo/screens/memo_screen.dart';
+import 'features/ceremony/screens/ceremony_order_screen.dart';
+import 'features/wedding/screens/roadmap_screen.dart';
 
 void main() {
   runApp(const WeddlyApp());
@@ -40,6 +42,8 @@ class WeddlyApp extends StatelessWidget {
           '/main': (ctx) => const MainScreen(),
           '/guest': (ctx) => const GuestScreen(),
           '/memo':  (ctx) => const MemoScreen(),
+          '/ceremony': (ctx) => const CeremonyOrderScreen(),
+          '/roadmap':  (ctx) => const RoadmapScreen(),
         },
       ),
     );
